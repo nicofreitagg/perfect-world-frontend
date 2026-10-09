@@ -7,28 +7,46 @@ import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
 import { isLaunched } from './launch'
 
-type Kind = 'tote' | 'tee' | 'over' | 'hoodie'
-const PIECE_LIST: { id: Kind; label: string; price: string; give: string }[] = [
-  { id: 'tote', label: 'Tote', price: PIECES.tote.price, give: PIECES.tote.give },
-  { id: 'tee', label: 'T-shirt', price: PIECES.shirt.price, give: PIECES.shirt.give },
-  { id: 'over', label: 'Oversized', price: PIECES.oversized.price, give: PIECES.oversized.give },
-  { id: 'hoodie', label: 'Hoodie', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
+type Kind = 'tote' | 'tee' | 'women' | 'over' | 'hoodie' | 'bomber' | 'beanie'
+const np = (id: string) => NEW_PIECES.find((n) => n.id === id)!
+const PIECE_LIST: { id: Kind; label: string; filter: string; price: string; give: string; split?: boolean }[] = [
+  { id: 'tee', label: 'T-shirt', filter: 'T-shirts', price: PIECES.shirt.price, give: PIECES.shirt.give },
+  { id: 'women', label: "Women's T-shirt", filter: "Women's", price: np('women').price, give: np('women').give },
+  { id: 'over', label: 'Oversized', filter: 'Oversized', price: PIECES.oversized.price, give: PIECES.oversized.give },
+  { id: 'hoodie', label: 'Hoodie', filter: 'Hoodies', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
+  { id: 'bomber', label: 'Bomber', filter: 'Bombers', price: np('bomber').price, give: np('bomber').give },
+  { id: 'tote', label: 'Tote', filter: 'Totes', price: PIECES.tote.price, give: PIECES.tote.give },
+  { id: 'beanie', label: 'Beanie', filter: 'Beanies', price: np('beanie').price, give: np('beanie').give, split: true },
 ]
 // Silhouettes shown until the Minimal pieces exist in Shopify.
+// One entry per colour. The shop shows one card per piece under "All" and splits a
+// piece into its colours once a filter is picked. Colours: Nico 9 Oct (tote, bomber,
+// beanie); tee, women's, oversized and hoodie colours are stand-ins until Shopify.
 const MINIMAL = [
-  { id: 'm1', name: 'Minimal Tee', colour: 'Black', kind: 'tee', fill: '#1b1b1d', bg: '#e9e7e2', swatches: ['#1b1b1d', '#f2efe8', '#6b6f4a'] },
-  { id: 'm2', name: 'Minimal Tee', colour: 'Off-white', kind: 'tee', fill: '#f4f1ea', bg: '#dedbd4', swatches: ['#1b1b1d', '#f2efe8', '#6b6f4a'] },
-  { id: 'm3', name: 'Oversized Tee', colour: 'Washed black', kind: 'over', fill: '#2a2a2c', bg: '#e9e7e2', swatches: ['#2a2a2c', '#f2efe8'] },
-  { id: 'm4', name: 'Minimal Hoodie', colour: 'Sand', kind: 'hoodie', fill: '#cdb89a', bg: '#ecebe6', swatches: ['#cdb89a', '#1b1b1d'] },
-  { id: 'm5', name: 'Minimal Hoodie', colour: 'Black', kind: 'hoodie', fill: '#1b1b1d', bg: '#e2e0da', swatches: ['#cdb89a', '#1b1b1d'] },
-  { id: 'm6', name: 'Minimal Tote', colour: 'Natural', kind: 'tote', fill: '#e8dcc4', bg: '#e9e7e2', swatches: ['#e8dcc4', '#1b1b1d'] },
+  { id: 'm1', name: 'Minimal Tee', colour: 'Black', kind: 'tee', fill: '#1b1b1d', bg: '#e9e7e2' },
+  { id: 'm2', name: 'Minimal Tee', colour: 'Off-white', kind: 'tee', fill: '#f4f1ea', bg: '#dedbd4' },
+  { id: 'w1', name: "Women's Minimal Tee", colour: 'Black', kind: 'women', fill: '#1b1b1d', bg: '#e9e7e2' },
+  { id: 'w2', name: "Women's Minimal Tee", colour: 'Off-white', kind: 'women', fill: '#f4f1ea', bg: '#dedbd4' },
+  { id: 'm3', name: 'Oversized Tee', colour: 'Washed black', kind: 'over', fill: '#2a2a2c', bg: '#e9e7e2' },
+  { id: 'm3b', name: 'Oversized Tee', colour: 'Off-white', kind: 'over', fill: '#f4f1ea', bg: '#dedbd4' },
+  { id: 'm4', name: 'Minimal Hoodie', colour: 'Sand', kind: 'hoodie', fill: '#cdb89a', bg: '#ecebe6' },
+  { id: 'm5', name: 'Minimal Hoodie', colour: 'Black', kind: 'hoodie', fill: '#1b1b1d', bg: '#e2e0da' },
+  { id: 'b1', name: 'Bomber Jacket', colour: 'Black', kind: 'bomber', fill: '#1b1b1d', bg: '#e2e0da' },
+  { id: 'b2', name: 'Bomber Jacket', colour: 'Khaki', kind: 'bomber', fill: '#8a7d5c', bg: '#ecebe6' },
+  { id: 'm6', name: 'Minimal Tote', colour: 'Natural', kind: 'tote', fill: '#e8dcc4', bg: '#e9e7e2' },
+  { id: 'm7', name: 'Minimal Tote', colour: 'Black', kind: 'tote', fill: '#1b1b1d', bg: '#dedbd4' },
+  { id: 'k1', name: 'Logo Beanie', colour: 'Black', kind: 'beanie', fill: '#1b1b1d', bg: '#e9e7e2' },
+  { id: 'k2', name: 'Logo Beanie', colour: 'Natural', kind: 'beanie', fill: '#e8dcc4', bg: '#dedbd4' },
 ] as const
-const MARK: Record<Kind, [number, number]> = { tee: [178, 92], over: [180, 98], hoodie: [172, 158], tote: [182, 300] }
+const MARK: Record<Kind, [number, number]> = { tee: [178, 92], women: [168, 112], over: [180, 98], hoodie: [172, 158], bomber: [160, 96], tote: [182, 300], beanie: [0, 0] }
 const kindOf = (title: string): Kind => {
   const t = title.toLowerCase()
   if (t.includes('hoodie')) return 'hoodie'
   if (t.includes('tote')) return 'tote'
   if (t.includes('oversize')) return 'over'
+  if (t.includes('bomber')) return 'bomber'
+  if (t.includes('beanie')) return 'beanie'
+  if (t.includes('women')) return 'women'
   return 'tee'
 }
 const SHORT = Object.fromEntries(CAUSES.map((c) => [c.id, c.short])) as Record<CauseKey, string>
@@ -75,10 +93,10 @@ export default function ShopV2() {
   const filterLabel = tr(tab === 'minimal' ? 'Filter by piece' : 'Filter by cause')
   const tabNote = tab === 'minimal' ? 'One small 11.11 mark. Made with one of our six partners.' : "Big back print. Each design tells its partner's story."
   const filters = tab === 'minimal'
-    ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: ({ tote: 'Totes', tee: 'T-shirts', over: 'Oversized', hoodie: 'Hoodies' } as const)[p.id] }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
+    ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
-  const blank = { ico: '', img: '', grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isOver: false, isHoodie: false, isTote: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string }[]; href: string; addLabel: string }
   let products: Card[]
   if (tab === 'minimal' && minimalLive.length) {
@@ -87,9 +105,12 @@ export default function ShopV2() {
       return { ...blank, name: m.title, sub: tr('Made with one partner'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: '#e9e7e2', isPrint: !!m.images[0], img: m.images[0]?.url ?? '', isNew: true, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal') {
-    products = MINIMAL.filter((m) => piece === 'all' || m.kind === piece).map((m) => {
+    // "All" = one card per piece; a picked filter = one card per colour.
+    const shown = piece === 'all' ? MINIMAL.filter((m, i) => MINIMAL.findIndex((x) => x.kind === m.kind) === i) : MINIMAL.filter((m) => m.kind === piece)
+    products = shown.map((m) => {
       const p = PIECE_LIST.find((x) => x.id === m.kind)!
-      return { ...blank, name: m.name, sub: tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: m.bg, fill: m.fill, isGarment: true, isTee: m.kind === 'tee', isOver: m.kind === 'over', isHoodie: m.kind === 'hoodie', isTote: m.kind === 'tote', markX: MARK[m.kind][0], markY: MARK[m.kind][1], isNew: true, swatches: m.swatches.map((c) => ({ c })), href: '', addLabel: tr('Coming 11.11') }
+      const variants = MINIMAL.filter((x) => x.kind === m.kind)
+      return { ...blank, name: m.name, sub: piece === 'all' ? variants.map((v) => tr(v.colour)).join(' · ') : tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: m.bg, fill: m.fill, isGarment: true, isTee: m.kind === 'tee', isWomen: m.kind === 'women', isOver: m.kind === 'over', isHoodie: m.kind === 'hoodie', isBomber: m.kind === 'bomber', isTote: m.kind === 'tote', isBeanie: m.kind === 'beanie', markX: MARK[m.kind][0], markY: MARK[m.kind][1], isNew: true, swatches: (piece === 'all' ? variants : [m]).map((v) => ({ c: v.fill })), href: '', addLabel: tr('Coming 11.11') }
     })
   } else {
     products = CAUSES.filter((c) => cause === 'all' || c.id === cause).map((c) => ({ ...blank, ico: icon(c.id, 'a'), name: c.name, sub: c.partner + ' · ' + tr(SHORT[c.id]), price: tr('from') + ' €' + PIECES.shirt.price, give: tr('from') + ' €' + PIECES.shirt.give + ' ' + tr('to') + ' ' + c.partner, bg: TINT[c.id], isPrint: !!c.print, isPlaceholderPrint: !c.print, img: c.print, grad: c.bg, swatches: [{ c: '#1b1b1d' }, { c: '#f2efe8' }], href: `/design/${c.slug}`, addLabel: tr('Choose your piece') }))
@@ -180,7 +201,10 @@ export default function ShopV2() {
                 {p.isOver && (<><path d="M82 42 L126 26 Q150 46 174 26 L218 42 L280 112 L246 140 L228 126 L230 320 L70 320 L72 126 L54 140 L20 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M126 26 Q150 46 174 26" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
                 {p.isHoodie && (<><path d="M102 64 Q100 18 150 16 Q200 18 198 64 L236 76 L272 252 L242 260 L222 142 L222 322 L78 322 L78 142 L58 260 L28 252 L64 76 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M120 66 Q150 92 180 66" fill="none" stroke="rgba(0,0,0,.25)" strokeWidth="3"></path><path d="M138 82 L136 128 M162 82 L164 128" stroke="rgba(0,0,0,.3)" strokeWidth="2.5"></path><path d="M104 236 L196 236 L206 290 L94 290 Z" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth="2"></path></>)}
                 {p.isTote && (<><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke={p.fill} strokeWidth="12" strokeLinecap="round"></path><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke="rgba(0,0,0,.14)" strokeWidth="12" strokeLinecap="round" opacity=".5"></path><path d="M66 124 L234 124 L246 324 L54 324 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path></>)}
-                <text x={p.markX} y={p.markY} fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#c0322a">11.11</text>
+                {p.isWomen && (<><path d="M100 70 L132 58 Q150 76 168 58 L200 70 L260 112 L238 144 L210 128 Q198 200 218 272 L82 272 Q102 200 90 128 L62 144 L40 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M132 58 Q150 76 168 58" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
+                {p.isBomber && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={p.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5"></path><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2"></path><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path></>)}
+                {p.isBeanie && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none"></path><rect x="72" y="200" width="156" height="58" rx="10" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></rect><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2"></path><rect x="134" y="216" width="32" height="26" rx="3" fill={p.fill === '#1b1b1d' ? '#f5f4f1' : '#1b1b1d'}></rect><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill={p.fill === '#1b1b1d' ? '#0b0b0c' : '#f5f4f1'}>PW</text></>)}
+                {!p.isBeanie && <text x={p.markX} y={p.markY} fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#c0322a">11.11</text>}
               </svg>
             </>)}
             {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW · 11.11")}</span></>)}
@@ -206,34 +230,6 @@ export default function ShopV2() {
   </section>
 
   
-  <section className="pw-iso" aria-label={tr("New pieces")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 80px)" }}>
-    <p className="pw-hand" style={{ margin: "0", fontSize: "26px", color: "#c0322a" }}>{tr("new on 11.11.")}</p>
-    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(24px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces.")}</h2>
-    <div className="pw-m-swipe pw-m-s50 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
-      {NEW_PIECES.map((n) => (
-        <article key={n.id} style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: n.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="70%" height="70%" viewBox="0 0 300 340" role="img" aria-label={tr(n.name)} style={{ filter: "drop-shadow(0 20px 22px rgba(0,0,0,.18))" }}>
-              {n.id === 'women' && (<><path d="M100 70 L132 58 Q150 76 168 58 L200 70 L260 112 L238 144 L210 128 Q198 200 218 272 L82 272 Q102 200 90 128 L62 144 L40 112 Z" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M132 58 Q150 76 168 58" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="2" /><text x="168" y="112" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#e2453c">11.11</text></>)}
-              {n.id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={n.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5" /><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2" /><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><rect x="64" y="128" width="12" height="26" rx="3" fill="rgba(255,255,255,.35)" /><text x="160" y="96" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#e2453c">11.11</text></>)}
-              {n.id === 'beanie' && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none" /><rect x="72" y="200" width="156" height="58" rx="10" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2" /><rect x="134" y="216" width="32" height="26" rx="3" fill="#f5f4f1" /><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#0b0b0c">PW</text></>)}
-            </svg>
-            <span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#e2453c", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW")}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
-            <div style={{ minWidth: "0" }}>
-              <h3 className="pw-fat" style={{ margin: "0", fontSize: "22px", lineHeight: "1.05" }}>{tr(n.name)}</h3>
-              <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#5c5c5c" }}>{tr(n.sub)}</p>
-            </div>
-            <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>€{n.price}</span>
-          </div>
-          <div style={{ margin: "12px 4px 0", paddingTop: "12px", borderTop: "1px dashed #c9c6bf" }}>
-            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>€{n.give} {tr('split' in n ? "shared by all six partners" : "to its partner")}</span>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
 
   <section className="pw-iso" aria-label={tr("The six causes")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 80px)" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-60px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
