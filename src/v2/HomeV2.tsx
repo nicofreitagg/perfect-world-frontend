@@ -1,7 +1,7 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import './v2.css'
 import './landing.css'
-import Flow from './Flow'
+import Flow, { EdgeGlow } from './Flow'
 import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
@@ -94,14 +94,15 @@ export default function HomeV2() {
     <>
 <div className="pw2 pw-page pw-grain pwl" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
   <Flow />
+  <EdgeGlow />
   <Header big cartCount={cartCount} openCart={openCart} />
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">
     <h1 className="pwl-head">
-      <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
-      <span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
-      <span className="pw-hand pwl-head-b">{tr('for.')}</span>
+      <span className="pw-fat pwl-head-a">{tr('Wear the world you')}</span>
+      <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
+<span className="pw-fat pwl-head-b">{tr('for.')}</span></span>
     </h1>
     <figure className="pwl-hero-photo">
       <div className="pwl-photo-box">
@@ -239,7 +240,7 @@ export default function HomeV2() {
         <div>
           <p className="pwl-kicker">{launched ? tr('11:11 · EVERY PIECE GIVES A FIXED AMOUNT') : tr('11:11 · FROM 11.11, EVERY PIECE GIVES A FIXED AMOUNT')}</p>
           <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pw-hand pwl-red">{tr('easier.')}</span></h2>
-          <p className="pwl-sub">{tr('Pick a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
+          <p className="pwl-sub">{tr('Pick a collection, a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
         </div>
       </div>
       <GiveReceipt />
@@ -266,7 +267,7 @@ export default function HomeV2() {
           <A key={c.id} href={`/project/${c.slug}`} className="pwl-cause" style={{ ['--c' as string]: c.color }}>
             <span className="pwl-cause-logo"><img src={c.logo} alt="" loading="lazy" /></span>
             <span className="pwl-cause-name">{titleCase(c.name)}</span>
-            <span className="pwl-cause-who">{c.partner} · {tr(c.place)}</span>
+            <span className="pwl-cause-who">{c.partner} · <span className="pwl-nowrap">{tr(c.place)}</span></span>
             <span className="pwl-cause-line">{tr(c.line)}</span>
             <span className="pwl-cause-go">{tr('Meet the project')} →</span>
           </A>

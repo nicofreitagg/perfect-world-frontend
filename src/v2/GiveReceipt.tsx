@@ -28,6 +28,7 @@ const eur = (s: string) => '€' + s
 
 export default function GiveReceipt() {
   const t = useT()
+  const [line, setLine] = useState<'og' | 'minimal'>('og')
   const [piece, setPiece] = useState<PieceId>('tshirt')
   const [design, setDesign] = useState<CauseKey>('talk')
   const [products, setProducts] = useState<ShopifyProduct[]>([])
@@ -35,16 +36,25 @@ export default function GiveReceipt() {
 
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
-  const product = useMemo(() => products.find((p) => !/minimal/i.test(p.title) && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece])
-  const photo = row.isNew ? '' : product?.images[0]?.url || (cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const min = line === 'minimal'
+  const product = useMemo(() => products.find((p) => /minimal/i.test(p.title) === min && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece, min])
+  // Minimal has no photos yet: Shopify photo if one exists, otherwise a sketch.
+  const photo = row.isNew ? '' : product?.images[0]?.url || (min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
-  const key = `${piece}-${row.split ? 'all' : design}`
+  const key = `${line}-${piece}-${row.split ? 'all' : design}`
 
   return (
     <div className="pwl-give">
       <div className="pwl-give-controls">
+        <div role="group" aria-label={t('Collection')}>
+          <p className="pwl-label">{t('1 · CHOOSE A COLLECTION')}</p>
+          <div className="pwl-chips">
+            <button type="button" className="pwl-chip" aria-pressed={!min} onClick={() => setLine('og')}>OG<span className="pwl-chip-fit">{t('big back print')}</span></button>
+            <button type="button" className="pwl-chip" aria-pressed={min} onClick={() => setLine('minimal')}>Minimal<span className="pwl-chip-soon">{t('new')}</span></button>
+          </div>
+        </div>
         <div role="group" aria-label={t('Piece')}>
-          <p className="pwl-label">{t('1 · PICK A PIECE')}</p>
+          <p className="pwl-label">{t('2 · PICK A PIECE')}</p>
           <div className="pwl-chips">
             {ROWS.map((r) => (
               <button key={r.id} type="button" className="pwl-chip" aria-pressed={r.id === piece} onClick={() => setPiece(r.id)}>
@@ -54,7 +64,7 @@ export default function GiveReceipt() {
           </div>
         </div>
         <div role="group" aria-label={t('Design')}>
-          <p className="pwl-label">{t('2 · PICK A DESIGN')}</p>
+          <p className="pwl-label">{t('3 · PICK A DESIGN')}</p>
           {row.split ? (
             <p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
           ) : (
@@ -75,7 +85,7 @@ export default function GiveReceipt() {
           {photo ? (
             <img src={photo} alt={`${t(row.label)}, ${causeTitle(cause.name)}`} loading="lazy" />
           ) : (
-            <PieceSketch id={piece} />
+            <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} />
           )}
           <figcaption>{photo ? (product ? t('Product photo') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
         </figure>
@@ -91,7 +101,7 @@ export default function GiveReceipt() {
             <span>{t('11:11 · WHAT THIS PIECE GIVES')}</span>
           </div>
           <dl>
-            <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${causeTitle(cause.name)} · ${t(row.label)}`}</dd></div>
+            <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${causeTitle(cause.name)}${min ? ' Minimal' : ''} · ${t(row.label)}`}</dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">
               <dt>{t('INCLUDED FOR')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
@@ -121,13 +131,16 @@ export default function GiveReceipt() {
 }
 
 /** Simple line drawings for pieces without photos yet, clearly not product shots. */
-export function PieceSketch({ id }: { id: string }) {
+export function PieceSketch({ id, dot }: { id: string; dot?: string }) {
   const stroke = { fill: 'none', stroke: '#0b0b0c', strokeWidth: 3, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   return (
     <svg viewBox="0 0 300 300" role="img" aria-label="Sketch" className="pwl-sketch">
       {id === 'beanie' && (<><path d="M84 190 Q80 70 150 66 Q220 70 216 190" {...stroke} /><rect x="72" y="180" width="156" height="58" rx="10" {...stroke} /><path d="M92 186 V232 M112 186 V232 M188 186 V232 M208 186 V232" {...stroke} strokeWidth={2} /><rect x="134" y="196" width="32" height="24" rx="3" fill="#e2453c" /></>)}
       {id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 260 L218 262 L214 140 L214 276 L86 276 L86 140 L82 262 L56 260 L44 98 Z" {...stroke} /><path d="M150 40 V276 M86 264 H214" {...stroke} strokeWidth={2} /><path d="M164 92 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
       {id === 'women' && (<><path d="M100 50 L132 38 Q150 56 168 38 L200 50 L260 92 L238 124 L210 108 Q198 180 218 252 L82 252 Q102 180 90 108 L62 124 L40 92 Z" {...stroke} /><path d="M164 96 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
+      {id === 'hoodie' && (<><path d="M112 52 Q150 20 188 52 L256 100 L244 262 L218 264 L214 150 L214 276 L86 276 L86 150 L82 264 L56 262 L44 100 Z" {...stroke} /><path d="M118 54 Q150 96 182 54 M138 80 V120 M162 80 V120 M104 210 H196 V250 H104 Z" {...stroke} strokeWidth={2} /></>)}
+      {id === 'tote' && (<><path d="M110 112 Q110 40 150 40 Q190 40 190 112" {...stroke} /><rect x="70" y="108" width="160" height="170" rx="4" {...stroke} /></>)}
+      {dot && <circle cx="173" cy={id === 'tote' ? 150 : 120} r="7" fill={dot} />}
       {id === 'minimal' && (<><path d="M96 46 L128 34 Q150 54 172 34 L204 46 L262 98 L232 134 L214 118 L214 270 L86 270 L86 118 L68 134 L38 98 Z" {...stroke} /><path d="M164 100 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
     </svg>
   )

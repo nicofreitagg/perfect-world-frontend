@@ -450,7 +450,7 @@
  "thank you.": "danke.",
  "the story behind the design": "die Geschichte hinter dem Design",
  "to": "an",
- "to its cause partner": "an den Projektpartner",
+ "to its cause partner": "an sein Projekt",
  "to its partner": "an den Partner",
  "too.": "auch.",
  "wear the design": "trag das Design",
@@ -506,7 +506,6 @@
  "Drawings, not product photos. Photos follow once the samples are made.": "Zeichnungen, keine Produktfotos. Fotos folgen, sobald die Muster fertig sind.",
  "11:11 · EVERY PIECE GIVES A FIXED AMOUNT": "11:11 · JEDES TEIL GIBT EINEN FESTEN BETRAG",
  "11:11 · FROM 11.11, EVERY PIECE GIVES A FIXED AMOUNT": "11:11 · AB DEM 11.11. GIBT JEDES TEIL EINEN FESTEN BETRAG",
- "Pick a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.": "Wähl ein Teil und ein Design. Der Beleg zeigt, was es kostet, was davon für den Partner enthalten ist und wer es bekommt.",
  "SIX PLACES · ONE HOPE": "SECHS ORTE · EINE HOFFNUNG",
  "All six causes": "Alle sechs Projekte",
  "Globe with the six causes marked": "Globus mit den sechs Projekten",
@@ -517,9 +516,7 @@
  "The small embroidered logo, close up": "Das kleine gestickte Logo, ganz nah",
  "SEE THE MINIMAL": "ZUR MINIMAL",
  "Piece": "Teil",
- "1 · PICK A PIECE": "1 · WÄHL EIN TEIL",
  "Design": "Design",
- "2 · PICK A DESIGN": "2 · WÄHL EIN DESIGN",
  "The beanie only carries the logo, so its amount is shared equally by all six partners.": "Die Beanie trägt nur das Logo, deshalb wird ihr Betrag gleichmäßig auf alle sechs Partner aufgeteilt.",
  "The design decides the partner. Each design was made with one of them.": "Das Design entscheidet über den Partner. Jedes Design ist mit einem von ihnen entstanden.",
  "Product photo": "Produktfoto",
@@ -561,5 +558,10 @@
  "Collection": "Kollektion",
  "Same six partners. A small detail on the front instead of a story on the back.": "Dieselben sechs Partner. Ein kleines Detail vorne statt einer Geschichte auf dem Rücken.",
  "New on 11.11": "Neu ab 11.11.",
- "Minimal T-shirt": "Minimal T-Shirt"
+ "Minimal T-shirt": "Minimal T-Shirt",
+ "1 · CHOOSE A COLLECTION": "1 · WÄHL EINE KOLLEKTION",
+ "2 · PICK A PIECE": "2 · WÄHL EIN TEIL",
+ "3 · PICK A DESIGN": "3 · WÄHL EIN DESIGN",
+ "big back print": "großer Rückendruck",
+ "Pick a collection, a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.": "Wähl eine Kollektion, ein Teil und ein Design. Der Beleg zeigt, was es kostet, was davon für den Partner enthalten ist und wer es bekommt."
 }

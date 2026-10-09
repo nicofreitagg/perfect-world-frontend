@@ -154,3 +154,7 @@
 
 /* Header on phones: logo, language and cart on one row, the menu below */
 @media (max-width:760px){.pw-hdr{row-gap:12px!important}.pw-hdr-nav{order:3;flex-basis:100%;justify-content:space-between;gap:10px!important}}
+
+/* No single word alone on the last line (Nico, 9 Oct): balance short lines and headings, "pretty" for body text. */
+.pw2 h1,.pw2 h2,.pw2 h3,.pw2 h4,.pw2 summary,.pw2 figcaption,.pw2 .pwl-cause-line,.pw2 .pwl-kicker,.pw2 .pwl-piece-meta,.pw2 .pwl-new-note,.pw2 .pwl-new-meta,.pw2 .pwl-ticket-t,.pw2 .pwl-note,.pw2 .pwl-tagline-t,.pw2 .pwl-loud-s{text-wrap:balance}
+.pw2 p,.pw2 li,.pw2 dd,.pw2 span{text-wrap:pretty}
