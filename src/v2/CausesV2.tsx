@@ -56,7 +56,7 @@ export default function CausesV2() {
     </div>
   </section>
 
-  <section className="pw-iso pw-blend" aria-label={tr("How it works")} style={{ position: "relative", zIndex: "77", background: "#0b0b0c", color: "#ffffff" }}>
+  <section className="pw-iso pw-blend pw-to-footer" aria-label={tr("How it works")} style={{ position: "relative", zIndex: "77", background: "#0b0b0c", color: "#ffffff" }}>
     <img className="pw-ico" src="/v2/icons/ic-f40a9d4d.svg" alt="" aria-hidden="true" style={{ left: "75.5%", top: "10px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-1e094dbe.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "170px", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-220px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(48px, 6vw, 80px) clamp(16px, 4vw, 56px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "28px" }}>

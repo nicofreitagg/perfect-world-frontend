@@ -9,7 +9,7 @@
 @media (max-width:760px){.pw-globe{width:280px;height:280px;background-size:560px 280px;animation-name:pw-spin-s}.pw-pin{display:none}.pw-globewrap{width:300px!important;height:300px!important}}
 @keyframes pw-spin-s{from{background-position:0 0}to{background-position:-560px 0}}
 .pw-still{width:100%;height:100%;object-fit:cover;display:block}
-.pw-marquee{display:flex;width:max-content;animation:pw-slide 38s linear infinite}
+.pw-marquee{display:flex;width:max-content;animation:pw-slide 90s linear infinite}
 @keyframes pw-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .pw-torn{position:relative}
 .pw-torn::after{content:'';position:absolute;left:0;right:0;bottom:-14px;height:14px;background:linear-gradient(135deg,#ffffff 50%,transparent 50%) 0 0/20px 14px repeat-x,linear-gradient(225deg,#ffffff 50%,transparent 50%) 0 0/20px 14px repeat-x}
@@ -144,3 +144,10 @@
 .pw-size thead th:first-child{text-align:left;position:sticky;left:0}
 .pw-size tbody tr:last-child th,.pw-size tbody tr:last-child td{border-bottom:none}
 @media (max-width:760px){.pw-herophoto{left:auto!important;right:-8px!important;bottom:-40px!important;width:130px!important}.pw-herophoto > div{margin-left:0!important;transform:scale(.8);transform-origin:left top}}
+.pw-six{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media (max-width:1100px){.pw-six{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.pw-six{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* A dark block that runs straight into the footer stays dark, no grey band between them */
+.pw2 .pw-blend.pw-to-footer{background:linear-gradient(180deg,rgba(11,11,12,.3) 0,rgba(11,11,12,.58) 35px,rgba(11,11,12,.84) 72px,#0b0b0c 120px)!important}
+.pw2 .pw-blend.pw-to-footer::after{display:none}
+.pw2 .pw-to-footer + footer.pw-blend-t{background:#0b0b0c!important;padding-top:clamp(60px,6vw,96px)!important}

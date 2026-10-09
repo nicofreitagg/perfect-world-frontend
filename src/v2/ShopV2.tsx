@@ -61,7 +61,8 @@ export default function ShopV2() {
   const goOg = () => { setTab('og'); setCause('all'); toShop() }
   const chip = (on: boolean) => ({ selected: on, border: on ? '#0b0b0c' : '#cfccc5', bg: on ? '#0b0b0c' : 'transparent', fg: on ? '#ffffff' : '#0b0b0c' })
 
-  const tiles = PIECE_LIST.map((p) => ({ name: p.label.toUpperCase(), price: p.price, give: p.give }))
+  const extra = NEW_PIECES.filter((n) => n.id !== 'women').map((n) => ({ name: n.id === 'beanie' ? 'BEANIE · ALL SIX' : 'BOMBER', price: n.price, give: n.give }))
+  const tiles = [...PIECE_LIST.map((p) => ({ name: p.label.toUpperCase(), price: p.price, give: p.give })), ...extra]
   const tabs = ([
     { id: 'minimal', label: 'The Minimal Collection', tag: 'NEW · 11.11' },
     { id: 'og', label: 'The OG Collections', tag: '6 CAUSES' },
@@ -237,7 +238,7 @@ export default function ShopV2() {
       <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("Six causes. You pick one.")}</h2>
       <A href="/projects" style={{ fontSize: "15px", fontWeight: "600", color: "#0b0b0c" }}>{tr("Meet all the projects →")}</A>
     </div>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: "14px" }}>
+    <div className="pw-six" style={{ display: "grid", gap: "14px" }}>
       {causeTiles.map((ct, ctI) => (<Fragment key={ctI}>
         <button type="button" onClick={ct.pick} style={{ position: "relative", overflow: "hidden", minHeight: "220px", border: "none", borderRadius: "24px", cursor: "pointer", fontFamily: "inherit", textAlign: "left", padding: "18px", display: "flex", flexDirection: "column", justifyContent: "space-between", background: ct.bg, color: ct.fg }}>
           <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><img src={ct.icon} alt="" aria-hidden="true" style={{ position: "absolute", right: "12px", top: "12px", width: "76px", height: "76px", transform: "rotate(6deg)", opacity: ".9" }} />
@@ -251,7 +252,6 @@ export default function ShopV2() {
   
   <section className="pw-iso pw-blend" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76", background: "#0b0b0c", color: "#ffffff" }}>
     <img className="pw-ico" src="/v2/icons/ic-c7d1f8ac.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "10px", width: "104px", transform: "rotate(6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-beae2a27.svg" alt="" aria-hidden="true" style={{ left: "71%", top: "30px", width: "90px", transform: "rotate(-10deg)" }} />
-    <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-200px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(56px, 6vw, 88px) clamp(16px, 4vw, 56px)" }}>
       <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: ".95" }}>{tr("How your order works")}</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "28px", marginTop: "40px" }}>

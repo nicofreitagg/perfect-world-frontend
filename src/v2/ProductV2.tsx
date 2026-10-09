@@ -47,8 +47,18 @@ export default function ProductV2() {
   const mine = useMemo(() => (all ?? []).filter((p) => raw && getCollectionKey(p.title) === raw.name && !/minimal/i.test(p.title)), [all, raw])
   const kinds = PIECE_LIST.filter((k) => mine.some((p) => extractProductType(p.title) === k.id))
   const piece = kinds.find((k) => k.id === kind) ?? kinds[0] ?? PIECE_LIST[1]
-  const ofKind = mine.filter((p) => extractProductType(p.title) === piece.id)
-  const colourNames = ofKind.map((p) => extractColorFromTitle(p.title) || p.title)
+  // Shopify can hold two products for the same colour; show each colour once, using the one with most sizes in stock.
+  const ofKind = useMemo(() => {
+    const byColour = new Map<string, ShopifyProduct>()
+    const stock = (p: ShopifyProduct) => p.variants.filter((v) => v.availableForSale).length
+    for (const p of mine.filter((m) => extractProductType(m.title) === piece.id)) {
+      const key = (extractColorFromTitle(p.title) || p.title).trim().toLowerCase()
+      const had = byColour.get(key)
+      if (!had || stock(p) > stock(had)) byColour.set(key, p)
+    }
+    return [...byColour.values()]
+  }, [mine, piece.id])
+  const colourNames = ofKind.map((p) => (extractColorFromTitle(p.title) || p.title).trim())
   const product = ofKind[Math.max(colourNames.indexOf(colour), 0)]
   const variants = product?.variants ?? []
   const variant = variants.find((v) => sizeOf(v) === size && v.availableForSale) ?? variants.find((v) => v.availableForSale)
