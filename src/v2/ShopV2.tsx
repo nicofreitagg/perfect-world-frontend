@@ -5,6 +5,7 @@ import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
+import { isLaunched } from './launch'
 
 type Kind = 'tote' | 'tee' | 'over' | 'hoodie'
 const PIECE_LIST: { id: Kind; label: string; price: string; give: string }[] = [
@@ -42,6 +43,10 @@ import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function ShopV2() {
   const tr = useT()
+  // Before 11.11 the ticker says "from 11.11", after it "since 11.11".
+  const ticker = tr(isLaunched()
+    ? 'SIX CAUSES ✕ ONE HOPE ✕ SINCE 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOUR DESIGN DECIDES WHO IT HELPS ✕'
+    : 'SIX CAUSES ✕ ONE HOPE ✕ FROM 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOUR DESIGN DECIDES WHO IT HELPS ✕').concat(' ').repeat(2)
   usePageTitle('Shop | Perfect World')
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
 
@@ -105,8 +110,8 @@ export default function ShopV2() {
 
   <div aria-hidden="true" style={{ background: "#e2453c", color: "#0b0b0c", overflow: "hidden", padding: "10px 0" }}>
     <div className="pw-marquee" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "20px", letterSpacing: ".01em", whiteSpace: "nowrap", gap: "36px" }}>
-      <span>{tr("SIX CAUSES ✕ ONE HOPE ✕ SINCE 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOU CHOOSE WHO IT HELPS ✕ SIX CAUSES ✕ ONE HOPE ✕ SINCE 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOU CHOOSE WHO IT HELPS ✕")}</span>
-      <span>{tr("SIX CAUSES ✕ ONE HOPE ✕ SINCE 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOU CHOOSE WHO IT HELPS ✕ SIX CAUSES ✕ ONE HOPE ✕ SINCE 11.11 EVERY PIECE GIVES A FIXED AMOUNT ✕ TOGETHER. NOT ALONE ✕ WEAR WHAT YOU HOPE FOR ✕ YOU CHOOSE WHO IT HELPS ✕")}</span>
+      <span>{ticker}</span>
+      <span>{ticker}</span>
     </div>
   </div>
 

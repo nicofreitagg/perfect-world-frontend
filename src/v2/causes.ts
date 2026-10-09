@@ -237,7 +237,8 @@ const DARK: Partial<Record<CauseKey, true>> = { oceans: true }
 export const causeFg = (c: Cause) => (DARK[c.id] ? '#ffffff' : '#0b0b0c')
 export const TINT: Record<CauseKey, string> = { rich: '#f3e6d6', 'one-world': '#e3f0f8', talk: '#fbeadc', oceans: '#e1eaf3', cool: '#e2f2e8', wild: '#efebe3' }
 export const causeTeaser = (c: Cause) => { const t = c.blocks[0].paras[0]; const i = t.indexOf('. '); return i > 0 ? t.slice(0, i + 1) : t }
-export const causeTitle = (n: string) => n.toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase())
+// "RICH IN LIFE" -> "Rich in Life" (small words stay lower case).
+export const causeTitle = (n: string) => n.toLowerCase().replace(/\b\w+/g, (w, i) => (i > 0 && ['in', 'at'].includes(w) ? w : w[0].toUpperCase() + w.slice(1)))
 export const causeBySlug = (slug: string | undefined) => CAUSES.find((c) => c.slug === slug)
 
 /** One real number per partner, shown in the "at a glance" row once the partner has given it. */

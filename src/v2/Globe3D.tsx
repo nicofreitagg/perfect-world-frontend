@@ -1,13 +1,19 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Html, PerspectiveCamera } from '@react-three/drei'
+import { Html, PerspectiveCamera, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { useNavigate } from 'react-router-dom'
-import Globe from '../components/3D/Globe'
 import { latLonToVector3 } from '../utils/animations'
 
-// The old site's 3D globe, in the new look: no space background, no stars,
-// six cause pills that open their project page.
+// A light globe in the Perfect World look, with the red line from the logo around the equator.
+// Two skins to choose from (both made from globe-texture.jpg):
+//   ink  = ink-black land on off-white (globe-pw.webp)
+//   hand = hand-drawn grid and coastlines like the One World print (globe-hand.webp)
+// Preview the second with ?globe=hand. Six cause pills open their project page.
+export type GlobeSkin = 'ink' | 'hand'
+const SKINS: Record<GlobeSkin, string> = { ink: '/v2/img/globe-pw.webp', hand: '/v2/img/globe-hand.webp' }
+const globeSkin = (): GlobeSkin =>
+  typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('globe') === 'hand' ? 'hand' : 'ink'
 const PINS = [
   { slug: 'one-world', name: 'One World', color: '#5DADE2', lat: 49.84, lon: 24.03, lift: 0.24 },
   { slug: 'talk-about-it', name: 'Talk About It', color: '#FF8C42', lat: 48.14, lon: 11.58 },
@@ -20,7 +26,7 @@ const PINS = [
 const still = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 function Pin({ pin, onOpen }: { pin: (typeof PINS)[number]; onOpen: (slug: string) => void }) {
-  const pos = useMemo(() => latLonToVector3(pin.lat, pin.lon, 1.02), [pin.lat, pin.lon])
+  const pos = useMemo(() => latLonToVector3(pin.lat, pin.lon, 1.01), [pin.lat, pin.lon])
   const dot = useRef<THREE.Mesh>(null)
   const label = useRef<HTMLButtonElement>(null)
   const { camera } = useThree()
@@ -54,14 +60,19 @@ function Pin({ pin, onOpen }: { pin: (typeof PINS)[number]; onOpen: (slug: strin
   )
 }
 
-function Spinning({ onOpen, onReady }: { onOpen: (slug: string) => void; onReady: () => void }) {
+function Earth({ onOpen, onReady, skin }: { onOpen: (slug: string) => void; onReady: () => void; skin: GlobeSkin }) {
+  const map = useTexture(SKINS[skin])
+  map.colorSpace = THREE.SRGBColorSpace
+  map.anisotropy = 4
   const group = useRef<THREE.Group>(null)
-  const dragging = useRef(false)
+  const drag = useRef<{ x: number; t: number } | null>(null)
   const velocity = useRef(0)
   const perPx = 0.006
 
+  useEffect(() => { onReady() }, [onReady])
+
   useFrame((_, delta) => {
-    if (!group.current || dragging.current) return
+    if (!group.current || drag.current) return
     velocity.current *= 0.93
     if (Math.abs(velocity.current) > 0.02) group.current.rotation.y += velocity.current * delta
     else if (!still) group.current.rotation.y -= 0.06 * delta
@@ -70,36 +81,47 @@ function Spinning({ onOpen, onReady }: { onOpen: (slug: string) => void; onReady
   return (
     // Start with Europe and Africa facing the viewer.
     <group ref={group} rotation={[0.28, -1.92, 0]} scale={1.85}>
-      <Globe
-        onReady={onReady}
-        onDragStart={() => { dragging.current = true; velocity.current = 0 }}
-        onDragMove={(dx) => { if (group.current) group.current.rotation.y += dx * perPx }}
-        onDragEnd={(v) => { dragging.current = false; velocity.current = Math.max(-2.5, Math.min(2.5, v * 1000 * perPx)) }}
-      />
+      <mesh
+        onPointerDown={(e) => { e.stopPropagation(); drag.current = { x: e.clientX, t: performance.now() }; velocity.current = 0; (e.target as Element).setPointerCapture?.(e.pointerId) }}
+        onPointerMove={(e) => {
+          if (!drag.current || !group.current) return
+          const now = performance.now()
+          const dx = e.clientX - drag.current.x
+          group.current.rotation.y += dx * perPx
+          velocity.current = (dx * perPx * 1000) / Math.max(now - drag.current.t, 1)
+          drag.current = { x: e.clientX, t: now }
+        }}
+        onPointerUp={(e) => { drag.current = null; velocity.current = Math.max(-2.5, Math.min(2.5, velocity.current)); (e.target as Element).releasePointerCapture?.(e.pointerId) }}
+        onPointerCancel={() => { drag.current = null }}
+      >
+        <sphereGeometry args={[1, 96, 96]} />
+        <meshStandardMaterial map={map} roughness={1} metalness={0} />
+      </mesh>
       {PINS.map((p) => <Pin key={p.slug} pin={p} onOpen={onOpen} />)}
     </group>
   )
 }
 
-export default function Globe3D({ onReady }: { onReady: () => void }) {
+export default function Globe3D({ onReady, skin = globeSkin() }: { onReady: () => void; skin?: GlobeSkin }) {
   const navigate = useNavigate()
   const [ready, setReady] = useState(false)
   useEffect(() => { if (ready) onReady() }, [ready, onReady])
+  const markReady = useMemo(() => () => setReady(true), [])
 
   return (
     <Canvas
       dpr={[1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
       // Canvas reaches past the box so pills near the edge are not cut off.
-      style={{ position: 'absolute', inset: '-60px -50px', width: 'auto', height: 'auto', touchAction: 'pan-y', opacity: ready ? 1 : 0, transition: 'opacity 1s ease' }}
+      style={{ position: 'absolute', inset: '-60px -50px', width: 'auto', height: 'auto', touchAction: 'pan-y', opacity: ready ? 1 : 0, transition: 'opacity .8s ease' }}
       onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); gl.domElement.style.touchAction = 'pan-y' }}
     >
       <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={50} />
-      <ambientLight intensity={0.9} />
-      <directionalLight position={[4, 4, 5]} intensity={2.1} />
-      <pointLight position={[-5, -4, -5]} intensity={0.8} />
+      {/* The drawn skin wants flatter light, like paper. */}
+      <ambientLight intensity={skin === 'hand' ? 2.2 : 1.6} />
+      <directionalLight position={[-3, 3, 5]} intensity={skin === 'hand' ? 0.9 : 1.4} />
       <Suspense fallback={null}>
-        <Spinning onOpen={(slug) => navigate(`/project/${slug}`)} onReady={() => setReady(true)} />
+        <Earth skin={skin} onOpen={(slug) => navigate(`/project/${slug}`)} onReady={markReady} />
       </Suspense>
     </Canvas>
   )

@@ -24,15 +24,15 @@ export function LangToggle({ dark = false }: { dark?: boolean }) {
   )
 }
 
-/** `dark` = the header sits on a dark block, so it switches to white text and the white logo. */
-export function Header({ active, cartCount, openCart, dark = false }: { active?: string; cartCount: number; openCart: () => void; dark?: boolean }) {
+/** `dark` = the header sits on a dark block, so it switches to white text and the white logo. `big` = larger logo (home). */
+export function Header({ active, cartCount, openCart, dark = false, big = false }: { active?: string; cartCount: number; openCart: () => void; dark?: boolean; big?: boolean }) {
   const t = useT()
   const ink = dark ? '#ffffff' : '#0b0b0c'
   const line = dark ? 'rgba(255,255,255,.35)' : 'rgba(11,11,12,.3)'
   return (
-  <header style={{ position: "relative", zIndex: 80, color: ink, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>
-    <A href="/" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src={dark ? "/v2/img/logo-white.png" : "/v2/img/logo-black.png"} alt="Perfect World" style={{ height: "40px", width: "auto", display: "block" }} /></A>
-    <nav aria-label="Main" style={{ display: "flex", flexWrap: "wrap", gap: "26px", fontSize: "14px", fontWeight: "600" }}>
+  <header className="pw-hdr" style={{ position: "relative", zIndex: 80, color: ink, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>
+    <A href="/" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src={dark ? "/v2/img/logo-white.png" : "/v2/img/logo-black.png"} alt="Perfect World" style={{ height: big ? "clamp(48px, 5vw, 68px)" : "40px", width: "auto", display: "block" }} /></A>
+    <nav aria-label="Main" className="pw-hdr-nav" style={{ display: "flex", flexWrap: "wrap", gap: "26px", fontSize: "14px", fontWeight: "600" }}>
       {NAV.map((l) => <A key={l.href} href={l.href} style={{ color: ink, textDecoration: "none", ...(active === l.href ? { borderBottom: "2px solid #e2453c", paddingBottom: "2px" } : {}) }}>{t(l.label)}</A>)}
     </nav>
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -48,7 +48,7 @@ export function Footer({ icons = ['/v2/icons/ic-df3d515b.svg', '/v2/icons/ic-745
   return (
   <footer className="pw-dark pw-iso pw-blend-t" style={{ position: "relative", zIndex: "76", overflow: "hidden", padding: "clamp(60px, 6vw, 96px) clamp(16px, 4vw, 56px) 44px", textAlign: "center" }}>
     <img className="pw-ico" src={icons[0]} alt="" aria-hidden="true" style={{ right: "2.5%", top: "70px", width: "84px", transform: "rotate(8deg)" }} /><img className="pw-ico pw-m-hide" src={icons[1]} alt="" aria-hidden="true" style={{ left: "92%", top: "570px", width: "104px", transform: "rotate(-6deg)" }} />
-    <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-55px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
+    <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-130px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
     
     <img src="/v2/img/logo-white.png" alt="Perfect World" style={{ height: "48px", width: "auto", display: "block", margin: "0 auto" }} />
     <p style={{ margin: "16px 0 0", fontWeight: "800", fontSize: "clamp(40px, 4.6vw, 68px)", lineHeight: ".9" }} className="pw-fat">Together.</p>

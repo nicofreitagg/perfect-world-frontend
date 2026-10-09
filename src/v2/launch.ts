@@ -28,3 +28,6 @@ export function isNewSiteVisible(): boolean {
   if (!PUBLIC_HOSTS.includes(window.location.hostname)) return true
   return Date.now() >= LAUNCH_AT
 }
+
+/** True once the 11.11 moment has passed, so copy can say "since 11.11" instead of "from 11.11". */
+export const isLaunched = () => Date.now() >= LAUNCH_AT

@@ -151,3 +151,6 @@
 .pw2 .pw-blend.pw-to-footer{background:linear-gradient(180deg,rgba(11,11,12,.3) 0,rgba(11,11,12,.58) 35px,rgba(11,11,12,.84) 72px,#0b0b0c 120px)!important}
 .pw2 .pw-blend.pw-to-footer::after{display:none}
 .pw2 .pw-to-footer + footer.pw-blend-t{background:#0b0b0c!important;padding-top:clamp(60px,6vw,96px)!important}
+
+/* Header on phones: logo, language and cart on one row, the menu below */
+@media (max-width:760px){.pw-hdr{row-gap:12px!important}.pw-hdr-nav{order:3;flex-basis:100%;justify-content:space-between;gap:10px!important}}

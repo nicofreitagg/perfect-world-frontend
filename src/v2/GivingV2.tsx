@@ -8,6 +8,7 @@ import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
+import { isLaunched } from './launch'
 
 export default function GivingV2() {
   const tr = useT()
@@ -58,7 +59,7 @@ export default function GivingV2() {
       <div style={{ flex: "0 1 260px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(40px, 5vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World: proof that buying and business can exist to help, not to take.")}</p>
-        <p style={{ margin: "0" }}>{tr("But 100% was abstract, and many people weren't sure what it meant. So since 11.11, every piece gives a fixed amount instead: shown next to the price, passed on to the partner. It's our next step in transparency.")}</p>
+        <p style={{ margin: "0" }}>{isLaunched() ? tr("Since 11.11, that mission has a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.") : tr("From 11.11, that mission gets a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.")}</p>
         <p style={{ margin: "0", fontWeight: "700", color: "#0b0b0c" }}>{tr("Same belief: we are stronger together. Now you can count it.")}</p>
       </div>
     </div>
