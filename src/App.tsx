@@ -14,7 +14,7 @@ import DiscountPopup from './components/ui/DiscountPopup'
 
 // Route-level code splitting: each page loads on demand so the initial
 // bundle stays small (three.js in particular only loads with Home's scene)
-const Home = lazy(() => import('./pages/Home'))
+const HomeGate = lazy(() => import('./v2/HomeGate'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
@@ -57,7 +57,7 @@ function App() {
           <ColorExpansionOverlay />
           <Suspense fallback={<PageFallback />}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HomeGate />} />
               <Route path="/projects" element={<ProjectSelection />} />
               <Route path="/project/:slug" element={<ProjectPage />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
