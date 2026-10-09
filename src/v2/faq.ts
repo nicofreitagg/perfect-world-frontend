@@ -1,7 +1,7 @@
 // One FAQ for the new site: the old site's questions plus the 11.11 giving questions,
 // rewritten for the fixed-amount model.
 export const FAQ: { q: string; a: string }[] = [
-  { q: 'How does giving work?', a: 'Every piece gives a fixed amount to the partner its design was made with: €7.77 for a tote, €11.11 for a T-shirt, €22.22 for an oversized shirt and €33.33 for a hoodie. You see the amount next to the price, on every order.' },
+  { q: 'How does giving work?', a: 'Every piece gives a fixed amount to the partner its design was made with: €7.77 for a tote, €11.11 for a T-shirt or women\'s T-shirt, €22.22 for an oversized shirt, €33.33 for a hoodie and €44.44 for a bomber jacket. The logo beanie gives €7.77, shared by all six partners. You see the amount next to the price, on every order.' },
   { q: 'Can I choose a different cause for a piece?', a: 'No. Every design, OG or Minimal, was made with one partner, so its amount always goes to that partner. Pick the design of the cause you want to support.' },
   { q: 'How do I know the money really arrives?', a: 'We add up the fixed amounts from every order and transfer them to each partner directly. Ask us any time how much has gone to a cause, and we will tell you. As orders come in more regularly, we will publish the totals per partner.' },
   { q: 'Does the €5 shipping fee go to the cause?', a: 'No. Shipping covers delivery. The amount next to the price is what the cause gets.' },

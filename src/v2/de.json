@@ -106,7 +106,6 @@
  "Every piece gives": "Jedes Teil gibt",
  "Every piece gives a fixed amount": "Jedes Teil gibt einen festen Betrag",
  "Every piece gives a fixed amount to its partner.": "Jedes Teil gibt einen festen Betrag an seinen Partner.",
- "Every piece gives a fixed amount to the partner its design was made with: €7.77 for a tote, €11.11 for a T-shirt, €22.22 for an oversized shirt and €33.33 for a hoodie. You see the amount next to the price, on every order.": "Jedes Teil gibt einen festen Betrag an den Partner, mit dem sein Design entstanden ist: €7.77 für eine Tote Bag, €11.11 für ein T-Shirt, €22.22 für ein Oversized-Shirt und €33.33 für einen Hoodie. Du siehst den Betrag neben dem Preis, bei jeder Bestellung.",
  "Every piece gives a fixed amount.": "Jedes Teil gibt einen festen Betrag.",
  "Every piece is made just for you, so we cannot exchange pieces that simply do not fit. Please check the size chart first. If your piece arrives faulty or damaged, email support@perfectworld.global and we will make it right. If an order is refunded, its amount is not paid out.": "Jedes Teil wird nur für dich gefertigt, deshalb können wir Teile, die einfach nicht passen, nicht umtauschen. Bitte wirf vorher einen Blick in die Größentabelle. Kommt dein Teil fehlerhaft oder beschädigt an, schreib an support@perfectworld.global, und wir bringen das in Ordnung. Wird eine Bestellung erstattet, wird ihr Betrag nicht ausgezahlt.",
  "Every piece is made on Stanley/Stella garments, a producer committed to organic materials and fair, ethical manufacturing. Each piece is printed on demand, only once you order, so nothing is overproduced and nothing goes to waste.": "Jedes Teil entsteht auf Textilien von Stanley/Stella, einem Hersteller, der auf Bio-Materialien und faire, ethische Produktion setzt. Jedes Teil wird on demand gedruckt, erst wenn du bestellst. So wird nichts überproduziert und nichts verschwendet.",
@@ -550,5 +549,17 @@
  "See the shop": "Zum Shop",
  "NEW ON 11.11": "NEU AB 11.11.",
  "New pieces.": "Neue Teile.",
- "New": "Neu"
+ "New": "Neu",
+ "Every piece gives a fixed amount to the partner its design was made with: €7.77 for a tote, €11.11 for a T-shirt or women's T-shirt, €22.22 for an oversized shirt, €33.33 for a hoodie and €44.44 for a bomber jacket. The logo beanie gives €7.77, shared by all six partners. You see the amount next to the price, on every order.": "Jedes Teil gibt einen festen Betrag an den Partner, mit dem sein Design entstanden ist: €7.77 für eine Tote Bag, €11.11 für ein T-Shirt oder Damen-T-Shirt, €22.22 für ein Oversized-Shirt, €33.33 für einen Hoodie und €44.44 für eine Bomberjacke. Die Logo-Beanie gibt €7.77, geteilt unter allen sechs Partnern. Du siehst den Betrag neben dem Preis, bei jeder Bestellung.",
+ "Shop every piece": "Alle Teile shoppen",
+ "From 11.11, a set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.": "Ab dem 11.11. ein fester Betrag für jedes Teil, direkt neben dem Preis und bei jeder Bestellung gleich. Er geht an den Partner, mit dem dein Design entstanden ist.",
+ "A set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.": "Ein fester Betrag für jedes Teil, direkt neben dem Preis und bei jeder Bestellung gleich. Er geht an den Partner, mit dem dein Design entstanden ist.",
+ "WOMEN'S T-SHIRT": "DAMEN-T-SHIRT",
+ "OVERSIZED": "OVERSIZED",
+ "BEANIE": "BEANIE",
+ "SIX DESIGNS, SIX PARTNERS": "SECHS DESIGNS, SECHS PARTNER",
+ "Collection": "Kollektion",
+ "Same six partners. A small detail on the front instead of a story on the back.": "Dieselben sechs Partner. Ein kleines Detail vorne statt einer Geschichte auf dem Rücken.",
+ "New on 11.11": "Neu ab 11.11.",
+ "Minimal T-shirt": "Minimal T-Shirt"
 }

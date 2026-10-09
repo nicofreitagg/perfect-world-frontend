@@ -23,9 +23,9 @@
 
 /* 1 · Hero */
 .pwl-hero{position:relative;z-index:79;max-width:1400px;margin:0 auto;padding:clamp(8px,2vw,28px) clamp(16px,4vw,56px) clamp(40px,5vw,72px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);grid-template-areas:"head photo" "body photo";grid-template-rows:auto 1fr;column-gap:clamp(28px,4vw,64px);align-items:start}
-.pwl-sign{margin:clamp(14px,1.6vw,22px) 0 0;display:flex;align-items:baseline;justify-content:center;gap:14px;flex-wrap:wrap;line-height:1}
-.pwl-sign .pw-fat{font-size:clamp(22px,2vw,30px)}
-.pwl-sign .pw-hand{font-size:clamp(40px,4vw,62px)}
+.pwl-sign{margin:clamp(14px,1.6vw,20px) 0 0;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1;text-align:center}
+.pwl-sign .pw-fat{font-size:clamp(17px,1.4vw,21px)}
+.pwl-sign .pw-hand{font-size:clamp(26px,2.3vw,34px)}
 .pwl-head{grid-area:head;margin:clamp(24px,3vw,48px) 0 0;font-weight:400;line-height:1}
 .pwl-head-a,.pwl-head-b{display:block;font-size:clamp(34px,3.6vw,56px);line-height:1;letter-spacing:.01em}
 .pwl-head-b{display:inline-block}
@@ -45,9 +45,12 @@
 .pwl-tagline .pwl-amount{align-self:flex-start;margin:2px 0 8px}
 .pwl-tagline-t{font-size:14px;line-height:1.35;font-weight:600}
 
-/* six-colour line between hero and pieces; never crosses text */
-.pwl-six{display:block;width:100%;height:70px;margin:-10px 0 -20px;overflow:visible;pointer-events:none}
-.pwl-six path{fill:none;stroke-width:4.5;stroke-linecap:round}
+/* cause-colour lines laid on the seam between blocks (no soft gradient) */
+.pwl-lines{display:block;position:relative;z-index:6;width:100%;height:70px;margin:-35px 0;overflow:visible;pointer-events:none}
+.pwl-lines path{fill:none;stroke-width:4.5;stroke-linecap:round}
+.pwl .pwl-hardfoot + footer.pw-blend-t{background:#0b0b0c!important;padding-top:clamp(70px,7vw,110px)!important}
+.pwl .pwl-hardfoot + footer .pw-swirl{display:none}
+.pwl .pwl-lines{z-index:90}
 
 /* OG or Minimal (the earlier big tiles) */
 .pwl-loud{display:grid;grid-template-columns:1fr 1fr;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.16)}
@@ -151,11 +154,11 @@
 .pwl-dark .pwl-sub{color:rgba(255,255,255,.78)}
 .pwl-kicker-l{text-align:left}
 .pwl-link-l{margin-top:14px}
-.pwl-causes-top{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:32px;align-items:center}
-.pwl-globe{position:relative;height:440px}
-.pwl-globe-flat{position:absolute;left:50%;top:50%;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:50%;background:url(/v2/img/globe-wire.webp) 0 50%/760px 380px repeat-x;animation:pwl-spin 60s linear infinite;transition:opacity .8s}
+.pwl-causes-top{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:32px;align-items:center;padding:clamp(20px,3vw,48px) 0}
+.pwl-globe{position:relative;height:clamp(520px,44vw,640px)}
+.pwl-globe-flat{position:absolute;left:50%;top:50%;width:500px;height:500px;margin:-250px 0 0 -250px;border-radius:50%;background:url(/v2/img/globe-earth.webp) 0 50%/1000px 500px repeat-x;box-shadow:inset -30px -16px 60px rgba(38,70,58,.25);animation:pwl-spin 60s linear infinite;transition:opacity .8s}
 .pwl-globe.is-3d .pwl-globe-flat{opacity:0}
-@keyframes pwl-spin{to{background-position:-760px 50%}}
+@keyframes pwl-spin{to{background-position:-1000px 50%}}
 .pwl-causes{margin-top:clamp(28px,4vw,48px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .pwl-cause{position:relative;display:grid;grid-template-columns:58px 1fr;grid-template-areas:"logo name" "logo who" "line line" "go go";column-gap:14px;row-gap:2px;padding:18px 20px 16px;border-radius:22px;background:#161618;border:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;overflow:hidden;transition:border-color .25s,transform .25s}
 .pwl-cause::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}
@@ -251,3 +254,64 @@
 }
 
 .pwl-story-sec{padding-bottom:clamp(110px,10vw,150px)}
+.pwl-faq .pwl-wrap{max-width:1000px}
+.pwl-faq .pwl-h2{margin-bottom:22px}
+.pwl-faq details{border-top:1px solid #dcd9d2;padding:18px 0}
+.pwl-faq details:last-of-type{border-bottom:1px solid #dcd9d2;margin-bottom:20px}
+.pwl-faq summary{cursor:pointer;font-weight:700;font-size:18px;min-height:28px}
+.pwl-faq details p{margin:12px 0 0;font-size:17px;line-height:1.6;color:#2a2a2a;max-width:720px}
+.pwl-story-sec{padding-bottom:clamp(40px,5vw,70px)!important}
+.pwl-faq{padding-top:clamp(40px,5vw,70px);padding-bottom:clamp(110px,10vw,150px)}
+
+/* 11.11 block */
+.pwl-dark .pwl-date{color:rgba(255,255,255,.6)}
+.pwl-1111{margin:12px 0 0;font-size:clamp(84px,10vw,150px);line-height:.82;color:#fff}
+.pwl-1111 span{color:var(--red)}
+.pwl-1111-h{color:#fff;margin-top:26px}
+.pwl-dark .pwl-sub{margin-left:auto;margin-right:auto}
+.pwl-tickets{list-style:none;margin:44px auto 0;padding:0;max-width:1180px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;text-align:left}
+.pwl-tickets li{display:flex;flex-direction:column;gap:8px;padding:18px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04)}
+.pwl-ticket-k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:rgba(255,255,255,.6)}
+.pwl-ticket-v{position:relative;align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:clamp(22px,2vw,28px);color:#fff}
+.is-mark .pwl-ticket-v{color:var(--red)}
+.pwl-ticket-v svg{position:absolute;left:-12px;top:-8px;width:calc(100% + 26px);height:calc(100% + 16px);overflow:visible}
+.pwl-ticket-v path{fill:none;stroke:var(--red);stroke-width:2.5;stroke-linecap:round}
+.pwl-ticket-t{font-size:13px;color:rgba(255,255,255,.7)}
+.pwl-ctas-c{justify-content:center;margin-top:34px}
+.pwl-dark .pwl-link{color:#fff}
+
+/* OG / Minimal switch on the designs */
+.pwl-switch{display:inline-flex;padding:4px;border-radius:999px;border:1.5px solid rgba(11,11,12,.3);background:#fff}
+.pwl-switch button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 22px;border:0;border-radius:999px;background:transparent;font:inherit;font-weight:800;font-size:16px;color:var(--ink);cursor:pointer}
+.pwl-switch button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pwl-switch button[aria-pressed="true"] .pwl-chip-soon{background:rgba(255,255,255,.18);color:#fff}
+.pwl-sec-tight{padding-top:clamp(24px,3vw,40px)}
+.pwl-sec-tight>.pwl-wrap>.pwl-link{margin-top:18px}
+.pwl-min-intro{display:flex;flex-direction:column;justify-content:flex-end;gap:14px;padding:26px;background:var(--ink);color:#fff}
+.pwl-min-intro p{margin:0;font-size:18px;line-height:1.45;font-weight:600}
+.pwl-min-intro .pwl-tag{background:var(--red-t)}
+.pwl-min-h{font-size:clamp(56px,5vw,80px);line-height:.9}
+.pwl-piece-sketch{position:relative;display:flex;align-items:center;justify-content:center}
+.pwl-piece-sketch svg{width:66%;height:auto;filter:drop-shadow(0 12px 14px rgba(0,0,0,.14))}
+.pwl-piece-sketch .pwl-tag{position:absolute;left:10px;top:10px;margin:0;background:var(--red-t)}
+
+/* swirls and icons, only in empty space */
+.pwl-swirl{display:block;width:100%;height:clamp(90px,12vw,170px);margin:clamp(-60px,-4vw,-30px) 0;overflow:visible;pointer-events:none;position:relative;z-index:1}
+.pwl-swirl path{fill:none;stroke-width:6;stroke-linecap:round}
+.pwl-ico{position:absolute;width:clamp(64px,6vw,92px);height:auto;pointer-events:none;z-index:0}
+.pwl-either .pwl-ico{width:58px}
+@media (max-width:1180px){.pwl-sec>.pwl-ico{display:none}}
+
+/* causes on a light, earthy ground */
+.pwl-earth{background:linear-gradient(180deg,rgba(226,236,228,0) 0,#e4ece5 140px,#e4ece5 calc(100% - 140px),rgba(226,236,228,0) 100%)}
+.pwl-earth .pwl-kicker{color:#2f6b55}
+.pwl-earth .pwl-cause{background:var(--paper);border-color:rgba(11,11,12,.1);color:var(--ink)}
+.pwl-earth .pwl-cause-who{color:var(--muted)}
+.pwl-earth .pwl-cause-line{color:#2a2a2a}
+.pwl-earth .pwl-cause-logo{border:1px solid rgba(11,11,12,.08)}
+.pwl-earth .pwl-cause-go{color:var(--ink);text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:2px;text-underline-offset:4px}
+
+@media (max-width:1100px){.pwl-tickets{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:760px){.pwl-tickets{grid-template-columns:repeat(2,minmax(0,1fr))}.pwl-tickets li:last-child{grid-column:span 2}.pwl-switch button{padding:0 16px}}
+
+#causes{padding-top:clamp(90px,9vw,140px)}
