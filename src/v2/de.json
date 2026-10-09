@@ -236,8 +236,6 @@
  "No. Every design, OG or Minimal, was made with one partner, so its amount always goes to that partner. Pick the design of the cause you want to support.": "Nein. Jedes Design, ob OG oder Minimal, ist mit einem Partner entstanden, deshalb geht sein Betrag immer an diesen Partner. Wähl das Design des Projekts, das du unterstützen möchtest.",
  "No. Perfect World is a small clothing brand from Munich. Our six partners are independent organisations, and we pass the fixed amounts on to them.": "Nein. Perfect World ist eine kleine Modemarke aus München. Unsere sechs Partner sind unabhängige Organisationen, und wir geben die festen Beträge an sie weiter.",
  "No. Shipping covers delivery. The amount next to the price is what the cause gets.": "Nein. Der Versand deckt die Lieferung. Der Betrag neben dem Preis ist das, was das Projekt bekommt.",
- "Not a share of profit you can never check. A set amount per piece, printed next to the price, the same on every order.": "Kein Gewinnanteil, den du nie überprüfen kannst. Ein fester Betrag pro Teil, direkt neben dem Preis, bei jeder Bestellung gleich.",
- "Not a share of profit you can never check. A set amount per piece, printed next to the price, the same on every order. Since 11.11.": "Kein Gewinnanteil, den du nie überprüfen kannst. Ein fester Betrag pro Teil, direkt neben dem Preis, bei jeder Bestellung gleich. Seit dem 11.11.",
  "Nothing in here yet.": "Hier ist noch nichts drin.",
  "OG AND MINIMAL": "OG UND MINIMAL",
  "OG COLLECTIONS": "OG-KOLLEKTIONEN",
@@ -285,7 +283,6 @@
  "Privacy": "Datenschutz",
  "Product": "Produkt",
  "Products": "Produkte",
- "Profit is a number you can never check from the outside. It depends on costs, returns and timing. A fixed amount is a promise you can see and count, on every order.": "Gewinn ist eine Zahl, die du von außen nie überprüfen kannst. Er hängt von Kosten, Retouren und Timing ab. Ein fester Betrag ist ein Versprechen, das du sehen und nachzählen kannst, bei jeder Bestellung.",
  "Questions": "Fragen",
  "Quiet pieces. New this November.": "Schlichte Teile. Neu im November.",
  "RETHINKING WHAT WEALTH TRULY MEANS.": "NEU DENKEN, WAS REICHTUM WIRKLICH BEDEUTET.",
@@ -415,7 +412,6 @@
  "Where do you ship to?": "Wohin liefert ihr?",
  "Where it goes": "Wohin es geht",
  "Why 11.11": "Warum 11.11",
- "Why not 100% of profits any more?": "Warum nicht mehr 100 % der Gewinne?",
  "Why we changed": "Warum wir umgestellt haben",
  "With": "Mit",
  "YOU CHOOSE": "DU ENTSCHEIDEST",
@@ -463,5 +459,9 @@
  "you wish for.": "du dir wünschst.",
  "· IN COLLABORATION WITH PERFECT WORLD": "· IN ZUSAMMENARBEIT MIT PERFECT WORLD",
  "€33.33 · €11.11 to your cause": "€33.33 · €11.11 für dein Projekt",
- "€77.77 · €33.33 to your cause": "€77.77 · €33.33 für dein Projekt"
+ "€77.77 · €33.33 to your cause": "€77.77 · €33.33 für dein Projekt",
+ "A clear amount for every piece. Shown right next to the price, the same on every order, and it goes straight to the partner your design was made with.": "Ein klarer Betrag für jedes Teil. Direkt neben dem Preis, bei jeder Bestellung gleich, und er geht direkt an den Partner, mit dem dein Design entstanden ist.",
+ "A clear amount for every piece. Shown right next to the price, the same on every order, and it goes straight to the partner your design was made with. Since 11.11.": "Ein klarer Betrag für jedes Teil. Direkt neben dem Preis, bei jeder Bestellung gleich, und er geht direkt an den Partner, mit dem dein Design entstanden ist. Seit dem 11.11.",
+ "Why a fixed amount instead of 100% of profits?": "Warum ein fester Betrag statt 100 % der Gewinne?",
+ "Because you should know exactly what your piece does. A fixed amount is clear from the moment you buy: shown next to the price, the same on every order, and easy to count as it adds up.": "Weil du genau wissen sollst, was dein Teil bewirkt. Ein fester Betrag ist vom Kauf an klar: neben dem Preis angezeigt, bei jeder Bestellung gleich und leicht nachzuzählen, während er wächst."
 }
