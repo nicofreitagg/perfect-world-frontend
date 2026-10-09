@@ -26,14 +26,15 @@ const ROWS: { id: PieceId; label: string; fit: string; price: string; give: stri
 ]
 const eur = (s: string) => '€' + s
 
-// Step 4. Real colours come from Shopify; until a piece is listed there, these stand in
-// (Minimal ones match the shop page; beanie = black + natural, Nico 9 Oct).
+// Step 4. Real colours come from Shopify; until a piece is listed there, these stand in.
+// Confirmed by Nico (9 Oct): beanie + tote black/natural, bomber black/khaki, OG oversized per design.
 const FALLBACK: Record<string, string[]> = {
   tshirt: ['Black', 'Off-white'], women: ['Black', 'Off-white'], oversized: ['Washed black', 'Off-white'],
-  hoodie: ['Black', 'Sand'], tote: ['Natural'], bomber: ['Black'], beanie: ['Black', 'Natural'],
+  hoodie: ['Black', 'Sand'], tote: ['Black', 'Natural'], bomber: ['Black', 'Khaki'], beanie: ['Black', 'Natural'],
 }
+const OG_OVERSIZED: Record<CauseKey, string> = { wild: 'French Navy', rich: 'Mocha', 'one-world': 'Violet', cool: 'Khaki', talk: 'Black', oceans: 'Dusk' }
 const HEX: [RegExp, string][] = [
-  [/washed/i, '#2a2a2c'], [/black/i, '#1b1b1d'], [/off.?white|white|natural|ecru|cream/i, '#f2efe8'], [/sand|beige|khaki/i, '#cdb89a'],
+  [/washed/i, '#2a2a2c'], [/black/i, '#1b1b1d'], [/off.?white|white|natural|ecru|cream/i, '#f2efe8'], [/khaki/i, '#8a7d5c'], [/mocha/i, '#6f4e3d'], [/violet/i, '#6b5b95'], [/dusk/i, '#4f5d73'], [/sand|beige/i, '#cdb89a'],
   [/navy/i, '#1d2a44'], [/blue/i, '#2f6fa8'], [/olive|green/i, '#6b6f4a'], [/burgundy|bordeaux|wine/i, '#5a2328'],
   [/brown|chocolate|heritage/i, '#5b3a2e'], [/grey|gray|stone|heather/i, '#9a9a96'], [/red/i, '#c0322a'], [/pink/i, '#e9a8b4'], [/orange/i, '#FF8C42'],
 ]
@@ -53,8 +54,10 @@ export default function GiveReceipt() {
   const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece, min])
   const colours = useMemo(() => {
     const seen = [...new Set(matches.map((p) => extractColorFromTitle(p.title)).filter(Boolean))]
-    return seen.length ? seen : FALLBACK[piece]
-  }, [matches, piece])
+    if (seen.length) return seen
+    if (piece === 'oversized' && !min) return [OG_OVERSIZED[design]]
+    return FALLBACK[piece]
+  }, [matches, piece, min, design])
   const [wanted, setColour] = useState('')
   const colour = colours.includes(wanted) ? wanted : colours[0]
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour) ?? matches[0]

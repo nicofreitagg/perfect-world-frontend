@@ -21,7 +21,7 @@ const MINIMAL = [
   { id: 'm3', name: 'Oversized Tee', colour: 'Washed black', kind: 'over', fill: '#2a2a2c', bg: '#e9e7e2', swatches: ['#2a2a2c', '#f2efe8'] },
   { id: 'm4', name: 'Minimal Hoodie', colour: 'Sand', kind: 'hoodie', fill: '#cdb89a', bg: '#ecebe6', swatches: ['#cdb89a', '#1b1b1d'] },
   { id: 'm5', name: 'Minimal Hoodie', colour: 'Black', kind: 'hoodie', fill: '#1b1b1d', bg: '#e2e0da', swatches: ['#cdb89a', '#1b1b1d'] },
-  { id: 'm6', name: 'Minimal Tote', colour: 'Natural', kind: 'tote', fill: '#e8dcc4', bg: '#e9e7e2', swatches: ['#e8dcc4'] },
+  { id: 'm6', name: 'Minimal Tote', colour: 'Natural', kind: 'tote', fill: '#e8dcc4', bg: '#e9e7e2', swatches: ['#e8dcc4', '#1b1b1d'] },
 ] as const
 const MARK: Record<Kind, [number, number]> = { tee: [178, 92], over: [180, 98], hoodie: [172, 158], tote: [182, 300] }
 const kindOf = (title: string): Kind => {
