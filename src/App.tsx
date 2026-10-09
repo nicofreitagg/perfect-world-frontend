@@ -17,6 +17,8 @@ import DiscountPopup from './components/ui/DiscountPopup'
 const HomeGate = lazy(() => import('./v2/HomeGate'))
 const GivingV2 = lazy(() => import('./v2/GivingV2'))
 const V2Only = lazy(() => import('./v2/V2Only'))
+const Swap = lazy(() => import('./v2/Swap'))
+const VisionV2 = lazy(() => import('./v2/VisionV2'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
@@ -64,7 +66,7 @@ function App() {
               <Route path="/projects" element={<ProjectSelection />} />
               <Route path="/project/:slug" element={<ProjectPage />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
-              <Route path="/about" element={<AboutUs />} />
+              <Route path="/about" element={<Swap next={<VisionV2 />} current={<AboutUs />} />} />
               <Route path="/transparency" element={<AboutUs />} />
               <Route path="/founders" element={<Founders />} />
               <Route path="/shop" element={<Shop />} />
