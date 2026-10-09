@@ -121,7 +121,7 @@ export default function ShopV2() {
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ bottom: "-80px" }}><path d="M-60 560 C 200 650, 380 420, 560 520 C 700 600, 770 470, 690 430 C 610 390, 600 570, 770 610 C 990 660, 1160 470, 1500 540" stroke="#FF8C42" strokeWidth="8"></path></svg>
     <div style={{ flex: "1 1 520px" }}>
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
-      <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(52px, 7vw, 104px)", lineHeight: ".9" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
+      <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(37px, 7vw, 104px)", lineHeight: ".9" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
       <p style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.5", color: "#3a3a3a", maxWidth: "520px" }}>{tr("Every piece is made with one of six cause partners and gives it a fixed amount. OG or Minimal, the design tells you who it helps.")}</p>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "28px" }}>
         <button type="button" onClick={goMinimal} style={{ fontFamily: "inherit", fontSize: "15px", fontWeight: "600", padding: "14px 24px", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr("Shop the Minimal Collection")}</button>
@@ -152,7 +152,7 @@ export default function ShopV2() {
     <div role="tablist" aria-label={tr("Collections")} style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px, 3vw, 44px)", borderBottom: "2px solid #0b0b0c" }}>
       {tabs.map((tb, tbI) => (<Fragment key={tbI}>
         <button type="button" role="tab" aria-selected={tb.selected} onClick={tb.pick} style={{ fontFamily: "inherit", background: "none", border: "none", cursor: "pointer", padding: "0 0 14px", marginBottom: "-2px", borderBottom: `4px solid ${tb.line}`, color: tb.fg, display: "flex", alignItems: "baseline", gap: "12px", textAlign: "left" }}>
-          <span className="pw-fat" style={{ fontSize: "clamp(30px, 3.6vw, 48px)", lineHeight: "1" }}>{tr(tb.label)}</span>
+          <span className="pw-fat" style={{ fontSize: "clamp(22px, 3.6vw, 48px)", lineHeight: "1" }}>{tr(tb.label)}</span>
           <span className="pw-mono" style={{ fontSize: "12px", color: "#c0322a" }}>{tr(tb.tag)}</span>
         </button>
       </Fragment>))}
@@ -210,7 +210,7 @@ export default function ShopV2() {
   
   <section className="pw-iso" aria-label={tr("New pieces")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 80px)" }}>
     <p className="pw-hand" style={{ margin: "0", fontSize: "26px", color: "#c0322a" }}>{tr("new on 11.11.")}</p>
-    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces.")}</h2>
+    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(24px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces.")}</h2>
     <div className="pw-m-swipe pw-m-s50 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
       {NEW_PIECES.map((n) => (
         <article key={n.id} style={{ display: "flex", flexDirection: "column" }}>
@@ -240,7 +240,7 @@ export default function ShopV2() {
   <section className="pw-iso" aria-label={tr("The six causes")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 80px)" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-60px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", marginBottom: "20px" }}>
-      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("Six causes. You pick one.")}</h2>
+      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(24px, 4vw, 56px)", lineHeight: ".95" }}>{tr("Six causes. You pick one.")}</h2>
       <A href="/projects" style={{ fontSize: "15px", fontWeight: "600", color: "#0b0b0c" }}>{tr("Meet all the projects →")}</A>
     </div>
     <div className="pw-six" style={{ display: "grid", gap: "14px" }}>
@@ -258,7 +258,7 @@ export default function ShopV2() {
   <section className="pw-iso pw-lightband" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76" }}>
     <img className="pw-ico" src="/v2/icons/ic-c7d1f8ac.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "10px", width: "104px", transform: "rotate(6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-beae2a27.svg" alt="" aria-hidden="true" style={{ left: "71%", top: "30px", width: "90px", transform: "rotate(-10deg)" }} />
     <div className="pw-m-pad" style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(40px, 6vw, 88px) clamp(16px, 4vw, 56px)" }}>
-      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: ".95" }}>{tr("How your order works")}</h2>
+      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(26px, 4.4vw, 60px)", lineHeight: ".95" }}>{tr("How your order works")}</h2>
       <div className="pw-m-steps" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "28px", marginTop: "40px" }}>
         <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>01</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("Pick a piece")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Minimal or OG. Every piece gives a fixed amount.")}</p></div>
         <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>02</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("It goes to its partner")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Every design is made with one partner. The fixed amount always goes to them.")}</p></div>

@@ -93,7 +93,7 @@ export default function HomeV2() {
     <>
 <div className="pw2 pw-page pw-grain pwl" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
   <Flow />
-  <Header big cartCount={cartCount} openCart={openCart} />
+  <Header big active="/" cartCount={cartCount} openCart={openCart} />
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">

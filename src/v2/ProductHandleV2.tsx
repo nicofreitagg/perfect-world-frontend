@@ -56,7 +56,7 @@ export default function ProductHandleV2() {
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div>
             {/minimal/i.test(p.title) && <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#c0322a' }}>{t('THE MINIMAL COLLECTION')}</p>}
-            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(36px, 4.4vw, 60px)', lineHeight: 0.95 }}>{p.title}</h1>
+            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{p.title}</h1>
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {t('goes to the partner it was made with')}</p>}
           </div>

@@ -30,8 +30,8 @@ export default function CausesV2() {
 
   <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "clamp(40px, 7vw, 104px) clamp(16px, 4vw, 56px) clamp(36px, 4vw, 56px)", textAlign: "center" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-40px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#2f6fa8" strokeWidth="7"></path></svg>
-    <p className="pw-hand" style={{ margin: "0 0 10px", fontSize: "clamp(40px, 4.6vw, 68px)", lineHeight: "1.05", color: "#0b0b0c" }}>{tr("Six causes. Six designs.")} <span style={{ color: "#c0322a" }}>{tr("You pick one.")}</span></p>
-    <h1 className="pw-fat" style={{ margin: "12px 0 0", fontSize: "clamp(56px, 8vw, 120px)", lineHeight: ".9" }}>{tr("The people doing the work.")}</h1>
+    <p className="pw-hand" style={{ margin: "0 0 10px", fontSize: "clamp(29px, 4.6vw, 68px)", lineHeight: "1.05", color: "#0b0b0c" }}>{tr("Six causes. Six designs.")} <span style={{ color: "#c0322a" }}>{tr("You pick one.")}</span></p>
+    <h1 className="pw-fat" style={{ margin: "12px 0 0", fontSize: "clamp(40px, 8vw, 120px)", lineHeight: ".9" }}>{tr("The people doing the work.")}</h1>
   </section>
 
   <section className="pw-iso" aria-label={tr("All causes")} style={{ position: "relative", zIndex: "78", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 88px)" }}>
@@ -44,7 +44,7 @@ export default function CausesV2() {
             <span className="pw-mono" style={{ fontSize: "12px", textAlign: "right" }}>{tr(c.place).toUpperCase()}</span>
           </span>
           <span style={{ position: "relative", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <span className="pw-hand" style={{ fontSize: "clamp(40px, 4vw, 58px)", lineHeight: ".95" }}>{c.name}</span>
+            <span className="pw-hand" style={{ fontSize: "clamp(29px, 4vw, 58px)", lineHeight: ".95" }}>{c.name}</span>
             <span  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "20px" }}>{tr(c.line)}</span>
             <span className="pw-m-hide-t" style={{ fontSize: "15px", lineHeight: "1.5", maxWidth: "440px" }}>{tr("With")} {c.partner}. {tr(c.teaser)}</span>
           </span>
@@ -60,7 +60,7 @@ export default function CausesV2() {
     <img className="pw-ico" src="/v2/icons/ic-f40a9d4d.svg" alt="" aria-hidden="true" style={{ left: "75.5%", top: "10px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-1e094dbe.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "170px", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-220px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(48px, 6vw, 80px) clamp(16px, 4vw, 56px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "28px" }}>
-      <p className="pw-fat" style={{ margin: "0", fontSize: "clamp(32px, 4vw, 56px)", lineHeight: ".95", flex: "1 1 520px" }}>{tr("Pick a piece. Pick a cause.")}<br /><span style={{ color: "#e2453c" }}>{tr("We pass it on.")}</span></p>
+      <p className="pw-fat" style={{ margin: "0", fontSize: "clamp(23px, 4vw, 56px)", lineHeight: ".95", flex: "1 1 520px" }}>{tr("Pick a piece. Pick a cause.")}<br /><span style={{ color: "#e2453c" }}>{tr("We pass it on.")}</span></p>
       <A href="/shop"  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", color: "#ffffff", background: "#0b0b0c", textDecoration: "none", padding: "14px 30px", borderRadius: "999px" }}>{tr("SHOP HOPE")}</A>
     </div>
   </section>

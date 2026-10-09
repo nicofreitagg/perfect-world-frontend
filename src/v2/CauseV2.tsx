@@ -50,7 +50,7 @@ export default function CauseV2() {
     <div className="pw-m-chero" style={{ position: "relative", overflow: "hidden", minHeight: "560px", borderRadius: "36px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "48px 24px", boxSizing: "border-box", background: c.bg, color: c.fg }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
       <span className="pw-m-clogo" style={{ position: "relative", width: "128px", height: "128px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 18px rgba(0,0,0,.12)" }}><img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "96px", maxHeight: "80px", objectFit: "contain" }} /></span>
-      <h1 className="pw-hand" style={{ position: "relative", margin: "22px 0 0", fontSize: "clamp(60px, 8vw, 120px)", lineHeight: ".92" }}>{c.name}</h1>
+      <h1 className="pw-hand" style={{ position: "relative", margin: "22px 0 0", fontSize: "clamp(43px, 8vw, 120px)", lineHeight: ".92" }}>{c.name}</h1>
       <p className="pw-hand" style={{ position: "relative", margin: "12px 0 0", fontSize: "clamp(22px, 2.2vw, 28px)" }}>{tr(c.line)}</p>
       <p style={{ position: "relative", margin: "16px 0 0", fontSize: "12px", fontWeight: "600", letterSpacing: ".16em" }}>{c.partnerUpper} · {c.placeUpper} {tr("· IN COLLABORATION WITH PERFECT WORLD")}</p>
     </div>
@@ -68,14 +68,14 @@ export default function CauseV2() {
   {film && (
   <section className="pw-iso" aria-label={tr("The film")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "clamp(40px, 7vw, 96px) clamp(16px, 4vw, 56px) 0" }}>
     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", marginBottom: "20px" }}>
-      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("Watch the film")}</h2>
+      <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(24px, 4vw, 56px)", lineHeight: ".95" }}>{tr("Watch the film")}</h2>
       <p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "22px", color: "#c0322a" }}>{tr("filmed with")} {c.partnerLower}</p>
     </div>
     <div style={{ position: "relative", aspectRatio: "16 / 9", borderRadius: "32px", overflow: "hidden", background: "#0b0b0c" }}>
       <img src={c.still} alt={`Still from the ${c.name} film`} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} />
       <span style={{ position: "absolute", inset: "0", background: "linear-gradient(0deg, rgba(0,0,0,.45), rgba(0,0,0,0) 50%)" }}></span>
       <A href={film} aria-label={`Play the ${c.name} film`} style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: "104px", height: "104px", borderRadius: "50%", border: "none", background: "rgba(255,255,255,.94)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="32" height="32" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="#0b0b0c"></path></svg></A>
-      <p className="pw-hand" style={{ position: "absolute", left: "clamp(20px, 3vw, 40px)", bottom: "clamp(16px, 2.6vw, 32px)", margin: "0", fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff" }}>{c.name}</p>
+      <p className="pw-hand" style={{ position: "absolute", left: "clamp(20px, 3vw, 40px)", bottom: "clamp(16px, 2.6vw, 32px)", margin: "0", fontSize: "clamp(19px, 3vw, 40px)", color: "#ffffff" }}>{c.name}</p>
     </div>
   </section>
   )}
@@ -124,7 +124,7 @@ export default function CauseV2() {
       </div>
       <div style={{ flex: "1 1 380px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "24px", color: "#c0322a" }}>{tr("wear the design")}</p>
-        <h2 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: ".92" }}>{tr("The")} {c.title} {tr("collection")}</h2>
+        <h2 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(26px, 4.4vw, 60px)", lineHeight: ".92" }}>{tr("The")} {c.title} {tr("collection")}</h2>
         <p style={{ margin: "16px 0 0", fontSize: "17px", lineHeight: "1.6", color: "#3a3a3a", maxWidth: "480px" }}>{tr("Designed for this project, so its amount always goes to")} {c.partner}. Prefer something quieter? Its Minimal piece gives to {c.partner} {tr("too.")}</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "24px" }}>
           <A href="/shop" style={{ display: "inline-flex", alignItems: "center", minHeight: "48px", padding: "0 22px", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontSize: "15px", fontWeight: "600" }}>{tr("Shop the")} {c.title} {tr("design")}</A>
@@ -138,7 +138,7 @@ export default function CauseV2() {
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-80px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
     <button type="button" onClick={goNext} className="pw-card" style={{ width: "100%", position: "relative", overflow: "hidden", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px", padding: "34px clamp(24px, 3vw, 44px)", border: "none", borderRadius: "28px", cursor: "pointer", textAlign: "left", fontFamily: "inherit", background: next.bg, color: next.fg }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
-      <span style={{ position: "relative" }}><span className="pw-mono" style={{ display: "block", fontSize: "12px" }}>{tr("NEXT CAUSE")}</span><span className="pw-hand" style={{ display: "block", marginTop: "6px", fontSize: "clamp(36px, 4vw, 56px)", lineHeight: "1" }}>{next.name}</span></span>
+      <span style={{ position: "relative" }}><span className="pw-mono" style={{ display: "block", fontSize: "12px" }}>{tr("NEXT CAUSE")}</span><span className="pw-hand" style={{ display: "block", marginTop: "6px", fontSize: "clamp(26px, 4vw, 56px)", lineHeight: "1" }}>{next.name}</span></span>
       <span className="pw-go" style={{ position: "relative", fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#ffffff", color: "#0b0b0c" }}>{tr("Explore →")}</span>
     </button>
   </section>

@@ -127,7 +127,7 @@ export default function ProductV2() {
     <div style={{ flex: "1 1 420px", minWidth: "0", display: "flex", flexDirection: "column", gap: "26px" }}>
       <div>
         <p className="pw-hand" style={{ margin: "0", fontSize: "28px", color: "#c0322a" }}>{tr("made with")} {c.partnerLower}</p>
-        <h1 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(44px, 5vw, 72px)", lineHeight: ".92" }}>{c.name}<br />{tr(piece.upper)}</h1>
+        <h1 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(32px, 5vw, 72px)", lineHeight: ".92" }}>{c.name}<br />{tr(piece.upper)}</h1>
         <p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "14px 0 0", fontSize: "22px" }}>{tr(c.line)}</p>
         <p className="pw-mono" style={{ margin: "16px 0 0", fontSize: "22px" }}>€{shownPiece.price}</p>
       </div>
@@ -193,7 +193,7 @@ export default function ProductV2() {
       <span style={{ position: "relative", width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }}><img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} /></span>
       <div style={{ position: "relative", flex: "1 1 460px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "26px" }}>{tr("the story behind the design")}</p>
-        <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(32px, 3.6vw, 52px)", lineHeight: ".95" }}>{c.name} · {tr(c.place)}</p>
+        <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(23px, 3.6vw, 52px)", lineHeight: ".95" }}>{c.name} · {tr(c.place)}</p>
         <p style={{ margin: "14px 0 0", fontSize: "17px", lineHeight: "1.55", maxWidth: "640px" }}>{tr(c.teaser)}</p>
         <A href={`/project/${c.slug}`} style={{ display: "inline-block", marginTop: "20px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontWeight: "600", fontSize: "15px", padding: "13px 22px", borderRadius: "999px" }}>{tr("Meet")} {c.partner} →</A>
       </div>

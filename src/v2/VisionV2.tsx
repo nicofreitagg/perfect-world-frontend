@@ -35,8 +35,8 @@ export default function VisionV2() {
         <span style={{ position: "absolute", right: "-6px", bottom: "22px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px", background: "#0b0b0c", color: "#ffffff", padding: "6px 14px", borderRadius: "999px", transform: "rotate(-5deg)" }}>{tr("FOUNDER")}</span>
       </div>
       <div style={{ flex: "1 1 480px" }}>
-        <p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(44px, 6vw, 84px)", lineHeight: "1" }} className="pw-hand">{tr("HI, I'M NICO.")}</p>
-        <h1 style={{ margin: "16px 0 0", fontWeight: "800", fontSize: "clamp(30px, 3.6vw, 52px)", lineHeight: "1.04", letterSpacing: "-0.02em" }} className="pw-fat">{tr("From pain to purpose.")}</h1>
+        <p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(32px, 6vw, 84px)", lineHeight: "1" }} className="pw-hand">{tr("HI, I'M NICO.")}</p>
+        <h1 style={{ margin: "16px 0 0", fontWeight: "800", fontSize: "clamp(22px, 3.6vw, 52px)", lineHeight: "1.04", letterSpacing: "-0.02em" }} className="pw-fat">{tr("From pain to purpose.")}</h1>
         <p style={{ margin: "18px 0 0", fontSize: "18px", lineHeight: "1.55", color: "#3a3a3a", maxWidth: "560px" }}>{tr("Perfect World started long before the brand ever existed. I spent nine months in a hospital, long enough to realize that my pain wasn't unique. Everyone around me was carrying something.")}</p>
       </div>
     </section>
@@ -51,16 +51,16 @@ export default function VisionV2() {
   <section className="pw-iso" aria-label={tr("The story")} style={{ position: "relative", zIndex: "77", maxWidth: "900px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 24px", display: "flex", flexDirection: "column", gap: "28px", fontSize: "19px", lineHeight: "1.65", color: "#2a2a2a" }}>
     <p style={{ margin: "0" }}>{tr("And yet, even in all that heaviness, I saw something else: people helping each other. People caring. People trying. It changed me.")}</p>
     <p style={{ margin: "0" }}>{tr("I had always lived a privileged life. South Africa, Germany, California, Spain. I saw beautiful places, met incredible people, and learned what opportunity feels like. But I also learned what responsibility feels like.")}</p>
-    <blockquote style={{ margin: "12px 0", padding: "0 0 0 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(28px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("PRIVILEGE WITHOUT ACTION IS JUST")} <span style={{ color: "#c0322a" }}>{tr("COMFORT.")}</span></blockquote>
+    <blockquote style={{ margin: "12px 0", padding: "0 0 0 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(20px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("PRIVILEGE WITHOUT ACTION IS JUST")} <span style={{ color: "#c0322a" }}>{tr("COMFORT.")}</span></blockquote>
     <p style={{ margin: "0" }}>{tr("During that time in the hospital, I realized something simple but important: my pain isn't special. But what I do with it can be. I wanted to give back. I wanted to create something that didn't just exist, but helped.")}</p>
     <p style={{ margin: "0" }}>{tr("I didn't have the perfect business plan. I didn't know anything about fashion. I didn't have an investor. I just had one belief:")}</p>
-    <blockquote style={{ margin: "12px 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(28px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("MONEY SHOULD HELP PEOPLE,")} <span style={{ color: "#c0322a" }}>{tr("NOT HURT THEM.")}</span></blockquote>
+    <blockquote style={{ margin: "12px 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(20px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("MONEY SHOULD HELP PEOPLE,")} <span style={{ color: "#c0322a" }}>{tr("NOT HURT THEM.")}</span></blockquote>
   </section>
 
   <section className="pw-iso" aria-label={tr("Why 11.11")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
     <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px", textAlign: "center" }}>
-        <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(64px, 8vw, 110px)", letterSpacing: "-0.04em", lineHeight: "0.9", color: "#c0322a" }} className="pw-fat">11.11</p>
+        <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(46px, 8vw, 110px)", letterSpacing: "-0.04em", lineHeight: "0.9", color: "#c0322a" }} className="pw-fat">11.11</p>
         <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE CHANGED")}</p>
       </div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
@@ -76,7 +76,7 @@ export default function VisionV2() {
     <img className="pw-ico" src="/v2/icons/ic-a60f6b2e.svg" alt="" aria-hidden="true" style={{ left: "95%", top: "50px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-91ae13b8.svg" alt="" aria-hidden="true" style={{ left: "0.5%", top: "70px", width: "96px", transform: "rotate(9deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-20px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <p style={{ margin: "0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "26px", color: "#c0322a" }} className="pw-hand">{tr("our vision")}</p>
-    <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(34px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
+    <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(24px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
     <div className="pw-m-swipe pw-m-s80" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "18px", marginTop: "40px" }}>
       <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
       <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
@@ -102,7 +102,7 @@ export default function VisionV2() {
   <section className="pw-iso" aria-label={tr("Sign-off")} style={{ position: "relative", zIndex: "73", maxWidth: "820px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px)", textAlign: "center" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-170px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#b07e52" strokeWidth="7"></path></svg>
     <p style={{ margin: "0", fontSize: "20px", lineHeight: "1.6", color: "#2a2a2a" }}>{tr("I built this movement because I've received more love in my life than I ever deserved. This is my way of giving some of it back.")}</p>
-    <p style={{ margin: "22px 0 0", fontWeight: "800", fontSize: "clamp(26px, 3vw, 38px)", letterSpacing: "-0.02em", lineHeight: "1.15" }} className="pw-fat">{tr("Perfect World isn't mine anymore. It's ours.")}</p>
+    <p style={{ margin: "22px 0 0", fontWeight: "800", fontSize: "clamp(19px, 3vw, 38px)", letterSpacing: "-0.02em", lineHeight: "1.15" }} className="pw-fat">{tr("Perfect World isn't mine anymore. It's ours.")}</p>
     <p style={{ margin: "22px 0 0", fontSize: "18px", color: "#3a3a3a" }}>{tr("Thanks for being here. Truly.")}</p>
     <p style={{ margin: "14px 0 0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "44px", transform: "rotate(-4deg)" }} className="pw-hand">{tr("NICO")}</p>
     <A href="/shop" style={{ display: "inline-block", marginTop: "30px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px", padding: "14px 30px", borderRadius: "999px" }}>{tr("SHOP HOPE")}</A>
