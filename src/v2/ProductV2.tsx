@@ -142,7 +142,7 @@ export default function ProductV2() {
       </div>
       )}
       <div>
-        <p className="pw-mono" style={{ margin: "0 0 10px", fontSize: "12px", color: "#5c5c5c" }}>{tr("SIZE")}</p>
+        <p className="pw-mono" style={{ margin: "0 0 10px", fontSize: "12px", color: "#5c5c5c", display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{tr("SIZE")}</span><A href={`/size-guide#${kind}`} style={{ color: "#0b0b0c" }}>{tr("Size guide")}</A></p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {sizes.map((z, zI) => (<Fragment key={zI}>
             <button type="button" className="pw-chip pw-mono" onClick={z.pick} aria-pressed={z.selected} disabled={z.disabled} style={{ fontSize: "14px", minWidth: "52px", minHeight: "44px", borderRadius: "12px", border: "1.5px solid #0b0b0c", cursor: "pointer", background: z.bg, color: z.fg }}>{z.label}</button>

@@ -7,6 +7,7 @@ import { A } from './A'
 import { useCart } from '../contexts/CartContext'
 import { useT } from './t'
 import { usePageTitle } from '../hooks/usePageTitle'
+import { SIZE_CHARTS } from './sizes'
 
 // Smaller pages of the new site. Each one replaces an old page only while the new site is visible.
 
@@ -99,6 +100,45 @@ export function InfoV2({ k }: { k: 'together' | 'fashionTool' }) {
     <Shell>
       <Page title={t(`info.${k}.title`)}>
         <p style={{ fontSize: '19px' }}>{t(`info.${k}.body`)}</p>
+      </Page>
+    </Shell>
+  )
+}
+
+/** Size guide with the official Stanley/Stella measurements. */
+export function SizeGuideV2() {
+  const t = useT()
+  usePageTitle('Size guide')
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (id) setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300)
+  }, [])
+  return (
+    <Shell active="/shop">
+      <Page kicker={t('fits like this.')} title={t('Size guide')} sub={t('Every piece is a Stanley/Stella garment in organic cotton. These are the official measurements, in centimetres, with the piece laid flat.')}>
+        <div className="pw-howto">
+          <p><b>A · {t('Half chest')}</b> {t('Straight across the front, 2.5 cm below the armholes.')}</p>
+          <p><b>B · {t('Body length')}</b> {t('From the highest point of the shoulder down to the hem.')}</p>
+          <p><b>C · {t('Sleeve length')}</b> {t('Along the sleeve, from the shoulder seam to the end.')}</p>
+          <p className="pw-tip">{t('Between two sizes? Lay a top you love flat, measure it and pick the closest. For a looser fit, go one size up.')}</p>
+        </div>
+        {SIZE_CHARTS.map((c) => (
+          <section key={c.id} id={c.id} className="pw-size">
+            <h2>{t(c.piece)} {c.soon && <span className="pw-soon">{t('COMING SOON')}</span>}</h2>
+            <p className="pw-size-model">STANLEY/STELLA {c.model.toUpperCase()} · {c.code} · CM</p>
+            <div className="pw-size-scroll" tabIndex={0} role="region" aria-label={`${t(c.piece)}, ${t('measurements in cm')}`}>
+              <table>
+                <thead><tr><th scope="col">{t('Size')}</th>{c.rows.map((r) => <th key={r[0]} scope="col">{r[0]}</th>)}</tr></thead>
+                <tbody>
+                  {c.cols.map(([letter, col], i) => (
+                    <tr key={col}><th scope="row">{letter} · {t(col)}</th>{c.rows.map((r) => <td key={r[0]}>{r[i + 1]}</td>)}</tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        ))}
+        <p style={{ marginTop: '28px' }}>{t('Still unsure?')} <A href="/contact">{t('Write to us')}</A> {t('and we will help you pick.')}</p>
       </Page>
     </Shell>
   )

@@ -25,8 +25,8 @@ export default function GivingV2() {
 <div className="pw2 pw-giving pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
   <Flow />
 
-  <div className="pw-stars" style={{ color: "#ffffff" }}>
-  <Header active="/how-giving-works" cartCount={cartCount} openCart={openCart} />
+  <div className="pw-stars pw-blend-b" style={{ color: "#ffffff" }}>
+  <Header dark active="/how-giving-works" cartCount={cartCount} openCart={openCart} />
     <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1100px", margin: "0 auto", padding: "clamp(40px, 6vw, 90px) clamp(16px, 4vw, 56px) clamp(70px, 8vw, 110px)" }}>
       <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontWeight: "700", fontSize: "14px", letterSpacing: ".14em", color: "#ff6b5f" }}>{tr("HOW GIVING WORKS")}</p>
       <h1 style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(48px, 7vw, 104px)", lineHeight: ".92", letterSpacing: "-0.02em" }} className="pw-fat">{tr("Every piece gives")}<br />{tr("a fixed amount.")}</h1>

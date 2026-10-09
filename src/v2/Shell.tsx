@@ -8,7 +8,11 @@ import { useCart } from '../contexts/CartContext'
 // Frame for the smaller pages (legal, contact, order status, 404) in the new look.
 export default function Shell({ children, active }: { children: ReactNode; active?: string }) {
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    document.body.style.background = '#f5f4f1'
+    return () => { document.body.style.background = '' }
+  }, [])
   return (
     <div className="pw2 pw-grain" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Flow />

@@ -50,7 +50,7 @@
 @media (prefers-reduced-motion:reduce){.pw-swirl path{animation:none;stroke-dashoffset:0}}
 /* v46 */ 
 .pw-ico{position:absolute;pointer-events:none;z-index:-1;height:auto}
-@media (max-width:760px){.pw-ico{width:54px!important;opacity:.5}.pw-ico.pw-m-hide{display:none}}section.pw-dark,footer{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22620%22%20height%3D%22620%22%3E%3Cg%20fill%3D%22%23ffffff%22%20opacity%3D%220.45%22%3E%3Cpath%20transform%3D%22translate%2870%2090%29%22%20d%3D%22M0%20-7%20C%201%20-1%2C%201%20-1%2C%207%200%20C%201%201%2C%201%201%2C%200%207%20C%20-1%201%2C%20-1%201%2C%20-7%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-7%20Z%22/%3E%3Cpath%20transform%3D%22translate%28410%2040%29%22%20d%3D%22M0%20-5%20C%201%20-1%2C%201%20-1%2C%205%200%20C%201%201%2C%201%201%2C%200%205%20C%20-1%201%2C%20-1%201%2C%20-5%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-5%20Z%22/%3E%3Cpath%20transform%3D%22translate%28260%20300%29%22%20d%3D%22M0%20-9%20C%201%20-1%2C%201%20-1%2C%209%200%20C%201%201%2C%201%201%2C%200%209%20C%20-1%201%2C%20-1%201%2C%20-9%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-9%20Z%22/%3E%3Cpath%20transform%3D%22translate%28530%20420%29%22%20d%3D%22M0%20-6%20C%201%20-1%2C%201%20-1%2C%206%200%20C%201%201%2C%201%201%2C%200%206%20C%20-1%201%2C%20-1%201%2C%20-6%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-6%20Z%22/%3E%3Cpath%20transform%3D%22translate%28120%20500%29%22%20d%3D%22M0%20-5%20C%201%20-1%2C%201%20-1%2C%205%200%20C%201%201%2C%201%201%2C%200%205%20C%20-1%201%2C%20-1%201%2C%20-5%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-5%20Z%22/%3E%3Cpath%20transform%3D%22translate%28470%20230%29%22%20d%3D%22M0%20-4%20C%201%20-1%2C%201%20-1%2C%204%200%20C%201%201%2C%201%201%2C%200%204%20C%20-1%201%2C%20-1%201%2C%20-4%200%20C%20-1%20-1%2C%20-1%20-1%2C%200%20-4%20Z%22/%3E%3C/g%3E%3C/svg%3E")}
+@media (max-width:760px){.pw-ico{width:54px!important;opacity:.5}.pw-ico.pw-m-hide{display:none}}
 
 /* Perfect World v2 (11.11 rework) */
 .pw2{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:500;color:#0b0b0c;-webkit-font-smoothing:antialiased}
@@ -104,3 +104,43 @@
 .pw-prose li{margin:4px 0}
 .pw-prose a{color:#0b0b0c;text-decoration:underline;text-underline-offset:3px}
 .pw-prose strong{color:#0b0b0c}
+
+/* Hand-drawn HOPE loop: draws once, like a pen */
+.pw2 .pw-loop{stroke-dasharray:1000;stroke-dashoffset:1000;animation:pw-draw 1.4s .4s cubic-bezier(.45,.1,.25,1) forwards}
+@media (prefers-reduced-motion:reduce){.pw2 .pw-loop{animation:none;stroke-dashoffset:0}}
+
+/* Dark blocks melt into the off-white page instead of hard edges */
+.pw2 .pw-blend,.pw2 .pw-blend-b{position:relative}
+.pw2 .pw-blend{background:linear-gradient(180deg,rgba(11,11,12,.3) 0,rgba(11,11,12,.58) 35px,rgba(11,11,12,.84) 72px,#0b0b0c 120px,#0b0b0c calc(100% - 120px),rgba(11,11,12,.84) calc(100% - 72px),rgba(11,11,12,.58) calc(100% - 35px),rgba(11,11,12,.3) 100%)!important}
+.pw2 .pw-blend::before,.pw2 .pw-blend::after,.pw2 .pw-blend-b::after{content:'';position:absolute;left:0;right:0;height:110px;pointer-events:none}
+.pw2 .pw-blend::before{top:-110px;background:linear-gradient(180deg,rgba(11,11,12,0),rgba(11,11,12,.03) 30%,rgba(11,11,12,.1) 55%,rgba(11,11,12,.2) 80%,rgba(11,11,12,.3))}
+.pw2 .pw-blend::after,.pw2 .pw-blend-b::after{bottom:-110px;background:linear-gradient(180deg,rgba(11,11,12,.3),rgba(11,11,12,.2) 20%,rgba(11,11,12,.1) 45%,rgba(11,11,12,.03) 70%,rgba(11,11,12,0))}
+.pw2 .pw-stars.pw-blend-b{background:radial-gradient(ellipse 80% 70% at 15% 0%,rgba(93,173,226,.28),transparent 70%),radial-gradient(ellipse 70% 60% at 95% 100%,rgba(255,140,66,.22),transparent 70%),linear-gradient(180deg,#0b0b0c calc(100% - 140px),rgba(11,11,12,.3) 100%)}
+.pw2 footer.pw-blend-t{background:linear-gradient(180deg,rgba(11,11,12,0) 0,rgba(11,11,12,.1) 40px,rgba(11,11,12,.35) 80px,rgba(11,11,12,.7) 125px,#0b0b0c 175px)!important;padding-top:calc(clamp(60px,6vw,96px) + 110px)!important}
+
+/* 3D globe pills (home hero) */
+.pw-gpin{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:13px;line-height:1;color:#0b0b0c;background:#fffdf8;border:1.5px solid #0b0b0c;border-radius:999px;padding:8px 14px 8px 10px;cursor:pointer;box-shadow:0 8px 18px rgba(0,0,0,.14);transition:opacity .25s,transform .25s,background .25s,color .25s}
+.pw-gpin span{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+.pw-gpin:hover,.pw-gpin:focus-visible{background:var(--c);transform:translateY(-2px);outline:none}
+.pw-gpin:hover span,.pw-gpin:focus-visible span{background:#fffdf8}
+.pw-globewrap .pw-globe{transition:opacity 1s ease}
+.pw-globewrap.is-3d .pw-globe{opacity:0}
+@media (max-width:760px){.pw-gpin{font-size:11px;padding:6px 10px 6px 8px}}
+.pw2 .pw-stars.pw-blend-b{padding-bottom:100px}
+
+/* Size guide */
+.pw-howto{display:grid;gap:6px;margin:0 0 8px;padding:18px 20px;border-radius:18px;background:#f5f4f1;font-size:15px}
+.pw-howto p{margin:0!important}
+.pw-howto .pw-tip{margin-top:8px!important;color:#5c5c5c}
+.pw-size{margin-top:34px}
+.pw-size h2{display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+.pw-soon{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:#ffffff;background:#c0322a;padding:5px 10px;border-radius:999px}
+.pw-size-model{font-family:'JetBrains Mono',monospace;font-size:12px;color:#5c5c5c;margin:0 0 12px!important}
+.pw-size-scroll{overflow-x:auto;border:1px solid #e3e1dc;border-radius:16px}
+.pw-size table{border-collapse:collapse;width:100%;font-family:'JetBrains Mono',monospace;font-size:14px;white-space:nowrap}
+.pw-size th,.pw-size td{padding:11px 14px;text-align:right;border-bottom:1px solid #eeece7}
+.pw-size thead th{background:#0b0b0c;color:#ffffff;font-weight:700}
+.pw-size tbody th{text-align:left;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;position:sticky;left:0;background:#ffffff}
+.pw-size thead th:first-child{text-align:left;position:sticky;left:0}
+.pw-size tbody tr:last-child th,.pw-size tbody tr:last-child td{border-bottom:none}
+@media (max-width:760px){.pw-herophoto{left:auto!important;right:-8px!important;bottom:-40px!important;width:130px!important}.pw-herophoto > div{margin-left:0!important;transform:scale(.8);transform-origin:left top}}

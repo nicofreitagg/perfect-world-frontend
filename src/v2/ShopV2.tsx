@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
@@ -202,6 +202,35 @@ export default function ShopV2() {
   </section>
 
   
+  <section className="pw-iso" aria-label={tr("Coming soon")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) 80px" }}>
+    <p className="pw-hand" style={{ margin: "0", fontSize: "26px", color: "#c0322a" }}>{tr("on the way.")}</p>
+    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces, coming soon")}</h2>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
+      {NEW_PIECES.map((n) => (
+        <article key={n.id} style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: n.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="70%" height="70%" viewBox="0 0 300 340" role="img" aria-label={tr(n.name)} style={{ filter: "drop-shadow(0 20px 22px rgba(0,0,0,.18))" }}>
+              {n.id === 'women' && (<><path d="M100 70 L132 58 Q150 76 168 58 L200 70 L260 112 L238 144 L210 128 Q198 200 218 272 L82 272 Q102 200 90 128 L62 144 L40 112 Z" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M132 58 Q150 76 168 58" fill="none" stroke="rgba(255,255,255,.25)" strokeWidth="2" /><text x="168" y="112" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#e2453c">11.11</text></>)}
+              {n.id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={n.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5" /><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2" /><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><rect x="64" y="128" width="12" height="26" rx="3" fill="rgba(255,255,255,.35)" /><text x="160" y="96" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#e2453c">11.11</text></>)}
+              {n.id === 'beanie' && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none" /><rect x="72" y="200" width="156" height="58" rx="10" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2" /><rect x="134" y="216" width="32" height="26" rx="3" fill="#f5f4f1" /><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#0b0b0c">PW</text></>)}
+            </svg>
+            <span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#0b0b0c", padding: "6px 11px", borderRadius: "999px" }}>{tr("COMING SOON")}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
+            <div style={{ minWidth: "0" }}>
+              <h3 className="pw-fat" style={{ margin: "0", fontSize: "22px", lineHeight: "1.05" }}>{tr(n.name)}</h3>
+              <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#5c5c5c" }}>{tr(n.sub)}</p>
+            </div>
+            <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>€{n.price}</span>
+          </div>
+          <div style={{ margin: "12px 4px 0", paddingTop: "12px", borderTop: "1px dashed #c9c6bf" }}>
+            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>€{n.give} {tr("to its partner")}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
   <section className="pw-iso" aria-label={tr("The six causes")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) 80px" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-60px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
     <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "flex-end", gap: "12px", marginBottom: "20px" }}>
@@ -220,7 +249,7 @@ export default function ShopV2() {
   </section>
 
   
-  <section className="pw-iso" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76", background: "#0b0b0c", color: "#ffffff" }}>
+  <section className="pw-iso pw-blend" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76", background: "#0b0b0c", color: "#ffffff" }}>
     <img className="pw-ico" src="/v2/icons/ic-c7d1f8ac.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "10px", width: "104px", transform: "rotate(6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-beae2a27.svg" alt="" aria-hidden="true" style={{ left: "71%", top: "30px", width: "90px", transform: "rotate(-10deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-200px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(56px, 6vw, 88px) clamp(16px, 4vw, 56px)" }}>

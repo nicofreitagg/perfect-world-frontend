@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './v2.css'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
@@ -25,7 +25,7 @@ export default function VisionV2() {
   <Flow />
 
   <div className="pw-stars" style={{ color: "#ffffff" }}>
-  <Header active="/about" cartCount={cartCount} openCart={openCart} />
+  <Header dark active="/about" cartCount={cartCount} openCart={openCart} />
 
     <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1240px", margin: "0 auto", padding: "clamp(32px, 5vw, 72px) clamp(16px, 4vw, 56px) clamp(56px, 7vw, 100px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "48px" }}>
     <img className="pw-ico" src="/v2/icons/ic-df3d515b.svg" alt="" aria-hidden="true" style={{ right: "3%", top: "30px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "95%", top: "390px", width: "96px", transform: "rotate(9deg)" }} />
@@ -42,9 +42,9 @@ export default function VisionV2() {
     </section>
   </div>
 
-  <section className="pw-iso" aria-label={tr("Founder video")} style={{ position: "relative", zIndex: "78", background: "linear-gradient(180deg, #0b0b0c 0 50%, #f5f4f1 50% 100%)", padding: "0 clamp(12px, 2.5vw, 32px)" }}>
+  <section className="pw-iso" aria-label={tr("Founder video")} style={{ position: "relative", zIndex: "78", background: "linear-gradient(180deg, #0b0b0c 0, #0b0b0c 35%, rgba(11,11,12,.3) 72%, rgba(11,11,12,0) 100%)", padding: "0 clamp(12px, 2.5vw, 32px)" }}>
     <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", aspectRatio: "16 / 9", borderRadius: "clamp(24px, 3vw, 40px)", overflow: "hidden", background: "#2a2a2e", boxShadow: "0 30px 60px rgba(0,0,0,.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <video src="/v2/video/founder.mp4" poster="/v2/img/founder-poster.jpg" controls playsInline preload="none" aria-label={tr("A message from Nico")} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", background: "#0b0b0c" }} />
+      <FounderVideo label={tr("A message from Nico")} playLabel={tr("Play the video")} />
     </div>
   </section>
 
@@ -111,6 +111,26 @@ export default function VisionV2() {
 </div>
 
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
+    </>
+  )
+}
+
+// The browser's own controls dim the paused video, so it starts as the bright
+// poster with our own play button and only shows controls once it plays.
+function FounderVideo({ label, playLabel }: { label: string; playLabel: string }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const [playing, setPlaying] = useState(false)
+  const play = () => { setPlaying(true); ref.current?.play().catch(() => {}) }
+  return (
+    <>
+      <video ref={ref} src="/v2/video/founder.mp4" poster="/v2/img/founder-poster.jpg" controls={playing} playsInline preload="metadata" aria-label={label} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", background: "#0b0b0c" }} />
+      {!playing && (
+        <button type="button" onClick={play} aria-label={playLabel} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none", padding: 0, background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ width: "clamp(64px, 8vw, 92px)", height: "clamp(64px, 8vw, 92px)", borderRadius: "50%", background: "#ffffff", boxShadow: "0 12px 30px rgba(0,0,0,.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="30%" height="30%" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 1.5 L12 7 L3.5 12.5 Z" fill="#e2453c" /></svg>
+          </span>
+        </button>
+      )}
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import Shell from './Shell'
+import { A } from './A'
 import { CAUSES } from './causes'
 import { PIECES } from './data'
 import { useT } from './t'
@@ -61,7 +62,7 @@ export default function ProductHandleV2() {
           </div>
           {p.variants.length > 1 && (
             <div>
-              <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em' }}>{t('SIZE')}</p>
+              <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em', display: 'flex', justifyContent: 'space-between' }}><span>{t('SIZE')}</span><A href="/size-guide" style={{ color: '#0b0b0c', letterSpacing: 0 }}>{t('Size guide')}</A></p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {p.variants.map((v) => {
                   const on = v === variant

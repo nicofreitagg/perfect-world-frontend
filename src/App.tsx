@@ -29,6 +29,7 @@ const CartPageV2 = lazy(() => V2Pages().then((m) => ({ default: m.CartPageV2 }))
 const OrderSuccessV2 = lazy(() => V2Pages().then((m) => ({ default: m.OrderSuccessV2 })))
 const InfoV2 = lazy(() => V2Pages().then((m) => ({ default: m.InfoV2 })))
 const To = lazy(() => V2Pages().then((m) => ({ default: m.To })))
+const SizeGuideV2 = lazy(() => V2Pages().then((m) => ({ default: m.SizeGuideV2 })))
 const ProductHandleV2 = lazy(() => import('./v2/ProductHandleV2'))
 const ShopV2 = lazy(() => import('./v2/ShopV2'))
 const ProductV2 = lazy(() => import('./v2/ProductV2'))
@@ -84,6 +85,7 @@ function App() {
               <Route path="/founders" element={<Swap next={<To to="/about" />} current={<Founders />} />} />
               <Route path="/shop" element={<Swap next={<ShopV2 />} current={<Shop />} />} />
               <Route path="/design/:slug" element={<V2Only><ProductV2 /></V2Only>} />
+              <Route path="/size-guide" element={<V2Only><SizeGuideV2 /></V2Only>} />
               <Route path="/rich-in-life" element={<Swap next={<To to="/project/rich-in-life" />} current={<RichInLifePreOrder />} />} />
               <Route path="/cart" element={<Swap next={<CartPageV2 />} current={<Cart />} />} />
               <Route path="/checkout" element={<Swap next={<CartPageV2 />} current={<Checkout />} />} />

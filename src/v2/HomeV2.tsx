@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import './v2.css'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
@@ -10,6 +10,8 @@ import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
 
+const Globe3D = lazy(() => import('./Globe3D'))
+
 // Set to the film's file URL once it exists; the film section stays hidden until then.
 const FILM_URL: string = ''
 
@@ -18,6 +20,16 @@ export default function HomeV2() {
   usePageTitle()
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const [tab, setTab] = useState<'minimal' | 'og'>('minimal')
+  // The 3D globe (a large model) loads once the page is idle; the drawn globe shows until it is ready.
+  const [show3d, setShow3d] = useState(false)
+  const [globe3d, setGlobe3d] = useState(false)
+  const onGlobe = useCallback(() => setGlobe3d(true), [])
+  useEffect(() => {
+    const start = () => setShow3d(true)
+    const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }
+    if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 2500 })
+    else setTimeout(start, 1200)
+  }, [])
   const colKicker = tab === 'og' ? 'Six stories, worn on your back.' : 'Quiet pieces. New this November.'
   const colTitle = tab === 'og' ? 'The OG Collections' : 'The Minimal Collection'
 
@@ -38,27 +50,22 @@ export default function HomeV2() {
     <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "auto", bottom: "-70px" }}><path d="M-60 560 C 220 470, 420 640, 700 560 S 1180 470, 1500 540" stroke="#FF8C42" strokeWidth="5"></path><path d="M-60 573 C 220 483, 420 653, 700 573 S 1180 483, 1500 553" stroke="#5DADE2" strokeWidth="5"></path><path d="M-60 586 C 220 496, 420 666, 700 586 S 1180 496, 1500 566" stroke="#4cc37f" strokeWidth="5"></path><path d="M-60 599 C 220 509, 420 679, 700 599 S 1180 509, 1500 579" stroke="#b07e52" strokeWidth="5"></path><path d="M-60 612 C 220 522, 420 692, 700 612 S 1180 522, 1500 592" stroke="#8e8f94" strokeWidth="5"></path><path d="M-60 625 C 220 535, 420 705, 700 625 S 1180 535, 1500 605" stroke="#2f6fa8" strokeWidth="5"></path></svg>
     <div style={{ flex: "1 1 560px", minWidth: "0" }}>
       <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontWeight: "700", fontSize: "clamp(15px, 1.3vw, 19px)", letterSpacing: ".12em", color: "#c0322a" }}>{tr("MAKE A WISH · FROM 11.11 · SIX CAUSES · ONE HOPE")}</p>
-      <h1 style={{ margin: "26px 0 0", fontFamily: "'Hand', cursive", fontWeight: "400", fontSize: "clamp(40px, 4.2vw, 62px)", lineHeight: "1", letterSpacing: ".01em" }} className="pw-hand">{tr("Wear the world you")}<br /><span style={{ position: "relative", display: "inline-block", margin: ".1em .2em .06em .06em", WebkitTextStroke: "0", fontWeight: "800", fontSize: "clamp(150px, 15.2vw, 220px)", lineHeight: ".82", letterSpacing: "-0.02em" }} className="pw-fat pw-hope">{tr("HOPE")}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true" style={{ position: "absolute", left: "-8%", top: "-18%", width: "116%", height: "136%", overflow: "visible", transform: "rotate(-2deg)" }}><path className="pw-draw" d="M200 6 C 322 6, 394 48, 394 100 C 394 152, 322 194, 200 194 C 78 194, 6 152, 6 100 C 6 48, 78 6, 200 6 Z" stroke="#e2453c" strokeWidth="5" fill="none" strokeLinecap="round" vectorEffect="non-scaling-stroke"></path></svg></span>{tr("for.")}</h1>
+      <h1 style={{ margin: "26px 0 0", fontFamily: "'Hand', cursive", fontWeight: "400", fontSize: "clamp(40px, 4.2vw, 62px)", lineHeight: "1", letterSpacing: ".01em" }} className="pw-hand">{tr("Wear the world you")}<br /><span style={{ position: "relative", display: "inline-block", margin: ".1em .2em .06em .06em", WebkitTextStroke: "0", fontWeight: "800", fontSize: "clamp(150px, 15.2vw, 220px)", lineHeight: ".82", letterSpacing: "-0.02em" }} className="pw-fat pw-hope">{tr("HOPE")}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true" style={{ position: "absolute", left: "-9%", top: "-20%", width: "118%", height: "140%", overflow: "visible", transform: "rotate(-3deg)" }}><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" stroke="#e2453c" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round"></path></svg></span>{tr("for.")}</h1>
       <p style={{ margin: "30px 0 0", maxWidth: "480px", fontSize: "20px", lineHeight: "1.5" }}>{tr("Clothing that gives. Every piece is made with one of six cause partners and gives it a")} <b>{tr("fixed amount")}</b>{tr(", from €7.77 for a tote to €33.33 for a hoodie. You see the amount next to the price.")}</p>
       <div style={{ marginTop: "32px", display: "flex", flexWrap: "wrap", gap: "12px" }}>
         <A href="/shop" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "17px", color: "#ffffff", background: "#0b0b0c", textDecoration: "none", padding: "12px 30px", borderRadius: "999px" }}>{tr("SHOP IMPACT")}</A>
         <A href="/how-giving-works" style={{ display: "flex", alignItems: "center", color: "#0b0b0c", textDecoration: "none", fontWeight: "600", fontSize: "15px", padding: "12px 22px", border: "1.5px solid rgba(11,11,12,.4)", borderRadius: "999px", background: "#f5f4f1" }}>{tr("How giving works")}</A>
       </div>
     </div>
-    <div className="pw-globewrap" style={{ position: "relative", width: "560px", height: "500px", flex: "0 0 auto", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div className={globe3d ? "pw-globewrap is-3d" : "pw-globewrap"} style={{ position: "relative", width: "560px", height: "500px", flex: "0 0 auto", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div className="pw-globe" role="img" aria-label={tr("Spinning globe with the six causes marked")}></div>
-      <span className="pw-pin" style={{ top: "56px", left: "30px" }}>{tr("UKRAINE")}<span className="pw-line"></span><span className="pw-dot"></span></span>
-      <span className="pw-pin" style={{ top: "160px", left: "0" }}>{tr("MUNICH")}<span className="pw-line"></span><span className="pw-dot"></span></span>
-      <span className="pw-pin" style={{ top: "310px", left: "10px" }}>{tr("BOTSWANA")}<span className="pw-line"></span><span className="pw-dot"></span></span>
-      <span className="pw-pin" style={{ top: "80px", right: "6px" }}><span className="pw-dot"></span><span className="pw-line"></span>{tr("CARIBBEAN")}</span>
-      <span className="pw-pin" style={{ top: "230px", right: "-22px" }}><span className="pw-dot"></span><span className="pw-line"></span>{tr("COLOMBIA")}</span>
-      <span className="pw-pin" style={{ top: "380px", right: "20px" }}><span className="pw-dot"></span><span className="pw-line"></span>{tr("TUTZING")}</span>
+      {show3d && <Suspense fallback={null}><Globe3D onReady={onGlobe} /></Suspense>}
     
       <div className="pw-herophoto" style={{ position: "absolute", left: "-150px", bottom: "-150px", width: "210px", zIndex: "3", transform: "rotate(-3deg)" }}><img src="/v2/img/hero-friends.jpg" alt={tr("Four friends wearing Perfect World hoodies and tees")} style={{ display: "block", width: "100%", aspectRatio: "5 / 4", objectFit: "cover", borderRadius: "18px", border: "5px solid #ffffff", boxShadow: "0 18px 36px rgba(0,0,0,.2)" }} /><div style={{ marginTop: "-14px", marginLeft: "40px", display: "inline-flex", alignItems: "center", gap: "10px", background: "#ffffff", borderRadius: "14px", padding: "10px 14px", boxShadow: "0 12px 26px rgba(0,0,0,.14)" }}><span style={{ fontWeight: "800", fontSize: "24px", lineHeight: "1", color: "#c0322a" }} className="pw-fat">€33.33</span><span style={{ fontSize: "12px", lineHeight: "1.3", fontWeight: "600", whiteSpace: "nowrap" }}>{tr("from every hoodie")}<br />{tr("to its partner")}</span></div></div>
     </div>
   </section>
 
-  <section id="giving" className="pw-dark pw-iso" aria-label={tr("Every piece gives a fixed amount")} style={{ position: "relative", zIndex: "78", padding: "clamp(80px, 9vw, 130px) clamp(16px, 4vw, 56px) clamp(60px, 6vw, 90px)", textAlign: "center" }}>
+  <section id="giving" className="pw-dark pw-iso pw-blend" aria-label={tr("Every piece gives a fixed amount")} style={{ position: "relative", zIndex: "78", padding: "clamp(80px, 9vw, 130px) clamp(16px, 4vw, 56px) clamp(60px, 6vw, 90px)", textAlign: "center" }}>
     <img className="pw-ico" src="/v2/icons/ic-c7d1f8ac.svg" alt="" aria-hidden="true" style={{ left: "2%", top: "60px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-beae2a27.svg" alt="" aria-hidden="true" style={{ right: "2.5%", top: "45%", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-150px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
