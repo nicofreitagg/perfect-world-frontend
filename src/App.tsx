@@ -19,6 +19,8 @@ const GivingV2 = lazy(() => import('./v2/GivingV2'))
 const V2Only = lazy(() => import('./v2/V2Only'))
 const Swap = lazy(() => import('./v2/Swap'))
 const VisionV2 = lazy(() => import('./v2/VisionV2'))
+const CausesV2 = lazy(() => import('./v2/CausesV2'))
+const CauseV2 = lazy(() => import('./v2/CauseV2'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
@@ -63,8 +65,8 @@ function App() {
             <Routes>
               <Route path="/" element={<HomeGate />} />
               <Route path="/how-giving-works" element={<V2Only><GivingV2 /></V2Only>} />
-              <Route path="/projects" element={<ProjectSelection />} />
-              <Route path="/project/:slug" element={<ProjectPage />} />
+              <Route path="/projects" element={<Swap next={<CausesV2 />} current={<ProjectSelection />} />} />
+              <Route path="/project/:slug" element={<Swap next={<CauseV2 />} current={<ProjectPage />} />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
               <Route path="/about" element={<Swap next={<VisionV2 />} current={<AboutUs />} />} />
               <Route path="/transparency" element={<AboutUs />} />

@@ -221,7 +221,7 @@ export default function HomeV2() {
     <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-100px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
     
     <img src="/v2/img/logo-white.png" alt="Perfect World" style={{ height: "52px", width: "auto" }} />
-    <p style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(64px, 8vw, 120px)", lineHeight: ".9" }} className="pw-fat">Together.</p>
+    <p style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(40px, 4.6vw, 68px)", lineHeight: ".9" }} className="pw-fat">Together.</p>
     <p style={{ margin: "4px 0 0", fontFamily: "'Hand', cursive", fontSize: "clamp(54px, 6.6vw, 100px)", lineHeight: "1", letterSpacing: ".01em" }} className="pw-hand">Not Alone.</p>
     <A href="/shop" style={{ display: "inline-block", marginTop: "34px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "17px", color: "#0b0b0c", background: "#f5f4f1", textDecoration: "none", padding: "12px 30px", borderRadius: "999px" }}>SHOP IMPACT</A>
     {/* Email sign-up form returns once the email tool is decided */}
