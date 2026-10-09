@@ -17,9 +17,10 @@ const PIECE_LIST: { id: Kind; name: string; upper: string; give: string; price: 
 const sizeOf = (v: ShopifyVariant) => v.selectedOptions?.find((o) => /size|gr(ö|oe)(ß|ss)e/i.test(o.name))?.value ?? v.title
 const money = (n: number) => n.toFixed(2)
 import './v2.css'
+import Flow from './Flow'
 import { A } from './A'
 import { useCart } from '../contexts/CartContext'
-import CartDrawer from '../components/Cart/CartDrawer'
+import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function ProductV2() {
@@ -78,7 +79,8 @@ export default function ProductV2() {
   return (
     <>
 
-<div className="pw2 pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c", background: "#f5f4f1" }}>
+<div className="pw2 pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
+  <Flow />
 
   <header style={{ color: "#0b0b0c", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>
     <A href="/" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src="/v2/img/logo-black.png" alt="Perfect World" style={{ height: "40px", width: "auto", display: "block" }} /></A>

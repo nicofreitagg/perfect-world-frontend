@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import './v2.css'
+import Flow from './Flow'
 import { A } from './A'
 import { useCart } from '../contexts/CartContext'
-import CartDrawer from '../components/Cart/CartDrawer'
+import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function GivingV2() {
@@ -17,7 +18,8 @@ export default function GivingV2() {
   return (
     <>
 
-<div className="pw2 pw-giving pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c", background: "#f5f4f1" }}>
+<div className="pw2 pw-giving pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
+  <Flow />
 
   <div className="pw-stars" style={{ color: "#ffffff" }}>
     <header style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>

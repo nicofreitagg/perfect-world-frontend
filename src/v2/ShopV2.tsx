@@ -31,9 +31,10 @@ const kindOf = (title: string): Kind => {
 }
 const SHORT: Record<CauseKey, string> = { rich: 'Colombia', 'one-world': 'Ukraine', talk: 'Mental health', oceans: 'Oceans', cool: 'Climate', wild: 'Elephants' }
 import './v2.css'
+import Flow from './Flow'
 import { A } from './A'
 import { useCart } from '../contexts/CartContext'
-import CartDrawer from '../components/Cart/CartDrawer'
+import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function ShopV2() {
@@ -93,7 +94,8 @@ export default function ShopV2() {
   return (
     <>
 
-<div className="pw2 pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c", background: "#f5f4f1" }}>
+<div className="pw2 pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
+  <Flow />
 
   <header style={{ color: "#0b0b0c", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>
     <A href="/" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src="/v2/img/logo-black.png" alt="Perfect World" style={{ height: "40px", width: "auto", display: "block" }} /></A>

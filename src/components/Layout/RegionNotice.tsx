@@ -17,7 +17,7 @@ const AMERICAS = new Set([
   'CO', 'VE', 'EC', 'PE', 'BO', 'BR', 'PY', 'UY', 'AR', 'CL', 'GY', 'SR',
 ])
 
-export default function RegionNotice() {
+export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
   const { country } = useLocale()
   const { t } = useTranslation()
   const [isVisible, setIsVisible] = useState(false)
@@ -42,9 +42,9 @@ export default function RegionNotice() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-[45] w-[calc(100%-2rem)] max-w-md"
+          className={v2 ? "fixed bottom-4 right-4 z-[2147481000] w-[calc(100%-2rem)] max-w-sm" : "fixed top-24 left-1/2 -translate-x-1/2 z-[45] w-[calc(100%-2rem)] max-w-md"}
         >
-          <div className="relative rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] px-5 py-4 pr-10 text-white">
+          <div className={v2 ? "relative rounded-[22px] bg-[#f5f4f1] border-[1.5px] border-[#0b0b0c] shadow-[0_18px_40px_rgba(0,0,0,0.18)] px-5 py-4 pr-10 text-[#0b0b0c] font-[Bricolage_Grotesque]" : "relative rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] px-5 py-4 pr-10 text-white"}>
             <button
               onClick={handleClose}
               className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
@@ -55,7 +55,7 @@ export default function RegionNotice() {
               </svg>
             </button>
             <p className="text-sm font-bold mb-1">{t('region.comingSoonTitle')}</p>
-            <p className="text-xs text-gray-300 leading-relaxed">{t('region.comingSoonBody')}</p>
+            <p className={v2 ? "text-sm text-[#3a3a3a] leading-relaxed" : "text-xs text-gray-300 leading-relaxed"}>{t('region.comingSoonBody')}</p>
           </div>
         </motion.div>
       )}

@@ -21,6 +21,7 @@ const Swap = lazy(() => import('./v2/Swap'))
 const VisionV2 = lazy(() => import('./v2/VisionV2'))
 const CausesV2 = lazy(() => import('./v2/CausesV2'))
 const CauseV2 = lazy(() => import('./v2/CauseV2'))
+const CookieV2 = lazy(() => import('./v2/CookieV2'))
 const ShopV2 = lazy(() => import('./v2/ShopV2'))
 const ProductV2 = lazy(() => import('./v2/ProductV2'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
@@ -95,9 +96,9 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
-          <CookieConsent />
-          <RegionNotice />
-          <DiscountPopup />
+          <Swap next={<CookieV2 />} current={<CookieConsent />} />
+          <Swap next={<RegionNotice v2 />} current={<RegionNotice />} />
+          <Swap next={null} current={<DiscountPopup />} />
           <Analytics />
           <SpeedInsights />
         </NavigationProvider>

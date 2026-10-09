@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import './v2.css'
+import Flow from './Flow'
 import { A } from './A'
 import { CollectionCarousel, CollectionTabs } from './Collections'
 import { WishTags } from './WishTags'
 import { useCart } from '../contexts/CartContext'
-import CartDrawer from '../components/Cart/CartDrawer'
+import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 
 // Set to the film's file URL once it exists; the film section stays hidden until then.
@@ -27,6 +28,7 @@ export default function HomeV2() {
 
 
 <div className="pw2 pw-page pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
+  <Flow />
 
   <header style={{ position: "relative", zIndex: "2", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "22px clamp(16px, 4vw, 56px)" }}>
     <A href="#top" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src="/v2/img/logo-black.png" alt="Perfect World" style={{ height: "40px", width: "auto" }} /></A>
