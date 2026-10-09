@@ -5,7 +5,7 @@ import { PIECES, NEW_PIECES, type CauseKey } from './data'
 import { useT } from './t'
 import { isLaunched } from './launch'
 import { getAllProducts } from '../utils/shopify'
-import { getCollectionKey, extractProductType } from '../utils/productGrouping'
+import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
 import type { ShopifyProduct } from '../types/shopify.types'
 
 // Home: one piece, its fixed amount and who receives it, side by side.
@@ -26,6 +26,19 @@ const ROWS: { id: PieceId; label: string; fit: string; price: string; give: stri
 ]
 const eur = (s: string) => '€' + s
 
+// Step 4. Real colours come from Shopify; until a piece is listed there, these stand in
+// (Minimal ones match the shop page; beanie = black + natural, Nico 9 Oct).
+const FALLBACK: Record<string, string[]> = {
+  tshirt: ['Black', 'Off-white'], women: ['Black', 'Off-white'], oversized: ['Washed black', 'Off-white'],
+  hoodie: ['Black', 'Sand'], tote: ['Natural'], bomber: ['Black'], beanie: ['Black', 'Natural'],
+}
+const HEX: [RegExp, string][] = [
+  [/washed/i, '#2a2a2c'], [/black/i, '#1b1b1d'], [/off.?white|white|natural|ecru|cream/i, '#f2efe8'], [/sand|beige|khaki/i, '#cdb89a'],
+  [/navy/i, '#1d2a44'], [/blue/i, '#2f6fa8'], [/olive|green/i, '#6b6f4a'], [/burgundy|bordeaux|wine/i, '#5a2328'],
+  [/brown|chocolate|heritage/i, '#5b3a2e'], [/grey|gray|stone|heather/i, '#9a9a96'], [/red/i, '#c0322a'], [/pink/i, '#e9a8b4'], [/orange/i, '#FF8C42'],
+]
+const hexOf = (name: string) => HEX.find(([r]) => r.test(name))?.[1] ?? '#c9c6bf'
+
 export default function GiveReceipt() {
   const t = useT()
   const [line, setLine] = useState<'og' | 'minimal'>('minimal')
@@ -37,11 +50,18 @@ export default function GiveReceipt() {
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
   const min = line === 'minimal'
-  const product = useMemo(() => products.find((p) => /minimal/i.test(p.title) === min && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece, min])
+  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece, min])
+  const colours = useMemo(() => {
+    const seen = [...new Set(matches.map((p) => extractColorFromTitle(p.title)).filter(Boolean))]
+    return seen.length ? seen : FALLBACK[piece]
+  }, [matches, piece])
+  const [wanted, setColour] = useState('')
+  const colour = colours.includes(wanted) ? wanted : colours[0]
+  const product = matches.find((p) => extractColorFromTitle(p.title) === colour) ?? matches[0]
   // Minimal has no photos yet: Shopify photo if one exists, otherwise a sketch.
   const photo = row.isNew ? '' : product?.images[0]?.url || (min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
-  const key = `${line}-${piece}-${row.split ? 'all' : design}`
+  const key = `${line}-${piece}-${row.split ? 'all' : design}-${colour}`
 
   return (
     <div className="pwl-give">
@@ -78,6 +98,16 @@ export default function GiveReceipt() {
           )}
           {!row.split && <p className="pwl-note">{t('The design decides the partner. Each design was made with one of them.')}</p>}
         </div>
+        <div role="group" aria-label={t('Colour')}>
+          <p className="pwl-label">{t('4 · PICK A COLOUR')}</p>
+          <div className="pwl-chips">
+            {colours.map((c) => (
+              <button key={c} type="button" className="pwl-chip" aria-pressed={c === colour} onClick={() => setColour(c)}>
+                <span className="pwl-dot pwl-dot-sw" style={{ background: hexOf(c) }} aria-hidden="true" />{t(c)}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="pwl-give-stage" aria-live="polite">
@@ -85,7 +115,7 @@ export default function GiveReceipt() {
           {photo ? (
             <img src={photo} alt={`${t(row.label)}, ${causeTitle(cause.name)}`} loading="lazy" />
           ) : (
-            <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} />
+            <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} fill={hexOf(colour)} />
           )}
           <figcaption>{photo ? (product ? t('Product photo') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
         </figure>
@@ -102,6 +132,7 @@ export default function GiveReceipt() {
           </div>
           <dl>
             <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${causeTitle(cause.name)}${min ? ' Minimal' : ''} · ${t(row.label)}`}</dd></div>
+            <div><dt>{t('COLOUR')}</dt><dd>{t(colour)}</dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">
               <dt>{t('INCLUDED FOR')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
@@ -131,15 +162,17 @@ export default function GiveReceipt() {
 }
 
 /** Simple line drawings for pieces without photos yet, clearly not product shots. */
-export function PieceSketch({ id, dot }: { id: string; dot?: string }) {
-  const stroke = { fill: 'none', stroke: '#0b0b0c', strokeWidth: 3, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+export function PieceSketch({ id, dot, fill }: { id: string; dot?: string; fill?: string }) {
+  const dark = !!fill && parseInt(fill.slice(1, 3), 16) + parseInt(fill.slice(3, 5), 16) + parseInt(fill.slice(5, 7), 16) < 300
+  const detail = { fill: 'none', stroke: dark ? 'rgba(242,239,232,.55)' : 'rgba(11,11,12,.45)', strokeWidth: 2, strokeLinecap: 'round' as const }
+  const stroke = { fill: fill ?? 'none', stroke: '#0b0b0c', strokeWidth: 3, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
   return (
     <svg viewBox="0 0 300 300" role="img" aria-label="Sketch" className="pwl-sketch">
-      {id === 'beanie' && (<><path d="M84 190 Q80 70 150 66 Q220 70 216 190" {...stroke} /><rect x="72" y="180" width="156" height="58" rx="10" {...stroke} /><path d="M92 186 V232 M112 186 V232 M188 186 V232 M208 186 V232" {...stroke} strokeWidth={2} /><rect x="134" y="196" width="32" height="24" rx="3" fill="#e2453c" /></>)}
-      {id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 260 L218 262 L214 140 L214 276 L86 276 L86 140 L82 262 L56 260 L44 98 Z" {...stroke} /><path d="M150 40 V276 M86 264 H214" {...stroke} strokeWidth={2} /><path d="M164 92 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
+      {id === 'beanie' && (<><path d="M84 190 Q80 70 150 66 Q220 70 216 190" {...stroke} /><rect x="72" y="180" width="156" height="58" rx="10" {...stroke} /><path d="M92 186 V232 M112 186 V232 M188 186 V232 M208 186 V232" {...detail} /><rect x="134" y="196" width="32" height="24" rx="3" fill="#e2453c" /></>)}
+      {id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 260 L218 262 L214 140 L214 276 L86 276 L86 140 L82 262 L56 260 L44 98 Z" {...stroke} /><path d="M150 40 V276 M86 264 H214" {...detail} /><path d="M164 92 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
       {id === 'women' && (<><path d="M100 50 L132 38 Q150 56 168 38 L200 50 L260 92 L238 124 L210 108 Q198 180 218 252 L82 252 Q102 180 90 108 L62 124 L40 92 Z" {...stroke} /><path d="M164 96 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
-      {id === 'hoodie' && (<><path d="M112 52 Q150 20 188 52 L256 100 L244 262 L218 264 L214 150 L214 276 L86 276 L86 150 L82 264 L56 262 L44 100 Z" {...stroke} /><path d="M118 54 Q150 96 182 54 M138 80 V120 M162 80 V120 M104 210 H196 V250 H104 Z" {...stroke} strokeWidth={2} /></>)}
-      {id === 'tote' && (<><path d="M110 112 Q110 40 150 40 Q190 40 190 112" {...stroke} /><rect x="70" y="108" width="160" height="170" rx="4" {...stroke} /></>)}
+      {id === 'hoodie' && (<><path d="M112 52 Q150 20 188 52 L256 100 L244 262 L218 264 L214 150 L214 276 L86 276 L86 150 L82 264 L56 262 L44 100 Z" {...stroke} /><path d="M118 54 Q150 96 182 54 M138 80 V120 M162 80 V120 M104 210 H196 V250 H104 Z" {...detail} /></>)}
+      {id === 'tote' && (<><path d="M110 112 Q110 40 150 40 Q190 40 190 112" {...stroke} fill="none" /><rect x="70" y="108" width="160" height="170" rx="4" {...stroke} /></>)}
       {dot && <circle cx="173" cy={id === 'tote' ? 150 : 120} r="7" fill={dot} />}
       {id === 'minimal' && (<><path d="M96 46 L128 34 Q150 54 172 34 L204 46 L262 98 L232 134 L214 118 L214 270 L86 270 L86 118 L68 134 L38 98 Z" {...stroke} /><path d="M164 100 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
     </svg>

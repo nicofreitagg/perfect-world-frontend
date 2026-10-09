@@ -229,9 +229,9 @@ export default function HomeV2() {
     <div className="pwl-wrap">
       <div className="pwl-sechead pwl-center">
         <div>
-          <p className="pwl-kicker">{tr('TRY IT · THREE TAPS')}</p>
+          <p className="pwl-kicker">{tr('TRY IT · FOUR TAPS')}</p>
           <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pwl-red">{tr('easier.')}</span></h2>
-          <p className="pwl-sub">{tr('Pick a collection, a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
+          <p className="pwl-sub">{tr('Pick a collection, a piece, a design and a colour. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
         </div>
       </div>
       <GiveReceipt />
