@@ -224,7 +224,7 @@ export default function ShopV2() {
             <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>€{n.price}</span>
           </div>
           <div style={{ margin: "12px 4px 0", paddingTop: "12px", borderTop: "1px dashed #c9c6bf" }}>
-            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>€{n.give} {tr("to its partner")}</span>
+            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>€{n.give} {tr('split' in n ? "shared by all six partners" : "to its partner")}</span>
           </div>
         </article>
       ))}
