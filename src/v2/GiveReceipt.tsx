@@ -28,7 +28,7 @@ const eur = (s: string) => '€' + s
 
 export default function GiveReceipt() {
   const t = useT()
-  const [line, setLine] = useState<'og' | 'minimal'>('og')
+  const [line, setLine] = useState<'og' | 'minimal'>('minimal')
   const [piece, setPiece] = useState<PieceId>('tshirt')
   const [design, setDesign] = useState<CauseKey>('talk')
   const [products, setProducts] = useState<ShopifyProduct[]>([])
@@ -49,8 +49,8 @@ export default function GiveReceipt() {
         <div role="group" aria-label={t('Collection')}>
           <p className="pwl-label">{t('1 · CHOOSE A COLLECTION')}</p>
           <div className="pwl-chips">
+            <button type="button" className="pwl-chip" aria-pressed={min} onClick={() => setLine('minimal')}>Minimal<span className="pwl-chip-new">{t('new')}</span></button>
             <button type="button" className="pwl-chip" aria-pressed={!min} onClick={() => setLine('og')}>OG<span className="pwl-chip-fit">{t('big back print')}</span></button>
-            <button type="button" className="pwl-chip" aria-pressed={min} onClick={() => setLine('minimal')}>Minimal<span className="pwl-chip-soon">{t('new')}</span></button>
           </div>
         </div>
         <div role="group" aria-label={t('Piece')}>
@@ -58,7 +58,7 @@ export default function GiveReceipt() {
           <div className="pwl-chips">
             {ROWS.map((r) => (
               <button key={r.id} type="button" className="pwl-chip" aria-pressed={r.id === piece} onClick={() => setPiece(r.id)}>
-                {t(r.label)}{r.fit !== 'women' && <span className="pwl-chip-fit">{t(r.fit)}</span>}{r.isNew && <span className="pwl-chip-soon">{t('new')}</span>}
+                {t(r.label)}{r.fit !== 'women' && <span className="pwl-chip-fit">{t(r.fit)}</span>}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}
               </button>
             ))}
           </div>

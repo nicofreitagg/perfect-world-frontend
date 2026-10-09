@@ -34,6 +34,8 @@ export default function Flow() {
   }, [])
 
   return (
+    <>
+    <EdgeGlow />
     <div ref={ref} className="pw-flow" aria-hidden="true">
       {BLOBS.map((b, i) => (
         <span
@@ -46,6 +48,7 @@ export default function Flow() {
         />
       ))}
     </div>
+    </>
   )
 }
 
@@ -61,16 +64,29 @@ const mix = (t: number) => {
   return a.map((v, j) => Math.round(v + (b[j] - v) * k)).join(',')
 }
 
-export function EdgeGlow() {
+function EdgeGlow() {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const spans = [...el.children] as HTMLElement[]
     let raf = 0
     const update = () => {
       raf = 0
       const max = document.documentElement.scrollHeight - window.innerHeight
       const p = max > 0 ? window.scrollY / max : 0
-      ref.current?.style.setProperty('--gl', mix(p))
-      ref.current?.style.setProperty('--gr', mix(p + 0.22))
+      // One continuous ribbon: the left glows travel down, the right ones up, each with its own
+      // sway, so over the whole page the colour seems to circle around the edges.
+      spans.forEach((s, i) => {
+        const left = i % 2 === 0
+        const off = i * 0.17
+        const t = p + off
+        const y = left ? -70 + ((t * 180) % 180) : 110 - ((t * 180) % 180)
+        const x = Math.sin(t * Math.PI * 3 + i) * 4 + (i > 1 ? (left ? -4 : 4) : 0)
+        const sc = 0.85 + 0.35 * Math.sin(t * Math.PI * 2 + i * 1.3) ** 2
+        s.style.transform = `translate3d(${x}vw, ${y}vh, 0) scale(${sc.toFixed(3)})`
+        s.style.setProperty('--g', mix(t % 1))
+      })
     }
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
     update()
@@ -82,5 +98,9 @@ export function EdgeGlow() {
       cancelAnimationFrame(raf)
     }
   }, [])
-  return <div ref={ref} className="pw-edge" aria-hidden="true" />
+  return (
+    <div ref={ref} className="pw-edge" aria-hidden="true">
+      <span className="l" /><span className="r" /><span className="l" /><span className="r" />
+    </div>
+  )
 }

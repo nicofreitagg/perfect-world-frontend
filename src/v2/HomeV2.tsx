@@ -1,7 +1,10 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import './v2.css'
 import './landing.css'
-import Flow, { EdgeGlow } from './Flow'
+import Flow from './Flow'
+import { Lines } from './Seams'
+
+const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
@@ -16,8 +19,6 @@ import { FAQ } from './faq'
 
 const Globe3D = lazy(() => import('./Globe3D'))
 
-// Six-colour line, used once, between the hero and the pieces.
-const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 
 // New pieces launching on 11.11, shown as drawings until the samples are photographed.
 const NEW = [
@@ -36,15 +37,6 @@ const AMOUNTS = [
   { label: 'BOMBER', price: byId('bomber').price, give: byId('bomber').give },
   { label: 'BEANIE', price: byId('beanie').price, give: byId('beanie').give, split: true },
 ]
-
-// Parallel cause-colour lines laid on the seam between two blocks, instead of a soft gradient.
-function Lines({ colors = SIX, flip = false, className = '' }: { colors?: string[]; flip?: boolean; className?: string }) {
-  return (
-    <svg className={`pwl-lines ${className}`} viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true" style={flip ? { transform: 'scaleX(-1)' } : undefined}>
-      {colors.map((c, i) => <path key={c} d={`M-20 ${30 + i * 8} C 300 ${-6 + i * 8}, 520 ${74 + i * 8}, 760 ${38 + i * 8} S 1200 ${6 + i * 8}, 1460 ${34 + i * 8}`} stroke={c} />)}
-    </svg>
-  )
-}
 
 // A loopy line in one cause colour, run edge to edge in the space between sections (never over text).
 function Swirl({ color, flip = false }: { color: string; flip?: boolean }) {
@@ -72,6 +64,12 @@ export default function HomeV2() {
     return () => { document.body.style.background = '' }
   }, [])
 
+  // Links like /#faq (footer) land on that section.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (id) setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300)
+  }, [])
+
   // The 3D globe only loads when the causes section comes close, and only on larger screens.
   const globeBox = useRef<HTMLDivElement>(null)
   const [show3d, setShow3d] = useState(false)
@@ -94,15 +92,14 @@ export default function HomeV2() {
     <>
 <div className="pw2 pw-page pw-grain pwl" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
   <Flow />
-  <EdgeGlow />
   <Header big cartCount={cartCount} openCart={openCart} />
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">
     <h1 className="pwl-head">
-      <span className="pw-fat pwl-head-a">{tr('Wear the world you')}</span>
+      <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
       <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
-<span className="pw-fat pwl-head-b">{tr('for.')}</span></span>
+<span className="pw-hand pwl-head-b">{tr('for.')}</span></span>
     </h1>
     <figure className="pwl-hero-photo">
       <div className="pwl-photo-box">
@@ -141,8 +138,8 @@ export default function HomeV2() {
         ? tr('A set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.')
         : tr('From 11.11, a set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.')}</p>
       <ul className="pwl-tickets">
-        {AMOUNTS.map((a) => (
-          <li key={a.label} className={a.mark ? 'is-mark' : undefined}>
+        {AMOUNTS.map((a, i) => (
+          <li key={a.label} className={a.mark ? 'is-mark' : undefined} style={{ '--c': SIX[i % SIX.length] } as React.CSSProperties}>
             <span className="pwl-ticket-k">{tr(a.label)}<br />€{a.price}</span>
             <span className="pwl-ticket-v">€{a.give}{a.mark && <svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M150 12 C 110 2, 30 6, 12 34 C -2 58, 60 74, 120 70 C 170 66, 196 46, 182 24 C 172 10, 140 6, 118 8" /></svg>}</span>
             <span className="pwl-ticket-t">{a.split ? tr('shared by all six partners') : tr('to its cause partner')}</span>
@@ -331,7 +328,6 @@ export default function HomeV2() {
     </div>
   </section>
 
-  <Lines colors={['#b07e52', '#e2453c', '#5DADE2']} className="pwl-hardfoot" />
   <Footer icons={["/v2/icons/ic-de6f599f.svg", "/v2/icons/ic-9eab075d.svg"]} />
 </div>
 

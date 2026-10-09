@@ -156,5 +156,23 @@
 @media (max-width:760px){.pw-hdr{row-gap:12px!important}.pw-hdr-nav{order:3;flex-basis:100%;justify-content:space-between;gap:10px!important}}
 
 /* No single word alone on the last line (Nico, 9 Oct): balance short lines and headings, "pretty" for body text. */
-.pw2 h1,.pw2 h2,.pw2 h3,.pw2 h4,.pw2 summary,.pw2 figcaption,.pw2 .pwl-cause-line,.pw2 .pwl-kicker,.pw2 .pwl-piece-meta,.pw2 .pwl-new-note,.pw2 .pwl-new-meta,.pw2 .pwl-ticket-t,.pw2 .pwl-note,.pw2 .pwl-tagline-t,.pw2 .pwl-loud-s{text-wrap:balance}
-.pw2 p,.pw2 li,.pw2 dd,.pw2 span{text-wrap:pretty}
+/* text-wrap-style only: the text-wrap shorthand would also reset white-space:nowrap */
+.pw2 h1,.pw2 h2,.pw2 h3,.pw2 h4,.pw2 summary,.pw2 figcaption,.pw2 .pwl-cause-line,.pw2 .pwl-kicker,.pw2 .pwl-piece-meta,.pw2 .pwl-new-note,.pw2 .pwl-new-meta,.pw2 .pwl-ticket-t,.pw2 .pwl-note,.pw2 .pwl-tagline-t,.pw2 .pwl-loud-s{text-wrap-style:balance}
+.pw2 p,.pw2 li,.pw2 dd,.pw2 span{text-wrap-style:pretty}
+
+/* Homepage look on every page (Nico, 9 Oct) */
+.pwl-lines{display:block;position:relative;z-index:6;width:100%;height:70px;margin:-35px 0;overflow:visible;pointer-events:none}
+.pwl-lines path{fill:none;stroke-width:4.5;stroke-linecap:round}
+.pw2 .pwl-lines{z-index:90}
+.pw2 footer.pw-foot{background:#0b0b0c;padding-top:clamp(70px,7vw,110px)!important}
+/* Light band instead of a black block: soft cause-colour glows, no hard edge */
+.pw2 .pw-lightband{position:relative;color:#0b0b0c;background:radial-gradient(ellipse 55% 60% at 12% 25%,rgba(93,173,226,.26),transparent 70%),radial-gradient(ellipse 50% 55% at 88% 30%,rgba(255,140,66,.22),transparent 70%),radial-gradient(ellipse 60% 55% at 30% 90%,rgba(76,195,127,.2),transparent 70%),radial-gradient(ellipse 55% 50% at 80% 85%,rgba(176,126,82,.18),transparent 70%)}
+/* Edge glow in the cause colours, moving with scroll (EdgeGlow in Flow.tsx) */
+.pw-edge{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden;mix-blend-mode:multiply}
+.pw-edge span{position:absolute;top:0;width:34vw;height:62vh;border-radius:50%;will-change:transform;
+  background:radial-gradient(closest-side,rgba(var(--g,255,140,66),.42),rgba(var(--g,255,140,66),.14) 55%,transparent);filter:blur(18px)}
+.pw-edge .l{left:-22vw}
+.pw-edge .r{right:-22vw}
+.pw-edge span:nth-child(n+3){width:24vw;height:44vh;opacity:.8}
+@media (max-width:760px){.pw-edge span{width:46vw;left:auto}.pw-edge .l{left:-34vw}.pw-edge .r{right:-34vw}.pw-edge span{opacity:.75}}
+@media (prefers-reduced-motion:reduce){.pw-edge span{transition:none}}

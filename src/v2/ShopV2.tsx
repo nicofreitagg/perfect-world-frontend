@@ -208,9 +208,9 @@ export default function ShopV2() {
   </section>
 
   
-  <section className="pw-iso" aria-label={tr("Coming soon")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) 80px" }}>
-    <p className="pw-hand" style={{ margin: "0", fontSize: "26px", color: "#c0322a" }}>{tr("on the way.")}</p>
-    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces, coming soon")}</h2>
+  <section className="pw-iso" aria-label={tr("New pieces")} style={{ position: "relative", zIndex: "77", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) 80px" }}>
+    <p className="pw-hand" style={{ margin: "0", fontSize: "26px", color: "#c0322a" }}>{tr("new on 11.11.")}</p>
+    <h2 className="pw-fat" style={{ margin: "6px 0 24px", fontSize: "clamp(34px, 4vw, 56px)", lineHeight: ".95" }}>{tr("New pieces.")}</h2>
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
       {NEW_PIECES.map((n) => (
         <article key={n.id} style={{ display: "flex", flexDirection: "column" }}>
@@ -220,7 +220,7 @@ export default function ShopV2() {
               {n.id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={n.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5" /><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2" /><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5" /><rect x="64" y="128" width="12" height="26" rx="3" fill="rgba(255,255,255,.35)" /><text x="160" y="96" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#e2453c">11.11</text></>)}
               {n.id === 'beanie' && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none" /><rect x="72" y="200" width="156" height="58" rx="10" fill={n.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5" /><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2" /><rect x="134" y="216" width="32" height="26" rx="3" fill="#f5f4f1" /><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill="#0b0b0c">PW</text></>)}
             </svg>
-            <span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#0b0b0c", padding: "6px 11px", borderRadius: "999px" }}>{tr("COMING SOON")}</span>
+            <span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#e2453c", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW")}</span>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
             <div style={{ minWidth: "0" }}>
@@ -255,14 +255,14 @@ export default function ShopV2() {
   </section>
 
   
-  <section className="pw-iso pw-blend" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76", background: "#0b0b0c", color: "#ffffff" }}>
+  <section className="pw-iso pw-lightband" aria-label={tr("How your order works")} style={{ position: "relative", zIndex: "76" }}>
     <img className="pw-ico" src="/v2/icons/ic-c7d1f8ac.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "10px", width: "104px", transform: "rotate(6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-beae2a27.svg" alt="" aria-hidden="true" style={{ left: "71%", top: "30px", width: "90px", transform: "rotate(-10deg)" }} />
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(56px, 6vw, 88px) clamp(16px, 4vw, 56px)" }}>
       <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: ".95" }}>{tr("How your order works")}</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "28px", marginTop: "40px" }}>
-        <div style={{ borderTop: "1px solid rgba(255,255,255,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>01</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("Pick a piece")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#cfcfcf" }}>{tr("Minimal or OG. Each piece has a fixed amount it gives.")}</p></div>
-        <div style={{ borderTop: "1px solid rgba(255,255,255,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>02</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("It goes to its partner")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#cfcfcf" }}>{tr("Every design is made with one partner. The fixed amount always goes to them.")}</p></div>
-        <div style={{ borderTop: "1px solid rgba(255,255,255,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>03</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("We pass it on")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#cfcfcf" }}>{tr("The full amount goes to the cause you picked. Your piece is made for you and arrives in about 1½ to 2 weeks.")}</p></div>
+        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>01</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("Pick a piece")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Minimal or OG. Each piece has a fixed amount it gives.")}</p></div>
+        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>02</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("It goes to its partner")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Every design is made with one partner. The fixed amount always goes to them.")}</p></div>
+        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>03</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("We pass it on")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("The full amount goes to the cause you picked. Your piece is made for you and arrives in about 1½ to 2 weeks.")}</p></div>
       </div>
     </div>
   </section>
