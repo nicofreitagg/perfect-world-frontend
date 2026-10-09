@@ -69,14 +69,14 @@ export default function ShopV2() {
   const extra = NEW_PIECES.filter((n) => n.id !== 'women').map((n) => ({ name: n.id === 'beanie' ? 'BEANIE · ALL SIX' : 'BOMBER', price: n.price, give: n.give }))
   const tiles = [...PIECE_LIST.map((p) => ({ name: p.label.toUpperCase(), price: p.price, give: p.give })), ...extra]
   const tabs = ([
-    { id: 'minimal', label: 'The Minimal Collection', tag: 'NEW · 11.11' },
-    { id: 'og', label: 'The OG Collections', tag: '6 CAUSES' },
-  ] as const).map((t) => ({ label: t.label, tag: t.tag, selected: t.id === tab, line: t.id === tab ? '#c0322a' : 'transparent', fg: t.id === tab ? '#0b0b0c' : '#9a978f', pick: () => setTab(t.id) }))
+    { id: 'minimal', label: 'Minimal', isNew: true },
+    { id: 'og', label: 'OG', isNew: false },
+  ] as const).map((t) => ({ label: t.label, isNew: t.isNew, selected: t.id === tab, pick: () => setTab(t.id) }))
   const filterLabel = tr(tab === 'minimal' ? 'Filter by piece' : 'Filter by cause')
-  const tabNote = tab === 'minimal' ? 'Clean pieces with one small 11.11 mark. Each is made with one of our six partners.' : "Each OG design tells its partner's story on the back, and its amount always goes to that partner."
+  const tabNote = tab === 'minimal' ? 'One small 11.11 mark. Made with one of our six partners.' : "Big back print. Each design tells its partner's story."
   const filters = tab === 'minimal'
-    ? [{ id: 'all' as const, label: 'All pieces' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: ({ tote: 'Totes', tee: 'T-shirts', over: 'Oversized', hoodie: 'Hoodies' } as const)[p.id] }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
-    : [{ id: 'all' as const, label: 'All causes', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
+    ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: ({ tote: 'Totes', tee: 'T-shirts', over: 'Oversized', hoodie: 'Hoodies' } as const)[p.id] }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
+    : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
   const blank = { ico: '', img: '', grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isOver: false, isHoodie: false, isTote: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string }[]; href: string; addLabel: string }
@@ -89,7 +89,7 @@ export default function ShopV2() {
   } else if (tab === 'minimal') {
     products = MINIMAL.filter((m) => piece === 'all' || m.kind === piece).map((m) => {
       const p = PIECE_LIST.find((x) => x.id === m.kind)!
-      return { ...blank, name: m.name, sub: tr(m.colour) + ' · ' + tr('made with one partner'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: m.bg, fill: m.fill, isGarment: true, isTee: m.kind === 'tee', isOver: m.kind === 'over', isHoodie: m.kind === 'hoodie', isTote: m.kind === 'tote', markX: MARK[m.kind][0], markY: MARK[m.kind][1], isNew: true, swatches: m.swatches.map((c) => ({ c })), href: '', addLabel: tr('Coming 11.11') }
+      return { ...blank, name: m.name, sub: tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: m.bg, fill: m.fill, isGarment: true, isTee: m.kind === 'tee', isOver: m.kind === 'over', isHoodie: m.kind === 'hoodie', isTote: m.kind === 'tote', markX: MARK[m.kind][0], markY: MARK[m.kind][1], isNew: true, swatches: m.swatches.map((c) => ({ c })), href: '', addLabel: tr('Coming 11.11') }
     })
   } else {
     products = CAUSES.filter((c) => cause === 'all' || c.id === cause).map((c) => ({ ...blank, ico: icon(c.id, 'a'), name: c.name, sub: c.partner + ' · ' + tr(SHORT[c.id]), price: tr('from') + ' €' + PIECES.shirt.price, give: tr('from') + ' €' + PIECES.shirt.give + ' ' + tr('to') + ' ' + c.partner, bg: TINT[c.id], isPrint: !!c.print, isPlaceholderPrint: !c.print, img: c.print, grad: c.bg, swatches: [{ c: '#1b1b1d' }, { c: '#f2efe8' }], href: `/design/${c.slug}`, addLabel: tr('Choose your piece') }))
@@ -149,26 +149,24 @@ export default function ShopV2() {
   
   <section className="pw-iso" id="shop" aria-label={tr("Products")} style={{ position: "relative", zIndex: "78", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 72px)" }}>
     <img className="pw-ico" src="/v2/icons/ic-931f8328.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "950px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-13b34769.svg" alt="" aria-hidden="true" style={{ left: "80%", top: "710px", width: "84px", transform: "rotate(10deg)" }} />
-    <div role="tablist" aria-label={tr("Collections")} style={{ display: "flex", flexWrap: "wrap", gap: "clamp(20px, 3vw, 44px)", borderBottom: "2px solid #0b0b0c" }}>
-      {tabs.map((tb, tbI) => (<Fragment key={tbI}>
-        <button type="button" role="tab" aria-selected={tb.selected} onClick={tb.pick} style={{ fontFamily: "inherit", background: "none", border: "none", cursor: "pointer", padding: "0 0 14px", marginBottom: "-2px", borderBottom: `4px solid ${tb.line}`, color: tb.fg, display: "flex", alignItems: "baseline", gap: "12px", textAlign: "left" }}>
-          <span className="pw-fat" style={{ fontSize: "clamp(22px, 3.6vw, 48px)", lineHeight: "1" }}>{tr(tb.label)}</span>
-          <span className="pw-mono" style={{ fontSize: "12px", color: "#c0322a" }}>{tr(tb.tag)}</span>
-        </button>
-      </Fragment>))}
-    </div>
-
-    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px", padding: "18px 0 26px" }}>
-      <p style={{ margin: "0", fontSize: "16px", color: "#3a3a3a", maxWidth: "560px" }}>{tr(tabNote)}</p>
-      <div role="group" aria-label={filterLabel} style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+    <div className="pw-shopbar">
+      <div role="tablist" aria-label={tr("Collections")} className="pw-seg">
+        {tabs.map((tb, tbI) => (<Fragment key={tbI}>
+          <button type="button" role="tab" aria-selected={tb.selected} onClick={tb.pick}>
+            {tr(tb.label)}{tb.isNew && <span className="pw-seg-new">{tr("new")}</span>}
+          </button>
+        </Fragment>))}
+      </div>
+      <div role="group" aria-label={filterLabel} className="pw-filters">
         {filters.map((f, fI) => (<Fragment key={fI}>
-          <button type="button" onClick={f.pick} aria-pressed={f.selected} style={{ display: "flex", alignItems: "center", gap: "8px", fontFamily: "inherit", fontSize: "14px", fontWeight: "600", padding: "0 16px", minHeight: "44px", borderRadius: "999px", cursor: "pointer", border: `1.5px solid ${f.border}`, background: f.bg, color: f.fg }}>
-            {f.hasDot && (<><span aria-hidden="true" style={{ width: "10px", height: "10px", borderRadius: "50%", background: f.dot }}></span></>)}
+          <button type="button" onClick={f.pick} aria-pressed={f.selected}>
+            {f.hasDot && (<><span aria-hidden="true" style={{ width: "9px", height: "9px", borderRadius: "50%", background: f.dot }}></span></>)}
             {f.label}
           </button>
         </Fragment>))}
       </div>
     </div>
+    <p className="pw-shopnote">{tr(tabNote)}</p>
 
     <div className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map((p, pI) => (<Fragment key={pI}>
