@@ -7,7 +7,7 @@ import { getCollectionKey, extractProductType, extractColorFromTitle } from '../
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 import NotFound from '../pages/NotFound'
 import { useT } from './t'
-import { hexOf } from './colours'
+import { hexOf, rankColours } from './colours'
 
 type Kind = 'tote' | 'tshirt' | 'oversized' | 'hoodie'
 const PIECE_LIST: { id: Kind; name: string; upper: string; give: string; price: string }[] = [
@@ -59,8 +59,9 @@ export default function ProductV2() {
       const had = byColour.get(key)
       if (!had || stock(p) > stock(had)) byColour.set(key, p)
     }
-    return [...byColour.values()]
-  }, [mine, piece.id])
+    // Signature colour first, so the page opens on the shirt the shop card shows.
+    return rankColours(raw?.name ?? '', [...byColour.values()], (p) => (extractColorFromTitle(p.title) || p.title).trim())
+  }, [mine, piece.id, raw])
   const colourNames = ofKind.map((p) => (extractColorFromTitle(p.title) || p.title).trim())
   const product = ofKind[Math.max(colourNames.findIndex((n) => n.toLowerCase() === colour.toLowerCase()), 0)]
   const variants = product?.variants ?? []

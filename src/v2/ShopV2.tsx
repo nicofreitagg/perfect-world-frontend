@@ -5,7 +5,7 @@ import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
-import { hexOf } from './colours'
+import { hexOf, rankColours } from './colours'
 import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
 import { isLaunched } from './launch'
 
@@ -122,7 +122,7 @@ export default function ShopV2() {
         const c = extractColorFromTitle(p.title).trim()
         if (c && !seen.has(c.toLowerCase())) seen.set(c.toLowerCase(), p)
       }
-      return [...seen.values()].map((p) => ({ name: extractColorFromTitle(p.title).trim(), img: p.images[0]?.url ?? '' }))
+      return rankColours(name, [...seen.values()].map((p) => ({ name: extractColorFromTitle(p.title).trim(), img: p.images[0]?.url ?? '' })), (x) => x.name)
     }
     const card = (c: (typeof CAUSES)[number]) => ({ ...blank, ico: icon(c.id, 'a'), name: c.name, sub: c.partner + ' · ' + tr(SHORT[c.id]), price: tr('from') + ' €' + PIECES.shirt.price, give: tr('from') + ' €' + PIECES.shirt.give + ' ' + tr('to') + ' ' + c.partner, bg: TINT[c.id], isPrint: !!c.print, isPlaceholderPrint: !c.print, img: c.print, grad: c.bg, swatches: [{ c: '#1b1b1d' }, { c: '#f2efe8' }] as { c: string; href?: string; label?: string }[], href: `/design/${c.slug}`, addLabel: tr('Choose your piece') })
     products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
@@ -132,7 +132,8 @@ export default function ShopV2() {
       const swatches = cols.map((x) => ({ c: hexOf(x.name), href: link(x.name), label: tr(x.name) }))
       // A picked cause splits into one card per colour, like the Minimal filters.
       if (cause !== 'all') return cols.map((x) => ({ ...card(c), sub: tr(x.name) + ' · ' + c.partner, img: x.img || c.print, isPrint: !!(x.img || c.print), isPlaceholderPrint: !(x.img || c.print), swatches: [{ c: hexOf(x.name) }], href: link(x.name) }))
-      return [{ ...card(c), sub: cols.map((x) => tr(x.name)).join(' · '), swatches }]
+      // The card itself opens the lead colour, which is the one its picture shows.
+      return [{ ...card(c), sub: cols.map((x) => tr(x.name)).join(' · '), swatches, href: link(cols[0].name) }]
     })
   }
   const causeTiles = CAUSES.map((c) => ({ icon: icon(c.id, c.id === 'oceans' ? 'wa' : 'a'), name: c.name, logo: c.logo, bg: c.bg, fg: c.id === 'oceans' ? '#ffffff' : '#0b0b0c', pick: () => { setTab('og'); setCause(c.id); toShop() } }))
