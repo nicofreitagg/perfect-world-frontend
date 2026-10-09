@@ -4,6 +4,7 @@ import { createCheckout } from '../utils/shopify'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
 import { CAUSES } from './causes'
 import { PIECES } from './data'
+import { useT } from './t'
 
 // The cart as a receipt, in the 11.11 look: what you pay, and what each piece gives to whom.
 const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give }
@@ -11,6 +12,7 @@ const eur = (n: number) => '€' + n.toFixed(2)
 const mono = "'JetBrains Mono', monospace"
 
 export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOpen: boolean; onClose: () => void; inline?: boolean }) {
+  const tr = useT()
   const { cart, cartTotal, updateQuantity, removeFromCart } = useCart()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -49,18 +51,18 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
 
   return (
     <Overlay inline={inline} onClose={onClose}>
-      <aside role={inline ? undefined : 'dialog'} aria-label="Your cart" style={{ width: '100%', maxWidth: inline ? '640px' : '420px', height: inline ? 'auto' : '100%', margin: inline ? '0 auto' : undefined, borderRadius: inline ? '28px' : undefined, border: inline ? '1px solid #e3e1dc' : undefined, background: '#f5f4f1', color: '#0b0b0c', display: 'flex', flexDirection: 'column', fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500, boxShadow: '-20px 0 50px rgba(0,0,0,.15)' }}>
+      <aside role={inline ? undefined : 'dialog'} aria-label={tr("Your cart")} style={{ width: '100%', maxWidth: inline ? '640px' : '420px', height: inline ? 'auto' : '100%', margin: inline ? '0 auto' : undefined, borderRadius: inline ? '28px' : undefined, border: inline ? '1px solid #e3e1dc' : undefined, background: '#f5f4f1', color: '#0b0b0c', display: 'flex', flexDirection: 'column', fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500, boxShadow: '-20px 0 50px rgba(0,0,0,.15)' }}>
         <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 22px 16px', borderBottom: '1.5px solid #0b0b0c' }}>
-          <h2 className="pw-fat" style={{ margin: 0, fontSize: '34px', lineHeight: 1, fontFamily: "'fatfrank', system-ui, sans-serif", fontWeight: 400 }}>Your cart</h2>
-          {!inline && <button type="button" onClick={onClose} aria-label="Close cart" style={{ ...round, width: '40px', height: '40px' }}>✕</button>}
+          <h2 className="pw-fat" style={{ margin: 0, fontSize: '34px', lineHeight: 1, fontFamily: "'fatfrank', system-ui, sans-serif", fontWeight: 400 }}>{tr("Your cart")}</h2>
+          {!inline && <button type="button" onClick={onClose} aria-label={tr("Close cart")} style={{ ...round, width: '40px', height: '40px' }}>✕</button>}
         </header>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
           {cart.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <p style={{ fontSize: '18px', margin: '0 0 6px' }}>Nothing in here yet.</p>
-              <p style={{ fontSize: '14px', color: '#5c5c5c', margin: '0 0 22px' }}>Every piece gives a fixed amount to its partner.</p>
-              <a href="/shop" onClick={onClose} style={{ display: 'inline-flex', alignItems: 'center', minHeight: '46px', padding: '0 22px', borderRadius: '999px', background: '#0b0b0c', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>Shop the pieces</a>
+              <p style={{ fontSize: '18px', margin: '0 0 6px' }}>{tr("Nothing in here yet.")}</p>
+              <p style={{ fontSize: '14px', color: '#5c5c5c', margin: '0 0 22px' }}>{tr("Every piece gives a fixed amount to its partner.")}</p>
+              <a href="/shop" onClick={onClose} style={{ display: 'inline-flex', alignItems: 'center', minHeight: '46px', padding: '0 22px', borderRadius: '999px', background: '#0b0b0c', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '14px' }}>{tr("Shop the pieces")}</a>
             </div>
           ) : (
             <div style={{ display: 'grid', gap: '14px' }}>
@@ -71,14 +73,14 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
                     <p style={{ margin: 0, fontWeight: 700, fontSize: '15px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</p>
                     {item.variant !== 'Default Title' && <p style={{ margin: '2px 0 8px', fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{item.variant}</p>}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <button type="button" style={round} aria-label="One less" onClick={() => updateQuantity(item.variantId, Math.max(0, item.quantity - 1))}>−</button>
+                      <button type="button" style={round} aria-label={tr("One less")} onClick={() => updateQuantity(item.variantId, Math.max(0, item.quantity - 1))}>−</button>
                       <span style={{ fontFamily: mono, fontSize: '14px', minWidth: '16px', textAlign: 'center' }}>{item.quantity}</span>
-                      <button type="button" style={round} aria-label="One more" onClick={() => updateQuantity(item.variantId, item.quantity + 1)}>+</button>
+                      <button type="button" style={round} aria-label={tr("One more")} onClick={() => updateQuantity(item.variantId, item.quantity + 1)}>+</button>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <p style={{ margin: '0 0 8px', fontFamily: mono, fontSize: '14px' }}>{eur(item.price * item.quantity)}</p>
-                    <button type="button" onClick={() => removeFromCart(item.variantId)} style={{ background: 'none', border: 'none', padding: 0, fontSize: '12px', color: '#5c5c5c', textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>Remove</button>
+                    <button type="button" onClick={() => removeFromCart(item.variantId)} style={{ background: 'none', border: 'none', padding: 0, fontSize: '12px', color: '#5c5c5c', textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit' }}>{tr("Remove")}</button>
                   </div>
                 </div>
               ))}
@@ -89,18 +91,18 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
         {cart.length > 0 && (
           <footer style={{ padding: '0 22px 22px' }}>
             <div style={{ background: '#ffffff', padding: '16px 18px', fontFamily: mono, fontSize: '13px', boxShadow: '0 10px 24px rgba(0,0,0,.08)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>SUBTOTAL</span><span>{eur(cartTotal)}</span></div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5c5c5c', marginTop: '6px' }}><span>SHIPPING</span><span>€5.00</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>{tr("SUBTOTAL")}</span><span>{eur(cartTotal)}</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5c5c5c', marginTop: '6px' }}><span>{tr("SHIPPING")}</span><span>€5.00</span></div>
               {[...gives].map(([partner, amount]) => (
                 <div key={partner} style={{ display: 'flex', justifyContent: 'space-between', color: '#c0322a', marginTop: '6px' }}><span>→ {partner.toUpperCase()}</span><span>{eur(amount)}</span></div>
               ))}
             </div>
             <div className="pw-tear" aria-hidden="true" style={{ height: '14px', background: 'linear-gradient(135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x,linear-gradient(-135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x' }} />
-            {error && <p role="alert" style={{ margin: '12px 0 0', fontSize: '13px', color: '#c0322a' }}>{error}</p>}
+            {error && <p role="alert" style={{ margin: '12px 0 0', fontSize: '13px', color: '#c0322a' }}>{tr(error)}</p>}
             <button type="button" onClick={checkout} disabled={busy} style={{ width: '100%', marginTop: '14px', minHeight: '54px', borderRadius: '999px', border: 'none', background: '#0b0b0c', color: '#ffffff', fontFamily: 'inherit', fontSize: '15px', fontWeight: 700, cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.6 : 1 }}>
-              {busy ? 'Opening checkout…' : `Checkout · ${eur(cartTotal + 5)}`}
+              {busy ? tr('Opening checkout…') : `${tr('Checkout')} · ${eur(cartTotal + 5)}`}
             </button>
-            <p style={{ margin: '10px 0 0', textAlign: 'center', fontSize: '12px', color: '#5c5c5c' }}>Secure checkout by Shopify. Made to order, about 1½ to 2 weeks.</p>
+            <p style={{ margin: '10px 0 0', textAlign: 'center', fontSize: '12px', color: '#5c5c5c' }}>{tr("Secure checkout by Shopify. Made to order, about 1½ to 2 weeks.")}</p>
           </footer>
         )}
       </aside>

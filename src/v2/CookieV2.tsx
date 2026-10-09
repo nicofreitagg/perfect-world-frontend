@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { A } from './A'
+import { useT } from './t'
 
 // Same storage keys and event as the old banner, so everything that reads consent keeps working.
 type Key = 'functionality' | 'experience' | 'measurement' | 'marketing'
@@ -16,6 +17,7 @@ const pill = (dark: boolean) => ({
 })
 
 export default function CookieV2() {
+  const tr = useT()
   const [open, setOpen] = useState(false)
   const [choose, setChoose] = useState(false)
   const [prefs, setPrefs] = useState<Record<Key, boolean>>({ functionality: false, experience: false, measurement: false, marketing: false })
@@ -42,7 +44,7 @@ export default function CookieV2() {
   return (
     <div
       role="dialog"
-      aria-label="Cookies"
+      aria-label={tr("Cookies")}
       style={{
         position: 'fixed', left: '16px', right: '16px', bottom: '16px', zIndex: 2147483000, maxWidth: '400px',
         background: '#f5f4f1', color: '#0b0b0c', border: '1.5px solid #0b0b0c', borderRadius: '22px',
@@ -50,10 +52,10 @@ export default function CookieV2() {
         fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500,
       }}
     >
-      <p style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', letterSpacing: '.08em', color: '#c0322a' }}>COOKIES</p>
+      <p style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', letterSpacing: '.08em', color: '#c0322a' }}>{tr("COOKIES")}</p>
       <p style={{ margin: '8px 0 14px', fontSize: '15px', lineHeight: 1.5 }}>
-        A few keep the site working. With your OK, we also use them to see what helps and for ads.{' '}
-        <A href="/cookie-policy" style={{ color: '#0b0b0c' }}>Cookie policy</A>
+        {tr("A few keep the site working. With your OK, we also use them to see what helps and for ads.")}{' '}
+        <A href="/cookie-policy" style={{ color: '#0b0b0c' }}>{tr("Cookie policy")}</A>
       </p>
 
       {choose && (
@@ -61,7 +63,7 @@ export default function CookieV2() {
           {OPTIONS.map((o) => (
             <label key={o.key} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '14px', cursor: 'pointer' }}>
               <input type="checkbox" checked={prefs[o.key]} onChange={() => setPrefs((p) => ({ ...p, [o.key]: !p[o.key] }))} style={{ width: '18px', height: '18px', accentColor: '#0b0b0c' }} />
-              <span><b>{o.label}</b> <span style={{ color: '#5c5c5c' }}>{o.desc}</span></span>
+              <span><b>{tr(o.label)}</b> <span style={{ color: '#5c5c5c' }}>{tr(o.desc)}</span></span>
             </label>
           ))}
         </div>
@@ -69,17 +71,17 @@ export default function CookieV2() {
 
       <div style={{ display: 'flex', gap: '8px' }}>
         {choose ? (
-          <button type="button" onClick={() => save('custom', prefs)} style={pill(true)}>Save my choice</button>
+          <button type="button" onClick={() => save('custom', prefs)} style={pill(true)}>{tr("Save my choice")}</button>
         ) : (
           <>
-            <button type="button" onClick={() => save('rejected', all(false))} style={pill(false)}>No thanks</button>
-            <button type="button" onClick={() => save('accepted', all(true))} style={pill(true)}>Yes, fine</button>
+            <button type="button" onClick={() => save('rejected', all(false))} style={pill(false)}>{tr("No thanks")}</button>
+            <button type="button" onClick={() => save('accepted', all(true))} style={pill(true)}>{tr("Yes, fine")}</button>
           </>
         )}
       </div>
       {!choose && (
         <button type="button" onClick={() => setChoose(true)} style={{ marginTop: '10px', background: 'none', border: 'none', padding: 0, fontFamily: 'inherit', fontSize: '13px', color: '#5c5c5c', textDecoration: 'underline', cursor: 'pointer' }}>
-          Let me choose
+          {tr("Let me choose")}
         </button>
       )}
     </div>
