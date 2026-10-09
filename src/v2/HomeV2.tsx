@@ -9,8 +9,8 @@ import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
 import PosterVideo from './PosterVideo'
-import { CAUSES, TINT, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES, TEE_PATH, icon, type CauseKey } from './data'
+import { CAUSES, causeTitle as titleCase } from './causes'
+import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -58,7 +58,6 @@ export default function HomeV2() {
   usePageTitle()
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const launched = isLaunched()
-  const [line, setLine] = useState<'og' | 'minimal'>('minimal')
 
   useEffect(() => {
     document.body.style.background = '#f5f4f1'
@@ -122,7 +121,6 @@ export default function HomeV2() {
 
   {/* 2 · The 11.11 moment: every piece gives a fixed amount */}
   <section id="eleven" className="pwl-sec pwl-glow pw-iso" aria-labelledby="eleven-h">
-    <Ico c="wild" style={{ left: '5%', top: '70px', transform: 'rotate(-8deg)' }} />
     <Ico c="cool" style={{ right: '5%', top: '150px', transform: 'rotate(8deg)' }} />
     <div className="pwl-wrap pwl-center">
       <p className="pwl-kicker pwl-date">{tr('11.11.2026 · 11:11 AM')}</p>
@@ -131,15 +129,18 @@ export default function HomeV2() {
       <p className="pwl-sub">{launched
         ? tr('You\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')
         : tr('From 11.11, you\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')}</p>
+      {/* On phones the tickets run as a slow moving strip; the second set only fills the loop. */}
+      <div className="pwl-tix-wrap">
       <ul className="pwl-tickets">
-        {AMOUNTS.map((a, i) => (
-          <li key={a.label} className={a.mark ? 'is-mark' : undefined} style={{ '--c': SIX[i % SIX.length] } as React.CSSProperties}>
+        {[...AMOUNTS, ...AMOUNTS].map((a, i) => (
+          <li key={i} className={[a.mark ? 'is-mark' : '', i >= AMOUNTS.length ? 'pwl-dup' : ''].join(' ').trim() || undefined} aria-hidden={i >= AMOUNTS.length || undefined} style={{ '--c': SIX[i % AMOUNTS.length % SIX.length] } as React.CSSProperties}>
             <span className="pwl-ticket-k">{tr(a.label)}<br />€{a.price}</span>
             <span className="pwl-ticket-v">€{a.give}{a.mark && <svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M150 12 C 110 2, 30 6, 12 34 C -2 58, 60 74, 120 70 C 170 66, 196 46, 182 24 C 172 10, 140 6, 118 8" /></svg>}</span>
             <span className="pwl-ticket-t">{a.split ? tr('shared by all six partners') : tr('to its cause partner')}</span>
           </li>
         ))}
       </ul>
+      </div>
       <div className="pwl-ctas pwl-ctas-c">
         <A href="/shop" className="pwl-btn">{tr('Shop every piece')}</A>
         <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
@@ -151,7 +152,6 @@ export default function HomeV2() {
 
   {/* 3 · New pieces, launching on 11.11 */}
   <section id="new" className="pwl-sec pw-iso" aria-label={tr('New pieces.')}>
-    <Ico c="rich" style={{ right: '6%', top: '70px', transform: 'rotate(6deg)' }} />
     <div className="pwl-wrap">
       <div className="pwl-sechead">
         <div>
@@ -175,57 +175,10 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 4 · Six designs, OG or Minimal */}
-  <section id="pieces" className="pwl-sec pwl-sec-tight pw-iso" aria-labelledby="pieces-h">
-    <div className="pwl-wrap">
-      <div className="pwl-sechead">
-        <div>
-          <p className="pwl-kicker">{tr('SIX DESIGNS, SIX PARTNERS')}</p>
-          <h2 id="pieces-h" className="pw-fat pwl-h2">{tr('Pick a design. It decides who it helps.')}</h2>
-        </div>
-        <div className="pwl-switch" role="group" aria-label={tr('Collection')}>
-          <button type="button" aria-pressed={line === 'minimal'} onClick={() => setLine('minimal')}>Minimal <span className="pwl-chip-new">{tr('new')}</span></button>
-          <button type="button" aria-pressed={line === 'og'} onClick={() => setLine('og')}>OG</button>
-        </div>
-      </div>
-      <div className="pwl-pieces">
-        {line === 'og' ? (
-        <figure className="pwl-worn">
-          <img src="/v2/img/og-back-700.webp" alt={tr('Cool Down back print, worn')} width={700} height={1050} loading="lazy" />
-          <figcaption>{tr('The story on the back. A small logo on the front.')}</figcaption>
-        </figure>
-        ) : (
-        <div className="pwl-worn pwl-min-intro">
-          <span className="pw-hand pwl-min-h">{tr('Minimal.')}</span>
-          <p>{tr('Same six partners. A small detail on the front instead of a story on the back.')}</p>
-          <span className="pwl-tag">{tr('New on 11.11')}</span>
-        </div>
-        )}
-        {line === 'og' && CAUSES.map((c) => (
-          <A key={c.id} href={`/design/${c.slug}`} className="pwl-piece" style={{ ['--tint' as string]: TINT[c.id], ['--c' as string]: c.color }}>
-            <span className="pwl-piece-img"><img src={c.id === 'rich' ? '/v2/img/og-rich-700.webp' : c.print} alt={`${titleCase(c.name)} ${tr('design, back print')}`} loading="lazy" /></span>
-            <span className="pwl-piece-name">{titleCase(c.name)}</span>
-            <span className="pwl-piece-meta">{tr('T-shirt')} €{PIECES.shirt.price} · <b>€{PIECES.shirt.give}</b> {tr('to')} {c.partner}</span>
-          </A>
-        ))}
-        {line === 'minimal' && CAUSES.map((c) => (
-          <A key={c.id} href="/shop" className="pwl-piece" style={{ ['--tint' as string]: TINT[c.id], ['--c' as string]: c.color }}>
-            <span className="pwl-piece-img pwl-piece-sketch"><svg viewBox="0 0 240 230" role="img" aria-label={`${tr('Minimal T-shirt')}, ${titleCase(c.name)}`}><path d={TEE_PATH} fill="#1b1b1d" /><circle cx="138" cy="70" r="6" fill={c.color} /></svg><span className="pwl-tag">{tr('New')}</span></span>
-            <span className="pwl-piece-name">{titleCase(c.name)}</span>
-            <span className="pwl-piece-meta">{tr('Minimal T-shirt')} €{PIECES.shirt.price} · <b>€{PIECES.shirt.give}</b> {tr('to')} {c.partner}</span>
-          </A>
-        ))}
-      </div>
-      <A href="/shop" className="pwl-link">{tr('All pieces')} →</A>
-    </div>
-  </section>
-
   <Swirl color="#4cc37f" />
 
   {/* 5 · The receipt: price, amount, partner */}
   <section id="giving" className="pwl-sec pwl-paper pw-iso" aria-labelledby="give-h">
-    <Ico c="talk" style={{ left: '4%', top: '110px', transform: 'rotate(-6deg)' }} />
-    <Ico c="one-world" style={{ right: '4%', top: '150px', transform: 'rotate(8deg)' }} />
     <div className="pwl-wrap">
       <div className="pwl-sechead pwl-center">
         <div>
@@ -266,8 +219,6 @@ export default function HomeV2() {
       </div>
     </div>
   </section>
-
-  <Swirl color="#2f6fa8" flip />
 
   {/* 8 · Founder note at the very end, from existing approved copy */}
   <section id="story" className="pwl-sec pwl-story-sec pw-iso" aria-labelledby="story-h">

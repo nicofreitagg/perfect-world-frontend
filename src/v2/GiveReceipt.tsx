@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
 import { PIECES, NEW_PIECES, type CauseKey } from './data'
@@ -66,51 +66,57 @@ export default function GiveReceipt() {
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
   const key = `${line}-${piece}-${row.split ? 'all' : design}-${colour}`
 
+  const [step, setStep] = useState(0)
+  const next = (from: number) => setStep(from + 1)
+  const chip = (on: boolean, onClick: () => void, children: ReactNode, k: string) => (
+    <button key={k} type="button" className="pwl-chip" aria-pressed={on} onClick={onClick}>{children}</button>
+  )
+  const steps = [
+    { id: 'collection', label: t('Collection'), value: min ? 'Minimal' : 'OG', body: (
+      <div className="pwl-chips">
+        {chip(min, () => { setLine('minimal'); next(0) }, <>Minimal<span className="pwl-chip-new">{t('new')}</span></>, 'm')}
+        {chip(!min, () => { setLine('og'); next(0) }, <>OG</>, 'o')}
+      </div>
+    ) },
+    { id: 'piece', label: t('Piece'), value: t(row.label), body: (
+      <div className="pwl-chips">
+        {ROWS.map((r) => chip(r.id === piece, () => { setPiece(r.id); next(1) }, <>{t(r.label)}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}</>, r.id))}
+      </div>
+    ) },
+    { id: 'design', label: t('Design'), value: row.split ? t('All six') : causeTitle(cause.name), body: row.split ? (
+      <><p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
+        <div className="pwl-chips">{chip(true, () => next(2), <>{t('Got it')}</>, 'ok')}</div></>
+    ) : (
+      <><div className="pwl-chips">
+        {CAUSES.map((c) => chip(c.id === design, () => { setDesign(c.id); next(2) }, <><span className="pwl-dot" style={{ background: c.color }} aria-hidden="true" />{causeTitle(c.name)}</>, c.id))}
+      </div>
+      <p className="pwl-note">{t('The design decides the partner. Each design was made with one of them.')}</p></>
+    ) },
+    { id: 'colour', label: t('Colour'), value: t(colour), body: (
+      <div className="pwl-chips">
+        {colours.map((c) => chip(c === colour, () => { setColour(c); next(3) }, <><span className="pwl-dot pwl-dot-sw" style={{ background: hexOf(c) }} aria-hidden="true" />{t(c)}</>, c))}
+      </div>
+    ) },
+  ]
+
   return (
     <div className="pwl-give">
-      <div className="pwl-give-controls">
-        <div role="group" aria-label={t('Collection')}>
-          <p className="pwl-label">{t('1 · CHOOSE A COLLECTION')}</p>
-          <div className="pwl-chips">
-            <button type="button" className="pwl-chip" aria-pressed={min} onClick={() => setLine('minimal')}>Minimal<span className="pwl-chip-new">{t('new')}</span></button>
-            <button type="button" className="pwl-chip" aria-pressed={!min} onClick={() => setLine('og')}>OG<span className="pwl-chip-fit">{t('big back print')}</span></button>
-          </div>
-        </div>
-        <div role="group" aria-label={t('Piece')}>
-          <p className="pwl-label">{t('2 · PICK A PIECE')}</p>
-          <div className="pwl-chips">
-            {ROWS.map((r) => (
-              <button key={r.id} type="button" className="pwl-chip" aria-pressed={r.id === piece} onClick={() => setPiece(r.id)}>
-                {t(r.label)}{r.fit !== 'women' && <span className="pwl-chip-fit">{t(r.fit)}</span>}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}
+      <div className="pwl-give-controls pwl-steps">
+        {steps.map((st, i) => {
+          const open = i === step
+          const done = i < step || (step >= steps.length)
+          return (
+            <div key={st.id} role="group" aria-label={st.label} className={'pwl-step' + (open ? ' is-open' : done ? ' is-done' : ' is-next')}>
+              <button type="button" className="pwl-step-head" aria-expanded={open} onClick={() => setStep(open ? steps.length : i)}>
+                <span className="pwl-step-n">{i + 1}</span>
+                <span className="pwl-step-t">{st.label}</span>
+                {!open && (done || i > step) && <span className="pwl-step-v">{st.value}</span>}
+                {!open && done && <span className="pwl-step-edit" aria-hidden="true">{t('Change')}</span>}
               </button>
-            ))}
-          </div>
-        </div>
-        <div role="group" aria-label={t('Design')}>
-          <p className="pwl-label">{t('3 · PICK A DESIGN')}</p>
-          {row.split ? (
-            <p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
-          ) : (
-            <div className="pwl-chips">
-              {CAUSES.map((c) => (
-                <button key={c.id} type="button" className="pwl-chip" aria-pressed={c.id === design} onClick={() => setDesign(c.id)}>
-                  <span className="pwl-dot" style={{ background: c.color }} aria-hidden="true" />{causeTitle(c.name)}
-                </button>
-              ))}
+              {open && <div className="pwl-step-body">{st.body}</div>}
             </div>
-          )}
-          {!row.split && <p className="pwl-note">{t('The design decides the partner. Each design was made with one of them.')}</p>}
-        </div>
-        <div role="group" aria-label={t('Colour')}>
-          <p className="pwl-label">{t('4 · PICK A COLOUR')}</p>
-          <div className="pwl-chips">
-            {colours.map((c) => (
-              <button key={c} type="button" className="pwl-chip" aria-pressed={c === colour} onClick={() => setColour(c)}>
-                <span className="pwl-dot pwl-dot-sw" style={{ background: hexOf(c) }} aria-hidden="true" />{t(c)}
-              </button>
-            ))}
-          </div>
-        </div>
+          )
+        })}
       </div>
 
       <div className="pwl-give-stage" aria-live="polite">
