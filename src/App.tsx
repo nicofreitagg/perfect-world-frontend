@@ -21,6 +21,8 @@ const Swap = lazy(() => import('./v2/Swap'))
 const VisionV2 = lazy(() => import('./v2/VisionV2'))
 const CausesV2 = lazy(() => import('./v2/CausesV2'))
 const CauseV2 = lazy(() => import('./v2/CauseV2'))
+const ShopV2 = lazy(() => import('./v2/ShopV2'))
+const ProductV2 = lazy(() => import('./v2/ProductV2'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
@@ -71,7 +73,8 @@ function App() {
               <Route path="/about" element={<Swap next={<VisionV2 />} current={<AboutUs />} />} />
               <Route path="/transparency" element={<AboutUs />} />
               <Route path="/founders" element={<Founders />} />
-              <Route path="/shop" element={<Shop />} />
+              <Route path="/shop" element={<Swap next={<ShopV2 />} current={<Shop />} />} />
+              <Route path="/design/:slug" element={<V2Only><ProductV2 /></V2Only>} />
               <Route path="/rich-in-life" element={<RichInLifePreOrder />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
