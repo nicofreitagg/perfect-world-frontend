@@ -50,10 +50,7 @@ export default function VisionV2() {
 
   <section className="pw-iso" aria-label="Founder video" style={{ position: "relative", zIndex: "78", background: "linear-gradient(180deg, #0b0b0c 0 50%, #f5f4f1 50% 100%)", padding: "0 clamp(12px, 2.5vw, 32px)" }}>
     <div style={{ position: "relative", maxWidth: "1200px", margin: "0 auto", aspectRatio: "16 / 9", borderRadius: "clamp(24px, 3vw, 40px)", overflow: "hidden", background: "#2a2a2e", boxShadow: "0 30px 60px rgba(0,0,0,.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <img src="/v2/img/vision.webp" alt="" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", filter: "grayscale(1) blur(2px) brightness(.45)" }} />
-      <button type="button" aria-label="Play Nico's video" style={{ position: "relative", width: "96px", height: "96px", borderRadius: "50%", border: "2px solid #ffffff", background: "rgba(255,255,255,.14)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><svg width="30" height="30" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5 L12 7 L3 12.5 Z" fill="#ffffff"></path></svg></button>
-      <span style={{ position: "absolute", top: "20px", right: "22px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", color: "#ffffff", background: "rgba(0,0,0,.5)", padding: "6px 10px", borderRadius: "8px" }}>[YOUR FOUNDER VIDEO]</span>
-      <p style={{ position: "absolute", left: "clamp(20px, 4vw, 48px)", bottom: "clamp(18px, 3vw, 36px)", margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(26px, 3vw, 40px)", color: "#ffffff" }} className="pw-hand">A MESSAGE FROM NICO</p>
+      <video src="/v2/video/founder.mp4" poster="/v2/img/founder-poster.jpg" controls playsInline preload="none" aria-label="A message from Nico" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", background: "#0b0b0c" }} />
     </div>
   </section>
 
@@ -73,9 +70,8 @@ export default function VisionV2() {
         <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>WHY WE CHANGED</p>
       </div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
-        <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", color: "#c0322a" }}>[DRAFT IN YOUR VOICE: REWRITE IT SO IT SOUNDS LIKE YOU]</p>
         <p style={{ margin: "0" }}>When I started, I promised to donate 100% of profits. Every hoodie, every shirt, every euro. I still stand behind why I did it.</p>
-        <p style={{ margin: "0" }}>But I learned that "profit" is a number nobody can see. So from 11.11, every piece carries a fixed amount, shown right next to the price. You choose which project gets it.</p>
+        <p style={{ margin: "0" }}>But I learned that "profit" is a number nobody can see. So from 11.11, every piece carries a fixed amount, shown right next to the price. The design you pick decides which partner gets it.</p>
         <p style={{ margin: "0", fontWeight: "600", color: "#0b0b0c" }}>Same belief. Now you can see it.</p>
       </div>
     </div>

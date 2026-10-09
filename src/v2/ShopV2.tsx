@@ -29,9 +29,10 @@ const kindOf = (title: string): Kind => {
   if (t.includes('oversize')) return 'over'
   return 'tee'
 }
-const SHORT: Record<CauseKey, string> = { rich: 'Colombia', 'one-world': 'Ukraine', talk: 'Mental health', oceans: 'Oceans', cool: 'Climate', wild: 'Elephants' }
+const SHORT = Object.fromEntries(CAUSES.map((c) => [c.id, c.short])) as Record<CauseKey, string>
 import './v2.css'
 import Flow from './Flow'
+import Sustain from './Sustain'
 import { A } from './A'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -249,13 +250,7 @@ export default function ShopV2() {
     </div>
   </section>
 
-  <section className="pw-iso" aria-label="Sustainability promise" style={{ position: "relative", zIndex: "72", padding: "clamp(60px, 7vw, 100px) clamp(16px, 4vw, 56px)" }}>
-    <div style={{ maxWidth: "1240px", margin: "0 auto", background: "#0b0b0c", color: "#ffffff", borderRadius: "32px", padding: "clamp(36px, 5vw, 72px)", textAlign: "center" }}>
-      <p style={{ margin: "0", fontFamily: "'Hand', cursive", fontSize: "clamp(40px, 4.6vw, 64px)", lineHeight: "1" }} className="pw-hand">Sustainability promise</p>
-      <p style={{ margin: "20px auto 0", maxWidth: "720px", fontSize: "18px", lineHeight: "1.6", color: "rgba(255,255,255,.8)" }}>Every piece is made on Stanley/Stella garments: GOTS, OEKO-TEX, PETA-Approved Vegan and Fair Wear Foundation certified. Good for the planet and fair to the people who make them, from seed to stitch.</p>
-      <div style={{ marginTop: "40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "14px" }}><div style={{ border: "1px solid rgba(255,255,255,.16)", borderRadius: "20px", padding: "26px 22px", textAlign: "left" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "26px", lineHeight: "1", color: "#ffffff" }} className="pw-fat">GOTS</p><p style={{ margin: "10px 0 0", fontSize: "16px", color: "rgba(255,255,255,.7)" }}>100% organic cotton</p></div><div style={{ border: "1px solid rgba(255,255,255,.16)", borderRadius: "20px", padding: "26px 22px", textAlign: "left" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "26px", lineHeight: "1", color: "#ffffff" }} className="pw-fat">OEKO-TEX</p><p style={{ margin: "10px 0 0", fontSize: "16px", color: "rgba(255,255,255,.7)" }}>Standard 100</p></div><div style={{ border: "1px solid rgba(255,255,255,.16)", borderRadius: "20px", padding: "26px 22px", textAlign: "left" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "26px", lineHeight: "1", color: "#ffffff" }} className="pw-fat">PETA-Approved</p><p style={{ margin: "10px 0 0", fontSize: "16px", color: "rgba(255,255,255,.7)" }}>100% vegan</p></div><div style={{ border: "1px solid rgba(255,255,255,.16)", borderRadius: "20px", padding: "26px 22px", textAlign: "left" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "26px", lineHeight: "1", color: "#ffffff" }} className="pw-fat">Fair Wear</p><p style={{ margin: "10px 0 0", fontSize: "16px", color: "rgba(255,255,255,.7)" }}>Fair treatment of workers</p></div></div>
-    </div>
-  </section>
+  <Sustain />
   <footer className="pw-dark pw-iso" style={{ position: "relative", zIndex: "74", overflow: "hidden", padding: "clamp(60px, 6vw, 96px) clamp(16px, 4vw, 56px) 44px", textAlign: "center" }}>
     <img className="pw-ico" src="/v2/icons/ic-f40a9d4d.svg" alt="" aria-hidden="true" style={{ left: "2%", top: "60px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-1e094dbe.svg" alt="" aria-hidden="true" style={{ right: "2.5%", top: "45%", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-120px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>

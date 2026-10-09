@@ -22,7 +22,7 @@ export interface Cause {
 export const CAUSES: Cause[] = [
   {
     "id": "rich",
-    "short": "Colombia",
+    "short": "Empowerment",
     "name": "RICH IN LIFE",
     "partner": "Mission Positivity",
     "partnerUpper": "MISSION POSITIVITY",
@@ -134,7 +134,7 @@ export const CAUSES: Cause[] = [
   },
   {
     "id": "oceans",
-    "short": "Oceans",
+    "short": "Corals",
     "name": "ENDANGERED OCEANS",
     "partner": "SECORE International",
     "partnerUpper": "SECORE INTERNATIONAL",
