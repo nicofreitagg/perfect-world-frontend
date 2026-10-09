@@ -271,7 +271,7 @@
 .pwl-dark .pwl-sub{margin-left:auto;margin-right:auto}
 .pwl-tickets{list-style:none;margin:44px auto 0;padding:0;max-width:1180px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;text-align:left}
 .pwl-tickets li{display:flex;flex-direction:column;gap:8px;padding:18px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04)}
-.pwl-ticket-k{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:rgba(255,255,255,.6)}
+.pwl-ticket-k{font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.5;letter-spacing:.08em;color:rgba(255,255,255,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pwl-ticket-v{position:relative;align-self:flex-start;font-family:'JetBrains Mono',monospace;font-size:clamp(22px,2vw,28px);color:#fff}
 .is-mark .pwl-ticket-v{color:var(--red)}
 .pwl-ticket-v svg{position:absolute;left:-12px;top:-8px;width:calc(100% + 26px);height:calc(100% + 16px);overflow:visible}
@@ -315,3 +315,15 @@
 @media (max-width:760px){.pwl-tickets{grid-template-columns:repeat(2,minmax(0,1fr))}.pwl-tickets li:last-child{grid-column:span 2}.pwl-switch button{padding:0 16px}}
 
 #causes{padding-top:clamp(90px,9vw,140px)}
+
+/* 11.11 block on a soft cause-colour gradient instead of black */
+.pwl-glow{background:radial-gradient(ellipse 55% 60% at 12% 20%,rgba(93,173,226,.28),transparent 70%),radial-gradient(ellipse 50% 55% at 88% 25%,rgba(255,140,66,.24),transparent 70%),radial-gradient(ellipse 60% 55% at 30% 95%,rgba(76,195,127,.22),transparent 70%),radial-gradient(ellipse 55% 50% at 80% 90%,rgba(176,126,82,.2),transparent 70%),#f5f4f1}
+.pwl-glow .pwl-date{color:#5c5c5c}
+.pwl-glow .pwl-1111{color:var(--ink)}
+.pwl-glow .pwl-1111-h{color:var(--ink)}
+.pwl-glow .pwl-sub{margin-left:auto;margin-right:auto}
+.pwl-glow .pwl-tickets li{background:rgba(255,253,248,.85);border-color:rgba(11,11,12,.12);box-shadow:0 10px 24px rgba(0,0,0,.05)}
+.pwl-glow .pwl-ticket-k{color:#5c5c5c}
+.pwl-glow .pwl-ticket-v{color:var(--ink)}
+.pwl-glow .is-mark .pwl-ticket-v{color:var(--red-t)}
+.pwl-glow .pwl-ticket-t{color:#4a4a4a}

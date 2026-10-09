@@ -129,9 +129,9 @@ export default function HomeV2() {
   <Lines />
 
   {/* 2 · The 11.11 moment: every piece gives a fixed amount */}
-  <section id="eleven" className="pwl-sec pwl-dark pw-dark pw-iso" aria-labelledby="eleven-h">
-    <Ico c="wild" w style={{ left: '5%', top: '70px', transform: 'rotate(-8deg)' }} />
-    <Ico c="cool" w style={{ right: '5%', top: '150px', transform: 'rotate(8deg)' }} />
+  <section id="eleven" className="pwl-sec pwl-glow pw-iso" aria-labelledby="eleven-h">
+    <Ico c="wild" style={{ left: '5%', top: '70px', transform: 'rotate(-8deg)' }} />
+    <Ico c="cool" style={{ right: '5%', top: '150px', transform: 'rotate(8deg)' }} />
     <div className="pwl-wrap pwl-center">
       <p className="pwl-kicker pwl-date">{tr('11.11.2026 · 11:11 AM')}</p>
       <p className="pw-fat pwl-1111" aria-label="11:11">11<span>:</span>11</p>
@@ -142,14 +142,14 @@ export default function HomeV2() {
       <ul className="pwl-tickets">
         {AMOUNTS.map((a) => (
           <li key={a.label} className={a.mark ? 'is-mark' : undefined}>
-            <span className="pwl-ticket-k">{tr(a.label)} · €{a.price}</span>
+            <span className="pwl-ticket-k">{tr(a.label)}<br />€{a.price}</span>
             <span className="pwl-ticket-v">€{a.give}{a.mark && <svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M150 12 C 110 2, 30 6, 12 34 C -2 58, 60 74, 120 70 C 170 66, 196 46, 182 24 C 172 10, 140 6, 118 8" /></svg>}</span>
             <span className="pwl-ticket-t">{a.split ? tr('shared by all six partners') : tr('to its cause partner')}</span>
           </li>
         ))}
       </ul>
       <div className="pwl-ctas pwl-ctas-c">
-        <A href="/shop" className="pwl-btn pwl-btn-light">{tr('Shop every piece')}</A>
+        <A href="/shop" className="pwl-btn">{tr('Shop every piece')}</A>
         <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
       </div>
     </div>
