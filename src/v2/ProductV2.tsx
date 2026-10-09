@@ -107,7 +107,7 @@ export default function ProductV2() {
     </div>
   </div>
 
-  <section className="pw-iso" aria-label={tr("Product")} style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "22px clamp(16px, 4vw, 56px) clamp(56px, 7vw, 96px)", display: "flex", flexWrap: "wrap", gap: "clamp(28px, 4vw, 64px)", alignItems: "flex-start" }}>
+  <section className="pw-iso" aria-label={tr("Product")} style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "22px clamp(16px, 4vw, 56px) clamp(40px, 7vw, 96px)", display: "flex", flexWrap: "wrap", gap: "clamp(28px, 4vw, 64px)", alignItems: "flex-start" }}>
     <img className="pw-ico" src={c.icoA} alt="" aria-hidden="true" style={{ left: "92%", top: "290px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src={c.icoB} alt="" aria-hidden="true" style={{ left: "93.5%", top: "910px", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "380px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#FF8C42" strokeWidth="7"></path></svg>
 

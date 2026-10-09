@@ -73,6 +73,7 @@ export default function HomeV2() {
   // The 3D globe only loads when the causes section comes close, and only on larger screens.
   const globeBox = useRef<HTMLDivElement>(null)
   const [show3d, setShow3d] = useState(false)
+  const [allQ, setAllQ] = useState(false)
   const [globe3d, setGlobe3d] = useState(false)
   const onGlobe = useCallback(() => setGlobe3d(true), [])
   useEffect(() => {
@@ -239,12 +240,13 @@ export default function HomeV2() {
   </section>
 
   {/* 9 · Questions, at the very end */}
-  <section id="faq" className="pwl-sec pwl-faq pw-iso" aria-labelledby="faq-h">
+  <section id="faq" className={'pwl-sec pwl-faq pw-iso' + (allQ ? ' is-all' : '')} aria-labelledby="faq-h">
     <div className="pwl-wrap">
       <h2 id="faq-h" className="pw-fat pwl-h2">{tr('Questions')}</h2>
-      {FAQ.map((f) => (
-        <details key={f.q}><summary>{tr(f.q)}</summary><p>{tr(f.a)}</p></details>
+      {FAQ.map((f, i) => (
+        <details key={f.q} className={i >= 5 ? 'pwl-faq-more' : undefined}><summary>{tr(f.q)}</summary><p>{tr(f.a)}</p></details>
       ))}
+      {!allQ && <button type="button" className="pwl-faq-all" onClick={() => setAllQ(true)}>{tr('More questions')} ({FAQ.length - 5})</button>}
       <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
     </div>
   </section>

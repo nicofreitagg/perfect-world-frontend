@@ -406,3 +406,16 @@
 }
 @keyframes pwl-marquee{to{transform:translateX(calc(-50% - 5px))}}
 @media (prefers-reduced-motion:reduce){.pwl-tix-wrap .pwl-tickets{animation:none}.pwl-tix-wrap{overflow-x:auto}}
+
+/* FAQ on phones: smaller rows, first five questions, the rest on tap */
+.pwl-faq-all{display:none}
+@media (max-width:760px){
+  .pwl-faq{padding-bottom:48px!important}
+  .pwl-faq .pwl-h2{font-size:26px;margin-bottom:12px}
+  .pwl-faq details{padding:11px 0}
+  .pwl-faq summary{font-size:14.5px;min-height:0}
+  .pwl-faq details p{font-size:14px;line-height:1.55;margin-top:8px}
+  .pwl-faq:not(.is-all) .pwl-faq-more{display:none}
+  .pwl-faq:not(.is-all) details:nth-of-type(5){border-bottom:1px solid #dcd9d2}
+  .pwl-faq-all{display:inline-flex;align-items:center;min-height:40px;margin:14px 0 18px;padding:0 16px;border-radius:999px;border:1.5px solid rgba(11,11,12,.28);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+}

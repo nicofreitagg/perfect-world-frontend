@@ -185,3 +185,77 @@
 /* Swirls behind content kept crossing text and photos (Nico, 9 Oct). They're off; swirls
    only appear in the empty gaps between blocks (home) and as the cause-line seams. */
 .pw2 svg.pw-swirl{display:none}
+
+/* Round 10 · compact mobile on every page (hooks are pw-m-* classes; inline styles need !important) */
+@media (max-width:760px){
+  .pw-m-g2{grid-template-columns:repeat(2,minmax(0,1fr))!important;column-gap:10px!important;row-gap:22px!important}
+  .pw-m-g3{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+  .pw-m-swipe{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px!important;margin-left:-16px!important;margin-right:-16px!important;padding:0 16px 6px!important;scrollbar-width:none}
+  .pw-m-swipe::-webkit-scrollbar{display:none}
+  .pw-m-swipe>*{flex:0 0 80%;scroll-snap-align:start}
+  .pw-m-swipe.pw-m-s50>*{flex-basis:46%}
+  .pw-m-hide-t{display:none!important}
+
+  /* product cards in two columns */
+  .pw-m-prods h3{font-size:16px!important}
+  .pw-m-prods article p{font-size:12px!important;margin-top:3px!important}
+  .pw-m-prods article>div:nth-child(2){flex-direction:column;gap:4px!important;padding-top:10px!important}
+  .pw-m-prods article>div:nth-child(2)>span{font-size:13px!important;padding:0!important}
+  .pw-m-prods article>div:nth-child(3){margin-top:8px!important;padding-top:8px!important;flex-wrap:wrap;gap:6px!important}
+  .pw-m-prods article>div:nth-child(3) .pw-mono{font-size:11px!important}
+  .pw-m-prods article>div:first-child{border-radius:14px!important}
+  .pw-m-prods article>div:first-child>.pw-mono{top:8px!important;left:8px!important;font-size:9px!important;padding:4px 8px!important}
+  .pw-m-prods article>div:first-child>img[aria-hidden]{width:36px!important;left:8px!important;bottom:8px!important}
+  .pw-m-prods .pw-add{display:none!important}
+  .pw-m-prods h3 a::after{content:"";position:absolute;inset:0;z-index:3}
+
+  /* how-it-works steps: number beside the text */
+  .pw-m-steps{gap:0!important;margin-top:20px!important}
+  .pw-m-steps>div{display:grid;grid-template-columns:44px 1fr;column-gap:8px;padding:14px 0!important}
+  .pw-m-steps>div>span{grid-row:span 2;font-size:32px!important;line-height:1}
+  .pw-m-steps>div>p{margin:0!important}
+  .pw-m-steps>div>p.pw-fat{font-size:19px!important}
+  .pw-m-steps>div>p:last-child{font-size:14px!important;margin-top:4px!important}
+  .pw-m-pad{padding-top:40px!important;padding-bottom:40px!important}
+  .pw-m-facts{padding-top:20px!important;padding-bottom:20px!important;row-gap:16px!important}
+  .pw-m-facts p:first-child{font-size:15px!important}
+  .pw-m-facts p:last-child{font-size:12.5px!important}
+
+  /* sustainability certificates: 2 x 2 */
+  .pw-m-certs{margin-top:22px!important;gap:8px!important}
+  .pw-m-certs .pw-cert{padding:14px 10px!important;border-radius:14px!important}
+  .pw-m-certs .pw-cert-ico{width:34px!important;height:34px!important;margin-bottom:6px!important}
+  .pw-m-certs .pw-cert-name{font-size:17px!important}
+  .pw-m-certs .pw-cert p{font-size:12px!important}
+
+  /* partner logos: 3 across, shorter */
+  .pw-m-logos>div{height:64px!important;border-radius:12px!important;padding:8px!important}
+  .pw-m-logos img{max-height:44px!important}
+
+  /* causes list: compact cards */
+  .pw-m-causes{gap:12px!important}
+  .pw-m-causes>a{min-height:0!important;padding:20px!important;gap:14px!important;border-radius:22px!important}
+  .pw-m-causes>a>span:nth-of-type(1)>span:first-child{width:56px!important;height:56px!important}
+  .pw-m-causes>a>span:nth-of-type(1)>span:first-child img{max-width:42px!important;max-height:36px!important}
+  .pw-m-causes .pw-hand{font-size:32px!important}
+  .pw-m-causes>a>span:nth-of-type(2)>span:nth-child(2){font-size:16px!important}
+  .pw-m-causes .pw-go{padding:10px 16px!important;font-size:14px!important}
+
+  /* cause page facts strip */
+  .pw-m-facts3{border-radius:16px!important}
+  .pw-m-facts3>div{padding:12px 10px!important}
+  .pw-m-facts3>div>*:last-child{font-size:15px!important}
+
+  .pw-m-founder{flex-basis:220px!important;max-width:220px}
+  .pw-m-founder>span{font-size:14px!important;bottom:8px!important}
+
+  .pw-m-chero{min-height:0!important;padding:32px 18px!important;border-radius:24px!important}
+  .pw-m-clogo{width:84px!important;height:84px!important}
+  .pw-m-clogo img{max-width:64px!important;max-height:54px!important}
+  .pw-m-facts3>div>p:last-child{font-size:15px!important}
+  .pw-six{gap:10px!important}
+  .pw-six>button{min-height:150px!important;border-radius:18px!important;padding:14px!important}
+  .pw-six>button>img[aria-hidden]{width:52px!important;height:52px!important}
+  /* footer: link groups two by two, less air */
+  .pw-m-footnav{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-top:36px!important;padding-top:24px!important;gap:22px 16px!important}
+}

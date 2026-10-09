@@ -25,11 +25,11 @@ export default function Sustain() {
   }, [])
 
   return (
-    <section className="pw-iso" aria-label={tr("Sustainability promise")} style={{ position: 'relative', zIndex: 72, padding: 'clamp(60px, 7vw, 100px) clamp(16px, 4vw, 56px)' }}>
-      <div style={{ maxWidth: '1128px', margin: '0 auto', background: '#0b0b0c', color: '#ffffff', borderRadius: '32px', padding: 'clamp(36px, 5vw, 72px)', textAlign: 'center' }}>
-        <p className="pw-hand" style={{ margin: 0, fontSize: 'clamp(40px, 4.6vw, 64px)', lineHeight: 1 }}>{tr("Sustainability promise")}</p>
-        <p style={{ margin: '20px auto 0', maxWidth: '720px', fontSize: '18px', lineHeight: 1.6, color: 'rgba(255,255,255,.8)' }}>{tr("Every piece starts as a Stanley/Stella garment: GOTS, OEKO-TEX, PETA-Approved Vegan and Fair Wear Foundation certified. Good for the planet and fair to the people who make it, from seed to stitch.")}</p>
-        <div ref={grid} style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+    <section className="pw-iso" aria-label={tr("Sustainability promise")} style={{ position: 'relative', zIndex: 72, padding: 'clamp(36px, 7vw, 100px) clamp(16px, 4vw, 56px)' }}>
+      <div style={{ maxWidth: '1128px', margin: '0 auto', background: '#0b0b0c', color: '#ffffff', borderRadius: 'clamp(22px, 3vw, 32px)', padding: 'clamp(24px, 5vw, 72px) clamp(16px, 5vw, 72px)', textAlign: 'center' }}>
+        <p className="pw-hand" style={{ margin: 0, fontSize: 'clamp(30px, 4.6vw, 64px)', lineHeight: 1 }}>{tr("Sustainability promise")}</p>
+        <p style={{ margin: '14px auto 0', maxWidth: '720px', fontSize: 'clamp(15px, 1.4vw, 18px)', lineHeight: 1.6, color: 'rgba(255,255,255,.8)' }}>{tr("Every piece starts as a Stanley/Stella garment: GOTS, OEKO-TEX, PETA-Approved Vegan and Fair Wear Foundation certified. Good for the planet and fair to the people who make it, from seed to stitch.")}</p>
+        <div ref={grid} className="pw-m-g2 pw-m-certs" style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
           {CERTS.map((c) => (
             <div key={c.name} className="pw-cert" tabIndex={0} style={{ '--g': c.rgb } as CSSProperties}>
               <span className="pw-cert-ico">
