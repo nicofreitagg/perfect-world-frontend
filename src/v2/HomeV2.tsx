@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './v2.css'
 import Flow from './Flow'
+import { Header, Footer } from './Chrome'
 import { A } from './A'
 import { CollectionCarousel, CollectionTabs } from './Collections'
 import { WishTags } from './WishTags'
@@ -29,17 +30,7 @@ export default function HomeV2() {
 
 <div className="pw2 pw-page pw-grain" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
   <Flow />
-
-  <header style={{ position: "relative", zIndex: "2", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "22px clamp(16px, 4vw, 56px)" }}>
-    <A href="#top" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src="/v2/img/logo-black.png" alt="Perfect World" style={{ height: "40px", width: "auto" }} /></A>
-    <nav aria-label="Main" style={{ display: "flex", flexWrap: "wrap", gap: "26px", fontSize: "14px", fontWeight: "600" }}>
-      <A href="/shop" style={{ color: "#0b0b0c", textDecoration: "none" }}>Shop</A>
-      <A href="/projects" style={{ color: "#0b0b0c", textDecoration: "none" }}>Causes</A>
-      <A href="/how-giving-works" style={{ color: "#0b0b0c", textDecoration: "none" }}>How giving works</A>
-      <A href="/about" style={{ color: "#0b0b0c", textDecoration: "none" }}>Our story</A>
-    </nav>
-    <button type="button" onClick={openCart} style={{ color: "#0b0b0c", fontSize: 14, fontWeight: 600, padding: "12px 18px", border: "1px solid rgba(11,11,12,.3)", borderRadius: 999, background: "transparent", cursor: "pointer", fontFamily: "inherit" }}>Cart ({cartCount})</button>
-  </header>
+  <Header cartCount={cartCount} openCart={openCart} />
 
   <section id="top" className="pw-iso" style={{ position: "relative", zIndex: "79", display: "flex", flexWrap: "wrap-reverse", alignItems: "center", justifyContent: "space-between", gap: "40px", padding: "clamp(40px, 5vw, 80px) clamp(16px, 4vw, 56px) clamp(90px, 8vw, 130px)", maxWidth: "1400px", margin: "0 auto" }}>
     <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "auto", bottom: "-70px" }}><path d="M-60 560 C 220 470, 420 640, 700 560 S 1180 470, 1500 540" stroke="#FF8C42" strokeWidth="5"></path><path d="M-60 573 C 220 483, 420 653, 700 573 S 1180 483, 1500 553" stroke="#5DADE2" strokeWidth="5"></path><path d="M-60 586 C 220 496, 420 666, 700 586 S 1180 496, 1500 566" stroke="#4cc37f" strokeWidth="5"></path><path d="M-60 599 C 220 509, 420 679, 700 599 S 1180 509, 1500 579" stroke="#b07e52" strokeWidth="5"></path><path d="M-60 612 C 220 522, 420 692, 700 612 S 1180 522, 1500 592" stroke="#8e8f94" strokeWidth="5"></path><path d="M-60 625 C 220 535, 420 705, 700 625 S 1180 535, 1500 605" stroke="#2f6fa8" strokeWidth="5"></path></svg>
@@ -217,19 +208,7 @@ export default function HomeV2() {
     </div>
     <p style={{ margin: "40px 0 0", textAlign: "center", fontFamily: "'Hand', cursive", fontSize: "clamp(34px, 3.6vw, 52px)", letterSpacing: ".01em" }} className="pw-hand">It gives either way.</p>
   </section>
-
-  <footer className="pw-dark pw-iso" style={{ position: "relative", zIndex: "72", overflow: "hidden", padding: "clamp(40px, 5vw, 80px) clamp(16px, 4vw, 56px) 48px", textAlign: "center" }}>
-    <img className="pw-ico" src="/v2/icons/ic-de6f599f.svg" alt="" aria-hidden="true" style={{ right: "2.5%", top: "70px", width: "84px", transform: "rotate(8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-9eab075d.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "570px", width: "104px", transform: "rotate(-6deg)" }} />
-    <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-100px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
-    
-    <img src="/v2/img/logo-white.png" alt="Perfect World" style={{ height: "52px", width: "auto" }} />
-    <p style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(40px, 4.6vw, 68px)", lineHeight: ".9" }} className="pw-fat">Together.</p>
-    <p style={{ margin: "4px 0 0", fontFamily: "'Hand', cursive", fontSize: "clamp(54px, 6.6vw, 100px)", lineHeight: "1", letterSpacing: ".01em" }} className="pw-hand">Not Alone.</p>
-    <A href="/shop" style={{ display: "inline-block", marginTop: "34px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "17px", color: "#0b0b0c", background: "#f5f4f1", textDecoration: "none", padding: "12px 30px", borderRadius: "999px" }}>SHOP IMPACT</A>
-    {/* Email sign-up form returns once the email tool is decided */}
-    <p style={{ margin: "18px 0 0", fontSize: "14px", color: "rgba(255,255,255,.6)" }}>Or comment HOPE on any post at @perfectworld.global, and we'll find you.</p>
-    <nav aria-label="Footer" style={{ margin: "64px auto 0", maxWidth: "1100px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "28px", textAlign: "left", paddingTop: "36px", borderTop: "1px solid rgba(255,255,255,.14)" }}><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>SHOP</p><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>All pieces</A><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Minimal</A><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>OG collections</A><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Size guide</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>GIVING</p><A href="/how-giving-works" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>How giving works</A><A href="/projects" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>The six causes</A><A href="/how-giving-works#payouts" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>When it's paid</A><A href="/about" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Our story</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>HELP</p><A href="/shipping-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Shipping and delivery</A><A href="/refund-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Returns and exchanges</A><A href="/how-giving-works#faq" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>FAQ</A><A href="mailto:hello@perfectworld.global" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Contact</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>LEGAL</p><A href="/legal-notice" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Imprint</A><A href="/privacy-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Privacy</A><A href="/terms-of-service" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Terms</A><A href="/refund-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>Right of withdrawal</A></div></nav><p style={{ margin: "40px 0 0", fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", letterSpacing: ".1em", color: "rgba(255,255,255,.4)" }}>MUNICH · SIX CAUSES, ONE HOPE · PRINTED ON DEMAND IN GERMANY · SHIPS IN 1.5 TO 2 WEEKS · @PERFECTWORLD.GLOBAL</p>
-  </footer>
+  <Footer icons={["/v2/icons/ic-de6f599f.svg", "/v2/icons/ic-9eab075d.svg"]} />
 </div>
 
 

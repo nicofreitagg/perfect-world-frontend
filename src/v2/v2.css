@@ -93,3 +93,14 @@
 .pw-cert:hover .pw-cert-ico,.pw-cert:focus-visible .pw-cert-ico,.pw-cert.is-lit .pw-cert-ico{transform:scale(1.1);box-shadow:0 0 28px rgba(var(--g),.45)}
 .pw-cert:hover .pw-cert-name,.pw-cert:focus-visible .pw-cert-name,.pw-cert.is-lit .pw-cert-name{color:rgb(var(--g))}
 @media (prefers-reduced-motion:reduce){.pw-cert,.pw-cert-ico{transition:none}}
+
+/* Text pages (legal, info) */
+.pw-prose{background:#ffffff;border:1px solid #e3e1dc;border-radius:28px;padding:clamp(24px,4vw,48px);font-size:17px;line-height:1.7;color:#2a2a2a}
+.pw-prose > :first-child{margin-top:0}
+.pw-prose h2{font-family:'fatfrank',system-ui,sans-serif;font-weight:400;font-size:clamp(24px,2.6vw,30px);line-height:1.1;color:#0b0b0c;margin:36px 0 10px}
+.pw-prose h3{font-size:18px;font-weight:700;color:#0b0b0c;margin:26px 0 6px}
+.pw-prose p{margin:0 0 14px;text-wrap:pretty}
+.pw-prose ul{margin:0 0 14px;padding-left:22px}
+.pw-prose li{margin:4px 0}
+.pw-prose a{color:#0b0b0c;text-decoration:underline;text-underline-offset:3px}
+.pw-prose strong{color:#0b0b0c}

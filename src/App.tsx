@@ -22,6 +22,14 @@ const VisionV2 = lazy(() => import('./v2/VisionV2'))
 const CausesV2 = lazy(() => import('./v2/CausesV2'))
 const CauseV2 = lazy(() => import('./v2/CauseV2'))
 const CookieV2 = lazy(() => import('./v2/CookieV2'))
+const V2Pages = () => import('./v2/Pages')
+const NotFoundV2 = lazy(() => V2Pages().then((m) => ({ default: m.NotFoundV2 })))
+const ContactV2 = lazy(() => V2Pages().then((m) => ({ default: m.ContactV2 })))
+const CartPageV2 = lazy(() => V2Pages().then((m) => ({ default: m.CartPageV2 })))
+const OrderSuccessV2 = lazy(() => V2Pages().then((m) => ({ default: m.OrderSuccessV2 })))
+const InfoV2 = lazy(() => V2Pages().then((m) => ({ default: m.InfoV2 })))
+const To = lazy(() => V2Pages().then((m) => ({ default: m.To })))
+const ProductHandleV2 = lazy(() => import('./v2/ProductHandleV2'))
 const ShopV2 = lazy(() => import('./v2/ShopV2'))
 const ProductV2 = lazy(() => import('./v2/ProductV2'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
@@ -70,30 +78,30 @@ function App() {
               <Route path="/how-giving-works" element={<V2Only><GivingV2 /></V2Only>} />
               <Route path="/projects" element={<Swap next={<CausesV2 />} current={<ProjectSelection />} />} />
               <Route path="/project/:slug" element={<Swap next={<CauseV2 />} current={<ProjectPage />} />} />
-              <Route path="/product/:handle" element={<ProductDetail />} />
+              <Route path="/product/:handle" element={<Swap next={<ProductHandleV2 />} current={<ProductDetail />} />} />
               <Route path="/about" element={<Swap next={<VisionV2 />} current={<AboutUs />} />} />
-              <Route path="/transparency" element={<AboutUs />} />
-              <Route path="/founders" element={<Founders />} />
+              <Route path="/transparency" element={<Swap next={<To to="/how-giving-works" />} current={<AboutUs />} />} />
+              <Route path="/founders" element={<Swap next={<To to="/about" />} current={<Founders />} />} />
               <Route path="/shop" element={<Swap next={<ShopV2 />} current={<Shop />} />} />
               <Route path="/design/:slug" element={<V2Only><ProductV2 /></V2Only>} />
-              <Route path="/rich-in-life" element={<RichInLifePreOrder />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/order-success" element={<OrderSuccess />} />
-              <Route path="/info/all-profits-donated" element={<InfoAllProfits />} />
-              <Route path="/info/together-not-alone" element={<InfoTogether />} />
-              <Route path="/info/fashion-as-a-tool" element={<InfoFashionTool />} />
+              <Route path="/rich-in-life" element={<Swap next={<To to="/project/rich-in-life" />} current={<RichInLifePreOrder />} />} />
+              <Route path="/cart" element={<Swap next={<CartPageV2 />} current={<Cart />} />} />
+              <Route path="/checkout" element={<Swap next={<CartPageV2 />} current={<Checkout />} />} />
+              <Route path="/order-success" element={<Swap next={<OrderSuccessV2 />} current={<OrderSuccess />} />} />
+              <Route path="/info/all-profits-donated" element={<Swap next={<To to="/how-giving-works" />} current={<InfoAllProfits />} />} />
+              <Route path="/info/together-not-alone" element={<Swap next={<InfoV2 k="together" />} current={<InfoTogether />} />} />
+              <Route path="/info/fashion-as-a-tool" element={<Swap next={<InfoV2 k="fashionTool" />} current={<InfoFashionTool />} />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/refund-policy" element={<RefundPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/legal-notice" element={<LegalNotice />} />
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
               <Route path="/cookie-policy" element={<CookiePolicy />} />
-              <Route path="/contact" element={<Contact />} />
+              <Route path="/contact" element={<Swap next={<ContactV2 />} current={<Contact />} />} />
               {/* Dev-only tooling pages, excluded from production */}
               {import.meta.env.DEV && <Route path="/demo" element={<ComponentDemo />} />}
               {import.meta.env.DEV && <Route path="/editor" element={<VisualEditor />} />}
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Swap next={<NotFoundV2 />} current={<NotFound />} />} />
             </Routes>
           </Suspense>
           <Swap next={<CookieV2 />} current={<CookieConsent />} />

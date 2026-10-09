@@ -2,6 +2,8 @@ import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import Footer from './Footer'
 import Navigation from './Navigation'
+import { isNewSiteVisible } from '../../v2/launch'
+import Shell, { Page } from '../../v2/Shell'
 
 interface LegalPageLayoutProps {
   title: string
@@ -10,6 +12,13 @@ interface LegalPageLayoutProps {
 }
 
 export default function LegalPageLayout({ title, subtitle, children }: LegalPageLayoutProps) {
+  if (isNewSiteVisible()) {
+    return (
+      <Shell>
+        <Page title={title} sub={subtitle}>{children}</Page>
+      </Shell>
+    )
+  }
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900">
       <Navigation />

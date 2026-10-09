@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { createCheckout } from '../utils/shopify'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
@@ -10,7 +10,7 @@ const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.sh
 const eur = (n: number) => '€' + n.toFixed(2)
 const mono = "'JetBrains Mono', monospace"
 
-export default function CartDrawerV2({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOpen: boolean; onClose: () => void; inline?: boolean }) {
   const { cart, cartTotal, updateQuantity, removeFromCart } = useCart()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -22,7 +22,7 @@ export default function CartDrawerV2({ isOpen, onClose }: { isOpen: boolean; onC
     return () => window.removeEventListener('keydown', onKey)
   }, [isOpen, onClose])
 
-  if (!isOpen) return null
+  if (!isOpen && !inline) return null
 
   // Per partner: what this cart gives.
   const gives = new Map<string, number>()
@@ -48,11 +48,11 @@ export default function CartDrawerV2({ isOpen, onClose }: { isOpen: boolean; onC
   const round = { width: '36px', height: '36px', borderRadius: '50%', border: '1.5px solid #0b0b0c', background: 'transparent', cursor: 'pointer', fontSize: '16px', fontFamily: 'inherit', lineHeight: 1 } as const
 
   return (
-    <div onClick={(e) => { if (e.target === e.currentTarget) onClose() }} style={{ position: 'fixed', inset: 0, zIndex: 2147482000, background: 'rgba(11,11,12,.35)', display: 'flex', justifyContent: 'flex-end' }}>
-      <aside role="dialog" aria-label="Your cart" style={{ width: '100%', maxWidth: '420px', height: '100%', background: '#f5f4f1', color: '#0b0b0c', display: 'flex', flexDirection: 'column', fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500, boxShadow: '-20px 0 50px rgba(0,0,0,.15)' }}>
+    <Overlay inline={inline} onClose={onClose}>
+      <aside role={inline ? undefined : 'dialog'} aria-label="Your cart" style={{ width: '100%', maxWidth: inline ? '640px' : '420px', height: inline ? 'auto' : '100%', margin: inline ? '0 auto' : undefined, borderRadius: inline ? '28px' : undefined, border: inline ? '1px solid #e3e1dc' : undefined, background: '#f5f4f1', color: '#0b0b0c', display: 'flex', flexDirection: 'column', fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500, boxShadow: '-20px 0 50px rgba(0,0,0,.15)' }}>
         <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 22px 16px', borderBottom: '1.5px solid #0b0b0c' }}>
           <h2 className="pw-fat" style={{ margin: 0, fontSize: '34px', lineHeight: 1, fontFamily: "'fatfrank', system-ui, sans-serif", fontWeight: 400 }}>Your cart</h2>
-          <button type="button" onClick={onClose} aria-label="Close cart" style={{ ...round, width: '40px', height: '40px' }}>✕</button>
+          {!inline && <button type="button" onClick={onClose} aria-label="Close cart" style={{ ...round, width: '40px', height: '40px' }}>✕</button>}
         </header>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '18px 22px' }}>
@@ -104,6 +104,15 @@ export default function CartDrawerV2({ isOpen, onClose }: { isOpen: boolean; onC
           </footer>
         )}
       </aside>
+    </Overlay>
+  )
+}
+
+function Overlay({ inline, onClose, children }: { inline: boolean; onClose: () => void; children: ReactNode }) {
+  if (inline) return <div style={{ padding: 'clamp(32px, 5vw, 72px) clamp(16px, 4vw, 40px)' }}>{children}</div>
+  return (
+    <div onClick={(e) => { if (e.target === e.currentTarget) onClose() }} style={{ position: 'fixed', inset: 0, zIndex: 2147482000, background: 'rgba(11,11,12,.35)', display: 'flex', justifyContent: 'flex-end' }}>
+      {children}
     </div>
   )
 }
