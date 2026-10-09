@@ -171,7 +171,7 @@ export default function ProductV2() {
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", color: "#5c5c5c" }}><span>{tr("Shipping")}</span><span>€5.00</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", fontWeight: "600" }}><span>→ {help.partner}</span><span style={{ color: "#c0322a" }}>€{piece.give}</span></div>
           </div>
-          <p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "22px", lineHeight: "1.2", color: "#0b0b0c" }}>€{piece.give} {tr("goes to")} {help.partner}{tr(". The same amount, every order.")}</p>
+          <p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "22px", lineHeight: "1.2", color: "#0b0b0c" }}>€{piece.give} {tr("goes to")} {help.partner}{tr(". Same amount, every time.")}</p>
         </div>
         <div className="pw-tear" aria-hidden="true"></div>
       </div>

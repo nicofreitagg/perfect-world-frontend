@@ -52,7 +52,7 @@ export default function VisionV2() {
     <p style={{ margin: "0" }}>{tr("And yet, even in all that heaviness, I saw something else: people helping each other. People caring. People trying. It changed me.")}</p>
     <p style={{ margin: "0" }}>{tr("I had always lived a privileged life. South Africa, Germany, California, Spain. I saw beautiful places, met incredible people, and learned what opportunity feels like. But I also learned what responsibility feels like.")}</p>
     <blockquote style={{ margin: "12px 0", padding: "0 0 0 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(28px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("PRIVILEGE WITHOUT ACTION IS JUST")} <span style={{ color: "#c0322a" }}>{tr("COMFORT.")}</span></blockquote>
-    <p style={{ margin: "0" }}>{tr("During that time in the hospital, I realized something simple, but important: my pain isn't special. But what I do with it can be. I wanted to give back. I wanted to create something that didn't just exist, but helped.")}</p>
+    <p style={{ margin: "0" }}>{tr("During that time in the hospital, I realized something simple but important: my pain isn't special. But what I do with it can be. I wanted to give back. I wanted to create something that didn't just exist, but helped.")}</p>
     <p style={{ margin: "0" }}>{tr("I didn't have the perfect business plan. I didn't know anything about fashion. I didn't have an investor. I just had one belief:")}</p>
     <blockquote style={{ margin: "12px 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(28px, 3.4vw, 44px)", lineHeight: "1.2", color: "#0b0b0c" }} className="pw-hand">{tr("MONEY SHOULD HELP PEOPLE,")} <span style={{ color: "#c0322a" }}>{tr("NOT HURT THEM.")}</span></blockquote>
   </section>
@@ -65,8 +65,8 @@ export default function VisionV2() {
       </div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World. It was my way of showing that buying and business can exist to help, not to take.")}</p>
-        <p style={{ margin: "0" }}>{tr("100% sounded great. But it was abstract, and many of you weren't sure what it actually meant. So from 11.11, every piece gives a fixed amount, shown right next to the price, and the design you pick decides which partner gets it. It's our next step in transparency, and the step that turns a promise into impact you can count.")}</p>
-        <p style={{ margin: "0", fontWeight: "600", color: "#0b0b0c" }}>{tr("Because I believe we are stronger together. Change happens and hope grows when we put our efforts together.")}</p>
+        <p style={{ margin: "0" }}>{tr("100% of profits was always the mission. From 11.11, that mission gets a number: every piece gives a fixed amount, shown right next to the price, and the design you choose decides which partner gets it. It's our next step in transparency: turning a promise into impact you can count.")}</p>
+        <p style={{ margin: "0", fontWeight: "600", color: "#0b0b0c" }}>{tr("Because I believe we are stronger together. Change happens and hope grows when we join forces.")}</p>
         <p style={{ margin: "0", fontWeight: 700 }}>Together. Not Alone. 😉</p>
       </div>
     </div>
@@ -79,7 +79,7 @@ export default function VisionV2() {
     <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(34px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "18px", marginTop: "40px" }}>
       <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
-      <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A fixed amount on every price. No fine print about what \"profit\" means.")}</p></div>
+      <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
       <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
     </div>
   </section>

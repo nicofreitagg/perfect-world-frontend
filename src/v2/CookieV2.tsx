@@ -54,7 +54,7 @@ export default function CookieV2() {
     >
       <p style={{ margin: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', letterSpacing: '.08em', color: '#c0322a' }}>{tr("COOKIES")}</p>
       <p style={{ margin: '8px 0 14px', fontSize: '15px', lineHeight: 1.5 }}>
-        {tr("A few keep the site working. With your OK, we also use them to see what helps and for ads.")}{' '}
+        {tr("Some keep the site running. With your OK, we also use them to learn what works and for ads.")}{' '}
         <A href="/cookie-policy" style={{ color: '#0b0b0c' }}>{tr("Cookie policy")}</A>
       </p>
 
@@ -75,7 +75,7 @@ export default function CookieV2() {
         ) : (
           <>
             <button type="button" onClick={() => save('rejected', all(false))} style={pill(false)}>{tr("No thanks")}</button>
-            <button type="button" onClick={() => save('accepted', all(true))} style={pill(true)}>{tr("Yes, fine")}</button>
+            <button type="button" onClick={() => save('accepted', all(true))} style={pill(true)}>{tr("Yes, please")}</button>
           </>
         )}
       </div>

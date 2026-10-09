@@ -117,7 +117,7 @@ export default function CauseV2() {
               <span>{tr(pc.label)}</span><span style={{ textAlign: "right", color: "#c0322a", fontWeight: "600" }}>€{pc.give}</span>
             </Fragment>))}
           </div>
-          <div style={{ paddingTop: "14px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.6" }}>{tr("GOES TO")} {c.partnerUpper}.<br />{tr("THE SAME AMOUNT, EVERY ORDER.")}</div>
+          <div style={{ paddingTop: "14px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.6" }}>{tr("GOES TO")} {c.partnerUpper}.<br />{tr("THE SAME AMOUNT, EVERY TIME.")}</div>
           <A href="/shop" style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "18px", minHeight: "50px", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: "15px", fontWeight: "600" }}>{tr("Shop for")} {c.title}</A>
         </div>
         <div className="pw-tear" aria-hidden="true"></div>

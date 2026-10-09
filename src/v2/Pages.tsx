@@ -84,8 +84,8 @@ export function OrderSuccessV2() {
   return (
     <Shell>
       <Page kicker={t('thank you.')} title={t('Your order is in.')}>
-        <p>{t('Your piece is now being made just for you. You will get a confirmation email with all the details, and a tracking link once it ships, usually within 1½ to 2 weeks.')}</p>
-        <p>{t('The fixed amount from your order goes to the partner your design was made with.')} <A href="/how-giving-works">{t('How giving works')}</A></p>
+        <p>{t('We\'re now making your piece, just for you. You\'ll get a confirmation email with all the details, then a tracking link once it ships, usually within 1½ to 2 weeks.')}</p>
+        <p>{t('The fixed amount from your order goes to the partner behind your design.')} <A href="/how-giving-works">{t('How giving works')}</A></p>
         {orderId && <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#5c5c5c' }}>{t('Order')}: {orderId}</p>}
         <p style={{ marginTop: '20px' }}><A href="/" style={pill}>{t('Back home')}</A></p>
       </Page>

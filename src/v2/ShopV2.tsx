@@ -73,7 +73,7 @@ export default function ShopV2() {
     { id: 'og', label: 'The OG Collections', tag: '6 CAUSES' },
   ] as const).map((t) => ({ label: t.label, tag: t.tag, selected: t.id === tab, line: t.id === tab ? '#c0322a' : 'transparent', fg: t.id === tab ? '#0b0b0c' : '#9a978f', pick: () => setTab(t.id) }))
   const filterLabel = tr(tab === 'minimal' ? 'Filter by piece' : 'Filter by cause')
-  const tabNote = tab === 'minimal' ? 'Clean pieces, one small 11.11 mark. Each one is made with one of our six partners.' : "Each OG design tells its partner's story on the back, and its amount always goes to that partner."
+  const tabNote = tab === 'minimal' ? 'Clean pieces with one small 11.11 mark. Each is made with one of our six partners.' : "Each OG design tells its partner's story on the back, and its amount always goes to that partner."
   const filters = tab === 'minimal'
     ? [{ id: 'all' as const, label: 'All pieces' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: ({ tote: 'Totes', tee: 'T-shirts', over: 'Oversized', hoodie: 'Hoodies' } as const)[p.id] }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All causes', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
@@ -135,7 +135,7 @@ export default function ShopV2() {
           <div style={{ fontSize: "11px", color: "#5c5c5c", marginTop: "4px" }}>{tr("WHAT EVERY PIECE GIVES")}</div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", columnGap: "18px", rowGap: "12px", padding: "16px 0", borderBottom: "1px dashed #bdbab3" }}>
-          <span style={{ fontSize: "11px", color: "#5c5c5c" }}>{tr("PIECE")}</span><span style={{ fontSize: "11px", color: "#5c5c5c", textAlign: "right" }}>{tr("PRICE")}</span><span style={{ fontSize: "11px", color: "#c0322a", textAlign: "right" }}>{tr("TO CAUSE")}</span>
+          <span style={{ fontSize: "11px", color: "#5c5c5c" }}>{tr("PIECE")}</span><span style={{ fontSize: "11px", color: "#5c5c5c", textAlign: "right" }}>{tr("PRICE")}</span><span style={{ fontSize: "11px", color: "#c0322a", textAlign: "right" }}>{tr("GIVES")}</span>
           {tiles.map((t, tI) => (<Fragment key={tI}>
             <span>{tr(t.name)}</span><span style={{ textAlign: "right" }}>€{t.price}</span><span style={{ textAlign: "right", color: "#c0322a", fontWeight: "600" }}>€{t.give}</span>
           </Fragment>))}
@@ -260,9 +260,9 @@ export default function ShopV2() {
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(56px, 6vw, 88px) clamp(16px, 4vw, 56px)" }}>
       <h2 className="pw-fat" style={{ margin: "0", fontSize: "clamp(36px, 4.4vw, 60px)", lineHeight: ".95" }}>{tr("How your order works")}</h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "28px", marginTop: "40px" }}>
-        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>01</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("Pick a piece")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Minimal or OG. Each piece has a fixed amount it gives.")}</p></div>
+        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>01</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("Pick a piece")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Minimal or OG. Every piece gives a fixed amount.")}</p></div>
         <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>02</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("It goes to its partner")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Every design is made with one partner. The fixed amount always goes to them.")}</p></div>
-        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>03</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("We pass it on")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("The full amount goes to the cause you picked. Your piece is made for you and arrives in about 1½ to 2 weeks.")}</p></div>
+        <div style={{ borderTop: "1px solid rgba(11,11,12,.25)", paddingTop: "18px" }}><span className="pw-hand" style={{ fontSize: "44px", color: "#e2453c" }}>03</span><p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "24px" }}>{tr("We pass it on")}</p><p style={{ margin: "8px 0 0", fontSize: "15px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("The full amount goes to the cause you picked. Your piece is made just for you and arrives in about 1½ to 2 weeks.")}</p></div>
       </div>
     </div>
   </section>

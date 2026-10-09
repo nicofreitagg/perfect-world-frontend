@@ -78,19 +78,19 @@ export const CAUSES: Cause[] = [
       {
         "title": "THE CHALLENGE",
         "paras": [
-          "Countless children around the world grow up without parental care, facing disadvantages that can shape their entire lives. For those caught in war-torn regions, the challenges are even more severe—lacking access to basic necessities, education, and the nurturing environment every child deserves."
+          "Countless children around the world grow up without parental care, facing disadvantages that can shape their entire lives. For those caught in war-torn regions, the challenges are even greater: no access to basic necessities, to education, or to the nurturing environment every child deserves."
         ]
       },
       {
         "title": "WHAT WE DO TOGETHER",
         "paras": [
-          "The ONE WORLD Collection stands for unity and compassion in the face of adversity. Every piece gives a fixed amount to Care in Action, a non-profit charity dedicated to helping disadvantaged children—especially those without parental care—to grow up and succeed in life. By providing essential care, education, and a nurturing environment, Care in Action serves as a lifeline for children facing the harsh realities of war."
+          "The ONE WORLD Collection stands for unity and compassion in the face of adversity. Every piece gives a fixed amount to Care in Action, a non-profit dedicated to helping disadvantaged children, especially those without parental care, grow up and succeed in life. By providing essential care, education, and a nurturing environment, Care in Action is a lifeline for children facing the harsh realities of war."
         ]
       },
       {
         "title": "ABOUT CARE IN ACTION",
         "paras": [
-          "Care in Action is a non-profit charity dedicated to helping disadvantaged children, but especially those without parental care, to grow up and succeed in life. By striving to provide essential care, education and a nurturing environment, Care in Action is a lifeline for those facing the harsh realities of war."
+          "Care in Action is a non-profit dedicated to helping disadvantaged children, especially those without parental care, grow up and succeed in life. By providing essential care, education and a nurturing environment, Care in Action is a lifeline for children facing the harsh realities of war."
         ]
       }
     ],
@@ -154,7 +154,7 @@ export const CAUSES: Cause[] = [
       {
         "title": "WHAT WE DO TOGETHER",
         "paras": [
-          "The ENDANGERED OCEANS Collection is more than just fashion—it's a call to action. Each piece is designed to spread awareness and fund real solutions for our oceans. Every piece gives a fixed amount to SECORE International, a global leader in coral restoration. Through pioneering research, innovative reef restoration techniques, and education, they're working to ensure a future where coral reefs thrive—not just survive."
+          "The ENDANGERED OCEANS Collection is more than fashion. It's a call to action. Each piece is designed to spread awareness and fund real solutions for our oceans. Every piece gives a fixed amount to SECORE International, a global leader in coral restoration. Through pioneering research, innovative reef restoration techniques, and education, they're working toward a future where coral reefs don't just survive, but thrive."
         ]
       },
       {
@@ -218,13 +218,13 @@ export const CAUSES: Cause[] = [
       {
         "title": "THE CHALLENGE",
         "paras": [
-          "The African elephant is one of Earth's most extraordinary beings — intelligent, social, emotional, and deeply connected to its herd. Yet despite their importance, elephants are under constant pressure from habitat loss, human–elephant conflict, and shifting landscapes. This collaboration is built on a simple belief: when we take action out of love, we protect what's wild and keep hope alive. WILD AT HEART is more than a design — it's a reminder that protecting nature starts with choosing compassion, choosing awareness, and choosing to act."
+          "The African elephant is one of Earth's most extraordinary beings: intelligent, social, emotional, and deeply connected to its herd. Yet despite their importance, elephants are under constant pressure from habitat loss, human–elephant conflict, and shifting landscapes. This collaboration is built on a simple belief: when we act out of love, we protect what's wild and keep hope alive. WILD AT HEART is more than a design. It's a reminder that protecting nature starts with choosing compassion, choosing awareness, and choosing to act."
         ]
       },
       {
         "title": "ABOUT ELEPHANTS FOR AFRICA",
         "paras": [
-          "Elephants for Africa, founded by Dr. Kate Evans, is a charity dedicated to safeguarding elephants through research, education, and community partnership in Botswana. Their work focuses on researching elephant behaviour (especially male elephants who often receive less conservation attention), supporting local communities and farmers to protect their livelihoods while coexisting with migrating elephant herds, and educating the next generation through school programmes and conservation clubs. Elephants for Africa isn't just \"protecting elephants\" — they're building a world where people and wildlife can thrive side by side."
+          "Elephants for Africa, founded by Dr. Kate Evans, is a charity dedicated to safeguarding elephants through research, education, and community partnership in Botswana. Their work focuses on researching elephant behaviour (especially male elephants, who often receive less conservation attention), supporting local communities and farmers to protect their livelihoods while living alongside migrating elephant herds, and educating the next generation through school programmes and conservation clubs. Elephants for Africa isn't just \"protecting elephants\". They're building a world where people and wildlife can thrive side by side."
         ]
       }
     ],

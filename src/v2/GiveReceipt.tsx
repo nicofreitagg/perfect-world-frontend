@@ -138,7 +138,7 @@ export default function GiveReceipt() {
             <div><dt>{t('COLOUR')}</dt><dd>{t(colour)}</dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">
-              <dt>{t('INCLUDED FOR')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
+              <dt>{t('GOES TO')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
               <dd><span className="pwl-amount">{eur(row.give)}<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 26 4, 60 10, 98 4" /></svg></span></dd>
             </div>
           </dl>

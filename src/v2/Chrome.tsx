@@ -2,6 +2,7 @@ import { useLocale } from '../contexts/LocaleContext'
 import { A } from './A'
 import { useT } from './t'
 import { Lines } from './Seams'
+import LangNotice from './LangNotice'
 
 // Shared header and footer for every page of the new site.
 const NAV = [
@@ -40,6 +41,7 @@ export function Header({ active, cartCount, openCart, dark = false, big = false 
       <LangToggle dark={dark} />
       <button type="button" onClick={openCart} style={{ color: ink, fontSize: "14px", fontWeight: "600", textDecoration: "none", padding: "12px 18px", border: `1px solid ${line}`, borderRadius: "999px" , background: "transparent", cursor: "pointer", fontFamily: "inherit" }}>{t("Cart")} ({cartCount})</button>
     </div>
+    <LangNotice />
   </header>
   )
 }

@@ -105,7 +105,7 @@ export default function HomeV2() {
     <figure className="pwl-hero-photo">
       {/* Placeholder until the official 11.11 film: the film from the current site */}
       <div className="pwl-photo-box pwl-film">
-        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those that dare to dream')} playLabel={tr('Play the video')} below />
+        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those who dare to dream')} playLabel={tr('Play the video')} below />
       </div>
       <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span><span className="pw-hand">{tr('Not Alone.')}</span></p>
     </figure>
@@ -129,8 +129,8 @@ export default function HomeV2() {
       <p className="pw-fat pwl-1111" aria-label="11:11">11<span>:</span>11</p>
       <h2 id="eleven-h" className="pw-fat pwl-h2 pwl-1111-h">{tr('Every piece gives a fixed amount.')}</h2>
       <p className="pwl-sub">{launched
-        ? tr('A set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.')
-        : tr('From 11.11, a set amount for every piece, printed next to the price and the same on every order. It goes to the partner your design was made with.')}</p>
+        ? tr('You\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')
+        : tr('From 11.11, you\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')}</p>
       <ul className="pwl-tickets">
         {AMOUNTS.map((a, i) => (
           <li key={a.label} className={a.mark ? 'is-mark' : undefined} style={{ '--c': SIX[i % SIX.length] } as React.CSSProperties}>
@@ -192,7 +192,7 @@ export default function HomeV2() {
         {line === 'og' ? (
         <figure className="pwl-worn">
           <img src="/v2/img/og-back-700.webp" alt={tr('Cool Down back print, worn')} width={700} height={1050} loading="lazy" />
-          <figcaption>{tr('The story sits on the back. The logo sits small on the front.')}</figcaption>
+          <figcaption>{tr('The story on the back. A small logo on the front.')}</figcaption>
         </figure>
         ) : (
         <div className="pwl-worn pwl-min-intro">
@@ -231,7 +231,7 @@ export default function HomeV2() {
         <div>
           <p className="pwl-kicker">{tr('TRY IT · FOUR TAPS')}</p>
           <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pwl-red">{tr('easier.')}</span></h2>
-          <p className="pwl-sub">{tr('Pick a collection, a piece, a design and a colour. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
+          <p className="pwl-sub">{tr('Pick a collection, a piece, a design and a colour. The receipt shows the price, how much goes to the partner, and who that partner is.')}</p>
         </div>
       </div>
       <GiveReceipt />
@@ -245,7 +245,7 @@ export default function HomeV2() {
         <div>
           <p className="pwl-kicker pwl-kicker-l">{tr('SIX PLACES · ONE HOPE')}</p>
           <h2 id="causes-h" className="pw-fat pwl-h2">{tr('The people doing the work.')}</h2>
-          <p className="pwl-sub">{tr('Far from here and right next door, people are already making the wishes come true. Every collection was made with one of them.')}</p>
+          <p className="pwl-sub">{tr('Far away and right next door, people are already making these wishes come true. Every collection was made with one of them.')}</p>
           <A href="/projects" className="pwl-link pwl-link-l">{tr('All six causes')} →</A>
         </div>
         <div ref={globeBox} className={globe3d ? 'pwl-globe is-3d' : 'pwl-globe'}>

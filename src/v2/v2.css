@@ -176,3 +176,12 @@
 .pw-edge span:nth-child(n+3){width:24vw;height:44vh;opacity:.8}
 @media (max-width:760px){.pw-edge span{width:46vw;left:auto}.pw-edge .l{left:-34vw}.pw-edge .r{right:-34vw}.pw-edge span{opacity:.75}}
 @media (prefers-reduced-motion:reduce){.pw-edge span{transition:none}}
+
+/* "Now in German too" note, under the header */
+.pw-langnote{flex-basis:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px 14px;margin:2px auto 0;padding:9px 12px 9px 18px;max-width:640px;border-radius:999px;background:rgba(255,253,248,.92);border:1px solid rgba(11,11,12,.12);box-shadow:0 8px 22px rgba(0,0,0,.06);font-size:14px;font-weight:600;color:#0b0b0c}
+.pw-langnote-go{font:inherit;font-size:13px;font-weight:700;padding:7px 14px;border-radius:999px;border:none;background:#0b0b0c;color:#fff;cursor:pointer}
+.pw-langnote-x{font:inherit;font-size:20px;line-height:1;width:30px;height:30px;border-radius:50%;border:none;background:transparent;color:#5c5c5c;cursor:pointer}
+@media (max-width:600px){.pw-langnote{border-radius:18px;font-size:13px}}
+/* Swirls behind content kept crossing text and photos (Nico, 9 Oct). They're off; swirls
+   only appear in the empty gaps between blocks (home) and as the cause-line seams. */
+.pw2 svg.pw-swirl{display:none}

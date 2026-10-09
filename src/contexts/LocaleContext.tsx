@@ -13,6 +13,8 @@ interface LocaleState {
   /** Languages offered in the switcher: English always + the visitor's local language */
   availableLanguages: string[]
   setLanguage: (lang: string) => void
+  /** The visitor's likely own language (from country or browser), if we support it */
+  suggestedLanguage: string | null
 }
 
 const LocaleContext = createContext<LocaleState>({
@@ -20,6 +22,7 @@ const LocaleContext = createContext<LocaleState>({
   language: 'en',
   availableLanguages: ['en'],
   setLanguage: () => {},
+  suggestedLanguage: null,
 })
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -57,14 +60,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     const cached = localStorage.getItem(COUNTRY_KEY)
     return cached && /^[A-Z]{2}$/.test(cached) ? cached : null
   })
+  // English first for everyone (Nico, 9 Oct). Visitors who'd prefer German get a small
+  // note offering it (LangNotice); only an explicit choice changes the language.
   const [language, setLanguageState] = useState<string>(() => {
     const saved = localStorage.getItem(LANGUAGE_KEY)
-    if (saved && SUPPORTED_LANGUAGES[saved]) return saved
-    const cached = localStorage.getItem(COUNTRY_KEY)
-    if (cached && COUNTRY_LANGUAGE[cached]) return COUNTRY_LANGUAGE[cached]
-    // First visit before geo resolves: guess from the browser language
-    const browserLang = navigator.language?.split('-')[0]?.toLowerCase()
-    return browserLang && SUPPORTED_LANGUAGES[browserLang] ? browserLang : 'en'
+    return saved && SUPPORTED_LANGUAGES[saved] ? saved : 'en'
   })
 
   // Keep i18next + Shopify context in sync from the very first render
@@ -77,14 +77,6 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
       if (cancelled || !detected) return
       localStorage.setItem(COUNTRY_KEY, detected)
       setCountry(detected)
-      // Only auto-switch language if the user never chose one explicitly
-      if (!localStorage.getItem(LANGUAGE_KEY)) {
-        const local = COUNTRY_LANGUAGE[detected]
-        if (local && local !== i18n.language) {
-          setLanguageState(local)
-          i18n.changeLanguage(local)
-        }
-      }
     })
     return () => {
       cancelled = true
@@ -107,8 +99,11 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   // the Netherlands) saw no switcher at all and couldn't reach German/Spanish.
   const availableLanguages = Object.keys(SUPPORTED_LANGUAGES)
 
+  const browserLang = navigator.languages?.map((l) => l.split('-')[0].toLowerCase()).find((l) => l !== 'en' && SUPPORTED_LANGUAGES[l])
+  const suggestedLanguage = (country && COUNTRY_LANGUAGE[country]) || browserLang || null
+
   return (
-    <LocaleContext.Provider value={{ country, language, availableLanguages, setLanguage }}>
+    <LocaleContext.Provider value={{ country, language, availableLanguages, setLanguage, suggestedLanguage }}>
       {children}
     </LocaleContext.Provider>
   )
