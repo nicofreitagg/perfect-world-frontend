@@ -8,6 +8,7 @@ const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
+import PosterVideo from './PosterVideo'
 import { CAUSES, TINT, causeTitle as titleCase } from './causes'
 import { PIECES, NEW_PIECES, TEE_PATH, icon, type CauseKey } from './data'
 import { isLaunched } from './launch'
@@ -57,7 +58,7 @@ export default function HomeV2() {
   usePageTitle()
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const launched = isLaunched()
-  const [line, setLine] = useState<'og' | 'minimal'>('og')
+  const [line, setLine] = useState<'og' | 'minimal'>('minimal')
 
   useEffect(() => {
     document.body.style.background = '#f5f4f1'
@@ -102,16 +103,9 @@ export default function HomeV2() {
 <span className="pw-hand pwl-head-b">{tr('for.')}</span></span>
     </h1>
     <figure className="pwl-hero-photo">
-      <div className="pwl-photo-box">
-      <picture>
-        <source media="(max-width: 700px)" srcSet="/v2/img/hero-friends-800.webp" />
-        <img src="/v2/img/hero-friends-1400.webp" alt={tr('Four friends on a bench in Perfect World hoodies')} width={1400} height={1308} fetchPriority="high" />
-      </picture>
-      <figcaption className="pwl-tagline">
-        <span className="pwl-tagline-k">{launched ? tr('INCLUDED') : tr('FROM 11.11')}</span>
-        <span className="pwl-amount">€{PIECES.hoodie.give}<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 26 4, 60 10, 98 4" /></svg></span>
-        <span className="pwl-tagline-t">{tr('of every €{p} hoodie goes to its cause partner').replace('{p}', PIECES.hoodie.price)}</span>
-      </figcaption>
+      {/* Placeholder until the official 11.11 film: the film from the current site */}
+      <div className="pwl-photo-box pwl-film">
+        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those that dare to dream')} playLabel={tr('Play the video')} corner />
       </div>
       <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span><span className="pw-hand">{tr('Not Alone.')}</span></p>
     </figure>
@@ -190,8 +184,8 @@ export default function HomeV2() {
           <h2 id="pieces-h" className="pw-fat pwl-h2">{tr('Pick a design. It decides who it helps.')}</h2>
         </div>
         <div className="pwl-switch" role="group" aria-label={tr('Collection')}>
+          <button type="button" aria-pressed={line === 'minimal'} onClick={() => setLine('minimal')}>Minimal <span className="pwl-chip-new">{tr('new')}</span></button>
           <button type="button" aria-pressed={line === 'og'} onClick={() => setLine('og')}>OG</button>
-          <button type="button" aria-pressed={line === 'minimal'} onClick={() => setLine('minimal')}>Minimal <span className="pwl-chip-soon">{tr('new')}</span></button>
         </div>
       </div>
       <div className="pwl-pieces">
@@ -235,8 +229,8 @@ export default function HomeV2() {
     <div className="pwl-wrap">
       <div className="pwl-sechead pwl-center">
         <div>
-          <p className="pwl-kicker">{launched ? tr('11:11 · EVERY PIECE GIVES A FIXED AMOUNT') : tr('11:11 · FROM 11.11, EVERY PIECE GIVES A FIXED AMOUNT')}</p>
-          <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pw-hand pwl-red">{tr('easier.')}</span></h2>
+          <p className="pwl-kicker">{tr('TRY IT · THREE TAPS')}</p>
+          <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pwl-red">{tr('easier.')}</span></h2>
           <p className="pwl-sub">{tr('Pick a collection, a piece and a design. The receipt shows what it costs, what is included for the partner, and who receives it.')}</p>
         </div>
       </div>
@@ -275,44 +269,20 @@ export default function HomeV2() {
 
   <Swirl color="#2f6fa8" flip />
 
-  {/* 7 · OG or Minimal: the two collections, as in the earlier version */}
-  <section id="loud" className="pwl-sec pw-iso" aria-label={tr('OG or Minimal')}>
-    <div className="pwl-wrap">
-      <div className="pwl-loud">
-        <A href="/shop" className="pwl-loud-og">
-          <span className="pwl-loud-k">{tr('SIX CAUSES · SIX BACK PRINTS')}</span>
-          <img src="/v2/img/og-talk.webp" alt={tr('Talk About It T-shirt, back print')} className="pwl-loud-a" loading="lazy" />
-          <img src="/v2/img/og-rich-700.webp" alt={tr('Rich in Life T-shirt, back print')} className="pwl-loud-b" loading="lazy" />
-          <span className="pwl-loud-txt"><span className="pw-fat pwl-loud-h">OG.</span><span className="pwl-loud-s">{tr('A story on your back, for anyone who asks.')}</span><span className="pwl-btn pwl-btn-light">{tr('SHOP THE OG')}</span></span>
-        </A>
-        <A href="/shop" className="pwl-loud-min">
-          <span className="pw-hand pwl-loud-new">{tr('New this November.')}</span>
-          <svg width="230" height="220" viewBox="0 0 240 230" aria-label={tr('Minimal black T-shirt')} className="pwl-loud-tee"><path d={TEE_PATH} fill="#1b1b1d" /><circle cx="138" cy="70" r="5" fill="#e2453c" /></svg>
-          <span className="pwl-loud-txt pwl-right"><span className="pw-hand pwl-loud-h">{tr('Minimal.')}</span><span className="pwl-loud-s">{tr('A small detail. Nobody has to know. You do.')}</span><span className="pwl-btn">{tr('SHOP THE MINIMAL')}</span></span>
-        </A>
-      </div>
-      <p className="pw-hand pwl-either"><Ico c="cool" style={{ position: 'static', display: 'inline-block', width: '58px', verticalAlign: 'middle', marginRight: '18px', transform: 'rotate(-8deg)' }} />{tr('It gives either way.')}</p>
-    </div>
-  </section>
-
   {/* 8 · Founder note at the very end, from existing approved copy */}
   <section id="story" className="pwl-sec pwl-story-sec pw-iso" aria-labelledby="story-h">
-    <Ico c="oceans" style={{ right: '5%', top: '30px', transform: 'rotate(-6deg)' }} />
-    <div className="pwl-wrap pwl-story">
-      <figure className="pwl-founder">
+    <Ico c="oceans" style={{ right: '8%', top: '30px', transform: 'rotate(-6deg)' }} />
+    <div className="pwl-wrap pwl-story pwl-story-s">
+      <figure className="pwl-founder-c">
         <img src="/v2/img/founder-700.webp" alt={tr('Nico, founder of Perfect World')} width={700} height={1024} loading="lazy" />
+        <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M150 24 C 112 2, 46 10, 22 58 C 2 100, 22 162, 84 182 C 146 200, 192 160, 190 104 C 188 58, 160 30, 118 22 C 96 18, 76 22, 64 28" /></svg>
       </figure>
       <div className="pwl-story-txt">
         <p className="pwl-kicker pwl-kicker-l">{tr('FROM MUNICH, WITH SIX PARTNERS')}</p>
         <p className="pwl-quote-lead">{tr("I built this movement because I've received more love in my life than I ever deserved. This is my way of giving some of it back.")}</p>
         <h2 id="story-h" className="pw-fat pwl-quote">{tr("Perfect World isn't mine anymore. It's ours.")}</h2>
         <p className="pw-hand pwl-sig">{tr('NICO')}</p>
-        <A href="/about" className="pwl-link">{tr('Our story and the video')} →</A>
-      </div>
-      <div className="pwl-community">
-        <img src="/v2/img/park-tees-900.webp" srcSet="/v2/img/park-tees-900.webp 900w, /v2/img/park-tees-1500.webp 1500w" sizes="(max-width: 700px) 100vw, 50vw" alt={tr('Three friends in a park wearing Perfect World tees')} loading="lazy" />
-        <img src="/v2/img/two-friends-700.webp" alt={tr('Two friends in Perfect World tees')} loading="lazy" />
-        <img src="/v2/img/detail-logo-900.webp" alt={tr('The small embroidered logo, close up')} loading="lazy" />
+        <A href="/about" className="pwl-link pwl-link-s">{tr('Find out more about the vision')} →</A>
       </div>
     </div>
   </section>

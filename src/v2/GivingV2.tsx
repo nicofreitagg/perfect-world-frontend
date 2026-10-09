@@ -27,7 +27,7 @@ export default function GivingV2() {
 
   <div className="pw-lightband" style={{ color: "#0b0b0c" }}>
   <Header active="/how-giving-works" cartCount={cartCount} openCart={openCart} />
-    <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1100px", margin: "0 auto", padding: "clamp(40px, 6vw, 90px) clamp(16px, 4vw, 56px) clamp(70px, 8vw, 110px)" }}>
+    <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 6vw, 90px) clamp(16px, 4vw, 56px) clamp(70px, 8vw, 110px)" }}>
       <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontWeight: "700", fontSize: "14px", letterSpacing: ".14em", color: "#c0322a" }}>{tr("HOW GIVING WORKS")}</p>
       <h1 style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(48px, 7vw, 104px)", lineHeight: ".92", letterSpacing: "-0.02em" }} className="pw-fat">{tr("Every piece gives")}<br />{tr("a fixed amount.")}</h1>
       <p style={{ margin: "24px 0 0", fontSize: "21px", lineHeight: "1.55", color: "#3a3a3a", maxWidth: "640px" }}>{tr("A clear amount for every piece. Shown right next to the price, the same on every order, and it goes straight to the partner your design was made with.")}</p>
@@ -53,7 +53,7 @@ export default function GivingV2() {
     </div>
   </section>
 
-  <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "0 auto", padding: "clamp(70px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
+  <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1240px", margin: "0 auto", padding: "clamp(70px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
     <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(40px, 5vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
