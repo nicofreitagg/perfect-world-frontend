@@ -350,4 +350,8 @@
 @media (max-width:700px){.pwl-story.pwl-story-s{flex-direction:column;align-items:flex-start}}
 .pwl-dot-sw{width:14px;height:14px;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(11,11,12,.18)}
 /* Hero film larger on desktop (Nico 9 Oct) */
-@media (min-width:1001px){.pwl-hero{max-width:1560px;grid-template-columns:minmax(0,.82fr) minmax(0,1.3fr)}}
+@media (min-width:1001px){.pwl-hero{max-width:1680px;grid-template-columns:minmax(0,.72fr) minmax(0,1.4fr)}.pwl-hope{font-size:clamp(96px,10.4vw,176px)}}
+/* Sign-off under the film: one line, big enough to belong to it; "Not Alone." stays the bigger one */
+.pwl-sign{flex-direction:row;justify-content:center;align-items:baseline;gap:.45em;margin-top:clamp(18px,2vw,28px)}
+.pwl-sign .pw-fat{font-size:clamp(26px,2.6vw,42px)}
+.pwl-sign .pw-hand{font-size:clamp(40px,4vw,66px)}

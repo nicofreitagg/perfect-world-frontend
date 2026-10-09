@@ -105,7 +105,7 @@ export default function HomeV2() {
     <figure className="pwl-hero-photo">
       {/* Placeholder until the official 11.11 film: the film from the current site */}
       <div className="pwl-photo-box pwl-film">
-        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those that dare to dream')} playLabel={tr('Play the video')} corner />
+        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those that dare to dream')} playLabel={tr('Play the video')} below />
       </div>
       <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span><span className="pw-hand">{tr('Not Alone.')}</span></p>
     </figure>
