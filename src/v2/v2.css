@@ -61,3 +61,5 @@
 .pw2 .pw-hand.pw-nostroke{-webkit-text-stroke:0}
 
 @media (max-width:520px){.pw2 .pw-hope{font-size:31vw!important}}
+
+.pw2 .pw-stars{background-color:#0b0b0c;background-image:radial-gradient(1px 1px at 12% 18%,rgba(255,255,255,.85),transparent 60%),radial-gradient(1px 1px at 28% 72%,rgba(255,255,255,.6),transparent 60%),radial-gradient(1.5px 1.5px at 44% 32%,rgba(255,255,255,.75),transparent 60%),radial-gradient(1px 1px at 63% 12%,rgba(255,255,255,.55),transparent 60%),radial-gradient(1px 1px at 78% 58%,rgba(255,255,255,.75),transparent 60%),radial-gradient(1.5px 1.5px at 91% 26%,rgba(255,255,255,.6),transparent 60%);background-size:420px 420px}
