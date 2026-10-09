@@ -5,15 +5,18 @@ import * as THREE from 'three'
 import { useNavigate } from 'react-router-dom'
 import { latLonToVector3 } from '../utils/animations'
 
-// A light globe in the Perfect World look, with the red line from the logo around the equator.
-// Two skins to choose from (both made from globe-texture.jpg):
-//   ink  = ink-black land on off-white (globe-pw.webp)
-//   hand = hand-drawn grid and coastlines like the One World print (globe-hand.webp)
-// Preview the second with ?globe=hand. Six cause pills open their project page.
-export type GlobeSkin = 'ink' | 'hand'
-const SKINS: Record<GlobeSkin, string> = { ink: '/v2/img/globe-pw.webp', hand: '/v2/img/globe-hand.webp' }
-const globeSkin = (): GlobeSkin =>
-  typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('globe') === 'hand' ? 'hand' : 'ink'
+// The causes globe, with the red line from the logo around the equator. Skins (all in public/v2/img):
+//   wire = see-through ball of hand-drawn, imperfect grid lines, like the One World print (default, globe-wire.webp)
+//   ink  = ink-black land on off-white (globe-pw.webp), preview with ?globe=ink
+//   hand = drawn coastlines on a grid (globe-hand.webp), preview with ?globe=hand
+// Six cause pills open their project page.
+export type GlobeSkin = 'wire' | 'ink' | 'hand'
+const SKINS: Record<GlobeSkin, string> = { wire: '/v2/img/globe-wire.webp', ink: '/v2/img/globe-pw.webp', hand: '/v2/img/globe-hand.webp' }
+const globeSkin = (): GlobeSkin => {
+  const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('globe') : null
+  return q === 'ink' || q === 'hand' ? q : 'wire'
+}
+
 const PINS = [
   { slug: 'one-world', name: 'One World', color: '#5DADE2', lat: 49.84, lon: 24.03, lift: 0.24 },
   { slug: 'talk-about-it', name: 'Talk About It', color: '#FF8C42', lat: 48.14, lon: 11.58 },
@@ -45,12 +48,14 @@ function Pin({ pin, onOpen }: { pin: (typeof PINS)[number]; onOpen: (slug: strin
     label.current.style.opacity = show ? String(Math.min(1, (facing - 0.12) * 5)) : '0'
     label.current.style.pointerEvents = show ? 'auto' : 'none'
     label.current.tabIndex = show ? 0 : -1
+    // Dots on the far side would show through the see-through ball.
+    ;(dot.current.material as THREE.MeshBasicMaterial).opacity = show ? 1 : 0
   })
 
   return (
     <mesh ref={dot} position={[pos.x, pos.y, pos.z]}>
       <sphereGeometry args={[0.035, 16, 16]} />
-      <meshBasicMaterial color={pin.color} />
+      <meshBasicMaterial color={pin.color} transparent />
       <Html center position={[0, ('lift' in pin ? pin.lift : undefined) ?? 0.12, 0]} zIndexRange={[60, 0]}>
         <button ref={label} type="button" className="pw-gpin" onClick={() => onOpen(pin.slug)} style={{ ['--c' as string]: pin.color }}>
           <span aria-hidden="true" />{pin.name}
@@ -95,8 +100,17 @@ function Earth({ onOpen, onReady, skin }: { onOpen: (slug: string) => void; onRe
         onPointerCancel={() => { drag.current = null }}
       >
         <sphereGeometry args={[1, 96, 96]} />
-        <meshStandardMaterial map={map} roughness={1} metalness={0} />
+        {skin === 'wire'
+          ? <meshBasicMaterial map={map} transparent depthWrite={false} side={THREE.FrontSide} />
+          : <meshStandardMaterial map={map} roughness={1} metalness={0} />}
       </mesh>
+      {/* See-through skin: the far side of the ball shows faintly through the middle. */}
+      {skin === 'wire' && (
+        <mesh renderOrder={-1}>
+          <sphereGeometry args={[1, 96, 96]} />
+          <meshBasicMaterial map={map} transparent opacity={0.28} depthWrite={false} side={THREE.BackSide} />
+        </mesh>
+      )}
       {PINS.map((p) => <Pin key={p.slug} pin={p} onOpen={onOpen} />)}
     </group>
   )

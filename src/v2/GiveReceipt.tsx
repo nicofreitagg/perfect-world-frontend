@@ -10,16 +10,19 @@ import type { ShopifyProduct } from '../types/shopify.types'
 
 // Home: one piece, its fixed amount and who receives it, side by side.
 // Amounts come from PIECES / NEW_PIECES; the partner always follows from the design.
-type PieceId = 'tote' | 'tshirt' | 'oversized' | 'hoodie' | 'bomber' | 'beanie'
+// isNew = launches on 11.11 and has no Shopify product or photo yet.
+type PieceId = 'women' | 'tshirt' | 'oversized' | 'hoodie' | 'tote' | 'bomber' | 'beanie'
+const women = NEW_PIECES.find((n) => n.id === 'women')!
 const bomber = NEW_PIECES.find((n) => n.id === 'bomber')!
 const beanie = NEW_PIECES.find((n) => n.id === 'beanie')!
-const ROWS: { id: PieceId; label: string; price: string; give: string; soon?: boolean; split?: boolean }[] = [
-  { id: 'tshirt', label: 'T-shirt', price: PIECES.shirt.price, give: PIECES.shirt.give },
-  { id: 'hoodie', label: 'Hoodie', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
-  { id: 'oversized', label: 'Oversized shirt', price: PIECES.oversized.price, give: PIECES.oversized.give },
-  { id: 'tote', label: 'Tote bag', price: PIECES.tote.price, give: PIECES.tote.give },
-  { id: 'bomber', label: 'Bomber jacket', price: bomber.price, give: bomber.give, soon: true },
-  { id: 'beanie', label: 'Beanie', price: beanie.price, give: beanie.give, soon: true, split: true },
+const ROWS: { id: PieceId; label: string; fit: string; price: string; give: string; isNew?: boolean; split?: boolean }[] = [
+  { id: 'women', label: "Women's T-shirt", fit: 'women', price: women.price, give: women.give, isNew: true },
+  { id: 'tshirt', label: 'T-shirt', fit: 'unisex', price: PIECES.shirt.price, give: PIECES.shirt.give },
+  { id: 'oversized', label: 'Oversized shirt', fit: 'unisex', price: PIECES.oversized.price, give: PIECES.oversized.give },
+  { id: 'hoodie', label: 'Hoodie', fit: 'unisex', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
+  { id: 'tote', label: 'Tote bag', fit: 'one size', price: PIECES.tote.price, give: PIECES.tote.give },
+  { id: 'bomber', label: 'Bomber jacket', fit: 'unisex', price: bomber.price, give: bomber.give, isNew: true },
+  { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true },
 ]
 const eur = (s: string) => '€' + s
 
@@ -33,7 +36,7 @@ export default function GiveReceipt() {
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
   const product = useMemo(() => products.find((p) => !/minimal/i.test(p.title) && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece])
-  const photo = row.soon ? '' : product?.images[0]?.url || (cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const photo = row.isNew ? '' : product?.images[0]?.url || (cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
   const key = `${piece}-${row.split ? 'all' : design}`
 
@@ -45,7 +48,7 @@ export default function GiveReceipt() {
           <div className="pwl-chips">
             {ROWS.map((r) => (
               <button key={r.id} type="button" className="pwl-chip" aria-pressed={r.id === piece} onClick={() => setPiece(r.id)}>
-                {t(r.label)}{r.soon && <span className="pwl-chip-soon">{t('soon')}</span>}
+                {t(r.label)}{r.fit !== 'women' && <span className="pwl-chip-fit">{t(r.fit)}</span>}{r.isNew && <span className="pwl-chip-soon">{t('new')}</span>}
               </button>
             ))}
           </div>
@@ -106,8 +109,10 @@ export default function GiveReceipt() {
               <p><b>{cause.partner}</b><br />{t(cause.place)}</p>
             </div>
           )}
-          <p className="pwl-receipt-foot">{t('Included in the price. Nothing is added at checkout.')}{!isLaunched() && <><br />{t('Fixed amounts apply from 11.11.')}</>}{row.soon && <><br />{t('Coming soon · price not final yet.')}</>}</p>
-          {!row.soon && <A href={`/design/${cause.slug}`} className="pwl-receipt-cta">{t('See this piece')} →</A>}
+          <p className="pwl-receipt-foot">{t('Included in the price. Nothing is added at checkout.')}{!isLaunched() && <><br />{t('Fixed amounts apply from 11.11.')}</>}</p>
+          {row.isNew
+            ? <A href="/shop" className="pwl-receipt-cta">{t('See the shop')} →</A>
+            : <A href={`/design/${cause.slug}`} className="pwl-receipt-cta">{t('See this piece')} →</A>}
           <div className="pw-tear" aria-hidden="true" />
         </div>
       </div>

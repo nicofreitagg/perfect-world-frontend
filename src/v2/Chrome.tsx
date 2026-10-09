@@ -48,7 +48,8 @@ export function Footer({ icons = ['/v2/icons/ic-df3d515b.svg', '/v2/icons/ic-745
   return (
   <footer className="pw-dark pw-iso pw-blend-t" style={{ position: "relative", zIndex: "76", overflow: "hidden", padding: "clamp(60px, 6vw, 96px) clamp(16px, 4vw, 56px) 44px", textAlign: "center" }}>
     <img className="pw-ico" src={icons[0]} alt="" aria-hidden="true" style={{ right: "2.5%", top: "70px", width: "84px", transform: "rotate(8deg)" }} /><img className="pw-ico pw-m-hide" src={icons[1]} alt="" aria-hidden="true" style={{ left: "92%", top: "570px", width: "104px", transform: "rotate(-6deg)" }} />
-    <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-130px" }}><path d="M-60 130 C 240 40, 310 270, 520 190 C 650 140, 610 40, 545 80 C 470 125, 620 310, 900 245 C 1150 190, 1250 60, 1500 115" stroke="#5DADE2" strokeWidth="7"></path></svg>
+    {/* A flat line through the fade at the top, so it never crosses the logo or text. */}
+    <svg className="pw-swirl" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "0px" }}><path d="M-60 70 C 260 20, 500 120, 760 64 S 1220 22, 1500 72" stroke="#5DADE2" strokeWidth="6"></path></svg>
     
     <img src="/v2/img/logo-white.png" alt="Perfect World" style={{ height: "48px", width: "auto", display: "block", margin: "0 auto" }} />
     <p style={{ margin: "16px 0 0", fontWeight: "800", fontSize: "clamp(40px, 4.6vw, 68px)", lineHeight: ".9" }} className="pw-fat">Together.</p>

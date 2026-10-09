@@ -6,7 +6,7 @@ import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
 import { CAUSES, TINT, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES } from './data'
+import { PIECES, NEW_PIECES, TEE_PATH } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -18,10 +18,10 @@ const Globe3D = lazy(() => import('./Globe3D'))
 // Six-colour line, used once, between the hero and the pieces.
 const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 
-// Pieces that are not in the shop yet, shown as drawings with their real status.
-const NEXT = [
-  { id: 'minimal', name: 'Minimal collection', status: 'Coming soon', note: 'Small detail, same fixed amounts' },
-  ...NEW_PIECES.map((n) => ({ id: n.id, name: n.name, status: 'In the works', note: n.sub })),
+// New pieces launching on 11.11, shown as drawings until the samples are photographed.
+const NEW = [
+  { id: 'minimal', name: 'Minimal collection', note: 'Small detail, same fixed amounts', price: PIECES.shirt.price, give: PIECES.shirt.give, from: true, split: false },
+  ...NEW_PIECES.map((n) => ({ id: n.id, name: n.name, note: n.sub, price: n.price, give: n.give, from: false, split: 'split' in n })),
 ]
 
 export default function HomeV2() {
@@ -61,13 +61,13 @@ export default function HomeV2() {
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">
-    <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span> <span className="pw-hand">{tr('Not Alone.')}</span></p>
     <h1 className="pwl-head">
       <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
       <span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
       <span className="pw-hand pwl-head-b">{tr('for.')}</span>
     </h1>
     <figure className="pwl-hero-photo">
+      <div className="pwl-photo-box">
       <picture>
         <source media="(max-width: 700px)" srcSet="/v2/img/hero-friends-800.webp" />
         <img src="/v2/img/hero-friends-1400.webp" alt={tr('Four friends on a bench in Perfect World hoodies')} width={1400} height={1308} fetchPriority="high" />
@@ -77,6 +77,8 @@ export default function HomeV2() {
         <span className="pwl-amount">€{PIECES.hoodie.give}<svg viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true"><path d="M2 8 C 26 4, 60 10, 98 4" /></svg></span>
         <span className="pwl-tagline-t">{tr('of every €{p} hoodie goes to its cause partner').replace('{p}', PIECES.hoodie.price)}</span>
       </figcaption>
+      </div>
+      <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span> <span className="pw-hand">{tr('Not Alone.')}</span></p>
     </figure>
     <div className="pwl-hero-body">
       <p className="pwl-lede"><b>{tr('Clothing that gives.')}</b> {heroLine} <span className="pwl-stroke">{tr('Included in the price, never added on top.')}</span></p>
@@ -91,7 +93,27 @@ export default function HomeV2() {
     {SIX.map((c, i) => <path key={c} d={`M-20 ${30 + i * 8} C 300 ${-10 + i * 8}, 520 ${80 + i * 8}, 760 ${38 + i * 8} S 1200 ${2 + i * 8}, 1460 ${36 + i * 8}`} stroke={c} />)}
   </svg>
 
-  {/* 2 · Curated pieces */}
+  {/* 2 · OG or Minimal: the two collections, as in the earlier version */}
+  <section id="loud" className="pwl-sec pw-iso" aria-label={tr('OG or Minimal')}>
+    <div className="pwl-wrap">
+      <div className="pwl-loud">
+        <A href="/shop" className="pwl-loud-og">
+          <span className="pwl-loud-k">{tr('SIX CAUSES · SIX BACK PRINTS')}</span>
+          <img src="/v2/img/og-talk.webp" alt={tr('Talk About It T-shirt, back print')} className="pwl-loud-a" loading="lazy" />
+          <img src="/v2/img/og-rich-700.webp" alt={tr('Rich in Life T-shirt, back print')} className="pwl-loud-b" loading="lazy" />
+          <span className="pwl-loud-txt"><span className="pw-fat pwl-loud-h">OG.</span><span className="pwl-loud-s">{tr('A story on your back, for anyone who asks.')}</span><span className="pwl-btn pwl-btn-light">{tr('SHOP THE OG')}</span></span>
+        </A>
+        <A href="/shop" className="pwl-loud-min">
+          <span className="pw-hand pwl-loud-new">{tr('New this November.')}</span>
+          <svg width="230" height="220" viewBox="0 0 240 230" aria-label={tr('Minimal black T-shirt')} className="pwl-loud-tee"><path d={TEE_PATH} fill="#1b1b1d" /><circle cx="138" cy="70" r="5" fill="#e2453c" /></svg>
+          <span className="pwl-loud-txt pwl-right"><span className="pw-hand pwl-loud-h">{tr('Minimal.')}</span><span className="pwl-loud-s">{tr('A small detail. Nobody has to know. You do.')}</span><span className="pwl-btn">{tr('SHOP THE MINIMAL')}</span></span>
+        </A>
+      </div>
+      <p className="pw-hand pwl-either">{tr('It gives either way.')}</p>
+    </div>
+  </section>
+
+  {/* 3 · Curated pieces */}
   <section id="pieces" className="pwl-sec pw-iso" aria-labelledby="pieces-h">
     <div className="pwl-wrap">
       <div className="pwl-sechead">
@@ -115,21 +137,29 @@ export default function HomeV2() {
         ))}
       </div>
 
-      <p className="pwl-kicker pwl-next-k">{tr('COMING NEXT')}</p>
-      <ul className="pwl-next">
-        {NEXT.map((n) => (
-          <li key={n.id}>
-            <span className="pwl-next-img"><PieceSketch id={n.id} /></span>
-            <span className="pwl-next-txt"><b>{tr(n.name)}</b><span>{tr(n.note)}</span></span>
-            <span className="pwl-tag">{tr(n.status)}</span>
+      <div className="pwl-sechead pwl-next-head">
+        <div>
+          <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
+          <h2 className="pw-fat pwl-h2">{tr('New pieces.')}</h2>
+        </div>
+      </div>
+      <ul className="pwl-new">
+        {NEW.map((n) => (
+          <li key={n.id} className={n.id === 'minimal' ? 'is-lead' : undefined}>
+            <A href="/shop" className="pwl-new-card">
+              <span className="pwl-new-img"><PieceSketch id={n.id} /><span className="pwl-tag">{tr('New')}</span></span>
+              <span className="pwl-new-name">{tr(n.name)}</span>
+              <span className="pwl-new-note">{tr(n.note)}</span>
+              <span className="pwl-new-meta">{n.from ? tr('from') + ' ' : ''}€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
+            </A>
           </li>
         ))}
       </ul>
-      <p className="pwl-fine">{tr('Drawings, not product photos. Photos follow once the samples are made.')}</p>
+      <p className="pwl-fine">{tr('Drawings, not product photos. Photos follow once the samples are made.')} {tr('Every piece is made to order, with care. Allow 1.5 to 2 weeks, so wish early.')}</p>
     </div>
   </section>
 
-  {/* 3 · The receipt: price, amount, partner */}
+  {/* 4 · The receipt: price, amount, partner */}
   <section id="giving" className="pwl-sec pwl-paper pw-iso" aria-labelledby="give-h">
     <div className="pwl-wrap">
       <div className="pwl-sechead pwl-center">
@@ -143,7 +173,7 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 4 · The six causes and the people behind them */}
+  {/* 5 · The six causes and the people behind them */}
   <section id="causes" className="pwl-sec pwl-dark pw-dark pw-iso pw-blend" aria-labelledby="causes-h">
     <div className="pwl-wrap">
       <div className="pwl-causes-top">
@@ -172,8 +202,8 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 5 · Founder and community, from existing approved copy */}
-  <section id="story" className="pwl-sec pw-iso" aria-labelledby="story-h">
+  {/* 6 · Founder note at the very end, from existing approved copy */}
+  <section id="story" className="pwl-sec pwl-story-sec pw-iso" aria-labelledby="story-h">
     <div className="pwl-wrap pwl-story">
       <figure className="pwl-founder">
         <img src="/v2/img/founder-700.webp" alt={tr('Nico, founder of Perfect World')} width={700} height={1024} loading="lazy" />
@@ -190,26 +220,6 @@ export default function HomeV2() {
         <img src="/v2/img/two-friends-700.webp" alt={tr('Two friends in Perfect World tees')} loading="lazy" />
         <img src="/v2/img/detail-logo-900.webp" alt={tr('The small embroidered logo, close up')} loading="lazy" />
       </div>
-    </div>
-  </section>
-
-  {/* 6 · Shop close */}
-  <section id="close" className="pwl-sec pwl-close pw-iso pwl-to-footer" aria-labelledby="close-h">
-    <div className="pwl-wrap">
-      <h2 id="close-h" className="pw-hand pwl-close-h">{tr('It gives either way.')}</h2>
-      <div className="pwl-duo">
-        <A href="/shop" className="pwl-og">
-          <span className="pw-fat pwl-duo-h">OG.</span>
-          <span>{tr('A story on your back, for anyone who asks.')}</span>
-          <span className="pwl-btn pwl-btn-light">{tr('SHOP THE OG')}</span>
-        </A>
-        <A href="/shop" className="pwl-min">
-          <span className="pw-hand pwl-duo-h">{tr('Minimal.')}</span>
-          <span>{tr('A small detail. Nobody has to know. You do.')}</span>
-          <span className="pwl-btn">{tr('SEE THE MINIMAL')}</span>
-        </A>
-      </div>
-      <p className="pwl-fine pwl-center">{tr('Every piece is made to order, with care. Allow 1.5 to 2 weeks, so wish early.')}</p>
     </div>
   </section>
 
