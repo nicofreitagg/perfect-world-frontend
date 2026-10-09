@@ -155,7 +155,7 @@
 
 /* 6 · Close */
 .pwl-close{padding-top:clamp(16px,2vw,32px);padding-bottom:clamp(90px,9vw,130px)}
-#giving{padding-bottom:clamp(40px,4vw,60px)}
+#giving{padding-bottom:clamp(90px,8vw,120px)}
 #causes{padding-bottom:clamp(150px,14vw,200px)}
 .pwl-close-h{margin:0 0 28px;text-align:center;font-size:clamp(40px,4.4vw,64px);line-height:1}
 .pwl-duo{display:grid;grid-template-columns:1fr 1fr;border-radius:28px;overflow:hidden;max-width:1100px;margin:0 auto;box-shadow:0 26px 50px rgba(0,0,0,.12)}
