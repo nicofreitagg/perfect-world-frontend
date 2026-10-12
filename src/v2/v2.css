@@ -407,8 +407,9 @@
 .pw-designbar{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 16px;margin:0 0 20px}
 .pw-designbar button{border:none;background:none;padding:6px 0;font:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#0b0b0c;text-decoration:underline;text-underline-offset:3px}
 .pw-designbar .pw-fat{font-size:clamp(24px,3vw,38px);line-height:1}
-.pw-pickswirl{flex:1 0 100%;width:100%;height:46px;margin:2px 0 0;overflow:visible}
-.pw-pickswirl path{fill:none;stroke-width:6;stroke-linecap:round;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pw-swirl-draw 1.4s cubic-bezier(.6,.05,.25,1) forwards}
+.pw-pickswirl{flex:1 0 100%;width:100vw;max-width:none;height:clamp(80px,9vw,130px);margin:4px 0 -6px calc(50% - 50vw);overflow:visible}
+.pw-designbar{position:relative}
+.pw-pickswirl path{fill:none;stroke-width:7;stroke-linecap:round;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pw-swirl-draw 1.8s cubic-bezier(.6,.05,.25,1) forwards}
 @keyframes pw-swirl-draw{to{stroke-dashoffset:0}}
 .pw-designbar~div .pw-prod{animation:pw-rise .5s ease both}
 .pw-designbar~div .pw-prod:nth-child(2){animation-delay:.08s}

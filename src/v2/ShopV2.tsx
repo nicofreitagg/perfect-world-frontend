@@ -295,8 +295,8 @@ export default function ShopV2() {
         <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
         <span className="pw-fat">{MIN_DESIGNS.find((d) => d.slug === minDesign)?.name}</span>
         {/* A swirl in the design's cause colour draws itself each time a design is picked. */}
-        <svg key={minDesign} className="pw-pickswirl" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
-          <path pathLength={1000} d="M0 34 C 120 6, 220 58, 340 30 C 430 10, 470 52, 420 46 C 370 40, 400 8, 500 18 C 640 32, 700 54, 820 30 C 920 10, 1000 44, 1080 28 C 1130 18, 1170 26, 1200 22" stroke={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
+        <svg key={minDesign} className="pw-pickswirl" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+          <path pathLength={1000} d="M-20 96 C 140 20, 260 130, 420 70 C 540 26, 600 118, 540 112 C 470 104, 500 18, 640 34 C 820 56, 880 132, 1040 84 C 1150 50, 1180 14, 1130 22 C 1080 30, 1110 108, 1240 92 C 1330 82, 1400 40, 1460 52" stroke={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
         </svg>
       </div>
     )}
