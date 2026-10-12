@@ -368,3 +368,4 @@
 @media (hover:none){.pw-prod .pw-add-h{display:none!important}}
 .pw-minbanner .pw-minline{margin:14px 0 0;font-size:clamp(24px,3vw,40px);line-height:1.02;color:#0b0b0c;max-width:none;text-wrap:balance}
 @media (max-width:760px){.pw-minbanner .pw-minline{font-size:24px}}
+.pw-prod .pw-add{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none}

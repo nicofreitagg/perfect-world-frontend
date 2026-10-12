@@ -3,7 +3,7 @@ import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
 import { CAUSES } from './causes'
-import { PIECES, NEW_PIECES } from './data'
+import { PIECES, NEW_PIECES, minDesignOf, backFirst, backOf } from './data'
 import { hexOf } from './colours'
 import { useT } from './t'
 import FitScale from './FitScale'
@@ -50,8 +50,11 @@ export default function ProductHandleV2() {
   const variant = inColour.find((v) => v.id === vid && v.availableForSale) ?? inColour.find((v) => v.availableForSale)
   const price = variant ? Number(variant.price.amount) : Number(p.priceRange.minVariantPrice.amount)
   const give = giveOf(p.title)
-  // The picked colour's own photo leads, when Shopify has one for it.
-  const img = (shot === 0 && (variant ?? inColour[0])?.image?.url) || p.images[shot]?.url
+  // Minimal: the back (the design) leads, for the picked colour when Shopify has its photo.
+  const minimal = /minimal/i.test(p.title)
+  const images = minimal ? backFirst(p.images) : p.images
+  const colourFront = (variant ?? inColour[0])?.image?.url
+  const img = (shot === 0 && (minimal ? backOf(p.images, colourFront) : colourFront)) || images[shot]?.url
 
   return (
     <Shell active="/shop">
@@ -60,9 +63,9 @@ export default function ProductHandleV2() {
           <div style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
             {img && <img src={img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
           </div>
-          {p.images.length > 1 && (
+          {images.length > 1 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-              {p.images.slice(0, 4).map((im, k) => (
+              {images.slice(0, 4).map((im, k) => (
                 <button key={im.url} type="button" onClick={() => setShot(k)} aria-pressed={k === shot} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: k === shot ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }}>
                   <img src={im.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </button>
@@ -73,7 +76,7 @@ export default function ProductHandleV2() {
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div>
             {/minimal/i.test(p.title) && <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={t('The Minimal Collection')} style={{ height: 'clamp(30px, 3vw, 42px)' }} />}
-            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{p.title}</h1>
+            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{minimal && minDesignOf(p.title) ? minDesignOf(p.title)!.name : p.title}</h1>
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {t('goes to the partner it was made with')}</p>}
           </div>

@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, minDesignOf, backFirst, backOf, type CauseKey } from './data'
 import { useT } from './t'
-import { hexOf } from './colours'
+import { hexOf, variantColours } from './colours'
 import { isLaunched } from './launch'
 import { getAllProducts } from '../utils/shopify'
 import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
@@ -33,6 +33,13 @@ const FALLBACK: Record<string, string[]> = {
   tshirt: ['Black', 'Off-white'], women: ['Black', 'Off-white'], oversized: ['Washed black', 'Off-white'],
   hoodie: ['Black', 'Sand'], tote: ['Black', 'Natural'], bomber: ['Black', 'Khaki'], beanie: ['Black', 'Natural'],
 }
+// Which receipt piece a Shopify title is (the new pieces first, then the classic types).
+const pieceOf = (title: string): string => {
+  if (/bomber/i.test(title)) return 'bomber'
+  if (/beanie/i.test(title)) return 'beanie'
+  if (/women|damen/i.test(title)) return 'women'
+  return extractProductType(title)
+}
 const OG_OVERSIZED: Record<CauseKey, string> = { wild: 'French Navy', rich: 'Mocha', 'one-world': 'Violet', cool: 'Khaki', talk: 'Black', oceans: 'Dusk' }
 
 export default function GiveReceipt() {
@@ -46,18 +53,21 @@ export default function GiveReceipt() {
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
   const min = line === 'minimal'
-  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && getCollectionKey(p.title) === cause.name && extractProductType(p.title) === piece), [products, cause.name, piece, min])
+  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && (getCollectionKey(p.title) === cause.name || (min && minDesignOf(p.title)?.slug === cause.slug)) && pieceOf(p.title) === piece), [products, cause.name, cause.slug, piece, min])
   const colours = useMemo(() => {
-    const seen = [...new Set(matches.map((p) => extractColorFromTitle(p.title)).filter(Boolean))]
+    // Colours from the product titles (OG) or from the Colour option (the new Minimal listings).
+    const seen = [...new Set([...matches.map((p) => extractColorFromTitle(p.title)), ...matches.flatMap((p) => variantColours(p.variants))].filter(Boolean))]
     if (seen.length) return seen
     if (piece === 'oversized' && !min) return [OG_OVERSIZED[design]]
     return FALLBACK[piece]
   }, [matches, piece, min, design])
   const [wanted, setColour] = useState('')
   const colour = colours.includes(wanted) ? wanted : colours[0]
-  const product = matches.find((p) => extractColorFromTitle(p.title) === colour) ?? matches[0]
-  // Minimal has no photos yet: Shopify photo if one exists, otherwise a sketch.
-  const photo = row.isNew ? '' : product?.images[0]?.url || (min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
+  // The listed colour's own photo when Shopify has one, then the product photo; otherwise artwork or a sketch.
+  const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
+  const photo = (min && product ? backOf(product.images, colourPhoto) ?? backFirst(product.images)[0]?.url : colourPhoto || product?.images[0]?.url) || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
   const key = `${line}-${piece}-${row.split ? 'all' : design}-${colour}`
 
@@ -155,7 +165,9 @@ export default function GiveReceipt() {
             </div>
           )}
           <p className="pwl-receipt-foot">{t('Included in the price. Nothing is added at checkout.')}{!isLaunched() && <><br />{t('Fixed amounts apply from 11.11.')}</>}</p>
-          {row.isNew
+          {shopHref && min
+            ? <A href={shopHref} className="pwl-receipt-cta">{t('See this piece')} →</A>
+            : row.isNew
             ? <A href="/shop" className="pwl-receipt-cta">{t('See the shop')} →</A>
             : <A href={`/design/${cause.slug}`} className="pwl-receipt-cta">{t('See this piece')} →</A>}
           <div className="pw-tear" aria-hidden="true" />

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, backFirst, icon, type CauseKey } from './data'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
@@ -85,13 +85,17 @@ export default function ShopV2() {
   const blank = { ico: '', img: '', img2: '', isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
   let products: Card[]
-  if (tab === 'minimal' && minimalLive.length) {
+  const liveShown = minimalLive.filter((m) => piece === 'all' || kindOf(m.title) === piece)
+  if (tab === 'minimal' && liveShown.length) {
     // Real listings: one card per product, its photo, a second photo on hover, colour dots that open that colour.
-    products = minimalLive.filter((m) => piece === 'all' || kindOf(m.title) === piece).map((m) => {
+    products = liveShown.map((m) => {
       const p = PIECE_LIST.find((x) => x.id === kindOf(m.title))!
-      const c = CAUSES.find((x) => x.name === getCollectionKey(m.title))
+      const d = minDesignOf(m.title)
+      const c = CAUSES.find((x) => (d && x.slug === d.slug) || x.name === getCollectionKey(m.title))
       const cols = rankColours(c?.name ?? '', variantColours(m.variants), (x) => x)
-      return { ...blank, name: formatDisplayTitle(m.title), sub: c ? c.partner : tr(p.label), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], img: m.images[0]?.url ?? '', img2: m.images[1]?.url ?? '', isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
+      // The back (the design) leads; hovering shows the front with the small logo.
+      const imgs = backFirst(m.images)
+      return { ...blank, name: d?.name ?? formatDisplayTitle(m.title), sub: tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!imgs[0], img: imgs[0]?.url ?? '', img2: imgs[1]?.url ?? '', isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal' && piece !== 'beanie') {
     // Until the listings are live: the six designs, as artwork on their partner's tint.
