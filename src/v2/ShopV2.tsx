@@ -204,7 +204,7 @@ export default function ShopV2() {
       <div className="pw-minbanner">
         <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
         <p className="pw-fat pw-minline">{tr('Doing good never looked so clean.')}</p>
-        <p><span className="pw-mono">{tr('NEW · 11.11')}</span> {tr('Minimal does not equal small.')} {tr(tabNote)}</p>
+        <p><span className="pw-mono">{tr('NEW · 11.11')}</span> {tr(tabNote)}</p>
       </div>
     ) : <p className="pw-shopnote">{tr(tabNote)}</p>}
 
