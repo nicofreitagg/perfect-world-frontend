@@ -1,7 +1,8 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, backFirst, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, icon, type CauseKey } from './data'
+import { useDesignPairOrGuess } from './printSide'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
@@ -82,7 +83,7 @@ export default function ShopV2() {
     ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
-  const blank = { ico: '', img: '', img2: '', isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', photos: [] as { url: string }[], isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
   let products: Card[]
   const liveShown = minimalLive.filter((m) => piece === 'all' || kindOf(m.title) === piece)
@@ -93,9 +94,7 @@ export default function ShopV2() {
       const d = minDesignOf(m.title)
       const c = CAUSES.find((x) => (d && x.slug === d.slug) || x.name === getCollectionKey(m.title))
       const cols = rankColours(c?.name ?? '', variantColours(m.variants), (x) => x)
-      // The back (the design) leads; hovering shows the front with the small logo.
-      const imgs = backFirst(m.images)
-      return { ...blank, name: d?.name ?? formatDisplayTitle(m.title), sub: tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!imgs[0], img: imgs[0]?.url ?? '', img2: imgs[1]?.url ?? '', isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
+      return { ...blank, name: d?.name ?? formatDisplayTitle(m.title), sub: tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal' && piece !== 'beanie') {
     // Until the listings are live: the six designs, as artwork on their partner's tint.
@@ -216,7 +215,7 @@ export default function ShopV2() {
       {products.map((p, pI) => (<Fragment key={pI}>
         <article className="pw-prod" style={{ position: "relative", display: "flex", flexDirection: "column" }}>
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
-            {p.isPhoto && (<><img src={p.img} alt={p.name} className="pw-photo" loading="lazy" />{p.img2 && <img src={p.img2} alt="" aria-hidden="true" className="pw-photo pw-photo2" loading="lazy" />}</>)}
+            {p.isPhoto && <DesignPhotos images={p.photos} alt={p.name} />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
@@ -306,4 +305,14 @@ export default function ShopV2() {
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
     </>
   )
+}
+
+// The design side leads; hovering shows the front with the small logo.
+function DesignPhotos({ images, alt }: { images: { url: string }[]; alt: string }) {
+  const pair = useDesignPairOrGuess(images)
+  if (!pair) return null
+  return (<>
+    <img src={pair[0]} alt={alt} className="pw-photo" loading="lazy" />
+    {pair[1] !== pair[0] && <img src={pair[1]} alt="" aria-hidden="true" className="pw-photo pw-photo2" loading="lazy" />}
+  </>)
 }

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, minDesignOf, backFirst, backOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, minDesignOf, type CauseKey } from './data'
+import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
 import { isLaunched } from './launch'
@@ -66,7 +67,8 @@ export default function GiveReceipt() {
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
   // The listed colour's own photo when Shopify has one, then the product photo; otherwise artwork or a sketch.
   const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
-  const photo = (min && product ? backOf(product.images, colourPhoto) ?? backFirst(product.images)[0]?.url : colourPhoto || product?.images[0]?.url) || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const designPair = useDesignPairOrGuess(min && product ? product.images : undefined, colourPhoto)
+  const photo = (min && product ? designPair?.[0] : colourPhoto || product?.images[0]?.url) || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
   const key = `${line}-${piece}-${row.split ? 'all' : design}-${colour}`

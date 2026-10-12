@@ -105,12 +105,3 @@ export const minDesignOf = (title: string) => {
   const t = title.toLowerCase()
   return MIN_DESIGNS.find((d) => t.includes(d.name.toLowerCase())) ?? MIN_DESIGNS.find((d) => t.includes(CAUSE_NAMES[d.slug]))
 }
-
-// Minimal listings come as front (small logo) then back (the design) per colour, so the
-// design-side photo is the one right after the front. backFirst puts the design first.
-export const backFirst = <T,>(images: T[]): T[] => images.length > 1 ? [images[1], images[0], ...images.slice(2)] : images
-export const backOf = <T extends { url: string }>(images: T[], frontUrl?: string): string | undefined => {
-  if (!frontUrl) return undefined
-  const i = images.findIndex((im) => im.url === frontUrl)
-  return i >= 0 && images[i + 1] ? images[i + 1].url : frontUrl
-}

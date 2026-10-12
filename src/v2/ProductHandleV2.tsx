@@ -3,7 +3,8 @@ import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
 import { CAUSES } from './causes'
-import { PIECES, NEW_PIECES, minDesignOf, backFirst, backOf } from './data'
+import { PIECES, NEW_PIECES, minDesignOf } from './data'
+import { useDesignPairOrGuess } from './printSide'
 import { hexOf } from './colours'
 import { useT } from './t'
 import FitScale from './FitScale'
@@ -52,16 +53,15 @@ export default function ProductHandleV2() {
   const give = giveOf(p.title)
   // Minimal: the back (the design) leads, for the picked colour when Shopify has its photo.
   const minimal = /minimal/i.test(p.title)
-  const images = minimal ? backFirst(p.images) : p.images
+  const images = p.images
   const colourFront = (variant ?? inColour[0])?.image?.url
-  const img = (shot === 0 && (minimal ? backOf(p.images, colourFront) : colourFront)) || images[shot]?.url
 
   return (
     <Shell active="/shop">
       <section className="pw-iso" style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(24px, 4vw, 56px) clamp(16px, 4vw, 56px) clamp(64px, 8vw, 110px)', display: 'flex', flexWrap: 'wrap', gap: 'clamp(24px, 4vw, 56px)' }}>
         <div style={{ flex: '1 1 480px', minWidth: 0, display: 'grid', gap: '12px' }}>
           <div style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
-            {img && <img src={img} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />}
+            <MainPhoto images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
           </div>
           {images.length > 1 && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
@@ -113,4 +113,11 @@ export default function ProductHandleV2() {
       </section>
     </Shell>
   )
+}
+
+// The big photo: for Minimal, the design side of the picked colour leads (see printSide.ts).
+function MainPhoto({ images, shot, colourUrl, minimal, alt }: { images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; alt: string }) {
+  const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
+  const img = (shot === 0 && (minimal ? pair?.[0] : colourUrl)) || images[shot]?.url
+  return img ? <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : null
 }
