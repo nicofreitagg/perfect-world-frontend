@@ -77,7 +77,7 @@ export default function ShopV2() {
     { id: 'og', label: 'OG', isNew: false },
   ] as const).map((t) => ({ label: t.label, isNew: t.isNew, selected: t.id === tab, pick: () => setTab(t.id) }))
   const filterLabel = tr(tab === 'minimal' ? 'Filter by piece' : 'Filter by cause')
-  const tabNote = tab === 'minimal' ? 'One small 11.11 mark. Made with one of our six partners.' : "Big back print. Each design tells its partner's story."
+  const tabNote = tab === 'minimal' ? 'Six new designs, each made with one of our six partners.' : "Big back print. Each design tells its partner's story."
   const filters = tab === 'minimal'
     ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
