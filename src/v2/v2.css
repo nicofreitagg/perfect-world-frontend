@@ -335,3 +335,12 @@
   .pw-m-rcpt img{height:28px!important}
   .pw-m-rcpt>div:first-child>div:last-child{font-size:10.5px!important;padding-top:10px!important}
 }
+
+/* Product page: fit scale (Stanley/Stella's four fits) */
+.pw-fit{margin:0 0 12px}
+.pw-fit-scale{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;border-radius:999px;background:#fff;border:1px solid #e3e1dc}
+.pw-fit-scale span{text-align:center;padding:7px 4px;border-radius:999px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;color:#8a877f;white-space:nowrap}
+.pw-fit-scale span.is-on{background:#0b0b0c;color:#fff;font-weight:700}
+.pw-fit-tip{margin:8px 2px 0;font-size:13px;line-height:1.45;color:#3a3a3a}
+.pw-fit-one{margin:0 0 10px;font-size:13px;color:#3a3a3a}
+@media (max-width:760px){.pw-fit-scale span{font-size:10px;padding:6px 2px}}

@@ -7,6 +7,7 @@ import { getCollectionKey, extractProductType, extractColorFromTitle } from '../
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 import NotFound from '../pages/NotFound'
 import { useT } from './t'
+import FitScale from './FitScale'
 import { hexOf, rankColours } from './colours'
 
 type Kind = 'tote' | 'tshirt' | 'oversized' | 'hoodie'
@@ -156,7 +157,8 @@ export default function ProductV2() {
       </div>
       )}
       <div>
-        <p className="pw-mono" style={{ margin: "0 0 10px", fontSize: "12px", color: "#5c5c5c", display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{tr("SIZE")}</span><A href={`/size-guide#${kind}`} style={{ color: "#0b0b0c" }}>{tr("Size guide")}</A></p>
+        <p className="pw-mono" style={{ margin: "0 0 10px", fontSize: "12px", color: "#5c5c5c", display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{tr("SIZE")}</span><A href={`/size-guide#${piece.id === 'oversized' ? 'tshirt' : piece.id}`} style={{ color: "#0b0b0c" }}>{tr("Size guide")}</A></p>
+        <FitScale piece={piece.id} />
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {sizes.map((z, zI) => (<Fragment key={zI}>
             <button type="button" className="pw-chip pw-mono" onClick={z.pick} aria-pressed={z.selected} disabled={z.disabled} style={{ fontSize: "14px", minWidth: "52px", minHeight: "44px", borderRadius: "12px", border: "1.5px solid #0b0b0c", cursor: "pointer", background: z.bg, color: z.fg }}>{z.label}</button>

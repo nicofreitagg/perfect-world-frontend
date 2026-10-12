@@ -5,6 +5,7 @@ import { A } from './A'
 import { CAUSES } from './causes'
 import { PIECES } from './data'
 import { useT } from './t'
+import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
 import { getProduct } from '../utils/shopify'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
@@ -63,6 +64,7 @@ export default function ProductHandleV2() {
           {p.variants.length > 1 && (
             <div>
               <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em', display: 'flex', justifyContent: 'space-between' }}><span>{t('SIZE')}</span><A href="/size-guide" style={{ color: '#0b0b0c', letterSpacing: 0 }}>{t('Size guide')}</A></p>
+              <FitScale piece={/women/i.test(p.title) ? 'women' : /bomber/i.test(p.title) ? 'bomber' : extractProductType(p.title)} />
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {p.variants.map((v) => {
                   const on = v === variant
