@@ -36,6 +36,18 @@ const kindOf = (title: string): Kind => {
   if (t.includes('women')) return 'women'
   return 'tee'
 }
+// Which colour a Minimal card opens on (Nico 12 Oct): T-shirts and hoodies on the design's own
+// cause colour; bombers, women's tees and oversized rotate through their colours design by design.
+const CAUSE_COLOUR: Record<string, string> = { 'one-world': 'blue soul', 'cool-down': 'green bay', 'endangered-oceans': 'bright blue', 'talk-about-it': 'lavender', 'wild-at-heart': 'india ink', 'rich-in-life': 'red brown' }
+const leadColour = (kind: Kind, slug: string, cols: string[]) => {
+  const i = Math.max(0, MIN_DESIGNS.findIndex((d) => d.slug === slug))
+  if (kind === 'tee' || kind === 'hoodie') {
+    const own = cols.find((x) => CAUSE_COLOUR[slug] && x.toLowerCase().includes(CAUSE_COLOUR[slug]))
+    if (own) return own
+  }
+  if ((kind === 'bomber' || kind === 'women' || kind === 'over') && cols.length) return cols[i % cols.length]
+  return cols[0]
+}
 const SHORT = Object.fromEntries(CAUSES.map((c) => [c.id, c.short])) as Record<CauseKey, string>
 import './v2.css'
 import Flow from './Flow'
@@ -59,6 +71,15 @@ export default function ShopV2() {
   const [tab, setTab] = useState<'minimal' | 'og'>(location.hash === '#og' ? 'og' : 'minimal')
   const [piece, setPiece] = useState<'all' | Kind>('all')
   const [cause, setCause] = useState<'all' | CauseKey>('all')
+  // Minimal: the six designs first; picking one shows that design's pieces (?design=slug).
+  const [minDesign, setMinDesign] = useState<string>(() => new URLSearchParams(location.search).get('design') ?? 'all')
+  const pickDesign = (slug: string) => {
+    setMinDesign(slug); setPiece('all')
+    const u = new URL(window.location.href)
+    if (slug === 'all') u.searchParams.delete('design'); else u.searchParams.set('design', slug)
+    window.history.replaceState(null, '', u.toString())
+    toShop()
+  }
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
 
@@ -83,23 +104,39 @@ export default function ShopV2() {
     ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
-  const blank = { ico: '', img: '', photos: [] as { url: string }[], isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
   let products: Card[]
-  const liveShown = minimalLive.filter((m) => piece === 'all' || kindOf(m.title) === piece)
-  if (tab === 'minimal' && liveShown.length) {
-    // Real listings: one card per product, its photo, a second photo on hover, colour dots that open that colour.
+  const liveShown = minimalLive
+    .filter((m) => (piece === 'all' || kindOf(m.title) === piece) && (minDesign === 'all' || minDesignOf(m.title)?.slug === minDesign))
+    .sort((x, y) => PIECE_LIST.findIndex((q) => q.id === kindOf(x.title)) - PIECE_LIST.findIndex((q) => q.id === kindOf(y.title)) || MIN_DESIGNS.indexOf(minDesignOf(x.title)!) - MIN_DESIGNS.indexOf(minDesignOf(y.title)!))
+  if (tab === 'minimal' && piece === 'all' && minDesign === 'all') {
+    // The six designs are the main cards; each opens that design's pieces.
+    products = MIN_DESIGNS.map((d) => {
+      const c = CAUSES.find((x) => x.slug === d.slug)!
+      const n = minimalLive.filter((m) => minDesignOf(m.title)?.slug === d.slug).length
+      return { ...blank, small: true, name: d.name, sub: c.partner, price: tr('from') + ' €' + PIECES.tote.price, give: tr('from') + ' €' + PIECES.tote.give + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: n ? tr('See the pieces') + ` (${n})` : tr('See the pieces') }
+    })
+  } else if (tab === 'minimal' && liveShown.length) {
+    // Real listings: one card per product on its lead colour, the design side first, the front on hover.
     products = liveShown.map((m) => {
-      const p = PIECE_LIST.find((x) => x.id === kindOf(m.title))!
+      const kind = kindOf(m.title)
+      const p = PIECE_LIST.find((x) => x.id === kind)!
       const d = minDesignOf(m.title)
       const c = CAUSES.find((x) => (d && x.slug === d.slug) || x.name === getCollectionKey(m.title))
       const cols = rankColours(c?.name ?? '', variantColours(m.variants), (x) => x)
-      return { ...blank, name: d?.name ?? formatDisplayTitle(m.title), sub: tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
+      const lead = leadColour(kind, d?.slug ?? '', cols)
+      const order = lead ? [lead, ...cols.filter((x) => x !== lead)] : cols
+      const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === lead))?.image?.url ?? ''
+      const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
+      // Inside one design the piece is the headline; across designs the design name is.
+      const one = minDesign !== 'all'
+      return { ...blank, name: one ? tr(p.label) : d?.name ?? formatDisplayTitle(m.title), sub: one ? (c?.partner ?? '') : tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, colourUrl, isNew: true, swatches: order.map((x) => ({ c: hexOf(x), label: x, href: link(x) })), href: lead ? link(lead) : `/product/${m.handle}`, addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal' && piece !== 'beanie') {
-    // Until the listings are live: the six designs, as artwork on their partner's tint.
+    // Pieces not listed yet: the designs as artwork on their partner's tint.
     const p = PIECE_LIST.find((x) => x.id === piece)
-    products = MIN_DESIGNS.map((d) => {
+    products = MIN_DESIGNS.filter((d) => minDesign === 'all' || d.slug === minDesign).map((d) => {
       const c = CAUSES.find((x) => x.slug === d.slug)!
       return { ...blank, name: d.name, sub: c.partner + (p ? ' · ' + tr(p.label) : ''), price: p ? '€' + p.price : tr('from') + ' €' + PIECES.tote.price, give: (p ? '' : tr('from') + ' ') + '€' + (p ? p.give : PIECES.tote.give) + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', addLabel: tr('Coming 11.11') }
     })
@@ -131,16 +168,13 @@ export default function ShopV2() {
       return [{ ...card(c), sub: cols.map((x) => tr(x.name)).join(' · '), swatches, href: link(cols[0].name) }]
     })
   }
-  // Minimal "All": one section per piece instead of one mixed grid.
-  const groups = tab === 'minimal' && piece === 'all' && liveShown.length
-    ? PIECE_LIST.map((pc) => ({ ...pc, label: pc.filter, items: products.filter((_, i) => kindOf(liveShown[i].title) === pc.id) })).filter((g) => g.items.length)
-    : null
   const card = (p: Card, pI: number) => (<Fragment key={pI}>
-        <article className="pw-prod" style={{ position: "relative", display: "flex", flexDirection: "column" }}>
+        <article className={p.small ? 'pw-prod pw-prod-sm' : 'pw-prod'} style={{ position: "relative", display: "flex", flexDirection: "column" }}>
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
-            {p.isPhoto && <DesignPhotos images={p.photos} alt={p.name} />}
+            {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={p.colourUrl || undefined} alt={p.name} />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
+            {p.pick && <button type="button" className="pw-cardlink" onClick={p.pick} aria-label={`${p.name}: ${p.addLabel}`} />}
             {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
             {p.isPlaceholderPrint && (<><span className="pw-art" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", background: p.grad }}><img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><span className="pw-hand" style={{ position: "relative", fontSize: "44px", lineHeight: "1", textAlign: "center" }}>{tr(p.name)}</span><span className="pw-mono" style={{ position: "relative", fontSize: "11px" }}>{tr("[BACK PRINT IMAGE]")}</span></span></>)}
             {p.isGarment && (<>
@@ -157,7 +191,7 @@ export default function ShopV2() {
             </>)}
             {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW · 11.11")}</span></>)}
             
-            {p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
+            {p.pick ? <button type="button" onClick={p.pick} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{p.addLabel}</button> : p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
             <div style={{ minWidth: "0" }}>
@@ -256,17 +290,20 @@ export default function ShopV2() {
       </div>
     ) : <p className="pw-shopnote">{tr(tabNote)}</p>}
 
-    {groups ? groups.map((g) => (
-      <div key={g.id} className="pw-seg-block">
-        <div className="pw-seg-head">
-          <h3 className="pw-fat">{tr(g.label)}</h3>
-          <span className="pw-mono">€{g.price} · <b>€{g.give}</b> {tr(g.split ? 'shared by all six partners' : 'to its partner')}</span>
-          <button type="button" className="pw-seg-all" onClick={() => setPiece(g.id)}>{tr('See all')} ({g.items.length}) →</button>
-        </div>
-        <div className="pw-seg-row">{g.items.map(card)}</div>
+    {tab === 'minimal' && minDesign !== 'all' && (
+      <div className="pw-designbar">
+        <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
+        <span className="pw-fat">{MIN_DESIGNS.find((d) => d.slug === minDesign)?.name}</span>
+        {/* A swirl in the design's cause colour draws itself each time a design is picked. */}
+        <svg key={minDesign} className="pw-pickswirl" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+          <path pathLength={1000} d="M0 34 C 120 6, 220 58, 340 30 C 430 10, 470 52, 420 46 C 370 40, 400 8, 500 18 C 640 32, 700 54, 820 30 C 920 10, 1000 44, 1080 28 C 1130 18, 1170 26, 1200 22" stroke={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
+        </svg>
       </div>
-    )) : (
-    <div className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
+    )}
+    {products.some((p) => p.small) ? (
+    <div className="pw-designgrid">{products.map(card)}</div>
+    ) : (
+    <div key={minDesign + piece} className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map(card)}
     </div>)}
   </section>
@@ -323,8 +360,8 @@ export default function ShopV2() {
 }
 
 // The design side leads; hovering shows the front with the small logo.
-function DesignPhotos({ images, alt }: { images: { url: string }[]; alt: string }) {
-  const pair = useDesignPairOrGuess(images)
+function DesignPhotos({ images, colourUrl, alt }: { images: { url: string }[]; colourUrl?: string; alt: string }) {
+  const pair = useDesignPairOrGuess(images, colourUrl)
   if (!pair) return null
   return (<>
     <img src={pair[0]} alt={alt} className="pw-photo" loading="lazy" />
