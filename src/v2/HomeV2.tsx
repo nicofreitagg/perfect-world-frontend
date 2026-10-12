@@ -9,7 +9,7 @@ import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
 import PosterVideo from './PosterVideo'
-import { CAUSES, causeTitle as titleCase } from './causes'
+import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
 import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
@@ -21,9 +21,18 @@ import { FAQ } from './faq'
 const Globe3D = lazy(() => import('./Globe3D'))
 
 
+// The Minimal designs, one per partner, for the Minimal section (which option ships per cause is not final yet).
+const MIN_DESIGNS = [
+  { img: 'one-world', slug: 'one-world', name: 'Where Hope Still Grows' },
+  { img: 'cool-down', slug: 'cool-down', name: 'Grow a Better World' },
+  { img: 'oceans', slug: 'endangered-oceans', name: 'A World Below' },
+  { img: 'talk', slug: 'talk-about-it', name: 'Talk About It' },
+  { img: 'wild-at-heart', slug: 'wild-at-heart', name: 'Wild at Heart' },
+  { img: 'rich-in-life', slug: 'rich-in-life', name: 'Rich in Life' },
+]
+
 // New pieces launching on 11.11, shown as drawings until the samples are photographed.
 const NEW = [
-  { id: 'minimal', name: 'Minimal collection', note: 'Small detail, same fixed amounts', price: PIECES.shirt.price, give: PIECES.shirt.give, from: true, split: false },
   ...NEW_PIECES.map((n) => ({ id: n.id, name: n.name, note: n.sub, price: n.price, give: n.give, from: false, split: 'split' in n })),
 ]
 
@@ -120,6 +129,34 @@ export default function HomeV2() {
 
   <Lines />
 
+  {/* 1b · The Minimal collection, the focus of 11.11 */}
+  <section id="minimal" className="pwl-sec pwl-min pw-iso" aria-label={tr('The Minimal Collection')}>
+    <div className="pwl-wrap pwl-center">
+      <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
+      <h2 className="pwl-min-h"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} /></h2>
+      <p className="pw-fat pwl-min-line">{tr('Minimal does not equal small.')}</p>
+      <p className="pwl-sub">{tr('Six new designs, one for each partner. A small 11.11 mark, the same fixed amount.')}</p>
+      <ul className="pwl-min-row">
+        {MIN_DESIGNS.map((d) => {
+          const c = causeBySlug(d.slug)
+          return (
+            <li key={d.slug} style={{ '--c': c?.color } as React.CSSProperties}>
+              <A href="/shop" className="pwl-min-card">
+                <span className="pwl-min-img"><img src={`/v2/img/min-${d.img}.webp`} alt={d.name} loading="lazy" /></span>
+                <span className="pwl-min-name">{d.name}</span>
+                <span className="pwl-min-cause">{c ? titleCase(c.name) : ''}</span>
+              </A>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="pwl-min-price">{tr('T-shirt')} €{PIECES.shirt.price} · <b>€{PIECES.shirt.give}</b> {tr('to its partner')}</p>
+      <div className="pwl-ctas pwl-ctas-c">
+        <A href="/shop" className="pwl-btn">{tr('Shop Minimal')}</A>
+      </div>
+    </div>
+  </section>
+
   {/* 2 · The 11.11 moment: every piece gives a fixed amount */}
   <section id="eleven" className="pwl-sec pwl-glow pw-iso" aria-labelledby="eleven-h">
     <Ico c="cool" style={{ right: '5%', top: '150px', transform: 'rotate(8deg)' }} />
@@ -162,14 +199,12 @@ export default function HomeV2() {
       </div>
       <ul className="pwl-new">
         {NEW.map((n) => (
-          <li key={n.id} className={n.id === 'minimal' ? 'is-lead' : undefined}>
+          <li key={n.id} >
             <A href="/shop" className="pwl-new-card">
               <span className="pwl-new-img"><PieceSketch id={n.id} /><span className="pwl-tag">{tr('New')}</span></span>
-              {n.id === 'minimal'
-                ? <span className="pwl-new-name"><img className="pw-sig pwl-new-sig" src="/v2/img/sig-minimal-black.png" alt={tr(n.name)} /></span>
-                : <span className="pwl-new-name">{tr(n.name)}</span>}
+              <span className="pwl-new-name">{tr(n.name)}</span>
               <span className="pwl-new-note">{tr(n.note)}</span>
-              <span className="pwl-new-meta">{n.from ? tr('from') + ' ' : ''}€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
+              <span className="pwl-new-meta">€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
             </A>
           </li>
         ))}
