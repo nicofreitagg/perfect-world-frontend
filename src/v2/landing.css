@@ -419,3 +419,5 @@
   .pwl-faq:not(.is-all) details:nth-of-type(5){border-bottom:1px solid #dcd9d2}
   .pwl-faq-all{display:inline-flex;align-items:center;min-height:40px;margin:14px 0 18px;padding:0 16px;border-radius:999px;border:1.5px solid rgba(11,11,12,.28);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
 }
+.pwl-new-sig{height:46px;margin:-8px 0 -4px -4px}
+@media (max-width:760px){.pwl-new-sig{height:38px}}

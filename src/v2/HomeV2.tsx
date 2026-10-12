@@ -165,7 +165,9 @@ export default function HomeV2() {
           <li key={n.id} className={n.id === 'minimal' ? 'is-lead' : undefined}>
             <A href="/shop" className="pwl-new-card">
               <span className="pwl-new-img"><PieceSketch id={n.id} /><span className="pwl-tag">{tr('New')}</span></span>
-              <span className="pwl-new-name">{tr(n.name)}</span>
+              {n.id === 'minimal'
+                ? <span className="pwl-new-name"><img className="pw-sig pwl-new-sig" src="/v2/img/sig-minimal-black.png" alt={tr(n.name)} /></span>
+                : <span className="pwl-new-name">{tr(n.name)}</span>}
               <span className="pwl-new-note">{tr(n.note)}</span>
               <span className="pwl-new-meta">{n.from ? tr('from') + ' ' : ''}€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
             </A>
