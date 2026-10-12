@@ -344,3 +344,11 @@
 .pw-fit-tip{margin:8px 2px 0;font-size:13px;line-height:1.45;color:#3a3a3a}
 .pw-fit-one{margin:0 0 10px;font-size:13px;color:#3a3a3a}
 @media (max-width:760px){.pw-fit-scale span{font-size:10px;padding:6px 2px}}
+
+/* Minimal signature lettering (images of designer Nico's font, the font file itself is not shipped) */
+.pw-sig{display:block;width:auto;max-width:100%;height:auto}
+.pw-minbanner{margin:22px 0 26px;padding:22px 0 0;border-top:1px solid #e3e1dc}
+.pw-minbanner .pw-sig{height:clamp(40px,5vw,72px)}
+.pw-minbanner p{margin:12px 0 0;font-size:14px;color:#5c5c5c;max-width:640px}
+.pw-minbanner p .pw-mono{color:#c0322a;font-size:11px;letter-spacing:.06em;margin-right:6px}
+@media (max-width:760px){.pw-minbanner{margin:16px 0 18px;padding-top:16px}.pw-minbanner p{font-size:13px}}

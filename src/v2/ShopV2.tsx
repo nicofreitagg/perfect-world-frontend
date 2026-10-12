@@ -208,7 +208,12 @@ export default function ShopV2() {
         </Fragment>))}
       </div>
     </div>
-    <p className="pw-shopnote">{tr(tabNote)}</p>
+    {tab === 'minimal' ? (
+      <div className="pw-minbanner">
+        <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
+        <p><span className="pw-mono">{tr('NEW · 11.11')}</span> {tr('Minimal does not equal small.')} {tr(tabNote)}</p>
+      </div>
+    ) : <p className="pw-shopnote">{tr(tabNote)}</p>}
 
     <div className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map((p, pI) => (<Fragment key={pI}>
