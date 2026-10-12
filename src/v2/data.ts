@@ -105,3 +105,6 @@ export const minDesignOf = (title: string) => {
   const t = title.toLowerCase()
   return MIN_DESIGNS.find((d) => t.includes(d.name.toLowerCase())) ?? MIN_DESIGNS.find((d) => t.includes(CAUSE_NAMES[d.slug]))
 }
+
+// Women's pieces in Shopify titles (English or German, or the Stanley/Stella model name).
+export const WOMEN = /wom[ae]n|damen|ladies|muser|fitted/i

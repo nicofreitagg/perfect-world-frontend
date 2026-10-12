@@ -3,7 +3,7 @@ import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
 import { CAUSES } from './causes'
-import { PIECES, NEW_PIECES, minDesignOf } from './data'
+import { PIECES, NEW_PIECES, WOMEN, minDesignOf } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { hexOf } from './colours'
 import { useT } from './t'
@@ -17,9 +17,10 @@ import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 // anything else (for example the Minimal pieces) gets this simple product page.
 const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give }
 const giveOf = (title: string) => {
-  const n = NEW_PIECES.find((x) => (x.id === 'women' && /women|damen/i.test(title)) || (x.id !== 'women' && new RegExp(x.id, 'i').test(title)))
+  const n = NEW_PIECES.find((x) => (x.id === 'women' && WOMEN.test(title)) || (x.id !== 'women' && new RegExp(x.id, 'i').test(title)))
   return n ? n.give : GIVE[extractProductType(title)]
 }
+const pieceLabel = (title: string) => /bomber/i.test(title) ? 'Bomber jacket' : /beanie/i.test(title) ? 'Beanie' : WOMEN.test(title) ? "Women's T-shirt" : ({ tote: 'Tote bag', oversized: 'Oversized shirt', hoodie: 'Hoodie', tshirt: 'T-shirt', other: 'T-shirt' } as Record<string, string>)[extractProductType(title)]
 const SIZE = /size|gr(ö|oe)(ß|ss)e/i
 const COLOUR = /colou?r|farbe/i
 const optOf = (v: ShopifyVariant, re: RegExp) => v.selectedOptions?.find((o) => re.test(o.name))?.value
@@ -77,6 +78,7 @@ export default function ProductHandleV2() {
           <div>
             {/minimal/i.test(p.title) && <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={t('The Minimal Collection')} style={{ height: 'clamp(30px, 3vw, 42px)' }} />}
             <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{minimal && minDesignOf(p.title) ? minDesignOf(p.title)!.name : p.title}</h1>
+            {minimal && minDesignOf(p.title) && <p style={{ margin: '8px 0 0', fontSize: '18px', fontWeight: 600 }}>{t(pieceLabel(p.title))}</p>}
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {t('goes to the partner it was made with')}</p>}
           </div>
@@ -95,7 +97,7 @@ export default function ProductHandleV2() {
           {inColour.length > 1 && (
             <div>
               <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em', display: 'flex', justifyContent: 'space-between' }}><span>{t('SIZE')}</span><A href="/size-guide" style={{ color: '#0b0b0c', letterSpacing: 0 }}>{t('Size guide')}</A></p>
-              <FitScale piece={/women/i.test(p.title) ? 'women' : /bomber/i.test(p.title) ? 'bomber' : extractProductType(p.title)} />
+              <FitScale piece={WOMEN.test(p.title) ? 'women' : /bomber/i.test(p.title) ? 'bomber' : extractProductType(p.title)} />
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {inColour.map((v) => {
                   const on = v === variant

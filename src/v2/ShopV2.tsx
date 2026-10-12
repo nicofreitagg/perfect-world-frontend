@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, minDesignOf, icon, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
@@ -33,7 +33,7 @@ const kindOf = (title: string): Kind => {
   if (t.includes('oversize')) return 'over'
   if (t.includes('bomber')) return 'bomber'
   if (t.includes('beanie')) return 'beanie'
-  if (t.includes('women')) return 'women'
+  if (WOMEN.test(t)) return 'women'
   return 'tee'
 }
 // Which colour a Minimal card opens on (Nico 12 Oct): T-shirts and hoodies on the design's own

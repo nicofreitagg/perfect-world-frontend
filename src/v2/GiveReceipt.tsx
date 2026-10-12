@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, minDesignOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, WOMEN, minDesignOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
@@ -38,7 +38,7 @@ const FALLBACK: Record<string, string[]> = {
 const pieceOf = (title: string): string => {
   if (/bomber/i.test(title)) return 'bomber'
   if (/beanie/i.test(title)) return 'beanie'
-  if (/women|damen/i.test(title)) return 'women'
+  if (WOMEN.test(title)) return 'women'
   return extractProductType(title)
 }
 const OG_OVERSIZED: Record<CauseKey, string> = { wild: 'French Navy', rich: 'Mocha', 'one-world': 'Violet', cool: 'Khaki', talk: 'Black', oceans: 'Dusk' }
