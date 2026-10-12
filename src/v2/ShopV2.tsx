@@ -131,6 +131,51 @@ export default function ShopV2() {
       return [{ ...card(c), sub: cols.map((x) => tr(x.name)).join(' · '), swatches, href: link(cols[0].name) }]
     })
   }
+  // Minimal "All": one section per piece instead of one mixed grid.
+  const groups = tab === 'minimal' && piece === 'all' && liveShown.length
+    ? PIECE_LIST.map((pc) => ({ ...pc, label: pc.filter, items: products.filter((_, i) => kindOf(liveShown[i].title) === pc.id) })).filter((g) => g.items.length)
+    : null
+  const card = (p: Card, pI: number) => (<Fragment key={pI}>
+        <article className="pw-prod" style={{ position: "relative", display: "flex", flexDirection: "column" }}>
+          <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
+            {p.isPhoto && <DesignPhotos images={p.photos} alt={p.name} />}
+            {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
+            {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
+            {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
+            {p.isPlaceholderPrint && (<><span className="pw-art" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", background: p.grad }}><img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><span className="pw-hand" style={{ position: "relative", fontSize: "44px", lineHeight: "1", textAlign: "center" }}>{tr(p.name)}</span><span className="pw-mono" style={{ position: "relative", fontSize: "11px" }}>{tr("[BACK PRINT IMAGE]")}</span></span></>)}
+            {p.isGarment && (<>
+              <svg className="pw-art" width="72%" height="72%" viewBox="0 0 300 340" role="img" aria-label={`${p.name} illustration`} style={{ filter: "drop-shadow(0 20px 22px rgba(0,0,0,.18))" }}>
+                {p.isTee && (<><path d="M96 34 L128 22 Q150 42 172 22 L204 34 L262 86 L232 122 L214 106 L214 316 L86 316 L86 106 L68 122 L38 86 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M128 22 Q150 42 172 22" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
+                {p.isOver && (<><path d="M82 42 L126 26 Q150 46 174 26 L218 42 L280 112 L246 140 L228 126 L230 320 L70 320 L72 126 L54 140 L20 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M126 26 Q150 46 174 26" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
+                {p.isHoodie && (<><path d="M102 64 Q100 18 150 16 Q200 18 198 64 L236 76 L272 252 L242 260 L222 142 L222 322 L78 322 L78 142 L58 260 L28 252 L64 76 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M120 66 Q150 92 180 66" fill="none" stroke="rgba(0,0,0,.25)" strokeWidth="3"></path><path d="M138 82 L136 128 M162 82 L164 128" stroke="rgba(0,0,0,.3)" strokeWidth="2.5"></path><path d="M104 236 L196 236 L206 290 L94 290 Z" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth="2"></path></>)}
+                {p.isTote && (<><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke={p.fill} strokeWidth="12" strokeLinecap="round"></path><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke="rgba(0,0,0,.14)" strokeWidth="12" strokeLinecap="round" opacity=".5"></path><path d="M66 124 L234 124 L246 324 L54 324 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path></>)}
+                {p.isWomen && (<><path d="M100 70 L132 58 Q150 76 168 58 L200 70 L260 112 L238 144 L210 128 Q198 200 218 272 L82 272 Q102 200 90 128 L62 144 L40 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M132 58 Q150 76 168 58" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
+                {p.isBomber && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={p.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5"></path><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2"></path><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path></>)}
+                {p.isBeanie && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none"></path><rect x="72" y="200" width="156" height="58" rx="10" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></rect><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2"></path><rect x="134" y="216" width="32" height="26" rx="3" fill={p.fill === '#1b1b1d' ? '#f5f4f1' : '#1b1b1d'}></rect><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill={p.fill === '#1b1b1d' ? '#0b0b0c' : '#f5f4f1'}>PW</text></>)}
+                {!p.isBeanie && <text x={p.markX} y={p.markY} fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#c0322a">11.11</text>}
+              </svg>
+            </>)}
+            {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW · 11.11")}</span></>)}
+            
+            {p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
+            <div style={{ minWidth: "0" }}>
+              <h3 className="pw-fat" style={{ margin: "0", fontSize: "22px", lineHeight: "1.05" }}>{p.href ? <A href={p.href} style={{ color: "inherit", textDecoration: "none" }}>{tr(p.name)}</A> : p.name}</h3>
+              <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#5c5c5c" }}>{tr(p.sub)}</p>
+            </div>
+            <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>{tr(p.price)}</span>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "10px 4px 0" }}>
+            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>{tr(p.give)}</span>
+            <span style={{ display: "flex", gap: "6px" }} aria-label={tr("Colours")}>
+              {p.swatches.map((sw, swI) => (<Fragment key={swI}>{sw.href
+                ? <A href={sw.href} className="pw-sw" aria-label={sw.label} title={sw.label} style={{ background: sw.c }} />
+                : <span style={{ width: "14px", height: "14px", borderRadius: "50%", background: sw.c, border: "1px solid rgba(0,0,0,.2)" }}></span>}</Fragment>))}
+            </span>
+          </div>
+        </article>
+  </Fragment>)
   const causeTiles = CAUSES.map((c) => ({ icon: icon(c.id, c.id === 'oceans' ? 'wa' : 'a'), name: c.name, logo: c.logo, bg: c.bg, fg: c.id === 'oceans' ? '#ffffff' : '#0b0b0c', pick: () => { setTab('og'); setCause(c.id); toShop() } }))
 
   useEffect(() => {
@@ -211,49 +256,19 @@ export default function ShopV2() {
       </div>
     ) : <p className="pw-shopnote">{tr(tabNote)}</p>}
 
+    {groups ? groups.map((g) => (
+      <div key={g.id} className="pw-seg-block">
+        <div className="pw-seg-head">
+          <h3 className="pw-fat">{tr(g.label)}</h3>
+          <span className="pw-mono">€{g.price} · <b>€{g.give}</b> {tr(g.split ? 'shared by all six partners' : 'to its partner')}</span>
+          <button type="button" className="pw-seg-all" onClick={() => setPiece(g.id)}>{tr('See all')} ({g.items.length}) →</button>
+        </div>
+        <div className="pw-seg-row">{g.items.map(card)}</div>
+      </div>
+    )) : (
     <div className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
-      {products.map((p, pI) => (<Fragment key={pI}>
-        <article className="pw-prod" style={{ position: "relative", display: "flex", flexDirection: "column" }}>
-          <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
-            {p.isPhoto && <DesignPhotos images={p.photos} alt={p.name} />}
-            {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
-            {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
-            {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
-            {p.isPlaceholderPrint && (<><span className="pw-art" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", background: p.grad }}><img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><span className="pw-hand" style={{ position: "relative", fontSize: "44px", lineHeight: "1", textAlign: "center" }}>{tr(p.name)}</span><span className="pw-mono" style={{ position: "relative", fontSize: "11px" }}>{tr("[BACK PRINT IMAGE]")}</span></span></>)}
-            {p.isGarment && (<>
-              <svg className="pw-art" width="72%" height="72%" viewBox="0 0 300 340" role="img" aria-label={`${p.name} illustration`} style={{ filter: "drop-shadow(0 20px 22px rgba(0,0,0,.18))" }}>
-                {p.isTee && (<><path d="M96 34 L128 22 Q150 42 172 22 L204 34 L262 86 L232 122 L214 106 L214 316 L86 316 L86 106 L68 122 L38 86 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M128 22 Q150 42 172 22" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
-                {p.isOver && (<><path d="M82 42 L126 26 Q150 46 174 26 L218 42 L280 112 L246 140 L228 126 L230 320 L70 320 L72 126 L54 140 L20 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M126 26 Q150 46 174 26" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
-                {p.isHoodie && (<><path d="M102 64 Q100 18 150 16 Q200 18 198 64 L236 76 L272 252 L242 260 L222 142 L222 322 L78 322 L78 142 L58 260 L28 252 L64 76 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M120 66 Q150 92 180 66" fill="none" stroke="rgba(0,0,0,.25)" strokeWidth="3"></path><path d="M138 82 L136 128 M162 82 L164 128" stroke="rgba(0,0,0,.3)" strokeWidth="2.5"></path><path d="M104 236 L196 236 L206 290 L94 290 Z" fill="none" stroke="rgba(0,0,0,.18)" strokeWidth="2"></path></>)}
-                {p.isTote && (<><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke={p.fill} strokeWidth="12" strokeLinecap="round"></path><path d="M112 130 Q112 46 150 46 Q188 46 188 130" fill="none" stroke="rgba(0,0,0,.14)" strokeWidth="12" strokeLinecap="round" opacity=".5"></path><path d="M66 124 L234 124 L246 324 L54 324 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path></>)}
-                {p.isWomen && (<><path d="M100 70 L132 58 Q150 76 168 58 L200 70 L260 112 L238 144 L210 128 Q198 200 218 272 L82 272 Q102 200 90 128 L62 144 L40 112 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M132 58 Q150 76 168 58" fill="none" stroke="rgba(0,0,0,.22)" strokeWidth="3"></path></>)}
-                {p.isBomber && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 280 L218 282 L214 150 L214 298 L86 298 L86 150 L82 282 L56 280 L44 98 Z" fill={p.fill} stroke="rgba(0,0,0,.18)" strokeWidth="1.5"></path><path d="M134 30 Q150 48 166 30" fill="none" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path><path d="M150 44 V298" stroke="rgba(255,255,255,.45)" strokeWidth="2"></path><path d="M86 286 H214 M58 268 L82 270 M218 270 L242 268" stroke="rgba(255,255,255,.3)" strokeWidth="5"></path></>)}
-                {p.isBeanie && (<><path d="M84 214 Q80 92 150 88 Q220 92 216 214 Z" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></path><path d="M110 210 Q108 120 126 100 M150 210 V92 M190 210 Q192 120 174 100" stroke="rgba(0,0,0,.12)" strokeWidth="3" fill="none"></path><rect x="72" y="200" width="156" height="58" rx="10" fill={p.fill} stroke="rgba(0,0,0,.16)" strokeWidth="1.5"></rect><path d="M84 206 V252 M98 206 V252 M112 206 V252 M126 206 V252 M174 206 V252 M188 206 V252 M202 206 V252 M216 206 V252" stroke="rgba(0,0,0,.14)" strokeWidth="2"></path><rect x="134" y="216" width="32" height="26" rx="3" fill={p.fill === '#1b1b1d' ? '#f5f4f1' : '#1b1b1d'}></rect><text x="150" y="233" textAnchor="middle" fontFamily="JetBrains Mono, monospace" fontSize="8" fill={p.fill === '#1b1b1d' ? '#0b0b0c' : '#f5f4f1'}>PW</text></>)}
-                {!p.isBeanie && <text x={p.markX} y={p.markY} fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#c0322a">11.11</text>}
-              </svg>
-            </>)}
-            {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW · 11.11")}</span></>)}
-            
-            {p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
-            <div style={{ minWidth: "0" }}>
-              <h3 className="pw-fat" style={{ margin: "0", fontSize: "22px", lineHeight: "1.05" }}>{p.href ? <A href={p.href} style={{ color: "inherit", textDecoration: "none" }}>{tr(p.name)}</A> : p.name}</h3>
-              <p style={{ margin: "6px 0 0", fontSize: "14px", color: "#5c5c5c" }}>{tr(p.sub)}</p>
-            </div>
-            <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>{tr(p.price)}</span>
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "10px 4px 0" }}>
-            <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>{tr(p.give)}</span>
-            <span style={{ display: "flex", gap: "6px" }} aria-label={tr("Colours")}>
-              {p.swatches.map((sw, swI) => (<Fragment key={swI}>{sw.href
-                ? <A href={sw.href} className="pw-sw" aria-label={sw.label} title={sw.label} style={{ background: sw.c }} />
-                : <span style={{ width: "14px", height: "14px", borderRadius: "50%", background: sw.c, border: "1px solid rgba(0,0,0,.2)" }}></span>}</Fragment>))}
-            </span>
-          </div>
-        </article>
-      </Fragment>))}
-    </div>
+      {products.map(card)}
+    </div>)}
   </section>
 
   

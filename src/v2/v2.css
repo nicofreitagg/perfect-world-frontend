@@ -369,3 +369,20 @@
 .pw-minbanner .pw-minline{margin:14px 0 0;font-size:clamp(24px,3vw,40px);line-height:1.02;color:#0b0b0c;max-width:none;text-wrap:balance}
 @media (max-width:760px){.pw-minbanner .pw-minline{font-size:24px}}
 .pw-prod .pw-add{display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none}
+/* Minimal "All": one section per piece */
+.pw-seg-block{margin-top:clamp(28px,4vw,48px)}
+.pw-seg-block:first-of-type{margin-top:8px}
+.pw-seg-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;padding-bottom:12px;margin-bottom:18px;border-bottom:1px solid #e3e1dc}
+.pw-seg-head h3{margin:0;font-size:clamp(22px,2.4vw,32px);line-height:1}
+.pw-seg-head .pw-mono{font-size:13px;color:#5c5c5c}
+.pw-seg-head .pw-mono b{color:#c0322a;font-weight:600}
+.pw-seg-all{margin-left:auto;border:none;background:none;padding:6px 0;font:inherit;font-size:14px;font-weight:600;color:#0b0b0c;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.pw-seg-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 18px}
+.pw-seg-row .pw-prod h3{font-size:18px!important}
+@media (max-width:1000px){.pw-seg-row{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){
+  .pw-seg-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -16px;padding:0 16px 8px;scrollbar-width:none}
+  .pw-seg-row::-webkit-scrollbar{display:none}
+  .pw-seg-row>.pw-prod{flex:0 0 62%;scroll-snap-align:start}
+  .pw-seg-row .pw-prod h3{font-size:16px!important}
+}
