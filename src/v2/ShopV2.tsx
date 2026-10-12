@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, minDesignOf, icon, type CauseKey } from './data'
@@ -78,7 +78,8 @@ export default function ShopV2() {
     const u = new URL(window.location.href)
     if (slug === 'all') u.searchParams.delete('design'); else u.searchParams.set('design', slug)
     window.history.replaceState(null, '', u.toString())
-    toShop()
+    // Land on the design name so the swirl draws in view.
+    setTimeout(() => (document.querySelector('.pw-designbar') ?? document.getElementById('shop'))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
@@ -295,9 +296,7 @@ export default function ShopV2() {
         <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
         <span className="pw-fat">{MIN_DESIGNS.find((d) => d.slug === minDesign)?.name}</span>
         {/* A swirl in the design's cause colour draws itself each time a design is picked. */}
-        <svg key={minDesign} className="pw-pickswirl" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
-          <path pathLength={1000} d="M-20 96 C 140 20, 260 130, 420 70 C 540 26, 600 118, 540 112 C 470 104, 500 18, 640 34 C 820 56, 880 132, 1040 84 C 1150 50, 1180 14, 1130 22 C 1080 30, 1110 108, 1240 92 C 1330 82, 1400 40, 1460 52" stroke={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
-        </svg>
+        <PickSwirl key={minDesign} color={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
       </div>
     )}
     {products.some((p) => p.small) ? (
@@ -360,11 +359,39 @@ export default function ShopV2() {
 }
 
 // The design side leads; hovering shows the front with the small logo.
+// On phones (no hover) each card flips once from the front logo to the design as it scrolls in.
 function DesignPhotos({ images, colourUrl, alt }: { images: { url: string }[]; colourUrl?: string; alt: string }) {
   const pair = useDesignPairOrGuess(images, colourUrl)
+  const ref = useRef<HTMLImageElement>(null)
+  const lead = pair?.[0]
+  useEffect(() => {
+    const media = ref.current?.parentElement
+    if (!media || !('IntersectionObserver' in window) || !window.matchMedia('(hover: none)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { media.classList.add('pw-flip'); io.disconnect() } }, { threshold: 0.55 })
+    io.observe(media)
+    return () => io.disconnect()
+  }, [lead])
   if (!pair) return null
   return (<>
-    <img src={pair[0]} alt={alt} className="pw-photo" loading="lazy" />
+    <img ref={ref} src={pair[0]} alt={alt} className="pw-photo" loading="lazy" />
     {pair[1] !== pair[0] && <img src={pair[1]} alt="" aria-hidden="true" className="pw-photo pw-photo2" loading="lazy" />}
   </>)
+}
+
+// A swirl in the picked design's cause colour; it draws itself once it is on screen (phones included).
+function PickSwirl({ color }: { color: string }) {
+  const ref = useRef<SVGSVGElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (!('IntersectionObserver' in window)) { el.classList.add('is-on'); return }
+    const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { el.classList.add('is-on'); io.disconnect() } }, { threshold: 0.6 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  return (
+    <svg ref={ref} className="pw-pickswirl" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+      <path pathLength={1000} d="M-20 96 C 140 20, 260 130, 420 70 C 540 26, 600 118, 540 112 C 470 104, 500 18, 640 34 C 820 56, 880 132, 1040 84 C 1150 50, 1180 14, 1130 22 C 1080 30, 1110 108, 1240 92 C 1330 82, 1400 40, 1460 52" stroke={color} />
+    </svg>
+  )
 }
