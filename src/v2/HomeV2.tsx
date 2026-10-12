@@ -124,8 +124,8 @@ export default function HomeV2() {
     <div className="pwl-wrap pwl-center">
       <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
       <h2 className="pwl-min-h"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} /></h2>
-      <p className="pw-fat pwl-min-line">{tr('Minimal does not equal small.')}</p>
-      <p className="pwl-sub">{tr('Six new designs, one for each partner. A small 11.11 mark, the same fixed amount.')}</p>
+      <p className="pw-fat pwl-min-line">{tr('Doing good never looked so clean.')}</p>
+      <p className="pwl-sub">{tr('Minimal does not equal small.')} {tr('Six new designs, one for each partner. A small 11.11 mark, the same fixed amount.')}</p>
       <ul className="pwl-min-row">
         {MIN_DESIGNS.map((d) => {
           const c = causeBySlug(d.slug)
