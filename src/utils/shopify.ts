@@ -141,7 +141,7 @@ async function fetchCollectionProducts(handle: string): Promise<ShopifyCollectio
                   }
                 }
               }
-              variants(first: 10) {
+              variants(first: 100) {
                 edges {
                   node {
                     id
@@ -239,7 +239,7 @@ async function fetchProduct(handle: string): Promise<ShopifyProduct> {
             }
           }
         }
-        variants(first: 20) {
+        variants(first: 100) {
           edges {
             node {
               id
@@ -249,6 +249,7 @@ async function fetchProduct(handle: string): Promise<ShopifyProduct> {
                 currencyCode
               }
               availableForSale
+              image { url }
               selectedOptions {
                 name
                 value
@@ -513,8 +514,9 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
 
 async function fetchAllProducts(): Promise<ShopifyProduct[]> {
   const query = `
-    query getAllProducts${inContextDirective()} {
-      products(first: 100) {
+    query getAllProducts($after: String)${inContextDirective()} {
+      products(first: 50, after: $after) {
+        pageInfo { hasNextPage endCursor }
         edges {
           node {
             id
@@ -553,7 +555,7 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
                 }
               }
             }
-            variants(first: 20) {
+            variants(first: 100) {
               edges {
                 node {
                   id
@@ -563,6 +565,7 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
                     currencyCode
                   }
                   availableForSale
+                  image { url }
                   selectedOptions {
                     name
                     value
@@ -576,10 +579,18 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
     }
   `
 
-  const data = await shopifyFetch<any>(query)
-  if (!data || !data.products) return []
+  // The 11.11 catalogue is well over 100 listings, so page through all of them.
+  const edges: any[] = []
+  let after: string | null = null
+  for (let page = 0; page < 20; page++) {
+    const data: any = await shopifyFetch<any>(query, after ? { after } : {})
+    if (!data || !data.products) break
+    edges.push(...data.products.edges)
+    if (!data.products.pageInfo?.hasNextPage) break
+    after = data.products.pageInfo.endCursor
+  }
 
-  return data.products.edges.map((edge: any) => ({
+  return edges.map((edge: any) => ({
     id: edge.node.id,
     title: edge.node.title,
     description: edge.node.description,

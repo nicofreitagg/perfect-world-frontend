@@ -10,7 +10,7 @@ import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
 import PosterVideo from './PosterVideo'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, type CauseKey } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -20,16 +20,6 @@ import { FAQ } from './faq'
 
 const Globe3D = lazy(() => import('./Globe3D'))
 
-
-// The Minimal designs, one per partner, for the Minimal section (which option ships per cause is not final yet).
-const MIN_DESIGNS = [
-  { img: 'one-world', slug: 'one-world', name: 'Where Hope Still Grows' },
-  { img: 'cool-down', slug: 'cool-down', name: 'Grow a Better World' },
-  { img: 'oceans', slug: 'endangered-oceans', name: 'A World Below' },
-  { img: 'talk', slug: 'talk-about-it', name: 'Talk About It' },
-  { img: 'wild-at-heart', slug: 'wild-at-heart', name: 'Wild at Heart' },
-  { img: 'rich-in-life', slug: 'rich-in-life', name: 'Rich in Life' },
-]
 
 // New pieces launching on 11.11, shown as drawings until the samples are photographed.
 const NEW = [

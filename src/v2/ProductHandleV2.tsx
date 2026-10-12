@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
 import { CAUSES } from './causes'
-import { PIECES } from './data'
+import { PIECES, NEW_PIECES } from './data'
+import { hexOf } from './colours'
 import { useT } from './t'
 import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
@@ -14,7 +15,14 @@ import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 // /product/:handle on the new site. Cause designs go to their /design page;
 // anything else (for example the Minimal pieces) gets this simple product page.
 const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give }
-const sizeOf = (v: ShopifyVariant) => v.selectedOptions?.find((o) => /size|gr(ö|oe)(ß|ss)e/i.test(o.name))?.value ?? v.title
+const giveOf = (title: string) => {
+  const n = NEW_PIECES.find((x) => (x.id === 'women' && /women|damen/i.test(title)) || (x.id !== 'women' && new RegExp(x.id, 'i').test(title)))
+  return n ? n.give : GIVE[extractProductType(title)]
+}
+const SIZE = /size|gr(ö|oe)(ß|ss)e/i
+const COLOUR = /colou?r|farbe/i
+const optOf = (v: ShopifyVariant, re: RegExp) => v.selectedOptions?.find((o) => re.test(o.name))?.value
+const sizeOf = (v: ShopifyVariant) => optOf(v, SIZE) ?? v.title
 const mono = "'JetBrains Mono', monospace"
 
 export default function ProductHandleV2() {
@@ -24,6 +32,7 @@ export default function ProductHandleV2() {
   const [p, setP] = useState<ShopifyProduct | null | undefined>(undefined)
   const [vid, setVid] = useState('')
   const [shot, setShot] = useState(0)
+  const [params, setParams] = useSearchParams()
 
   useEffect(() => { if (handle) getProduct(handle).then(setP).catch(() => setP(null)) }, [handle])
 
@@ -32,10 +41,17 @@ export default function ProductHandleV2() {
   const cause = CAUSES.find((c) => c.name === getCollectionKey(p.title))
   if (cause && !/minimal/i.test(p.title)) return <Navigate to={`/design/${cause.slug}`} replace />
 
-  const variant = p.variants.find((v) => v.id === vid && v.availableForSale) ?? p.variants.find((v) => v.availableForSale)
+  // Colour and size are separate pickers; ?colour= (from the shop's colour dots) preselects the colour.
+  const colours = [...new Set(p.variants.map((v) => optOf(v, COLOUR)).filter((c): c is string => !!c))]
+  const wanted = params.get('colour')?.toLowerCase()
+  const colour = colours.find((c) => c.toLowerCase() === wanted) ?? colours[0]
+  const inColour = colours.length ? p.variants.filter((v) => optOf(v, COLOUR) === colour) : p.variants
+  const pickColour = (c: string) => { setVid(''); setShot(0); setParams((q) => { q.set('colour', c); return q }, { replace: true }) }
+  const variant = inColour.find((v) => v.id === vid && v.availableForSale) ?? inColour.find((v) => v.availableForSale)
   const price = variant ? Number(variant.price.amount) : Number(p.priceRange.minVariantPrice.amount)
-  const give = GIVE[extractProductType(p.title)]
-  const img = p.images[shot]?.url
+  const give = giveOf(p.title)
+  // The picked colour's own photo leads, when Shopify has one for it.
+  const img = (shot === 0 && (variant ?? inColour[0])?.image?.url) || p.images[shot]?.url
 
   return (
     <Shell active="/shop">
@@ -61,12 +77,24 @@ export default function ProductHandleV2() {
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {t('goes to the partner it was made with')}</p>}
           </div>
-          {p.variants.length > 1 && (
+          {colours.length > 1 && (
+            <div>
+              <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em' }}>{t('COLOUR')} · <span style={{ letterSpacing: 0 }}>{colour}</span></p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {colours.map((c) => (
+                  <button key={c} type="button" className="pw-chip" aria-pressed={c === colour} onClick={() => pickColour(c)} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontFamily: 'inherit', fontSize: '14px', minHeight: '46px', padding: '0 16px', borderRadius: '999px', cursor: 'pointer', border: c === colour ? '2px solid #0b0b0c' : '1px solid #cfccc5', background: '#fff', color: '#0b0b0c' }}>
+                    <span aria-hidden="true" style={{ width: '16px', height: '16px', borderRadius: '50%', background: hexOf(c), border: '1px solid rgba(0,0,0,.2)' }} />{c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {inColour.length > 1 && (
             <div>
               <p style={{ margin: '0 0 10px', fontFamily: mono, fontSize: '12px', letterSpacing: '.1em', display: 'flex', justifyContent: 'space-between' }}><span>{t('SIZE')}</span><A href="/size-guide" style={{ color: '#0b0b0c', letterSpacing: 0 }}>{t('Size guide')}</A></p>
               <FitScale piece={/women/i.test(p.title) ? 'women' : /bomber/i.test(p.title) ? 'bomber' : extractProductType(p.title)} />
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {p.variants.map((v) => {
+                {inColour.map((v) => {
                   const on = v === variant
                   return <button key={v.id} type="button" className="pw-chip" disabled={!v.availableForSale} aria-pressed={on} onClick={() => setVid(v.id)} style={{ fontFamily: mono, fontSize: '14px', minWidth: '52px', minHeight: '46px', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid #0b0b0c', background: on ? '#0b0b0c' : '#fff', color: on ? '#fff' : '#0b0b0c' }}>{sizeOf(v)}</button>
                 })}

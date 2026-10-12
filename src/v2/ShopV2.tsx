@@ -1,12 +1,12 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, type CauseKey } from './data'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
-import { hexOf, rankColours } from './colours'
-import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
+import { hexOf, rankColours, variantColours } from './colours'
+import { getCollectionKey, extractProductType, extractColorFromTitle, formatDisplayTitle } from '../utils/productGrouping'
 import { isLaunched } from './launch'
 
 type Kind = 'tote' | 'tee' | 'women' | 'over' | 'hoodie' | 'bomber' | 'beanie'
@@ -20,27 +20,11 @@ const PIECE_LIST: { id: Kind; label: string; filter: string; price: string; give
   { id: 'tote', label: 'Tote', filter: 'Totes', price: PIECES.tote.price, give: PIECES.tote.give },
   { id: 'beanie', label: 'Beanie', filter: 'Beanies', price: np('beanie').price, give: np('beanie').give, split: true },
 ]
-// Silhouettes shown until the Minimal pieces exist in Shopify.
-// One entry per colour. The shop shows one card per piece under "All" and splits a
-// piece into its colours once a filter is picked. Colours: Nico 9 Oct (tote, bomber,
-// beanie); tee, women's, oversized and hoodie colours are stand-ins until Shopify.
+// The logo beanie has no design, so it shows as a drawing until it is listed (black + natural, Nico 9 Oct).
 const MINIMAL = [
-  { id: 'm1', name: 'Minimal Tee', colour: 'Black', kind: 'tee', fill: '#1b1b1d', bg: '#e9e7e2' },
-  { id: 'm2', name: 'Minimal Tee', colour: 'Off-white', kind: 'tee', fill: '#f4f1ea', bg: '#dedbd4' },
-  { id: 'w1', name: "Women's Minimal Tee", colour: 'Black', kind: 'women', fill: '#1b1b1d', bg: '#e9e7e2' },
-  { id: 'w2', name: "Women's Minimal Tee", colour: 'Off-white', kind: 'women', fill: '#f4f1ea', bg: '#dedbd4' },
-  { id: 'm3', name: 'Oversized Tee', colour: 'Washed black', kind: 'over', fill: '#2a2a2c', bg: '#e9e7e2' },
-  { id: 'm3b', name: 'Oversized Tee', colour: 'Off-white', kind: 'over', fill: '#f4f1ea', bg: '#dedbd4' },
-  { id: 'm4', name: 'Minimal Hoodie', colour: 'Sand', kind: 'hoodie', fill: '#cdb89a', bg: '#ecebe6' },
-  { id: 'm5', name: 'Minimal Hoodie', colour: 'Black', kind: 'hoodie', fill: '#1b1b1d', bg: '#e2e0da' },
-  { id: 'b1', name: 'Bomber Jacket', colour: 'Black', kind: 'bomber', fill: '#1b1b1d', bg: '#e2e0da' },
-  { id: 'b2', name: 'Bomber Jacket', colour: 'Khaki', kind: 'bomber', fill: '#8a7d5c', bg: '#ecebe6' },
-  { id: 'm6', name: 'Minimal Tote', colour: 'Natural', kind: 'tote', fill: '#e8dcc4', bg: '#e9e7e2' },
-  { id: 'm7', name: 'Minimal Tote', colour: 'Black', kind: 'tote', fill: '#1b1b1d', bg: '#dedbd4' },
   { id: 'k1', name: 'Logo Beanie', colour: 'Black', kind: 'beanie', fill: '#1b1b1d', bg: '#e9e7e2' },
   { id: 'k2', name: 'Logo Beanie', colour: 'Natural', kind: 'beanie', fill: '#e8dcc4', bg: '#dedbd4' },
 ] as const
-const MARK: Record<Kind, [number, number]> = { tee: [178, 92], women: [168, 112], over: [180, 98], hoodie: [172, 158], bomber: [160, 96], tote: [182, 300], beanie: [0, 0] }
 const kindOf = (title: string): Kind => {
   const t = title.toLowerCase()
   if (t.includes('hoodie')) return 'hoodie'
@@ -98,21 +82,29 @@ export default function ShopV2() {
     ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
     : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
-  const blank = { ico: '', img: '', grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', img2: '', isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
   let products: Card[]
   if (tab === 'minimal' && minimalLive.length) {
+    // Real listings: one card per product, its photo, a second photo on hover, colour dots that open that colour.
     products = minimalLive.filter((m) => piece === 'all' || kindOf(m.title) === piece).map((m) => {
       const p = PIECE_LIST.find((x) => x.id === kindOf(m.title))!
-      return { ...blank, name: m.title, sub: tr('Made with one partner'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: '#e9e7e2', isPrint: !!m.images[0], img: m.images[0]?.url ?? '', isNew: true, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }
+      const c = CAUSES.find((x) => x.name === getCollectionKey(m.title))
+      const cols = rankColours(c?.name ?? '', variantColours(m.variants), (x) => x)
+      return { ...blank, name: formatDisplayTitle(m.title), sub: c ? c.partner : tr(p.label), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], img: m.images[0]?.url ?? '', img2: m.images[1]?.url ?? '', isNew: true, swatches: cols.map((x) => ({ c: hexOf(x), label: x, href: `/product/${m.handle}?colour=${encodeURIComponent(x)}` })), href: `/product/${m.handle}` + (cols[0] ? `?colour=${encodeURIComponent(cols[0])}` : ''), addLabel: tr('Choose your size') }
+    })
+  } else if (tab === 'minimal' && piece !== 'beanie') {
+    // Until the listings are live: the six designs, as artwork on their partner's tint.
+    const p = PIECE_LIST.find((x) => x.id === piece)
+    products = MIN_DESIGNS.map((d) => {
+      const c = CAUSES.find((x) => x.slug === d.slug)!
+      return { ...blank, name: d.name, sub: c.partner + (p ? ' · ' + tr(p.label) : ''), price: p ? '€' + p.price : tr('from') + ' €' + PIECES.tote.price, give: (p ? '' : tr('from') + ' ') + '€' + (p ? p.give : PIECES.tote.give) + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', addLabel: tr('Coming 11.11') }
     })
   } else if (tab === 'minimal') {
-    // "All" = one card per piece; a picked filter = one card per colour.
-    const shown = piece === 'all' ? MINIMAL.filter((m, i) => MINIMAL.findIndex((x) => x.kind === m.kind) === i) : MINIMAL.filter((m) => m.kind === piece)
-    products = shown.map((m) => {
+    // The logo beanie has no design: one card per colour.
+    products = MINIMAL.filter((m) => m.kind === 'beanie').map((m) => {
       const p = PIECE_LIST.find((x) => x.id === m.kind)!
-      const variants = MINIMAL.filter((x) => x.kind === m.kind)
-      return { ...blank, name: m.name, sub: piece === 'all' ? variants.map((v) => tr(v.colour)).join(' · ') : tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: m.bg, fill: m.fill, isGarment: true, isTee: m.kind === 'tee', isWomen: m.kind === 'women', isOver: m.kind === 'over', isHoodie: m.kind === 'hoodie', isBomber: m.kind === 'bomber', isTote: m.kind === 'tote', isBeanie: m.kind === 'beanie', markX: MARK[m.kind][0], markY: MARK[m.kind][1], isNew: true, swatches: (piece === 'all' ? variants : [m]).map((v) => ({ c: v.fill })), href: '', addLabel: tr('Coming 11.11') }
+      return { ...blank, name: m.name, sub: tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: m.bg, fill: m.fill, isGarment: true, isBeanie: true, isNew: true, swatches: [{ c: m.fill }], href: '', addLabel: tr('Coming 11.11') }
     })
   } else {
     // T-shirt colours per design from Shopify, each opening the product page on that colour.
@@ -190,7 +182,7 @@ export default function ShopV2() {
 
   
   <section className="pw-iso" id="shop" aria-label={tr("Products")} style={{ position: "relative", zIndex: "78", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 72px)" }}>
-    <img className="pw-ico" src="/v2/icons/ic-931f8328.svg" alt="" aria-hidden="true" style={{ left: "92%", top: "950px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-13b34769.svg" alt="" aria-hidden="true" style={{ left: "80%", top: "710px", width: "84px", transform: "rotate(10deg)" }} />
+    
     <div className="pw-shopbar">
       <div role="tablist" aria-label={tr("Collections")} className="pw-seg">
         {tabs.map((tb, tbI) => (<Fragment key={tbI}>
@@ -219,6 +211,9 @@ export default function ShopV2() {
       {products.map((p, pI) => (<Fragment key={pI}>
         <article className="pw-prod" style={{ position: "relative", display: "flex", flexDirection: "column" }}>
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
+            {p.isPhoto && (<><img src={p.img} alt={p.name} className="pw-photo" loading="lazy" />{p.img2 && <img src={p.img2} alt="" aria-hidden="true" className="pw-photo pw-photo2" loading="lazy" />}</>)}
+            {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
+            {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
             {p.isPlaceholderPrint && (<><span className="pw-art" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", background: p.grad }}><img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><span className="pw-hand" style={{ position: "relative", fontSize: "44px", lineHeight: "1", textAlign: "center" }}>{tr(p.name)}</span><span className="pw-mono" style={{ position: "relative", fontSize: "11px" }}>{tr("[BACK PRINT IMAGE]")}</span></span></>)}
             {p.isGarment && (<>
@@ -235,7 +230,7 @@ export default function ShopV2() {
             </>)}
             {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW · 11.11")}</span></>)}
             
-            {p.href ? <A href={p.href} className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
+            {p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
             <div style={{ minWidth: "0" }}>
@@ -244,7 +239,7 @@ export default function ShopV2() {
             </div>
             <span className="pw-mono" style={{ fontSize: "16px", whiteSpace: "nowrap", paddingTop: "2px" }}>{tr(p.price)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "12px 4px 0", paddingTop: "12px", borderTop: "1px dashed #c9c6bf" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "10px 4px 0" }}>
             <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>{tr(p.give)}</span>
             <span style={{ display: "flex", gap: "6px" }} aria-label={tr("Colours")}>
               {p.swatches.map((sw, swI) => (<Fragment key={swI}>{sw.href

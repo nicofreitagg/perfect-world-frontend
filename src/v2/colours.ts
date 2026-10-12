@@ -25,3 +25,7 @@ export function rankColours<T>(design: string, items: T[], nameOf: (t: T) => str
   }
   return [...items].sort((a, b) => score(nameOf(a)) - score(nameOf(b)))
 }
+
+// A Shopify product's colours, from its Colour/Farbe option, in variant order.
+export const variantColours = (variants: { selectedOptions?: { name: string; value: string }[] }[]) =>
+  [...new Set(variants.map((v) => v.selectedOptions?.find((o) => /colou?r|farbe/i.test(o.name))?.value).filter((x): x is string => !!x))]

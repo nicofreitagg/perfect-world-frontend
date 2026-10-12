@@ -352,3 +352,17 @@
 .pw-minbanner p{margin:12px 0 0;font-size:14px;color:#5c5c5c;max-width:640px}
 .pw-minbanner p .pw-mono{color:#c0322a;font-size:11px;letter-spacing:.06em;margin-right:6px}
 @media (max-width:760px){.pw-minbanner{margin:16px 0 18px;padding-top:16px}.pw-minbanner p{font-size:13px}}
+/* Shop cards: real photos fill the card, a second photo on hover; the whole picture links */
+.pw-prod .pw-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .35s,transform .6s}
+.pw-prod .pw-photo2{opacity:0}
+.pw-prod:hover .pw-photo2{opacity:1}
+.pw-prod:hover .pw-photo{transform:scale(1.03)}
+.pw-prod .pw-design{width:70%;height:70%;object-fit:contain;transition:transform .5s}
+.pw-prod:hover .pw-design{transform:scale(1.05) rotate(-1deg)}
+.pw-cardlink{position:absolute;inset:0;z-index:1}
+.pw-prod .pw-media>.pw-mono,.pw-prod .pw-add{z-index:2}
+@media (hover:hover){
+  .pw-prod .pw-add-h{opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s}
+  .pw-prod:hover .pw-add-h,.pw-prod .pw-add-h:focus-visible{opacity:1;transform:none}
+}
+@media (hover:none){.pw-prod .pw-add-h{display:none!important}}

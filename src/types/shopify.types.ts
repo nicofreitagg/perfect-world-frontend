@@ -25,6 +25,7 @@ export interface ShopifyVariant {
   price: ShopifyMoney
   priceV2?: ShopifyMoney
   availableForSale: boolean
+  image?: { url: string } | null
   selectedOptions?: Array<{
     name: string
     value: string

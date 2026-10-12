@@ -88,3 +88,13 @@ export const TAGS: WishTag[] = [
   { loud: true, ico: icon('wild', 'wa'), name: 'WILD AT HEART', partner: 'Elephants for Africa', wish: 'room for elephants and people.', piece: 'T-shirt', price: '€33.33', give: '€11.11', img: '/v2/img/og-wild.webp', bg: 'linear-gradient(160deg,#8e8f94,#2e3a5a)', btnFg: '#2e3a5a', rot: -1.6 },
   { loud: false, ico: icon('oceans', 'a'), lc: '#2f6fa8', name: 'ENDANGERED OCEANS', partner: 'SECORE', wish: 'reefs that grow back.', piece: 'Minimal hoodie, sand', price: '€77.77', give: '€33.33', path: HOODIE_PATH, color: '#cdb89a', mark: '#0b0b0c', rot: 1.2 },
 ]
+
+// The Minimal designs, one per partner, for the Minimal section (Talk About It = the face, Nico 12 Oct; One World pairing is a guess).
+export const MIN_DESIGNS = [
+  { img: 'one-world', slug: 'one-world', name: 'Where Hope Still Grows' },
+  { img: 'cool-down', slug: 'cool-down', name: 'Grow a Better World' },
+  { img: 'oceans', slug: 'endangered-oceans', name: 'A World Below' },
+  { img: 'talk', slug: 'talk-about-it', name: 'Talk About It' },
+  { img: 'wild-at-heart', slug: 'wild-at-heart', name: 'Wild at Heart' },
+  { img: 'rich-in-life', slug: 'rich-in-life', name: 'Rich in Life' },
+]
