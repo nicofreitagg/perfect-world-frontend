@@ -173,12 +173,12 @@ export function PieceSketch({ id, dot, fill }: { id: string; dot?: string; fill?
   return (
     <svg viewBox="0 0 300 300" role="img" aria-label="Sketch" className="pwl-sketch">
       {id === 'beanie' && (<><path d="M84 190 Q80 70 150 66 Q220 70 216 190" {...stroke} /><rect x="72" y="180" width="156" height="58" rx="10" {...stroke} /><path d="M92 186 V232 M112 186 V232 M188 186 V232 M208 186 V232" {...detail} /><rect x="134" y="196" width="32" height="24" rx="3" fill="#e2453c" /></>)}
-      {id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 260 L218 262 L214 140 L214 276 L86 276 L86 140 L82 262 L56 260 L44 98 Z" {...stroke} /><path d="M150 40 V276 M86 264 H214" {...detail} /><path d="M164 92 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
-      {id === 'women' && (<><path d="M100 50 L132 38 Q150 56 168 38 L200 50 L260 92 L238 124 L210 108 Q198 180 218 252 L82 252 Q102 180 90 108 L62 124 L40 92 Z" {...stroke} /><path d="M164 96 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
+      {id === 'bomber' && (<><path d="M108 40 L134 30 L166 30 L192 40 L256 98 L244 260 L218 262 L214 140 L214 276 L86 276 L86 140 L82 262 L56 260 L44 98 Z" {...stroke} /><path d="M150 40 V276 M86 264 H214" {...detail} /></>)}
+      {id === 'women' && (<><path d="M100 50 L132 38 Q150 56 168 38 L200 50 L260 92 L238 124 L210 108 Q198 180 218 252 L82 252 Q102 180 90 108 L62 124 L40 92 Z" {...stroke} /></>)}
       {id === 'hoodie' && (<><path d="M112 52 Q150 20 188 52 L256 100 L244 262 L218 264 L214 150 L214 276 L86 276 L86 150 L82 264 L56 262 L44 100 Z" {...stroke} /><path d="M118 54 Q150 96 182 54 M138 80 V120 M162 80 V120 M104 210 H196 V250 H104 Z" {...detail} /></>)}
       {id === 'tote' && (<><path d="M110 112 Q110 40 150 40 Q190 40 190 112" {...stroke} fill="none" /><rect x="70" y="108" width="160" height="170" rx="4" {...stroke} /></>)}
       {dot && <circle cx="173" cy={id === 'tote' ? 150 : 120} r="7" fill={dot} />}
-      {id === 'minimal' && (<><path d="M96 46 L128 34 Q150 54 172 34 L204 46 L262 98 L232 134 L214 118 L214 270 L86 270 L86 118 L68 134 L38 98 Z" {...stroke} /><path d="M164 100 h18" stroke="#e2453c" strokeWidth={4} strokeLinecap="round" /></>)}
+      {id === 'minimal' && (<><path d="M96 46 L128 34 Q150 54 172 34 L204 46 L262 98 L232 134 L214 118 L214 270 L86 270 L86 118 L68 134 L38 98 Z" {...stroke} /></>)}
     </svg>
   )
 }
