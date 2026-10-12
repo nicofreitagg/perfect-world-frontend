@@ -88,7 +88,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    import('../utils/shopify').then(({ getCollectionProducts }) => {
+    import('../utils/shopifyOld').then(({ getCollectionProducts }) => {
       getCollectionProducts('rich-in-life')
         .then((col) => {
           if (col && col.products && col.products.length > 0) {

@@ -5,7 +5,7 @@ import Navigation from '../components/Layout/Navigation'
 import Footer from '../components/Layout/Footer'
 import ProductCard from '../components/Product/ProductCard'
 import QuickViewModal from '../components/Product/QuickViewModal'
-import { getCollectionProducts } from '../utils/shopify'
+import { getCollectionProducts } from '../utils/shopifyOld'
 import type { ShopifyProduct } from '../types/shopify.types'
 
 export default function RichInLifePreOrder() {
