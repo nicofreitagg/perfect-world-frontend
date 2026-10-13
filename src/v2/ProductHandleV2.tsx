@@ -65,23 +65,15 @@ export default function ProductHandleV2() {
           <div style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
             <MainPhoto images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
           </div>
-          {images.length > 1 && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-              {images.slice(0, 4).map((im, k) => (
-                <button key={im.url} type="button" onClick={() => setShot(k)} aria-pressed={k === shot} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: k === shot ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }}>
-                  <img src={im.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                </button>
-              ))}
-            </div>
-          )}
+          {images.length > 1 && <Thumbs images={images} shot={shot} colourUrl={colourFront} minimal={minimal} setShot={setShot} />}
         </div>
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div>
             {/minimal/i.test(p.title) && <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={t('The Minimal Collection')} style={{ height: 'clamp(30px, 3vw, 42px)' }} />}
-            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{minimal && minDesignOf(p.title) ? minDesignOf(p.title)!.name : p.title}</h1>
+            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{minimal && minDesignOf(p.title) ? minDesignOf(p.title)!.name : /beanie/i.test(p.title) ? t('Logo beanie') : p.title}</h1>
             {minimal && minDesignOf(p.title) && <p style={{ margin: '8px 0 0', fontSize: '18px', fontWeight: 600 }}>{t(pieceLabel(p.title))}</p>}
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
-            {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {t('goes to the partner it was made with')}</p>}
+            {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {/beanie/i.test(p.title) ? t('shared by all six partners') : t('goes to the partner it was made with')}</p>}
           </div>
           {colours.length > 1 && (
             <div>
@@ -121,6 +113,30 @@ export default function ProductHandleV2() {
 // The big photo: for Minimal, the design side of the picked colour leads (see printSide.ts).
 function MainPhoto({ images, shot, colourUrl, minimal, alt }: { images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; alt: string }) {
   const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
-  const img = (shot === 0 && (minimal ? pair?.[0] : colourUrl)) || images[shot]?.url
+  // shot 0 = the design side, -1 = the front of the same pair, otherwise a photo index.
+  const img = (shot === 0 && (minimal ? pair?.[0] : colourUrl)) || (shot === -1 && pair?.[1]) || images[shot]?.url
   return img ? <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : null
+}
+
+// Thumbnails: for Minimal, the picked colour's two photos (design first, then the front logo);
+// otherwise the first four photos.
+function Thumbs({ images, shot, colourUrl, minimal, setShot }: { images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; setShot: (n: number) => void }) {
+  const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
+  const urls = minimal && pair ? [...new Set(pair)] : images.slice(0, 4).map((im) => im.url)
+  const shown = minimal && pair && shot === 0 ? pair[0] : minimal && pair && shot === -1 ? pair[1] : images[shot]?.url
+  if (urls.length < 2) return null
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+      {urls.map((url) => {
+        const idx = images.findIndex((im) => im.url === url)
+        const k = minimal && pair ? (url === pair[0] ? 0 : -1) : Math.max(idx, 0)
+        const on = url === shown
+        return (
+          <button key={url} type="button" onClick={() => setShot(k)} aria-pressed={on} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: on ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }}>
+            <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </button>
+        )
+      })}
+    </div>
+  )
 }
