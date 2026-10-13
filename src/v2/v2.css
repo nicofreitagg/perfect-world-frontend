@@ -443,9 +443,9 @@
 
 /* Between pages: six cause swirls sweep across while the next page fades in behind them,
    so the swirls never sit over readable text. */
-.pw-pageswirl{position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;animation:pwSwirlOut 1.3s ease forwards}
-.pw-pageswirl path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pwDrawIn .75s cubic-bezier(.6,.05,.25,1) forwards;animation-delay:calc(var(--i,0) * 50ms)}
-@keyframes pwSwirlOut{0%,62%{opacity:1}100%{opacity:0}}
+.pw-pageswirl{position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;animation:pwSwirlOut 1.8s ease forwards}
+.pw-pageswirl path{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pwDrawIn 1.15s cubic-bezier(.45,.05,.25,1) forwards;animation-delay:calc(var(--i,0) * 90ms);opacity:.85}
+@keyframes pwSwirlOut{0%,60%{opacity:1}100%{opacity:0}}
 .pw-nav .pw2{animation:pwPageIn .9s ease both}
 @keyframes pwPageIn{0%,35%{opacity:0}100%{opacity:1}}
 @media (prefers-reduced-motion:reduce){.pw-draw-wait path{stroke-dashoffset:0}.pw-draw-on path,.pw-pageswirl,.pw-nav .pw2{animation:none}}
@@ -460,3 +460,21 @@
 .pw-desc li{margin:3px 0}
 .pw-desc li::marker{color:#e2453c}
 .pw-desc p:last-child{margin:22px 0 0;color:#0b0b0c}
+
+/* Minimal design view: switch designs in place, and previous/next at the end of the pieces. */
+.pw-designswitch{position:relative;flex:1 0 100%;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 0 2px;margin-top:6px}
+.pw-designswitch::-webkit-scrollbar{display:none}
+.pw-designswitch button{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border:1px solid rgba(11,11,12,.16);border-radius:999px;background:rgba(255,255,255,.7);font:inherit;font-size:13px;font-weight:600;color:#0b0b0c;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s}
+.pw-designswitch img{width:28px;height:28px;object-fit:contain;border-radius:50%;background:#f5f4f1}
+.pw-designswitch button[aria-current]{background:#0b0b0c;color:#fff;border-color:#0b0b0c;cursor:default}
+.pw-designswitch button[aria-current] img{background:#fff}
+@media (hover:hover) and (pointer:fine){.pw-designswitch button:not([aria-current]):hover{border-color:var(--c)}}
+.pw-designnav{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:48px}
+.pw-designnext{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid rgba(11,11,12,.12);border-radius:20px;background:#fff;font:inherit;color:#0b0b0c;text-align:left;cursor:pointer;transition:transform .25s,box-shadow .25s,border-color .25s}
+.pw-designnext.is-next{flex-direction:row-reverse;text-align:right}
+.pw-designnext img{width:64px;height:64px;object-fit:contain;flex:0 0 auto}
+.pw-designnext>span{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pw-designnext .pw-mono{font-size:11px;letter-spacing:.12em;color:#5c5c5c}
+.pw-designnext .pw-fat{font-size:clamp(18px,2.2vw,26px);line-height:1}
+@media (hover:hover) and (pointer:fine){.pw-designnext:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.08);border-color:var(--c)}}
+@media (max-width:760px){.pw-designnav{gap:10px;margin-top:32px}.pw-designnext{padding:10px 12px;gap:10px}.pw-designnext img{width:44px;height:44px}}

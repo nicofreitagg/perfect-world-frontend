@@ -81,6 +81,11 @@ export default function ShopV2() {
     // Land on the design name so the swirl draws in view.
     setTimeout(() => (document.querySelector('.pw-designbar') ?? document.getElementById('shop'))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }
+  // Phones: slide the design switcher so the current design's chip is in view.
+  useEffect(() => {
+    const on = document.querySelector<HTMLElement>('.pw-designswitch [aria-current]')
+    on?.parentElement?.scrollTo({ left: Math.max(0, on.offsetLeft - 16), behavior: 'smooth' })
+  }, [minDesign])
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
 
@@ -294,6 +299,14 @@ export default function ShopV2() {
       <div className="pw-designbar">
         <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
         <span className="pw-fat">{MIN_DESIGNS.find((d) => d.slug === minDesign)?.name}</span>
+        {/* Jump straight to any other design without going back to the overview. */}
+        <nav className="pw-designswitch" aria-label={tr('Minimal designs')}>
+          {MIN_DESIGNS.map((d) => (
+            <button key={d.slug} type="button" aria-current={d.slug === minDesign ? 'true' : undefined} onClick={() => d.slug !== minDesign && pickDesign(d.slug)} style={{ '--c': CAUSES.find((c) => c.slug === d.slug)?.color } as React.CSSProperties}>
+              <img src={`/v2/img/min-${d.img}.webp`} alt="" />{d.name}
+            </button>
+          ))}
+        </nav>
         {/* A swirl in the design's cause colour draws itself each time a design is picked. */}
         <PickSwirl key={minDesign} color={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
       </div>
@@ -304,6 +317,18 @@ export default function ShopV2() {
     <div key={minDesign + piece} className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map(card)}
     </div>)}
+    {tab === 'minimal' && minDesign !== 'all' && (() => {
+      // Previous and next design at the end of the pieces, so the designs read as one loop.
+      const i = MIN_DESIGNS.findIndex((d) => d.slug === minDesign)
+      const prev = MIN_DESIGNS[(i + MIN_DESIGNS.length - 1) % MIN_DESIGNS.length], next = MIN_DESIGNS[(i + 1) % MIN_DESIGNS.length]
+      const tile = (d: typeof prev, dir: 'prev' | 'next') => (
+        <button type="button" className={`pw-designnext is-${dir}`} onClick={() => pickDesign(d.slug)} style={{ '--c': CAUSES.find((c) => c.slug === d.slug)?.color } as React.CSSProperties}>
+          <img src={`/v2/img/min-${d.img}.webp`} alt="" />
+          <span><span className="pw-mono">{dir === 'prev' ? '← ' + tr('PREVIOUS DESIGN') : tr('NEXT DESIGN') + ' →'}</span><span className="pw-fat">{d.name}</span></span>
+        </button>
+      )
+      return <div className="pw-designnav">{tile(prev, 'prev')}{tile(next, 'next')}</div>
+    })()}
   </section>
 
   

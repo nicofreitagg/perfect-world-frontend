@@ -3,6 +3,7 @@ import { getPreferredColorForCollection } from '../utils/productGrouping'
 // Colour name → swatch hex (Stanley/Stella names first, then generic words).
 // Specific names come before the words they contain ("worker blue" before "blue").
 const HEX: [RegExp, string][] = [
+  [/lilac dream/i, '#d4a5b9'], [/lavender/i, '#a9a6d6'], [/purple love/i, '#7b4f9e'], [/cotton pink/i, '#f2c4cc'], [/coral/i, '#f08a78'], [/baby blue/i, '#bcd8f0'], [/bright blue/i, '#3f7fd8'], [/true royal/i, '#2a4fb0'], [/india ink/i, '#4b5157'], [/dark grey/i, '#55585c'], [/kelly/i, '#3a9a4a'], [/bright orange/i, '#f47b2a'],
   [/fiesta/i, '#e2553c'], [/worker blue/i, '#2445a3'], [/sky blue/i, '#a7c9ea'], [/light blue/i, '#bcd6ee'], [/royal blue/i, '#2f55c2'], [/blue soul/i, '#4f86c6'],
   [/french navy|navy/i, '#1d2a44'], [/indian grey/i, '#4a5664'], [/heather grey|heather/i, '#b4b4b2'], [/anthracite|charcoal/i, '#3b3d40'],
   [/green bay/i, '#5f9e8a'], [/glazed green|light green/i, '#a8c9a0'], [/kelly green/i, '#3a9a4a'], [/forest green|dark green/i, '#2c4a35'], [/olive/i, '#6b6f4a'],

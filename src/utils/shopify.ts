@@ -232,7 +232,7 @@ async function fetchProduct(handle: string): Promise<ShopifyProduct> {
             }
           }
         }
-        images(first: 10) {
+        images(first: 50) {
           edges {
             node {
               url
@@ -549,7 +549,7 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
                 }
               }
             }
-            images(first: 10) {
+            images(first: 50) {
               edges {
                 node {
                   url

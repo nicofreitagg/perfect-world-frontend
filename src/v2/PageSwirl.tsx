@@ -1,9 +1,10 @@
 import { useLayoutEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-// Moving between pages of the new site: six cause-colour swirls sweep across the whole screen
-// while the next page fades in. A different sweep every time (direction, waves, loops, colour
-// order). Not on the very first page load, and not with reduced motion.
+// Moving between pages of the new site: three thin cause-colour swirls glide across the whole
+// screen while the next page fades in. A different sweep every time (direction, waves, loops,
+// colours). Kept light on purpose (Nico, 13 Oct: "too thick, too intense").
+// Not on the very first page load, and not with reduced motion.
 let firstPage = true
 const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 
@@ -23,14 +24,15 @@ function smooth(p: Pt[]) {
   return d
 }
 
-// Six paths in unit space (0..1 on both axes, a little beyond the edges), then scaled to the screen.
+// Three paths in unit space (0..1 on both axes, a little beyond the edges), then scaled to the screen.
 function sweep(w: number, h: number) {
   const kind = ['waves', 'loops', 'diagonal', 'vertical'][Math.floor(Math.random() * 4)]
-  const freq = rnd(1.2, 2.6), amp = rnd(0.06, 0.16), phase = rnd(0, Math.PI * 2)
+  const freq = rnd(0.8, 1.6), amp = rnd(0.04, 0.09), phase = rnd(0, Math.PI * 2)
   const loopAt = rnd(0.3, 0.7)
   const flipX = Math.random() < 0.5, flipY = Math.random() < 0.5
-  const lines = SIX.map((_, i) => {
-    const off = (i - 2.5) / 6 // spreads the six lines over the whole screen
+  const shift = rnd(-0.12, 0.12)
+  const lines = [0, 1, 2].map((i) => {
+    const off = shift + (i - 1) * 0.035 // a loose band of three, somewhere near the middle
     const pts: Pt[] = []
     for (let k = 0; k <= 10; k++) {
       const t = -0.08 + (k / 10) * 1.16
@@ -39,14 +41,14 @@ function sweep(w: number, h: number) {
       else if (kind === 'diagonal') pts.push([t, t + off * 1.3 + wave])
       else pts.push([t, 0.5 + off * 1.1 + wave])
       // A loop-the-loop halfway across, like the hand-drawn swirls.
-      if (kind === 'loops' && Math.abs(t - loopAt) < 0.06) {
+      if (kind === 'loops' && i === 1 && Math.abs(t - loopAt) < 0.06) {
         const [x, y] = pts[pts.length - 1]
         pts.push([x + 0.06, y - 0.1], [x + 0.1, y - 0.02], [x + 0.03, y + 0.05], [x - 0.02, y - 0.02])
       }
     }
     return pts.map(([x, y]): Pt => [(flipX ? 1 - x : x) * w, (flipY ? 1 - y : y) * h])
   })
-  return { kind, paths: lines.map(smooth), colours: shuffle(SIX), reverse: Math.random() < 0.5 }
+  return { kind, paths: lines.map(smooth), colours: shuffle(SIX).slice(0, 3), reverse: Math.random() < 0.5 }
 }
 
 export default function PageSwirl() {
@@ -58,17 +60,17 @@ export default function PageSwirl() {
     const w = window.innerWidth, h = window.innerHeight
     root.classList.add('pw-nav')
     setSwirl({ w, h, ...sweep(w, h) })
-    const t = setTimeout(() => { root.classList.remove('pw-nav'); setSwirl(null) }, 1300)
+    const t = setTimeout(() => { root.classList.remove('pw-nav'); setSwirl(null) }, 1800)
     return () => { clearTimeout(t); root.classList.remove('pw-nav') }
   }, [])
   if (!swirl) return null
-  const stroke = Math.max(10, Math.min(swirl.w, swirl.h) * 0.028)
+  const stroke = Math.max(3.5, Math.min(swirl.w, swirl.h) * 0.006)
   // Rendered on <body>, outside the page that is fading in, so the swirls stay fully visible.
   return createPortal(
     <svg className="pw-pageswirl" viewBox={`0 0 ${swirl.w} ${swirl.h}`} aria-hidden="true">
       {swirl.paths.map((d, i) => (
         <path key={i} d={d} pathLength={1000} stroke={swirl.colours[i]} strokeWidth={stroke}
-          style={{ '--i': swirl.reverse ? 5 - i : i } as React.CSSProperties} />
+          style={{ '--i': swirl.reverse ? 2 - i : i } as React.CSSProperties} />
       ))}
     </svg>,
     document.body,
