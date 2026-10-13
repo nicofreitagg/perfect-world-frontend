@@ -8,9 +8,12 @@ const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 import { Header, Footer } from './Chrome'
 import { A } from './A'
 import GiveReceipt, { PieceSketch } from './GiveReceipt'
+import { getAllProducts } from '../utils/shopify'
+import type { ShopifyProduct } from '../types/shopify.types'
+import { useDesignPairOrGuess } from './printSide'
 import PosterVideo from './PosterVideo'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, pieceOf, type CauseKey } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -21,7 +24,7 @@ import { FAQ } from './faq'
 const Globe3D = lazy(() => import('./Globe3D'))
 
 
-// New pieces launching on 11.11, shown as drawings until the samples are photographed.
+// New pieces launching on 11.11: the real Minimal listing photo once Shopify has one, a drawing until then.
 const NEW = [
   ...NEW_PIECES.map((n) => ({ id: n.id, name: n.name, note: n.sub, price: n.price, give: n.give, from: false, split: 'split' in n })),
 ]
@@ -39,6 +42,13 @@ const AMOUNTS = [
 ]
 
 // A loopy line in one cause colour, run edge to edge in the space between sections (never over text).
+// A new piece's listing photo: the back design first, the front logo on hover.
+function NewShot({ p, alt }: { p: ShopifyProduct; alt: string }) {
+  const pair = useDesignPairOrGuess(p.images)
+  if (!pair) return null
+  return (<><img className="pwl-new-photo" src={pair[0]} alt={alt} loading="lazy" />{pair[1] !== pair[0] && <img className="pwl-new-photo pwl-new-alt" src={pair[1]} alt="" aria-hidden="true" loading="lazy" />}</>)
+}
+
 function Swirl({ color, flip = false }: { color: string; flip?: boolean }) {
   return (
     <svg className="pwl-swirl" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={flip ? { transform: 'scaleX(-1)' } : undefined}>
@@ -71,6 +81,10 @@ export default function HomeV2() {
 
   // The 3D globe only loads when the causes section comes close, and only on larger screens.
   const globeBox = useRef<HTMLDivElement>(null)
+  const [live, setLive] = useState<ShopifyProduct[]>([])
+  useEffect(() => { getAllProducts().then((all) => setLive(all.filter((p) => /minimal/i.test(p.title) && p.images.length))).catch(() => {}) }, [])
+  const newPhoto = (id: string) => live.find((p) => pieceOf(p.title) === id)
+  const sketches = NEW.some((n) => !newPhoto(n.id))
   const [show3d, setShow3d] = useState(false)
   const [allQ, setAllQ] = useState(false)
   const [globe3d, setGlobe3d] = useState(false)
@@ -188,18 +202,18 @@ export default function HomeV2() {
         </div>
       </div>
       <ul className="pwl-new">
-        {NEW.map((n) => (
+        {NEW.map((n) => { const ph = newPhoto(n.id); return (
           <li key={n.id} >
-            <A href="/shop" className="pwl-new-card">
-              <span className="pwl-new-img"><PieceSketch id={n.id} /><span className="pwl-tag">{tr('New')}</span></span>
+            <A href={ph ? `/product/${ph.handle}` : '/shop'} className="pwl-new-card">
+              <span className={`pwl-new-img${ph ? ' has-photo' : ''}`}>{ph ? <NewShot p={ph} alt={tr(n.name)} /> : <PieceSketch id={n.id} />}<span className="pwl-tag">{tr('New')}</span></span>
               <span className="pwl-new-name">{tr(n.name)}</span>
               <span className="pwl-new-note">{tr(n.note)}</span>
               <span className="pwl-new-meta">€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
             </A>
           </li>
-        ))}
+        ) })}
       </ul>
-      <p className="pwl-fine">{tr('Drawings, not product photos. Photos follow once the samples are made.')} {tr('Every piece is made to order, with care. Allow 1.5 to 2 weeks, so wish early.')}</p>
+      <p className="pwl-fine">{sketches && tr('Drawings, not product photos. Photos follow once the samples are made.')} {tr('Every piece is made to order, with care. Allow 1.5 to 2 weeks, so wish early.')}</p>
     </div>
   </section>
 

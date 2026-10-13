@@ -1,3 +1,4 @@
+import { extractProductType } from '../utils/productGrouping'
 // Fixed donation per piece, confirmed for the 11.11 model.
 export const PIECES = {
   tote: { name: 'Tote bag', price: '27.77', give: '7.77' },
@@ -108,3 +109,11 @@ export const minDesignOf = (title: string) => {
 
 // Women's pieces in Shopify titles (English or German, or the Stanley/Stella model name).
 export const WOMEN = /wom[ae]n|damen|ladies|muser|fitted/i
+
+// Which piece a Shopify title is: the new pieces first, then the usual tee/oversized/hoodie/tote.
+export const pieceOf = (title: string): string => {
+  if (/bomber/i.test(title)) return 'bomber'
+  if (/beanie/i.test(title)) return 'beanie'
+  if (WOMEN.test(title)) return 'women'
+  return extractProductType(title)
+}

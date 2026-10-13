@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { CAUSES, causeBySlug, causeFg, causeTeaser } from './causes'
 import { PIECES, icon } from './data'
 import { getAllProducts } from '../utils/shopify'
+import { useDesignPairOrGuess } from './printSide'
 import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 import NotFound from '../pages/NotFound'
@@ -41,11 +42,11 @@ export default function ProductV2() {
   const [params] = useSearchParams()
   const [colour, setColour] = useState(params.get('colour') ?? '')
   const [size, setSize] = useState('M')
-  const [shotIdx, setShot] = useState(0)
+  const [shot, setShot] = useState<number | null>(null)
   const [added, setAdded] = useState(false)
 
   useEffect(() => { getAllProducts().then(setAll).catch(() => setAll([])) }, [])
-  useEffect(() => { setShot(0); setAdded(false) }, [slug, kind, colour, size])
+  useEffect(() => { setShot(null); setAdded(false) }, [slug, kind, colour, size])
 
   // This design's real Shopify products, grouped by piece.
   const mine = useMemo(() => (all ?? []).filter((p) => raw && getCollectionKey(p.title) === raw.name && !/minimal/i.test(p.title)), [all, raw])
@@ -68,6 +69,10 @@ export default function ProductV2() {
   const variants = product?.variants ?? []
   const variant = variants.find((v) => sizeOf(v) === size && v.availableForSale) ?? variants.find((v) => v.availableForSale)
   const images = product?.images ?? []
+  // Opens on the back print (the design), not the front logo; Shopify's photo order varies.
+  const pair = useDesignPairOrGuess(images.length ? images : undefined)
+  const lead = pair ? Math.max(images.findIndex((im) => im.url === pair[0]), 0) : 0
+  const shotIdx = shot ?? lead
   const photo = images[shotIdx]?.url ?? ''
   const price = variant ? Number(variant.price.amount) : Number(piece.price)
 
@@ -89,7 +94,7 @@ export default function ProductV2() {
   const addLabel = all === null ? tr('LOADING…') : !variant ? tr(all.length ? 'SOLD OUT' : 'SHOP IS OFFLINE, TRY AGAIN SOON') : added ? tr('ADDED. THANK YOU.') : `${tr('ADD TO CART')} · €${money(price)}`
   const add = () => {
     if (!variant || !product) return
-    addToCart({ variantId: variant.id, productId: product.id, title: product.title, variant: variant.title, price, image: images[0]?.url ?? raw.print, quantity: 1 })
+    addToCart({ variantId: variant.id, productId: product.id, title: product.title, variant: variant.title, price, image: images[lead]?.url ?? raw.print, quantity: 1 })
     setAdded(true)
     openCart()
   }

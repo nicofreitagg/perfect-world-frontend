@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, WOMEN, MIN_DESIGNS, minDesignOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
 import { isLaunched } from './launch'
 import { getAllProducts } from '../utils/shopify'
-import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
+import { getCollectionKey, extractColorFromTitle } from '../utils/productGrouping'
 import type { ShopifyProduct } from '../types/shopify.types'
 
 // Home: one piece, its fixed amount and who receives it, side by side.
@@ -36,12 +36,6 @@ const FALLBACK: Record<string, string[]> = {
   hoodie: ['Black', 'Sand'], tote: ['Black', 'Natural'], bomber: ['Black', 'Khaki'], beanie: ['Black', 'Natural'],
 }
 // Which receipt piece a Shopify title is (the new pieces first, then the classic types).
-const pieceOf = (title: string): string => {
-  if (/bomber/i.test(title)) return 'bomber'
-  if (/beanie/i.test(title)) return 'beanie'
-  if (WOMEN.test(title)) return 'women'
-  return extractProductType(title)
-}
 const CAUSE_COLOUR: Record<string, string> = { 'one-world': 'blue soul', 'cool-down': 'green bay', 'endangered-oceans': 'bright blue', 'talk-about-it': 'lavender', 'wild-at-heart': 'india ink', 'rich-in-life': 'red brown' }
 const OG_OVERSIZED: Record<CauseKey, string> = { wild: 'French Navy', rich: 'Mocha', 'one-world': 'Violet', cool: 'Khaki', talk: 'Black', oceans: 'Dusk' }
 
@@ -73,8 +67,9 @@ export default function GiveReceipt() {
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
   // The listed colour's own photo when Shopify has one, then the product photo; otherwise artwork or a sketch.
   const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
-  const designPair = useDesignPairOrGuess(min && product ? product.images : undefined, colourPhoto)
-  const photo = (min && product ? designPair?.[0] : colourPhoto || product?.images[0]?.url) || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  // OG and Minimal both: the back print first, never the small front logo.
+  const designPair = useDesignPairOrGuess(product?.images, colourPhoto)
+  const photo = (product ? designPair?.[0] : '') || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
   const designName = MIN_DESIGNS.find((x) => x.slug === cause.slug)?.name ?? causeTitle(cause.name)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)

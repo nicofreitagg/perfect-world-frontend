@@ -449,3 +449,7 @@
 .pwl-chip:disabled{opacity:.35;cursor:not-allowed;border-style:dashed;background:transparent}
 .pwl-chip:disabled .pwl-chip-new{display:none}
 .pwl-chip-art{width:26px;height:26px;object-fit:contain;margin-left:-6px}
+.pwl-new-img.has-photo{overflow:hidden;background:#fff}
+.pwl-new-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px;transition:opacity .35s}
+.pwl-new-alt{opacity:0}
+@media (hover:hover) and (pointer:fine){.pwl-new-card:hover .pwl-new-alt{opacity:1}}

@@ -155,7 +155,7 @@ export default function ShopV2() {
         const c = extractColorFromTitle(p.title).trim()
         if (c && !seen.has(c.toLowerCase())) seen.set(c.toLowerCase(), p)
       }
-      return rankColours(name, [...seen.values()].map((p) => ({ name: extractColorFromTitle(p.title).trim(), img: p.images[0]?.url ?? '' })), (x) => x.name)
+      return rankColours(name, [...seen.values()].map((p) => ({ name: extractColorFromTitle(p.title).trim(), img: p.images[0]?.url ?? '', photos: p.images })), (x) => x.name)
     }
     const card = (c: (typeof CAUSES)[number]) => ({ ...blank, ico: icon(c.id, 'a'), name: c.name, sub: c.partner + ' · ' + tr(SHORT[c.id]), price: tr('from') + ' €' + PIECES.shirt.price, give: tr('from') + ' €' + PIECES.shirt.give + ' ' + tr('to') + ' ' + c.partner, bg: TINT[c.id], isPrint: !!c.print, isPlaceholderPrint: !c.print, img: c.print, grad: c.bg, swatches: [{ c: '#1b1b1d' }, { c: '#f2efe8' }] as { c: string; href?: string; label?: string }[], href: `/design/${c.slug}`, addLabel: tr('Choose your piece') })
     products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
@@ -164,7 +164,7 @@ export default function ShopV2() {
       if (!cols.length) return [card(c)]
       const swatches = cols.map((x) => ({ c: hexOf(x.name), href: link(x.name), label: tr(x.name) }))
       // A picked cause splits into one card per colour, like the Minimal filters.
-      if (cause !== 'all') return cols.map((x) => ({ ...card(c), sub: tr(x.name) + ' · ' + c.partner, img: x.img || c.print, isPrint: !!(x.img || c.print), isPlaceholderPrint: !(x.img || c.print), swatches: [{ c: hexOf(x.name) }], href: link(x.name) }))
+      if (cause !== 'all') return cols.map((x) => ({ ...card(c), sub: tr(x.name) + ' · ' + c.partner, img: x.img || c.print, isPrint: !!(x.img || c.print), isPlaceholderPrint: !(x.img || c.print), photos: x.photos, swatches: [{ c: hexOf(x.name) }], href: link(x.name) }))
       // The card itself opens the lead colour, which is the one its picture shows.
       return [{ ...card(c), sub: cols.map((x) => tr(x.name)).join(' · '), swatches, href: link(cols[0].name) }]
     })
@@ -176,7 +176,7 @@ export default function ShopV2() {
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.pick && <button type="button" className="pw-cardlink" onClick={p.pick} aria-label={`${p.name}: ${p.addLabel}`} />}
-            {p.isPrint && (<><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
+            {p.isPrint && (p.photos.length ? <OgShot photos={p.photos} alt={`${p.name}, ${p.sub}`} /> : <><img src={p.img} alt={`${p.name} back print`} className="pw-art" style={{ width: "78%", height: "78%", objectFit: "contain", filter: "drop-shadow(0 18px 20px rgba(0,0,0,.16))" }} /></>)}
             {p.isPlaceholderPrint && (<><span className="pw-art" style={{ position: "absolute", inset: "0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "10px", background: p.grad }}><img src="/v2/img/banner-hands.png" alt="" className="pw-hands" /><span className="pw-hand" style={{ position: "relative", fontSize: "44px", lineHeight: "1", textAlign: "center" }}>{tr(p.name)}</span><span className="pw-mono" style={{ position: "relative", fontSize: "11px" }}>{tr("[BACK PRINT IMAGE]")}</span></span></>)}
             {p.isGarment && (<>
               <svg className="pw-art" width="72%" height="72%" viewBox="0 0 300 340" role="img" aria-label={`${p.name} illustration`} style={{ filter: "drop-shadow(0 20px 22px rgba(0,0,0,.18))" }}>
@@ -394,4 +394,10 @@ function PickSwirl({ color }: { color: string }) {
       <path pathLength={1000} d="M-20 96 C 140 20, 260 130, 420 70 C 540 26, 600 118, 540 112 C 470 104, 500 18, 640 34 C 820 56, 880 132, 1040 84 C 1150 50, 1180 14, 1130 22 C 1080 30, 1110 108, 1240 92 C 1330 82, 1400 40, 1460 52" stroke={color} />
     </svg>
   )
+}
+
+// An OG colour's own product photo, back print first (Shopify often lists the front first).
+function OgShot({ photos, alt }: { photos: { url: string }[]; alt: string }) {
+  const pair = useDesignPairOrGuess(photos)
+  return pair ? <img src={pair[0]} alt={alt} loading="lazy" className="pw-art" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} /> : null
 }
