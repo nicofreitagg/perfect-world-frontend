@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, WOMEN, minDesignOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, WOMEN, MIN_DESIGNS, minDesignOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
@@ -17,14 +17,15 @@ type PieceId = 'women' | 'tshirt' | 'oversized' | 'hoodie' | 'tote' | 'bomber' |
 const women = NEW_PIECES.find((n) => n.id === 'women')!
 const bomber = NEW_PIECES.find((n) => n.id === 'bomber')!
 const beanie = NEW_PIECES.find((n) => n.id === 'beanie')!
-const ROWS: { id: PieceId; label: string; fit: string; price: string; give: string; isNew?: boolean; split?: boolean }[] = [
-  { id: 'women', label: "Women's T-shirt", fit: 'women', price: women.price, give: women.give, isNew: true },
+// minOnly: made in the Minimal collection only for now (Nico 13 Oct), so not pickable under OG.
+const ROWS: { id: PieceId; label: string; fit: string; price: string; give: string; isNew?: boolean; split?: boolean; minOnly?: boolean }[] = [
+  { id: 'women', label: "Women's T-shirt", fit: 'women', price: women.price, give: women.give, isNew: true, minOnly: true },
   { id: 'tshirt', label: 'T-shirt', fit: 'unisex', price: PIECES.shirt.price, give: PIECES.shirt.give },
   { id: 'oversized', label: 'Oversized shirt', fit: 'unisex', price: PIECES.oversized.price, give: PIECES.oversized.give },
   { id: 'hoodie', label: 'Hoodie', fit: 'unisex', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
   { id: 'tote', label: 'Tote bag', fit: 'one size', price: PIECES.tote.price, give: PIECES.tote.give },
-  { id: 'bomber', label: 'Bomber jacket', fit: 'unisex', price: bomber.price, give: bomber.give, isNew: true },
-  { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true },
+  { id: 'bomber', label: 'Bomber jacket', fit: 'unisex', price: bomber.price, give: bomber.give, isNew: true, minOnly: true },
+  { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true, minOnly: true },
 ]
 const eur = (s: string) => '€' + s
 
@@ -41,6 +42,7 @@ const pieceOf = (title: string): string => {
   if (WOMEN.test(title)) return 'women'
   return extractProductType(title)
 }
+const CAUSE_COLOUR: Record<string, string> = { 'one-world': 'blue soul', 'cool-down': 'green bay', 'endangered-oceans': 'bright blue', 'talk-about-it': 'lavender', 'wild-at-heart': 'india ink', 'rich-in-life': 'red brown' }
 const OG_OVERSIZED: Record<CauseKey, string> = { wild: 'French Navy', rich: 'Mocha', 'one-world': 'Violet', cool: 'Khaki', talk: 'Black', oceans: 'Dusk' }
 
 export default function GiveReceipt() {
@@ -58,10 +60,14 @@ export default function GiveReceipt() {
   const colours = useMemo(() => {
     // Colours from the product titles (OG) or from the Colour option (the new Minimal listings).
     const seen = [...new Set([...matches.map((p) => extractColorFromTitle(p.title)), ...matches.flatMap((p) => variantColours(p.variants))].filter(Boolean))]
-    if (seen.length) return seen
+    if (seen.length) {
+      // Minimal T-shirts and hoodies open on the design's own cause colour.
+      const own = min && (piece === 'tshirt' || piece === 'hoodie') ? seen.find((c) => CAUSE_COLOUR[cause.slug] && c.toLowerCase().includes(CAUSE_COLOUR[cause.slug])) : undefined
+      return own ? [own, ...seen.filter((c) => c !== own)] : seen
+    }
     if (piece === 'oversized' && !min) return [OG_OVERSIZED[design]]
     return FALLBACK[piece]
-  }, [matches, piece, min, design])
+  }, [matches, piece, min, design, cause.slug])
   const [wanted, setColour] = useState('')
   const colour = colours.includes(wanted) ? wanted : colours[0]
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
@@ -70,32 +76,39 @@ export default function GiveReceipt() {
   const designPair = useDesignPairOrGuess(min && product ? product.images : undefined, colourPhoto)
   const photo = (min && product ? designPair?.[0] : colourPhoto || product?.images[0]?.url) || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
+  const designName = MIN_DESIGNS.find((x) => x.slug === cause.slug)?.name ?? causeTitle(cause.name)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
   const key = `${line}-${piece}-${row.split ? 'all' : design}-${colour}`
 
   const [step, setStep] = useState(0)
   const next = (from: number) => setStep(from + 1)
-  const chip = (on: boolean, onClick: () => void, children: ReactNode, k: string) => (
-    <button key={k} type="button" className="pwl-chip" aria-pressed={on} onClick={onClick}>{children}</button>
+  const chip = (on: boolean, onClick: () => void, children: ReactNode, k: string, off = false) => (
+    <button key={k} type="button" className="pwl-chip" aria-pressed={on} disabled={off} onClick={onClick}>{children}</button>
   )
   const steps = [
     { id: 'collection', label: t('Collection'), value: min ? 'Minimal' : 'OG', body: (
       <div className="pwl-chips">
         {chip(min, () => { setLine('minimal'); next(0) }, <>Minimal<span className="pwl-chip-new">{t('new')}</span></>, 'm')}
-        {chip(!min, () => { setLine('og'); next(0) }, <>OG</>, 'o')}
+        {chip(!min, () => { setLine('og'); if (row.minOnly) setPiece('tshirt'); next(0) }, <>OG</>, 'o')}
       </div>
     ) },
-    { id: 'piece', label: t('Piece'), value: t(row.label), body: (
+    { id: 'piece', label: t('Piece'), value: t(row.label), body: (<>
       <div className="pwl-chips">
-        {ROWS.map((r) => chip(r.id === piece, () => { setPiece(r.id); next(1) }, <>{t(r.label)}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}</>, r.id))}
+        {ROWS.map((r) => chip(r.id === piece, () => { setPiece(r.id); next(1) }, <>{t(r.label)}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}</>, r.id, !min && r.minOnly))}
       </div>
-    ) },
-    { id: 'design', label: t('Design'), value: row.split ? t('All six') : causeTitle(cause.name), body: row.split ? (
+      {!min && <p className="pwl-note">{t("Women's T-shirt, bomber and beanie are Minimal only for now.")}</p>}
+    </>) },
+    { id: 'design', label: t('Design'), value: row.split ? t('All six') : min ? designName : causeTitle(cause.name), body: row.split ? (
       <><p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
         <div className="pwl-chips">{chip(true, () => next(2), <>{t('Got it')}</>, 'ok')}</div></>
     ) : (
       <><div className="pwl-chips">
-        {CAUSES.map((c) => chip(c.id === design, () => { setDesign(c.id); next(2) }, <><span className="pwl-dot" style={{ background: c.color }} aria-hidden="true" />{causeTitle(c.name)}</>, c.id))}
+        {CAUSES.map((c) => {
+          const d = MIN_DESIGNS.find((x) => x.slug === c.slug)
+          return chip(c.id === design, () => { setDesign(c.id); next(2) }, min && d
+            ? <><img className="pwl-chip-art" src={`/v2/img/min-${d.img}.webp`} alt="" aria-hidden="true" />{d.name}</>
+            : <><span className="pwl-dot" style={{ background: c.color }} aria-hidden="true" />{causeTitle(c.name)}</>, c.id)
+        })}
       </div>
       <p className="pwl-note">{t('The design decides the partner. Each design was made with one of them.')}</p></>
     ) },
@@ -147,7 +160,7 @@ export default function GiveReceipt() {
             <span>{t('11:11 · WHAT THIS PIECE GIVES')}</span>
           </div>
           <dl>
-            <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${causeTitle(cause.name)}${min ? ' Minimal' : ''} · ${t(row.label)}`}</dd></div>
+            <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${min ? designName : causeTitle(cause.name)} · ${t(row.label)}`}</dd></div>
             <div><dt>{t('COLOUR')}</dt><dd>{t(colour)}</dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">

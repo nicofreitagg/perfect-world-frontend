@@ -3,6 +3,7 @@ import { A } from './A'
 import { useT } from './t'
 import { Lines } from './Seams'
 import LangNotice from './LangNotice'
+import PageSwirl from './PageSwirl'
 
 // Shared header and footer for every page of the new site.
 // Short labels so the menu fits one line on a phone, in both languages.
@@ -35,6 +36,8 @@ export function Header({ active, cartCount, openCart, dark = false, big = false 
   const ink = dark ? '#ffffff' : '#0b0b0c'
   const line = dark ? 'rgba(255,255,255,.35)' : 'rgba(11,11,12,.3)'
   return (
+  <>
+  <PageSwirl />
   <header className="pw-hdr" style={{ position: "relative", zIndex: 80, color: ink, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "16px", padding: "20px clamp(16px, 4vw, 56px)" }}>
     <A href="/" aria-label="Perfect World, home" style={{ display: "block", lineHeight: "0" }}><img src={dark ? "/v2/img/logo-white.png" : "/v2/img/logo-black.png"} alt="Perfect World" style={{ height: big ? "clamp(48px, 5vw, 68px)" : "40px", width: "auto", display: "block" }} /></A>
     <nav aria-label="Main" className="pw-hdr-nav" style={{ display: "flex", flexWrap: "wrap", gap: "26px", fontSize: "14px", fontWeight: "600" }}>
@@ -46,6 +49,7 @@ export function Header({ active, cartCount, openCart, dark = false, big = false 
     </div>
     <LangNotice />
   </header>
+  </>
   )
 }
 

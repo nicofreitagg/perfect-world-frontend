@@ -446,3 +446,6 @@
 .pwl-min-new{position:absolute;right:2%;top:-6%;transform:rotate(8deg);background:#c0322a;color:#fff;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(13px,1.5vw,20px);letter-spacing:.08em;text-transform:uppercase;padding:.35em .8em;border-radius:999px;box-shadow:0 6px 16px -8px rgba(192,50,42,.8)}
 @media (max-width:760px){.pwl-min-new{top:-34%;right:0}}
 .pwl-min>.pwl-wrap{width:100%;min-width:0;box-sizing:border-box}.pwl-min-row{min-width:0}
+.pwl-chip:disabled{opacity:.35;cursor:not-allowed;border-style:dashed;background:transparent}
+.pwl-chip:disabled .pwl-chip-new{display:none}
+.pwl-chip-art{width:26px;height:26px;object-fit:contain;margin-left:-6px}

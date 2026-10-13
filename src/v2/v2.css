@@ -435,3 +435,17 @@
 @keyframes pw-front-off{0%,49.9%{opacity:1}50%,100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.pw-prod .pw-photo2{opacity:0!important}}
 .pw-designbar{scroll-margin-top:90px}
+
+/* Seam lines draw themselves in, one after another, when they scroll into view. */
+.pw-draw-wait path{stroke-dasharray:1000;stroke-dashoffset:1000}
+.pw-draw-on path{animation:pwDrawIn 1.1s cubic-bezier(.6,.05,.25,1) forwards;animation-delay:calc(var(--i,0) * 90ms)}
+@keyframes pwDrawIn{to{stroke-dashoffset:0}}
+
+/* Between pages: six cause swirls sweep across while the next page fades in behind them,
+   so the swirls never sit over readable text. */
+.pw-pageswirl{position:fixed;inset:0;width:100vw;height:100vh;z-index:9999;pointer-events:none;animation:pwSwirlOut 1.1s ease forwards}
+.pw-pageswirl path{fill:none;stroke-width:9;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1000;stroke-dashoffset:1000;animation:pwDrawIn .7s cubic-bezier(.6,.05,.25,1) forwards;animation-delay:calc(var(--i,0) * 45ms)}
+@keyframes pwSwirlOut{0%,55%{opacity:1}100%{opacity:0}}
+.pw-nav .pw2{animation:pwPageIn .9s ease both}
+@keyframes pwPageIn{0%,35%{opacity:0}100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.pw-draw-wait path{stroke-dashoffset:0}.pw-draw-on path,.pw-pageswirl,.pw-nav .pw2{animation:none}}
