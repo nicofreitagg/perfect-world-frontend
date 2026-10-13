@@ -36,6 +36,8 @@ export interface ShopifyProduct {
   id: string
   title: string
   description: string
+  // Formatted description (paragraphs, lists) from the Shopify editor; only fetched for single products.
+  descriptionHtml?: string
   handle: string
   priceRange: ShopifyPriceRange
   images: ShopifyImage[]
@@ -98,6 +100,7 @@ export interface GraphQLProductNode {
   id: string
   title: string
   description: string
+  descriptionHtml?: string
   handle: string
   availableForSale: boolean
   priceRange: ShopifyPriceRange

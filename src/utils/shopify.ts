@@ -210,6 +210,7 @@ async function fetchProduct(handle: string): Promise<ShopifyProduct> {
         id
         title
         description
+        descriptionHtml
         handle
         availableForSale
         priceRange {
@@ -273,6 +274,7 @@ async function fetchProduct(handle: string): Promise<ShopifyProduct> {
     id: product.id,
     title: product.title,
     description: product.description,
+    descriptionHtml: product.descriptionHtml,
     handle: product.handle,
     availableForSale: product.availableForSale,
     priceRange: product.priceRange,

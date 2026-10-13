@@ -10,6 +10,7 @@ import { useT } from './t'
 import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
 import { getProduct } from '../utils/shopify'
+import { cleanDescription } from './richText'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 
@@ -109,7 +110,7 @@ export default function ProductHandleV2() {
           <button type="button" disabled={!variant} onClick={() => { if (!variant) return; addToCart({ variantId: variant.id, productId: p.id, title: p.title, variant: variant.title, price, image: p.images[0]?.url ?? '', quantity: 1 }); openCart() }} style={{ minHeight: '56px', borderRadius: '999px', border: 'none', background: '#0b0b0c', color: '#fff', fontFamily: 'inherit', fontWeight: 700, fontSize: '16px', cursor: variant ? 'pointer' : 'not-allowed', opacity: variant ? 1 : 0.5 }}>
             {variant ? `${t('ADD TO CART')} · €${price.toFixed(2)}` : t('SOLD OUT')}
           </button>
-          {p.description && <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, color: '#3a3a3a' }}>{p.description}</p>}
+          {p.descriptionHtml ? <div className="pw-desc" dangerouslySetInnerHTML={{ __html: cleanDescription(p.descriptionHtml) }} /> : p.description && <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, color: '#3a3a3a' }}>{p.description}</p>}
           <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{t('MADE TO ORDER · ABOUT 1½ TO 2 WEEKS · SHIPPING €5')}</p>
         </div>
       </section>
