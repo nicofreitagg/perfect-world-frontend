@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, pieceOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
@@ -50,7 +50,7 @@ export default function GiveReceipt() {
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
   const min = line === 'minimal'
-  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && (getCollectionKey(p.title) === cause.name || (min && minDesignOf(p.title)?.slug === cause.slug)) && pieceOf(p.title) === piece), [products, cause.name, cause.slug, piece, min])
+  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && (piece === 'beanie' || getCollectionKey(p.title) === cause.name || (min && minDesignOf(p.title)?.slug === cause.slug)) && pieceOf(p.title) === piece), [products, cause.name, cause.slug, piece, min])
   const colours = useMemo(() => {
     // Colours from the product titles (OG) or from the Colour option (the new Minimal listings).
     const seen = [...new Set([...matches.map((p) => extractColorFromTitle(p.title)), ...matches.flatMap((p) => variantColours(p.variants))].filter(Boolean))]
@@ -69,7 +69,7 @@ export default function GiveReceipt() {
   const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
   // OG and Minimal both: the back print first, never the small front logo.
   const designPair = useDesignPairOrGuess(product?.images, colourPhoto)
-  const photo = (product ? designPair?.[0] : '') || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const photo = (product ? designPair?.[0] : '') || (piece === 'beanie' && colour === 'Black' ? BEANIE_MOCKUP : '') || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
   const designName = MIN_DESIGNS.find((x) => x.slug === cause.slug)?.name ?? causeTitle(cause.name)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
@@ -141,7 +141,7 @@ export default function GiveReceipt() {
           ) : (
             <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} fill={hexOf(colour)} />
           )}
-          <figcaption>{photo ? (product ? t('Product photo') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
+          <figcaption>{photo ? (product ? t('Product photo') : photo === BEANIE_MOCKUP ? t('Mockup') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
         </figure>
 
         <svg className="pwl-give-line" viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true" key={'l' + key}>

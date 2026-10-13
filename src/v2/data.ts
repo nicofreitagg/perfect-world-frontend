@@ -8,6 +8,9 @@ export const PIECES = {
 } as const
 
 // New pieces, shown as "coming soon" placeholders. Prices are Claude's suggestion (9 Oct), not confirmed by Nico yet.
+// Mockup of the black logo beanie (Nico, 13 Oct), shown until the beanie has its own Shopify listing.
+export const BEANIE_MOCKUP = '/v2/img/beanie-black.webp'
+
 export const NEW_PIECES = [
   { id: 'women', name: "Women's T-shirt", sub: 'Fitted cut · made with one partner', price: '33.33', give: '11.11', fill: '#1b1b1d', bg: '#e9e7e2' },
   { id: 'bomber', name: 'Bomber jacket', sub: 'Made with one partner', price: '111.11', give: '44.44', fill: '#1d2a44', bg: '#dedbd4' },

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, minDesignOf, icon, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, icon, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
@@ -142,11 +142,10 @@ export default function ShopV2() {
       return { ...blank, name: d.name, sub: c.partner + (p ? ' · ' + tr(p.label) : ''), price: p ? '€' + p.price : tr('from') + ' €' + PIECES.tote.price, give: (p ? '' : tr('from') + ' ') + '€' + (p ? p.give : PIECES.tote.give) + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', addLabel: tr('Coming 11.11') }
     })
   } else if (tab === 'minimal') {
-    // The logo beanie has no design: one card per colour.
-    products = MINIMAL.filter((m) => m.kind === 'beanie').map((m) => {
-      const p = PIECE_LIST.find((x) => x.id === m.kind)!
-      return { ...blank, name: m.name, sub: tr(m.colour), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: m.bg, fill: m.fill, isGarment: true, isBeanie: true, isNew: true, swatches: [{ c: m.fill }], href: '', addLabel: tr('Coming 11.11') }
-    })
+    // The logo beanie has no design. Until its Shopify listing exists: one card with the mockup, both colours.
+    const p = PIECE_LIST.find((x) => x.id === 'beanie')!
+    const kinds = MINIMAL.filter((m) => m.kind === 'beanie')
+    products = [{ ...blank, name: kinds[0].name, sub: kinds.map((m) => tr(m.colour)).join(' · '), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: '#ffffff', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: kinds.map((m) => ({ c: m.fill })), href: '', addLabel: tr('Coming 11.11') }]
   } else {
     // T-shirt colours per design from Shopify, each opening the product page on that colour.
     const coloursOf = (name: string) => {

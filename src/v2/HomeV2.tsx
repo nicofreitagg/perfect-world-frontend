@@ -13,7 +13,7 @@ import type { ShopifyProduct } from '../types/shopify.types'
 import { useDesignPairOrGuess } from './printSide'
 import PosterVideo from './PosterVideo'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, pieceOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, icon, pieceOf, type CauseKey } from './data'
 import { isLaunched } from './launch'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
@@ -84,7 +84,7 @@ export default function HomeV2() {
   const [live, setLive] = useState<ShopifyProduct[]>([])
   useEffect(() => { getAllProducts().then((all) => setLive(all.filter((p) => /minimal/i.test(p.title) && p.images.length))).catch(() => {}) }, [])
   const newPhoto = (id: string) => live.find((p) => pieceOf(p.title) === id)
-  const sketches = NEW.some((n) => !newPhoto(n.id))
+  const sketches = NEW.some((n) => !newPhoto(n.id) && n.id !== 'beanie')
   const [show3d, setShow3d] = useState(false)
   const [allQ, setAllQ] = useState(false)
   const [globe3d, setGlobe3d] = useState(false)
@@ -205,7 +205,7 @@ export default function HomeV2() {
         {NEW.map((n) => { const ph = newPhoto(n.id); return (
           <li key={n.id} >
             <A href={ph ? `/product/${ph.handle}` : '/shop'} className="pwl-new-card">
-              <span className={`pwl-new-img${ph ? ' has-photo' : ''}`}>{ph ? <NewShot p={ph} alt={tr(n.name)} /> : <PieceSketch id={n.id} />}<span className="pwl-tag">{tr('New')}</span></span>
+              <span className={`pwl-new-img${ph || n.id === 'beanie' ? ' has-photo' : ''}`}>{ph ? <NewShot p={ph} alt={tr(n.name)} /> : n.id === 'beanie' ? <img className="pwl-new-photo" style={{ objectFit: "contain" }} src={BEANIE_MOCKUP} alt={tr(n.name)} loading="lazy" /> : <PieceSketch id={n.id} />}<span className="pwl-tag">{tr('New')}</span></span>
               <span className="pwl-new-name">{tr(n.name)}</span>
               <span className="pwl-new-note">{tr(n.note)}</span>
               <span className="pwl-new-meta">€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
