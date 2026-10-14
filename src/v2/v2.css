@@ -504,17 +504,22 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 /* Giving hero: the price tag you play with */
 .pw-givehero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,4vw,64px);align-items:center}
 @media (max-width:900px){.pw-givehero{grid-template-columns:1fr}}
-.pw-givetag{position:relative;background:#fbf6ec;border-radius:18px 18px 18px 18px;padding:46px clamp(20px,2.4vw,32px) 28px;box-shadow:0 24px 50px rgba(70,48,25,.16);transform:rotate(1.5deg);font-family:'JetBrains Mono',monospace;color:#1c1813}
-.pw-givetag::before{content:'';position:absolute;left:50%;top:-58px;width:2px;height:66px;background:linear-gradient(#c0322a,#c0322a);transform:translateX(-50%) rotate(-6deg);transform-origin:bottom}
+.pw-givetag{position:relative;background:#fbf6ec;border-radius:18px 18px 18px 18px;padding:28px clamp(20px,2.4vw,32px) 26px;box-shadow:0 24px 50px rgba(70,48,25,.16);font-family:'JetBrains Mono',monospace;color:#1c1813}
 .pw-givetag-hole{position:absolute;left:50%;top:16px;width:16px;height:16px;margin-left:-8px;border-radius:50%;background:#ece3d2;box-shadow:inset 0 0 0 2px rgba(70,48,25,.28)}
 .pw-givetag-k{margin:0;font-size:11px;letter-spacing:.14em;color:#8a7c6b;font-weight:700}
 .pw-givetag-chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 22px}
 .pw-givetag-chips button{min-height:36px;padding:0 12px;border-radius:999px;border:1px solid rgba(70,48,25,.25);background:transparent;color:#1c1813;font:600 13px 'Bricolage Grotesque',system-ui,sans-serif;cursor:pointer;transition:background .2s,color .2s}
 .pw-givetag-chips button[aria-pressed="true"]{background:#1c1813;border-color:#1c1813;color:#fbf6ec}
-.pw-givetag-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;margin-bottom:16px;border-top:1px dashed rgba(70,48,25,.3);border-bottom:1px dashed rgba(70,48,25,.3);font-size:15px}
-.pw-givetag-amt{margin:4px 0 0;font-size:clamp(56px,6vw,88px);line-height:1;color:#c0322a;white-space:nowrap}
+.pw-givetag-t{margin:0;font:800 20px 'Bricolage Grotesque',system-ui,sans-serif;color:#1c1813}
+.pw-givetag-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-top:1px dashed rgba(70,48,25,.3);font-size:15px}
+.pw-givetag-row.is-give{align-items:center;border-bottom:1px dashed rgba(70,48,25,.3);font-weight:700}
+.pw-givetag-amt{font-size:clamp(44px,4.6vw,68px);line-height:1;color:#c0322a;white-space:nowrap}
 .pw-givetag-bar{height:8px;margin:16px 0 0;border-radius:999px;background:rgba(70,48,25,.12);overflow:hidden}
 .pw-givetag-bar span{display:block;height:100%;border-radius:999px;background:#e2453c;transition:width .6s cubic-bezier(.2,.7,.2,1)}
 .pw-givetag-note{margin:12px 0 0;font:500 14px 'Bricolage Grotesque',system-ui,sans-serif;color:#5b5146}
 .pw-givehero h1{font-size:clamp(35px,5.2vw,78px)!important}
-@media (max-width:900px){.pw-givetag::before{display:none}.pw-givetag{transform:none;margin-top:8px}}
+@media (max-width:900px){.pw-givetag{margin-top:8px}}
+.pw-piecepick{position:relative;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 18px;border-radius:999px;border:1.5px solid rgba(11,11,12,.25);background:#f8f2e7;cursor:pointer}
+.pw-piecepick .pw-mono{font-size:11px;letter-spacing:.12em;color:#8a7c6b}
+.pw-piecepick select{appearance:none;-webkit-appearance:none;border:0;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230b0b0c' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right center;padding:0 22px 0 0;font:700 15px 'Bricolage Grotesque',system-ui,sans-serif;color:#0b0b0c;cursor:pointer;min-height:44px}
+.pw-piecepick:focus-within{outline:2.5px solid #e2453c;outline-offset:3px}

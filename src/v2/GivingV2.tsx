@@ -77,7 +77,7 @@ export default function GivingV2() {
 }
 
 // Hero of the giving page (Nico, 14 Oct: "more engaging"): a price tag you play with.
-// Pick a piece, the amount counts up, the red bar shows how much of the price it is.
+// Pick a piece: what you pay, and what its partner gets (counts up).
 const [women, bomber, beanie] = NEW_PIECES
 const TAG = [
   { id: 'shirt', name: PIECES.shirt.name, price: PIECES.shirt.price, give: PIECES.shirt.give, split: false },
@@ -109,16 +109,13 @@ function GiveTag() {
   }, [target])
   return (
     <div className="pw-givetag">
-      <span className="pw-givetag-hole" aria-hidden="true" />
-      <p className="pw-givetag-k">{tr('PICK A PIECE')}</p>
-      <div className="pw-givetag-chips" role="group" aria-label={tr('PICK A PIECE')}>
+      <p className="pw-givetag-t">{tr('Try it: what does your piece give?')}</p>
+      <div className="pw-givetag-chips" role="group" aria-label={tr('Pick a piece')}>
         {TAG.map((x, j) => <button key={x.id} type="button" aria-pressed={j === i} onClick={() => setI(j)}>{tr(x.name)}</button>)}
       </div>
-      <div className="pw-givetag-row"><span>{tr(p.name)}</span><span>€{p.price}</span></div>
-      <p className="pw-givetag-k">{tr('GOES TO THE PARTNER')}</p>
-      <p className="pw-givetag-amt pw-fat" aria-live="polite">€{n.toFixed(2)}</p>
-      <div className="pw-givetag-bar" aria-hidden="true"><span style={{ width: `${(target / Number(p.price)) * 100}%` }} /></div>
-      <p className="pw-givetag-note">{tr(p.split ? 'Shared by all six partners.' : 'To the partner behind your design.')}</p>
+      <div className="pw-givetag-row"><span>{tr('You pay')}</span><span>€{p.price}</span></div>
+      <div className="pw-givetag-row is-give"><span>{tr(p.split ? 'Shared by all six partners' : 'The partner gets')}</span><span className="pw-givetag-amt pw-fat" aria-live="polite">€{n.toFixed(2)}</span></div>
+      <p className="pw-givetag-note">{tr('Already included in the price, never added on top.')}</p>
     </div>
   )
 }

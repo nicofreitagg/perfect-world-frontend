@@ -104,10 +104,8 @@ export default function ShopV2() {
     getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')) }).catch(() => {})
   }, [])
 
-  const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
-  const goMinimal = () => { setTab('minimal'); setPiece('all'); toShop() }
-  const goOg = () => { setTab('og'); setCause('all'); toShop() }
 
+  const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
   const tiles = PIECE_LIST.map((p) => ({ name: p.id === 'beanie' ? 'BEANIE · ALL SIX' : p.id === 'women' ? "WOMEN'S TEE" : p.label.toUpperCase(), price: p.price, give: p.give }))
   const tabs = ([
     { id: 'minimal', label: 'Minimal', isNew: true },
@@ -249,10 +247,6 @@ export default function ShopV2() {
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
       <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(37px, 7vw, 104px)", lineHeight: ".9" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
       <p style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.5", color: "#3a3a3a", maxWidth: "520px" }}>{tr("Every piece is made with one of six cause partners and gives it a fixed amount. OG or Minimal, the design tells you who it helps.")}</p>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "28px" }}>
-        <button type="button" onClick={goMinimal} style={{ fontFamily: "inherit", fontSize: "15px", fontWeight: "600", padding: "14px 24px", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr("Shop the Minimal Collection")}</button>
-        <button type="button" onClick={goOg} style={{ fontFamily: "inherit", fontSize: "15px", fontWeight: "600", padding: "14px 24px", minHeight: "48px", border: "1.5px solid #0b0b0c", borderRadius: "999px", background: "transparent", color: "#0b0b0c", cursor: "pointer" }}>{tr("Shop by cause")}</button>
-      </div>
     </div>
     <div className="pw-m-rcpt" style={{ flex: "0 1 400px", filter: "drop-shadow(0 22px 30px rgba(0,0,0,.12))", transform: "rotate(1.5deg)" }}>
       <div className="pw-mono" style={{ background: "#fbf6ec", padding: "26px 26px 18px", fontSize: "14px" }}>
@@ -283,6 +277,16 @@ export default function ShopV2() {
           </button>
         </Fragment>))}
       </div>
+      {/* One quiet way to find a piece type (Nico, 14 Oct: "searching for a tote bag only"). */}
+      {tab === 'minimal' && (
+        <label className="pw-piecepick">
+          <span className="pw-mono">{tr('PIECE')}</span>
+          <select value={piece} onChange={(e) => setPiece(e.target.value as 'all' | Kind)}>
+            <option value="all">{tr('All pieces')}</option>
+            {PIECE_LIST.map((p) => <option key={p.id} value={p.id}>{tr(p.filter)}</option>)}
+          </select>
+        </label>
+      )}
     </div>
     {tab === 'minimal' ? (
       <div className="pw-minbanner">

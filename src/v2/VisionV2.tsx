@@ -58,15 +58,15 @@ export default function VisionV2() {
   </section>
 
   <section className="pw-iso" aria-label={tr("Why 11.11")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
-    <div style={{ background: "#1d1a16", border: "1px solid rgba(242,235,223,.12)", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
+    <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px", textAlign: "center" }}>
         <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(46px, 8vw, 110px)", letterSpacing: "-0.04em", lineHeight: "0.9", color: "#c0322a" }} className="pw-fat">11.11</p>
         <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE CHANGED")}</p>
       </div>
-      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#d9cfbf", display: "flex", flexDirection: "column", gap: "14px" }}>
+      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#3a3128", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World. It was my way of showing that buying and business can exist to help, not to take.")}</p>
         <p style={{ margin: "0" }}>{tr("100% of profits was always the mission. From 11.11, that mission gets a number: every piece gives a fixed amount, shown right next to the price, and the design you choose decides which partner gets it. It's our next step in transparency: turning a promise into impact you can count.")}</p>
-        <p style={{ margin: "0", fontWeight: "600", color: "#f2ebdf" }}>{tr("Because I believe we are stronger together. Change happens and hope grows when we join forces.")}</p>
+        <p style={{ margin: "0", fontWeight: "600", color: "#1c1813" }}>{tr("Because I believe we are stronger together. Change happens and hope grows when we join forces.")}</p>
         <p style={{ margin: "0", fontWeight: 700 }}>Together. Not Alone. 😉</p>
       </div>
     </div>
@@ -78,9 +78,9 @@ export default function VisionV2() {
     <p style={{ margin: "0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "26px", color: "#c0322a" }} className="pw-hand">{tr("our vision")}</p>
     <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(24px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
     <div className="pw-m-swipe pw-m-s80" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "18px", marginTop: "40px" }}>
-      <div style={{ background: "#1d1a16", border: "1px solid rgba(242,235,223,.12)", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#cfc4b2" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
-      <div style={{ background: "#1d1a16", border: "1px solid rgba(242,235,223,.12)", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#cfc4b2" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
-      <div style={{ background: "#1d1a16", border: "1px solid rgba(242,235,223,.12)", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#cfc4b2" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
+      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
+      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
+      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
     </div>
   </section>
 
