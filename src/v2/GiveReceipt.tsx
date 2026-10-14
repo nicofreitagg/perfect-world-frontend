@@ -18,6 +18,7 @@ const women = NEW_PIECES.find((n) => n.id === 'women')!
 const bomber = NEW_PIECES.find((n) => n.id === 'bomber')!
 const beanie = NEW_PIECES.find((n) => n.id === 'beanie')!
 // minOnly: made in the Minimal collection only for now (Nico 13 Oct), so not pickable under OG.
+// The logo beanie goes with both (Nico 14 Oct).
 const ROWS: { id: PieceId; label: string; fit: string; price: string; give: string; isNew?: boolean; split?: boolean; minOnly?: boolean }[] = [
   { id: 'women', label: "Women's T-shirt", fit: 'women', price: women.price, give: women.give, isNew: true, minOnly: true },
   { id: 'tshirt', label: 'T-shirt', fit: 'unisex', price: PIECES.shirt.price, give: PIECES.shirt.give },
@@ -25,7 +26,7 @@ const ROWS: { id: PieceId; label: string; fit: string; price: string; give: stri
   { id: 'hoodie', label: 'Hoodie', fit: 'unisex', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
   { id: 'tote', label: 'Tote bag', fit: 'one size', price: PIECES.tote.price, give: PIECES.tote.give },
   { id: 'bomber', label: 'Bomber jacket', fit: 'unisex', price: bomber.price, give: bomber.give, isNew: true, minOnly: true },
-  { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true, minOnly: true },
+  { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true },
 ]
 const eur = (s: string) => '€' + s
 
@@ -50,7 +51,7 @@ export default function GiveReceipt() {
   const row = ROWS.find((r) => r.id === piece)!
   const cause = CAUSES.find((c) => c.id === design)!
   const min = line === 'minimal'
-  const matches = useMemo(() => products.filter((p) => /minimal/i.test(p.title) === min && (piece === 'beanie' || getCollectionKey(p.title) === cause.name || (min && minDesignOf(p.title)?.slug === cause.slug)) && pieceOf(p.title) === piece), [products, cause.name, cause.slug, piece, min])
+  const matches = useMemo(() => products.filter((p) => (piece === 'beanie' || /minimal/i.test(p.title) === min) && (piece === 'beanie' || getCollectionKey(p.title) === cause.name || (min && minDesignOf(p.title)?.slug === cause.slug)) && pieceOf(p.title) === piece), [products, cause.name, cause.slug, piece, min])
   const colours = useMemo(() => {
     // Colours from the product titles (OG) or from the Colour option (the new Minimal listings).
     const seen = [...new Set([...matches.map((p) => extractColorFromTitle(p.title)), ...matches.flatMap((p) => variantColours(p.variants))].filter(Boolean))]
@@ -91,7 +92,7 @@ export default function GiveReceipt() {
       <div className="pwl-chips">
         {ROWS.map((r) => chip(r.id === piece, () => { setPiece(r.id); next(1) }, <>{t(r.label)}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}</>, r.id, !min && r.minOnly))}
       </div>
-      {!min && <p className="pwl-note">{t("Women's T-shirt, bomber and beanie are Minimal only for now.")}</p>}
+      {!min && <p className="pwl-note">{t("Women's T-shirt and bomber are Minimal only for now.")}</p>}
     </>) },
     { id: 'design', label: t('Design'), value: row.split ? t('All six') : min ? designName : causeTitle(cause.name), body: row.split ? (
       <><p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
