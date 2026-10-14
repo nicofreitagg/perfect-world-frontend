@@ -81,6 +81,14 @@ export default function ShopV2() {
     // Land on the design name so the swirl draws in view.
     setTimeout(() => (document.querySelector('.pw-designbar') ?? document.getElementById('shop'))?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }
+  // Arriving from the home page: a design opens on its pieces, "#shop" on the collection grid.
+  useEffect(() => {
+    const target = new URLSearchParams(location.search).get('design') ? '.pw-designbar' : location.hash === '#shop' ? '#shop' : ''
+    if (!target) return
+    const t = setTimeout(() => document.querySelector(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   // Phones: slide the design switcher so the current design's chip is in view.
   useEffect(() => {
     const on = document.querySelector<HTMLElement>('.pw-designswitch [aria-current]')

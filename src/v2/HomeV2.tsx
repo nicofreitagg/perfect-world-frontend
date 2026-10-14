@@ -137,7 +137,7 @@ export default function HomeV2() {
   <section id="minimal" className="pwl-sec pwl-min pw-iso" aria-label={tr('The Minimal Collection')}>
     <div className="pwl-wrap pwl-center">
       <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
-      <h2 className="pwl-min-h"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} /></h2>
+      <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} /></A></h2>
       <p className="pw-fat pwl-min-line">{tr('Doing good never looked so clean.')}</p>
       <p className="pwl-sub">{tr('Six new designs, one for each partner. Every piece gives a fixed amount.')}</p>
       <ul className="pwl-min-row">
@@ -145,7 +145,7 @@ export default function HomeV2() {
           const c = causeBySlug(d.slug)
           return (
             <li key={d.slug} style={{ '--c': c?.color } as React.CSSProperties}>
-              <A href="/shop" className="pwl-min-card">
+              <A href={`/shop?design=${d.slug}`} className="pwl-min-card">
                 <span className="pwl-min-img"><img src={`/v2/img/min-${d.img}.webp`} alt={d.name} loading="lazy" /></span>
                 <span className="pwl-min-name">{d.name}</span>
                 <span className="pwl-min-cause">{c ? titleCase(c.name) : ''}</span>
@@ -156,7 +156,7 @@ export default function HomeV2() {
       </ul>
       <p className="pwl-min-price">{tr('T-shirt')} €{PIECES.shirt.price} · <b>€{PIECES.shirt.give}</b> {tr('to its partner')}</p>
       <div className="pwl-ctas pwl-ctas-c">
-        <A href="/shop" className="pwl-btn">{tr('Shop Minimal')}</A>
+        <A href="/shop#shop" className="pwl-btn">{tr('Shop the whole collection')}</A>
       </div>
     </div>
   </section>
