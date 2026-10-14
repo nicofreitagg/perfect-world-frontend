@@ -129,13 +129,14 @@ export const RAW_GROUND = '#ece3d2'
 const CAUSE_TINT: Record<string, [string, string]> = {
   'one-world': ['93,165,226', '242,201,76'],
   'cool-down': ['96,150,96', '214,190,120'],
-  'endangered-oceans': ['47,111,200', '240,128,100'],
-  'talk-about-it': ['170,140,215', '255,150,90'],
+  'endangered-oceans': ['30,110,220', '240,128,100'],
+  'talk-about-it': ['160,120,225', '255,150,90'],
   'wild-at-heart': ['105,110,122', '200,170,130'],
   'rich-in-life': ['150,85,55', '230,170,100'],
 }
 export const causeGround = (slug: string | undefined) => {
   const t = slug ? CAUSE_TINT[slug] : undefined
   if (!t) return RAW_GROUND
-  return `radial-gradient(ellipse 75% 60% at 0% 0%, rgba(${t[0]},.55), transparent 70%), radial-gradient(ellipse 65% 55% at 100% 35%, rgba(${t[1]},.34), transparent 70%), radial-gradient(ellipse 80% 60% at 30% 100%, rgba(${t[0]},.36), transparent 70%), ${RAW_GROUND}`
+  // A deeper, warmer raw (Nico, 14 Oct: "more natural raw, a bit warmer"), the cause colour on top.
+  return `radial-gradient(ellipse 70% 55% at 0% 0%, rgba(${t[0]},.62), transparent 72%), radial-gradient(ellipse 60% 60% at 100% 15%, rgba(${t[0]},.44), transparent 72%), radial-gradient(ellipse 70% 55% at 65% 100%, rgba(${t[1]},.28), transparent 70%), radial-gradient(ellipse 80% 60% at 20% 80%, rgba(214,150,90,.28), transparent 72%), linear-gradient(180deg, #ebdcc2, #e3d0b2)`
 }
