@@ -100,7 +100,7 @@ function GiveTag() {
     let raf = 0
     const t0 = performance.now()
     const step = (t: number) => {
-      const k = Math.min(1, (t - t0) / 650)
+      const k = Math.max(0, Math.min(1, (t - t0) / 650))
       setN(target * (1 - Math.pow(1 - k, 3)))
       if (k < 1) raf = requestAnimationFrame(step)
     }
