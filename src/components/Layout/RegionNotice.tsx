@@ -3,18 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '../../contexts/LocaleContext'
 
-const DISMISS_KEY = 'pw-region-notice-dismissed'
+const DISMISS_KEY = 'pw-ship-notice-dismissed'
 
-// North, Central & South America + the Caribbean. We don't yet have a
-// manufacturer serving this region, so visitors here get a "coming soon" note
-// (they can still buy — everything ships from Europe for now).
-const AMERICAS = new Set([
-  // North America
-  'US', 'CA', 'MX',
-  // Central America & Caribbean
-  'GT', 'BZ', 'SV', 'HN', 'NI', 'CR', 'PA', 'CU', 'DO', 'HT', 'JM', 'TT', 'BS', 'BB', 'PR',
-  // South America
-  'CO', 'VE', 'EC', 'PE', 'BO', 'BR', 'PY', 'UY', 'AR', 'CL', 'GY', 'SR',
+// Our print-on-demand maker delivers within Europe only (Nico, 14 Oct 2026), so visitors
+// from anywhere else get a note before they pick something we can't send them.
+// If it turns out to be DACH only, shrink this list to DE, AT, CH.
+const SHIPS_TO = new Set([
+  'DE', 'AT', 'CH', 'LI', 'LU', 'BE', 'NL', 'FR', 'IT', 'ES', 'PT', 'IE', 'DK', 'SE', 'FI', 'NO', 'IS',
+  'PL', 'CZ', 'SK', 'HU', 'SI', 'HR', 'RO', 'BG', 'GR', 'CY', 'MT', 'EE', 'LV', 'LT', 'GB', 'MC', 'SM', 'AD', 'VA',
 ])
 
 export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
@@ -23,7 +19,7 @@ export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    if (!country || !AMERICAS.has(country)) return
+    if (!country || SHIPS_TO.has(country)) return
     if (localStorage.getItem(DISMISS_KEY)) return
     const timer = setTimeout(() => setIsVisible(true), 1500)
     return () => clearTimeout(timer)
@@ -44,7 +40,7 @@ export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className={v2 ? "fixed bottom-4 right-4 z-[2147481000] w-[calc(100%-2rem)] max-w-sm" : "fixed top-24 left-1/2 -translate-x-1/2 z-[45] w-[calc(100%-2rem)] max-w-md"}
         >
-          <div className={v2 ? "relative rounded-[22px] bg-[#f5f4f1] border-[1.5px] border-[#0b0b0c] shadow-[0_18px_40px_rgba(0,0,0,0.18)] px-5 py-4 pr-10 text-[#0b0b0c] font-[Bricolage_Grotesque]" : "relative rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] px-5 py-4 pr-10 text-white"}>
+          <div className={v2 ? "relative rounded-[22px] bg-[#f8f2e7] border-[1.5px] border-[#0b0b0c] shadow-[0_18px_40px_rgba(0,0,0,0.18)] px-5 py-4 pr-10 text-[#0b0b0c] font-[Bricolage_Grotesque]" : "relative rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.5)] px-5 py-4 pr-10 text-white"}>
             <button
               onClick={handleClose}
               className="absolute top-3 right-3 text-gray-400 hover:text-white transition-colors"
