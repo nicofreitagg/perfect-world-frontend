@@ -57,12 +57,12 @@ export default function GivingV2() {
   </section>
 
   <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
-    <div style={{ background: "radial-gradient(ellipse 70% 80% at 0% 0%, rgba(255,140,66,.16), transparent 70%), radial-gradient(ellipse 60% 70% at 100% 100%, rgba(226,69,60,.12), transparent 70%), #16130f", color: "#f2ebdf", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
+    <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", color: "#0b0b0c", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(29px, 5vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
-      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#cfc4b2", display: "flex", flexDirection: "column", gap: "14px" }}>
+      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World: proof that buying and business can exist to help, not to take.")}</p>
         <p style={{ margin: "0" }}>{isLaunched() ? tr("Since 11.11, that mission has a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.") : tr("From 11.11, that mission gets a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.")}</p>
-        <p style={{ margin: "0", fontWeight: "700", color: "#f2ebdf" }}>{tr("Same belief: we are stronger together. Now you can count it.")}</p>
+        <p style={{ margin: "0", fontWeight: "700", color: "#0b0b0c" }}>{tr("Same belief: we are stronger together. Now you can count it.")}</p>
       </div>
     </div>
   </section>
