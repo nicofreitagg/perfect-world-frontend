@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './v2.css'
-import { RAW_GROUND } from './data'
+import { RAW_GROUND, PIECES, NEW_PIECES } from './data'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import Sustain from './Sustain'
@@ -29,9 +29,11 @@ export default function GivingV2() {
   <div className="pw-lightband" style={{ color: "#0b0b0c" }}>
   <Header active="/how-giving-works" cartCount={cartCount} openCart={openCart} />
     <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 6vw, 90px) clamp(16px, 4vw, 56px) clamp(40px, 8vw, 110px)" }}>
+      <div className="pw-givehero"><div>
       <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontWeight: "700", fontSize: "14px", letterSpacing: ".14em", color: "#c0322a" }}>{tr("HOW GIVING WORKS")}</p>
       <h1 style={{ margin: "18px 0 0", fontWeight: "800", fontSize: "clamp(35px, 7vw, 104px)", lineHeight: ".92", letterSpacing: "-0.02em" }} className="pw-fat">{tr("Every piece gives")}<br />{tr("a fixed amount.")}</h1>
       <p style={{ margin: "24px 0 0", fontSize: "21px", lineHeight: "1.55", color: "#3a3a3a", maxWidth: "640px" }}>{tr("A clear amount on every piece. Right next to the price, the same every time, and straight to the partner behind your design.")}</p>
+      </div><GiveTag /></div>
       <div className="pw-m-ptable" style={{ marginTop: "48px", maxWidth: "760px" }}><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", paddingBottom: "10px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".1em", color: "rgba(11,11,12,.50)" }}><span>{tr("PIECE")}</span><span>{tr("PRICE")}</span><span style={{ minWidth: "110px", textAlign: "right" }}>{tr("GIVES")}</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("Tote bag")}</span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€27.77</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€7.77</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("T-shirt")}</span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€33.33</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€11.11</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("Oversized shirt")}</span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€55.55</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€22.22</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("Hoodie")}</span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€77.77</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€33.33</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("Bomber jacket")}</span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€111.11</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€44.44</span></div><div style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: "24px", padding: "18px 0", borderTop: "1px solid rgba(11,11,12,.16)", fontSize: "20px", alignItems: "baseline" }}><span style={{ fontWeight: "600" }}>{tr("Beanie")}<span style={{ display: "block", marginTop: "4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", fontWeight: 400, color: "rgba(11,11,12,.55)" }}>{tr("SHARED BY ALL SIX PARTNERS")}</span></span><span style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(11,11,12,.60)" }}>€33.33</span><span style={{ fontWeight: "800", fontSize: "28px", color: "#c0322a", minWidth: "110px", textAlign: "right" }} className="pw-fat">€7.77</span></div></div>
     </section>
   </div>
@@ -71,5 +73,52 @@ export default function GivingV2() {
 
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
     </>
+  )
+}
+
+// Hero of the giving page (Nico, 14 Oct: "more engaging"): a price tag you play with.
+// Pick a piece, the amount counts up, the red bar shows how much of the price it is.
+const [women, bomber, beanie] = NEW_PIECES
+const TAG = [
+  { id: 'shirt', name: PIECES.shirt.name, price: PIECES.shirt.price, give: PIECES.shirt.give, split: false },
+  { id: 'women', name: women.name, price: women.price, give: women.give, split: false },
+  { id: 'oversized', name: PIECES.oversized.name, price: PIECES.oversized.price, give: PIECES.oversized.give, split: false },
+  { id: 'hoodie', name: PIECES.hoodie.name, price: PIECES.hoodie.price, give: PIECES.hoodie.give, split: false },
+  { id: 'bomber', name: bomber.name, price: bomber.price, give: bomber.give, split: false },
+  { id: 'tote', name: PIECES.tote.name, price: PIECES.tote.price, give: PIECES.tote.give, split: false },
+  { id: 'beanie', name: beanie.name, price: beanie.price, give: beanie.give, split: true },
+]
+
+function GiveTag() {
+  const tr = useT()
+  const [i, setI] = useState(0)
+  const p = TAG[i]
+  const target = Number(p.give)
+  const [n, setN] = useState(target)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setN(target); return }
+    let raf = 0
+    const t0 = performance.now()
+    const step = (t: number) => {
+      const k = Math.min(1, (t - t0) / 650)
+      setN(target * (1 - Math.pow(1 - k, 3)))
+      if (k < 1) raf = requestAnimationFrame(step)
+    }
+    raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [target])
+  return (
+    <div className="pw-givetag">
+      <span className="pw-givetag-hole" aria-hidden="true" />
+      <p className="pw-givetag-k">{tr('PICK A PIECE')}</p>
+      <div className="pw-givetag-chips" role="group" aria-label={tr('PICK A PIECE')}>
+        {TAG.map((x, j) => <button key={x.id} type="button" aria-pressed={j === i} onClick={() => setI(j)}>{tr(x.name)}</button>)}
+      </div>
+      <div className="pw-givetag-row"><span>{tr(p.name)}</span><span>€{p.price}</span></div>
+      <p className="pw-givetag-k">{tr('GOES TO THE PARTNER')}</p>
+      <p className="pw-givetag-amt pw-fat" aria-live="polite">€{n.toFixed(2)}</p>
+      <div className="pw-givetag-bar" aria-hidden="true"><span style={{ width: `${(target / Number(p.price)) * 100}%` }} /></div>
+      <p className="pw-givetag-note">{tr(p.split ? 'Shared by all six partners.' : 'To the partner behind your design.')}</p>
+    </div>
   )
 }
