@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './v2.css'
+import { RAW_GROUND } from './data'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import { A } from './A'
@@ -14,7 +15,7 @@ export default function VisionV2() {
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
 
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -58,7 +59,7 @@ export default function VisionV2() {
   </section>
 
   <section className="pw-iso" aria-label={tr("Why 11.11")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
-    <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
+    <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px", textAlign: "center" }}>
         <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(46px, 8vw, 110px)", letterSpacing: "-0.04em", lineHeight: "0.9", color: "#c0322a" }} className="pw-fat">11.11</p>
         <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE CHANGED")}</p>
@@ -78,9 +79,9 @@ export default function VisionV2() {
     <p style={{ margin: "0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "26px", color: "#c0322a" }} className="pw-hand">{tr("our vision")}</p>
     <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(24px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
     <div className="pw-m-swipe pw-m-s80" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "18px", marginTop: "40px" }}>
-      <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
-      <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
-      <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
+      <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
+      <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
+      <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#3a3a3a" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
     </div>
   </section>
 
@@ -90,12 +91,12 @@ export default function VisionV2() {
     
     <p style={{ margin: "36px 0 14px", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "42px" }} className="pw-hand">{tr("OUR PARTNERS ON THE GROUND")}</p>
     <div className="pw-m-g3 pw-m-logos" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}>
-      <A href="/project/one-world" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-care-in-action.png" alt={tr("Care in Action")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
-      <A href="/project/rich-in-life" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mission-positivity.png" alt={tr("Mission Positivity")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/talk-about-it" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mhi.png" alt={tr("Mental Health Initiative")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/endangered-oceans" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-secore.png" alt={tr("SECORE International")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
-      <A href="/project/cool-down" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-pftp.png" alt={tr("Plant-for-the-Planet")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/wild-at-heart" style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-efa.png" alt={tr("Elephants for Africa")} style={{ maxWidth: "70%", maxHeight: "44px", objectFit: "contain" }} /></A>
+      <A href="/project/one-world" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-care-in-action.png" alt={tr("Care in Action")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
+      <A href="/project/rich-in-life" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mission-positivity.png" alt={tr("Mission Positivity")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
+      <A href="/project/talk-about-it" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mhi.png" alt={tr("Mental Health Initiative")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
+      <A href="/project/endangered-oceans" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-secore.png" alt={tr("SECORE International")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
+      <A href="/project/cool-down" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-pftp.png" alt={tr("Plant-for-the-Planet")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
+      <A href="/project/wild-at-heart" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-efa.png" alt={tr("Elephants for Africa")} style={{ maxWidth: "70%", maxHeight: "44px", objectFit: "contain" }} /></A>
     </div>
   </section>
 

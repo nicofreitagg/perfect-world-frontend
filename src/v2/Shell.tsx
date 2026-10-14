@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from 'react'
 import './v2.css'
+import { RAW_GROUND } from './data'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import CartDrawer from './CartDrawerV2'
@@ -10,7 +11,7 @@ export default function Shell({ children, active }: { children: ReactNode; activ
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   useEffect(() => {
     window.scrollTo(0, 0)
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
   return (

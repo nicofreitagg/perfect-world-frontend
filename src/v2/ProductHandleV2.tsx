@@ -4,6 +4,7 @@ import Shell from './Shell'
 import { A } from './A'
 import { CAUSES } from './causes'
 import { PIECES, NEW_PIECES, WOMEN, minDesignOf } from './data'
+import { useCauseGround } from './ground'
 import { useDesignPairOrGuess } from './printSide'
 import { hexOf } from './colours'
 import { useT } from './t'
@@ -38,6 +39,7 @@ export default function ProductHandleV2() {
   const [params, setParams] = useSearchParams()
 
   useEffect(() => { if (handle) getProduct(handle).then(setP).catch(() => setP(null)) }, [handle])
+  useCauseGround(p ? minDesignOf(p.title)?.slug : undefined)
 
   if (p === undefined) return <Shell><p style={{ padding: '120px 16px', textAlign: 'center', fontFamily: mono }}>{t('LOADING…')}</p></Shell>
   if (p === null) return <Navigate to="/shop" replace />

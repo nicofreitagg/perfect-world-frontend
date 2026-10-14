@@ -1,7 +1,8 @@
 import { Fragment, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CAUSES, TINT, causeFg, causeTitle, FACTS, FILMS } from './causes'
-import { PIECES, icon } from './data'
+import { PIECES, icon, RAW_GROUND } from './data'
+import { useCauseGround } from './ground'
 import NotFound from '../pages/NotFound'
 import './v2.css'
 import Flow from './Flow'
@@ -18,6 +19,7 @@ export default function CauseV2() {
   const navigate = useNavigate()
   const i = CAUSES.findIndex((x) => x.slug === slug)
   const raw = CAUSES[Math.max(i, 0)]
+  useCauseGround(raw.slug)
   usePageTitle(`${causeTitle(raw.name)} | Perfect World`)
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const c = { ...raw, icoA: icon(raw.id, 'a'), icoB: icon(raw.id, 'b'), title: causeTitle(raw.name), placeUpper: raw.place.toUpperCase(), partnerLower: raw.partner.toLowerCase(), fg: causeFg(raw), tint: TINT[raw.id], hasPrint: !!raw.print, noPrint: !raw.print }
@@ -29,7 +31,7 @@ export default function CauseV2() {
   const pieces = ([['TOTE', PIECES.tote], ['T-SHIRT', PIECES.shirt], ['OVERSIZED', PIECES.oversized], ['HOODIE', PIECES.hoodie]] as const).map(([label, p]) => ({ label, give: p.give }))
 
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -58,10 +60,10 @@ export default function CauseV2() {
 
   <section className="pw-iso" aria-label={tr("At a glance")} style={{ position: "relative", zIndex: "78", maxWidth: "1320px", margin: "0 auto", padding: "28px clamp(16px, 4vw, 56px) 0" }}>
     <div className="pw-m-g3 pw-m-facts3" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1px", background: "#d9d6cf", border: "1px solid #d9d6cf", borderRadius: "22px", overflow: "hidden" }}>
-      <div style={{ background: "#ffffff", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("PARTNER")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px" }}>{c.partner}</p></div>
-      <div style={{ background: "#ffffff", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("WHERE")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px" }}>{tr(c.place)}</p></div>
-      <div style={{ background: "#ffffff", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("A SHIRT GIVES")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px", color: "#c0322a" }}>€11.11</p></div>
-      {fact && (<div style={{ background: "#ffffff", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("ONE REAL FACT")}</p><p className="pw-mono" style={{ margin: "8px 0 0", fontSize: "13px", color: "#8a877f" }}>{fact}</p></div>)}
+      <div style={{ background: "#fbf6ec", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("PARTNER")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px" }}>{c.partner}</p></div>
+      <div style={{ background: "#fbf6ec", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("WHERE")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px" }}>{tr(c.place)}</p></div>
+      <div style={{ background: "#fbf6ec", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("A SHIRT GIVES")}</p><p className="pw-fat" style={{ margin: "6px 0 0", fontSize: "22px", color: "#c0322a" }}>€11.11</p></div>
+      {fact && (<div style={{ background: "#fbf6ec", padding: "22px 24px" }}><p className="pw-mono" style={{ margin: "0", fontSize: "11px", color: "#5c5c5c" }}>{tr("ONE REAL FACT")}</p><p className="pw-mono" style={{ margin: "8px 0 0", fontSize: "13px", color: "#8a877f" }}>{fact}</p></div>)}
     </div>
   </section>
 
@@ -97,7 +99,7 @@ export default function CauseV2() {
 
     <aside aria-label={tr("Support this cause")} style={{ flex: "0 1 380px", minWidth: "0", position: "sticky", top: "16px" }}>
       <div style={{ filter: "drop-shadow(0 22px 30px rgba(0,0,0,.12))" }}>
-        <div className="pw-mono" style={{ background: "#ffffff", padding: "26px 26px 20px", fontSize: "14px" }}>
+        <div className="pw-mono" style={{ background: "#fbf6ec", padding: "26px 26px 20px", fontSize: "14px" }}>
           <div style={{ textAlign: "center", borderBottom: "1px dashed #bdbab3", paddingBottom: "14px" }}>
             <div  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "22px" }}>{tr("SUPPORT")} {c.name}</div>
             <div style={{ fontSize: "11px", color: "#5c5c5c", marginTop: "4px" }}>{tr("EVERY")} {c.name} {tr("DESIGN GIVES")}</div>
@@ -117,7 +119,7 @@ export default function CauseV2() {
 
   <section className="pw-iso" aria-label={tr("Wear the design")} style={{ position: "relative", zIndex: "75", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 96px)" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-180px" }}><path d="M-60 200 C 260 320, 520 60, 760 160 C 880 210, 860 330, 790 310 C 720 290, 780 150, 980 130 C 1180 110, 1300 260, 1500 200" stroke="#b07e52" strokeWidth="7"></path></svg>
-    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px, 4vw, 56px)", background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "32px", padding: "clamp(24px, 3vw, 44px)" }}>
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(28px, 4vw, 56px)", background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(24px, 3vw, 44px)" }}>
       <div style={{ flex: "0 1 380px", aspectRatio: "1 / 1", borderRadius: "24px", background: c.tint, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
         {c.hasPrint && (<><img src={c.print} alt={`${c.name} back print`} style={{ width: "82%", height: "82%", objectFit: "contain", filter: "drop-shadow(0 16px 18px rgba(0,0,0,.16))" }} /></>)}
         {c.noPrint && (<><span className="pw-mono" style={{ fontSize: "12px", color: "#5c5c5c" }}>[{c.name} {tr("BACK PRINT]")}</span></>)}
@@ -139,7 +141,7 @@ export default function CauseV2() {
     <button type="button" onClick={goNext} className="pw-card" style={{ width: "100%", position: "relative", overflow: "hidden", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px", padding: "34px clamp(24px, 3vw, 44px)", border: "none", borderRadius: "28px", cursor: "pointer", textAlign: "left", fontFamily: "inherit", background: next.bg, color: next.fg }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
       <span style={{ position: "relative" }}><span className="pw-mono" style={{ display: "block", fontSize: "12px" }}>{tr("NEXT CAUSE")}</span><span className="pw-hand" style={{ display: "block", marginTop: "6px", fontSize: "clamp(26px, 4vw, 56px)", lineHeight: "1" }}>{next.name}</span></span>
-      <span className="pw-go" style={{ position: "relative", fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#ffffff", color: "#0b0b0c" }}>{tr("Explore →")}</span>
+      <span className="pw-go" style={{ position: "relative", fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#fbf6ec", color: "#0b0b0c" }}>{tr("Explore →")}</span>
     </button>
   </section>
   <Footer icons={[c.icoA, c.icoB]} />

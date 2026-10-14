@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './v2.css'
+import { RAW_GROUND } from './data'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import Sustain from './Sustain'
@@ -15,7 +16,7 @@ export default function GivingV2() {
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
 
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -37,29 +38,29 @@ export default function GivingV2() {
 
   <section className="pw-iso" aria-label={tr("Where it goes")} style={{ position: "relative", zIndex: "78", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
     <h2 style={{ margin: "0", fontWeight: "800", fontSize: "clamp(26px, 4.6vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("Where it goes")}</h2>
-    <div style={{ marginTop: "34px", background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "28px", padding: "clamp(28px, 4vw, 48px)" }}>
+    <div style={{ marginTop: "34px", background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "28px", padding: "clamp(28px, 4vw, 48px)" }}>
       <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", letterSpacing: ".1em", color: "#c0322a" }}>{tr("OG AND MINIMAL")}</p>
       <h3 style={{ margin: "12px 0 0", fontSize: "clamp(20px, 3.2vw, 40px)", lineHeight: "1.05" }} className="pw-fat">{tr("The partner behind the design")}</h3>
       <p style={{ margin: "16px 0 0", fontSize: "clamp(18px, 1.6vw, 21px)", lineHeight: "1.6", color: "#2a2a2a", maxWidth: "820px" }}>{tr("Every design, OG or Minimal, is made with one of our six partners, and its amount always goes to that partner. Buy the Wild at Heart print and it goes to Elephants for Africa. Choose a quiet Minimal piece and it goes to the partner behind that design. Always.")}</p>
     </div>
-    <div className="pw-m-g3 pw-m-logos" style={{ marginTop: "26px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-care-in-action.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mission-positivity.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mhi.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-secore.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-pftp.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-efa.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div></div>
+    <div className="pw-m-g3 pw-m-logos" style={{ marginTop: "26px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-care-in-action.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mission-positivity.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mhi.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-secore.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-pftp.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-efa.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div></div>
   </section>
 
   <section className="pw-iso" id="payouts" aria-label={tr("When it's paid and how to check")} style={{ position: "relative", zIndex: "77", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
     <h2 style={{ margin: "0", fontWeight: "800", fontSize: "clamp(26px, 4.6vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("When it's paid")}</h2>
-    <div style={{ marginTop: "34px", background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "24px", padding: "30px", maxWidth: "820px" }}>
+    <div style={{ marginTop: "34px", background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "30px", maxWidth: "820px" }}>
       <p style={{ margin: "0", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a" }}>{tr("We add up the fixed amounts from every order and transfer them to each partner directly. Ask us any time how much has gone to a cause, and we'll tell you.")}</p>
       <p style={{ margin: "14px 0 0", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a" }}>{tr("As Perfect World grows and orders come in more regularly, we'll publish the totals per partner here.")}</p>
     </div>
   </section>
 
   <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
-    <div style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
+    <div style={{ background: "radial-gradient(ellipse 70% 80% at 0% 0%, rgba(255,140,66,.16), transparent 70%), radial-gradient(ellipse 60% 70% at 100% 100%, rgba(226,69,60,.12), transparent 70%), #16130f", color: "#f2ebdf", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(29px, 5vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
-      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
+      <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#cfc4b2", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World: proof that buying and business can exist to help, not to take.")}</p>
         <p style={{ margin: "0" }}>{isLaunched() ? tr("Since 11.11, that mission has a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.") : tr("From 11.11, that mission gets a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.")}</p>
-        <p style={{ margin: "0", fontWeight: "700", color: "#0b0b0c" }}>{tr("Same belief: we are stronger together. Now you can count it.")}</p>
+        <p style={{ margin: "0", fontWeight: "700", color: "#f2ebdf" }}>{tr("Same belief: we are stronger together. Now you can count it.")}</p>
       </div>
     </div>
   </section>

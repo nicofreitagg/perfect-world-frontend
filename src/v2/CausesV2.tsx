@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from 'react'
 import { CAUSES, causeFg, causeTeaser } from './causes'
 import './v2.css'
+import { RAW_GROUND } from './data'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import { A } from './A'
@@ -17,7 +18,7 @@ export default function CausesV2() {
   const others = CAUSES.map((c) => ({ ...c, placeUpper: c.place.toUpperCase(), teaser: causeTeaser(c), fg: causeFg(c) }))
 
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -49,19 +50,19 @@ export default function CausesV2() {
             <span className="pw-m-hide-t" style={{ fontSize: "15px", lineHeight: "1.5", maxWidth: "440px" }}>{tr("With")} {c.partner}. {tr(c.teaser)}</span>
           </span>
           <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
-            <span className="pw-go" style={{ fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#ffffff", color: "#0b0b0c", transition: "background .25s, color .25s" }}>{tr("Explore the project →")}</span>
+            <span className="pw-go" style={{ fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#fbf6ec", color: "#0b0b0c", transition: "background .25s, color .25s" }}>{tr("Explore the project →")}</span>
           </span>
         </A>
       </Fragment>))}
     </div>
   </section>
 
-  <section className="pw-iso pw-lightband" aria-label={tr("How it works")} style={{ position: "relative", zIndex: "77" }}>
+  <section className="pw-iso pw-nightband pw-night-end" aria-label={tr("How it works")} style={{ position: "relative", zIndex: "77" }}>
     <img className="pw-ico" src="/v2/icons/ic-f40a9d4d.svg" alt="" aria-hidden="true" style={{ left: "75.5%", top: "10px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-1e094dbe.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "170px", width: "84px", transform: "rotate(10deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-220px" }}><path d="M-60 300 C 300 90, 420 530, 700 420 C 870 355, 830 210, 745 245 C 640 290, 760 530, 1010 480 C 1210 440, 1300 190, 1500 260" stroke="#4cc37f" strokeWidth="7"></path></svg>
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "clamp(48px, 6vw, 80px) clamp(16px, 4vw, 56px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "28px" }}>
       <p className="pw-fat" style={{ margin: "0", fontSize: "clamp(23px, 4vw, 56px)", lineHeight: ".95", flex: "1 1 520px" }}>{tr("Pick a piece. Pick a cause.")}<br /><span style={{ color: "#e2453c" }}>{tr("We pass it on.")}</span></p>
-      <A href="/shop"  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", color: "#ffffff", background: "#0b0b0c", textDecoration: "none", padding: "14px 30px", borderRadius: "999px" }}>{tr("SHOP HOPE")}</A>
+      <A href="/shop"  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", color: "#14110e", background: "#f2ebdf", textDecoration: "none", padding: "14px 30px", borderRadius: "999px" }}>{tr("SHOP HOPE")}</A>
     </div>
   </section>
   <Footer icons={["/v2/icons/ic-df3d515b.svg", "/v2/icons/ic-745e6390.svg"]} />

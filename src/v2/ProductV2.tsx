@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { CAUSES, causeBySlug, causeFg, causeTeaser } from './causes'
-import { PIECES, icon } from './data'
+import { PIECES, icon, RAW_GROUND } from './data'
 import { getAllProducts } from '../utils/shopify'
 import { useDesignPairOrGuess } from './printSide'
 import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
@@ -21,6 +21,7 @@ const PIECE_LIST: { id: Kind; name: string; upper: string; give: string; price: 
 const sizeOf = (v: ShopifyVariant) => v.selectedOptions?.find((o) => /size|gr(ö|oe)(ß|ss)e/i.test(o.name))?.value ?? v.title
 const money = (n: number) => n.toFixed(2)
 import './v2.css'
+import { useCauseGround } from './ground'
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import Sustain from './Sustain'
@@ -36,6 +37,7 @@ export default function ProductV2() {
   const { slug } = useParams()
   const navigate = useNavigate()
   const raw = causeBySlug(slug)
+  useCauseGround(raw?.slug)
   const [all, setAll] = useState<ShopifyProduct[] | null>(null)
   const [kind, setKind] = useState<Kind>('tshirt')
   // ?colour= from a shop swatch opens the page on that colour.
@@ -77,7 +79,7 @@ export default function ProductV2() {
   const price = variant ? Number(variant.price.amount) : Number(piece.price)
 
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -129,7 +131,7 @@ export default function ProductV2() {
       </div>
       {images.length > 1 && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
         {images.slice(0, 3).map((im, k) => (
-          <button type="button" key={im.url} onClick={() => setShot(k)} aria-pressed={k === shotIdx} style={{ aspectRatio: "1 / 1", borderRadius: "18px", background: "#ffffff", border: k === shotIdx ? "2px solid #0b0b0c" : "1px solid #e3e1dc", padding: "0", overflow: "hidden", cursor: "pointer" }}><img src={im.url} alt={im.altText ?? ''} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} /></button>
+          <button type="button" key={im.url} onClick={() => setShot(k)} aria-pressed={k === shotIdx} style={{ aspectRatio: "1 / 1", borderRadius: "18px", background: "#fbf6ec", border: k === shotIdx ? "2px solid #0b0b0c" : "1px solid #e3e1dc", padding: "0", overflow: "hidden", cursor: "pointer" }}><img src={im.url} alt={im.altText ?? ''} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} /></button>
         ))}
       </div>)}
     </div>
@@ -172,7 +174,7 @@ export default function ProductV2() {
       </div>
 
       <div style={{ filter: "drop-shadow(0 18px 26px rgba(0,0,0,.12))", transform: "rotate(-.8deg)" }}>
-        <div className="pw-mono" style={{ background: "#ffffff", padding: "22px 24px 18px", fontSize: "14px", display: "flex", flexDirection: "column", gap: "14px" }}>
+        <div className="pw-mono" style={{ background: "#fbf6ec", padding: "22px 24px 18px", fontSize: "14px", display: "flex", flexDirection: "column", gap: "14px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#5c5c5c", borderBottom: "1px dashed #bdbab3", paddingBottom: "12px" }}><span>{tr("PERFECT WORLD")}</span><span>{tr("WHAT THIS PIECE GIVES")}</span></div>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{c.name} {tr(piece.upper)} · {shownSize}</span><span>€{shownPiece.price}</span></div>
@@ -187,10 +189,10 @@ export default function ProductV2() {
       <button type="button" onClick={add} disabled={!variant}  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", minHeight: "60px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{addLabel}</button>
 
       <div className="pw-mono pw-pd-facts" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.5" }}>
-        <span style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "14px", padding: "12px 14px" }}>{tr("MADE TO ORDER")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Printed just for you")}</span></span>
-        <span style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "14px", padding: "12px 14px" }}>{tr("ABOUT 1½ TO 2 WEEKS")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Depends on where you live")}</span></span>
-        <span style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "14px", padding: "12px 14px" }}>{tr("SHIPPING €5")}<br /><span style={{ color: "#5c5c5c" }}>{tr("On every order")}</span></span>
-        <span style={{ background: "#ffffff", border: "1px solid #e3e1dc", borderRadius: "14px", padding: "12px 14px" }}>{tr("ORGANIC COTTON")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Stanley/Stella, GOTS certified")}</span></span>
+        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("MADE TO ORDER")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Printed just for you")}</span></span>
+        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("ABOUT 1½ TO 2 WEEKS")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Depends on where you live")}</span></span>
+        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("SHIPPING €5")}<br /><span style={{ color: "#5c5c5c" }}>{tr("On every order")}</span></span>
+        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("ORGANIC COTTON")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Stanley/Stella, GOTS certified")}</span></span>
       </div>
     </div>
   </section>

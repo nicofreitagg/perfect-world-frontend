@@ -120,3 +120,22 @@ export const pieceOf = (title: string): string => {
   if (WOMEN.test(title)) return 'women'
   return extractProductType(title)
 }
+
+// Natural Raw: the ground of every page except home, which is dark (Nico, 14 Oct: "the home page feels cold").
+export const RAW_GROUND = '#ece3d2'
+
+// A design's pages sit on Natural Raw, washed with its cause colours (Nico, 14 Oct):
+// A World Below warm + blue, Wild at Heart India grey, Talk About It lavender, and so on.
+const CAUSE_TINT: Record<string, [string, string]> = {
+  'one-world': ['93,165,226', '242,201,76'],
+  'cool-down': ['96,150,96', '214,190,120'],
+  'endangered-oceans': ['47,111,200', '240,128,100'],
+  'talk-about-it': ['170,140,215', '255,150,90'],
+  'wild-at-heart': ['105,110,122', '200,170,130'],
+  'rich-in-life': ['150,85,55', '230,170,100'],
+}
+export const causeGround = (slug: string | undefined) => {
+  const t = slug ? CAUSE_TINT[slug] : undefined
+  if (!t) return RAW_GROUND
+  return `radial-gradient(ellipse 75% 60% at 0% 0%, rgba(${t[0]},.55), transparent 70%), radial-gradient(ellipse 65% 55% at 100% 35%, rgba(${t[1]},.34), transparent 70%), radial-gradient(ellipse 80% 60% at 30% 100%, rgba(${t[0]},.36), transparent 70%), ${RAW_GROUND}`
+}

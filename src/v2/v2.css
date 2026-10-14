@@ -81,7 +81,7 @@
 @media (prefers-reduced-motion:reduce){.pw-card{transition:none}}
 
 /* Flowing colour fields instead of stars (Nico, 9 Oct) */
-.pw-flow{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#f5f4f1}
+.pw-flow{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:var(--pw-ground,#ece3d2);transition:background .6s}
 .pw-flow span{position:absolute;border-radius:50%;opacity:.3;filter:blur(40px);will-change:transform;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 @media (max-width:760px){.pw-flow span{opacity:.24}}
 
@@ -129,7 +129,7 @@
 .pw2 .pw-stars.pw-blend-b{padding-bottom:100px}
 
 /* Size guide */
-.pw-howto{display:grid;gap:6px;margin:0 0 8px;padding:18px 20px;border-radius:18px;background:#f5f4f1;font-size:15px}
+.pw-howto{display:grid;gap:6px;margin:0 0 8px;padding:18px 20px;border-radius:18px;background:#f3ebdd;font-size:15px}
 .pw-howto p{margin:0!important}
 .pw-howto .pw-tip{margin-top:8px!important;color:#5c5c5c}
 .pw-size{margin-top:34px}
@@ -166,7 +166,7 @@
 .pw2 .pwl-lines{z-index:90}
 .pw2 footer.pw-foot{background:#0b0b0c;padding-top:clamp(70px,7vw,110px)!important}
 /* Light band instead of a black block: soft cause-colour glows, no hard edge */
-.pw2 .pw-lightband{position:relative;color:#0b0b0c;background:radial-gradient(ellipse 55% 60% at 12% 25%,rgba(93,173,226,.26),transparent 70%),radial-gradient(ellipse 50% 55% at 88% 30%,rgba(255,140,66,.22),transparent 70%),radial-gradient(ellipse 60% 55% at 30% 90%,rgba(76,195,127,.2),transparent 70%),radial-gradient(ellipse 55% 50% at 80% 85%,rgba(176,126,82,.18),transparent 70%)}
+.pw2 .pw-lightband{position:relative;color:#0b0b0c;background:radial-gradient(ellipse 55% 60% at 12% 25%,rgba(255,170,110,.24),transparent 70%),radial-gradient(ellipse 50% 55% at 88% 30%,rgba(226,69,60,.10),transparent 70%),radial-gradient(ellipse 60% 55% at 30% 90%,rgba(176,126,82,.22),transparent 70%),radial-gradient(ellipse 55% 50% at 80% 85%,rgba(93,173,226,.12),transparent 70%)}
 /* Edge glow in the cause colours, moving with scroll (EdgeGlow in Flow.tsx) */
 .pw-edge{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden;mix-blend-mode:multiply}
 .pw-edge span{position:absolute;top:0;width:34vw;height:62vh;border-radius:50%;will-change:transform;
@@ -465,7 +465,7 @@
 .pw-designswitch{position:relative;flex:1 0 100%;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 0 2px;margin-top:6px}
 .pw-designswitch::-webkit-scrollbar{display:none}
 .pw-designswitch button{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;padding:6px 14px 6px 6px;border:1px solid rgba(11,11,12,.16);border-radius:999px;background:rgba(255,255,255,.7);font:inherit;font-size:13px;font-weight:600;color:#0b0b0c;text-decoration:none;cursor:pointer;transition:border-color .2s,background .2s}
-.pw-designswitch img{width:28px;height:28px;object-fit:contain;border-radius:50%;background:#f5f4f1}
+.pw-designswitch img{width:28px;height:28px;object-fit:contain;border-radius:50%;background:#f3ebdd}
 .pw-designswitch button[aria-current]{background:#0b0b0c;color:#fff;border-color:#0b0b0c;cursor:default}
 .pw-designswitch button[aria-current] img{background:#fff}
 @media (hover:hover) and (pointer:fine){.pw-designswitch button:not([aria-current]):hover{border-color:var(--c)}}
@@ -478,3 +478,11 @@
 .pw-designnext .pw-fat{font-size:clamp(18px,2.2vw,26px);line-height:1}
 @media (hover:hover) and (pointer:fine){.pw-designnext:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.08);border-color:var(--c)}}
 @media (max-width:760px){.pw-designnav{gap:10px;margin-top:32px}.pw-designnext{padding:10px 12px;gap:10px}.pw-designnext img{width:44px;height:44px}}
+
+/* A dark moment on the Natural Raw pages (Nico, 14 Oct: home dark, the rest mostly raw).
+   Fades in from the raw ground, runs into the footer. */
+.pw2 .pw-nightband{position:relative;color:#f2ebdf;background:radial-gradient(ellipse 50% 60% at 15% 55%,rgba(255,140,66,.13),transparent 70%),radial-gradient(ellipse 45% 55% at 85% 60%,rgba(226,69,60,.10),transparent 70%),linear-gradient(180deg,rgba(19,17,15,0) 0,rgba(19,17,15,.85) 90px,#13110f 170px,#13110f calc(100% - 170px),rgba(19,17,15,.85) calc(100% - 90px),rgba(19,17,15,0) 100%);padding:80px 0}
+.pw2 .pw-nightband.pw-night-end{background:radial-gradient(ellipse 50% 60% at 15% 55%,rgba(255,140,66,.13),transparent 70%),radial-gradient(ellipse 45% 55% at 85% 60%,rgba(226,69,60,.10),transparent 70%),linear-gradient(180deg,rgba(19,17,15,0) 0,rgba(19,17,15,.85) 90px,#13110f 170px,#0b0b0c 100%);padding-bottom:0}
+.pw2 .pw-nightband + svg.pwl-hardfoot{display:none}
+.pw-tinted .pw-flow span{opacity:.07}
+.pw-tinted .pw-edge{opacity:.25}

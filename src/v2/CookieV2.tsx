@@ -47,7 +47,7 @@ export default function CookieV2() {
       aria-label={tr("Cookies")}
       style={{
         position: 'fixed', left: '16px', right: '16px', bottom: '16px', zIndex: 2147483000, maxWidth: '400px',
-        background: '#f5f4f1', color: '#0b0b0c', border: '1.5px solid #0b0b0c', borderRadius: '22px',
+        background: '#f8f2e7', color: '#0b0b0c', border: '1.5px solid #0b0b0c', borderRadius: '22px',
         boxShadow: '0 18px 40px rgba(0,0,0,.18)', padding: '18px 18px 16px',
         fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500,
       }}
