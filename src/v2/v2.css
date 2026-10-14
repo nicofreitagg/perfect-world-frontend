@@ -517,3 +517,4 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-givetag-bar span{display:block;height:100%;border-radius:999px;background:#e2453c;transition:width .6s cubic-bezier(.2,.7,.2,1)}
 .pw-givetag-note{margin:12px 0 0;font:500 14px 'Bricolage Grotesque',system-ui,sans-serif;color:#5b5146}
 .pw-givehero h1{font-size:clamp(35px,5.2vw,78px)!important}
+@media (max-width:900px){.pw-givetag::before{display:none}.pw-givetag{transform:none;margin-top:8px}}
