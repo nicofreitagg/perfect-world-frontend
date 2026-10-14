@@ -481,8 +481,22 @@
 
 /* A dark moment on the Natural Raw pages (Nico, 14 Oct: home dark, the rest mostly raw).
    Fades in from the raw ground, runs into the footer. */
-.pw2 .pw-nightband{position:relative;color:#f2ebdf;background:radial-gradient(ellipse 50% 60% at 15% 55%,rgba(255,140,66,.13),transparent 70%),radial-gradient(ellipse 45% 55% at 85% 60%,rgba(226,69,60,.10),transparent 70%),linear-gradient(180deg,rgba(19,17,15,0) 0,rgba(19,17,15,.85) 90px,#13110f 170px,#13110f calc(100% - 170px),rgba(19,17,15,.85) calc(100% - 90px),rgba(19,17,15,0) 100%);padding:80px 0}
+.pw2 .pw-nightband{position:relative;color:#f2ebdf;background:radial-gradient(ellipse 50% 60% at 15% 55%,rgba(255,140,66,.13),transparent 70%),radial-gradient(ellipse 45% 55% at 85% 60%,rgba(226,69,60,.10),transparent 70%),linear-gradient(180deg,rgba(19,17,15,0) 0,rgba(19,17,15,.35) 70px,rgba(19,17,15,.8) 150px,#13110f 230px,#13110f calc(100% - 230px),rgba(19,17,15,.8) calc(100% - 150px),rgba(19,17,15,.35) calc(100% - 70px),rgba(19,17,15,0) 100%);padding:130px 0}
 .pw2 .pw-nightband.pw-night-end{background:radial-gradient(ellipse 50% 60% at 15% 55%,rgba(255,140,66,.13),transparent 70%),radial-gradient(ellipse 45% 55% at 85% 60%,rgba(226,69,60,.10),transparent 70%),linear-gradient(180deg,rgba(19,17,15,0) 0,rgba(19,17,15,.85) 90px,#13110f 170px,#0b0b0c 100%);padding-bottom:0}
 .pw2 .pw-nightband + svg.pwl-hardfoot{display:none}
 .pw-tinted .pw-flow span{opacity:.07}
 .pw-tinted .pw-edge{opacity:.25}
+
+/* Our story on the dark theme (Nico, 14 Oct), like home */
+.pw-darkpage .pw-flow span{opacity:.14}
+.pw-darkpage ~ .pw-edge,.pw-darkpage .pw-edge{mix-blend-mode:screen;opacity:.45}
+.pw2.pw-darkpage .pw-lightband{color:#f2ebdf;background:radial-gradient(ellipse 50% 40% at 12% 18%,rgba(255,140,66,.12),transparent 70%),radial-gradient(ellipse 45% 40% at 88% 40%,rgba(226,69,60,.09),transparent 70%),radial-gradient(ellipse 55% 40% at 30% 75%,rgba(176,126,82,.12),transparent 70%)}
+.pw2.pw-darkpage footer.pw-foot{background:linear-gradient(180deg,#13110f 0,#0b0a09 260px)}
+.pw2.pw-darkpage .pwl-hardfoot{display:none}
+.pw-beanieline{display:flex;align-items:center;gap:16px;margin:28px 0 0;padding:10px 20px 10px 10px;border-radius:20px;background:#f8f2e7;border:1px solid #e2d6c1;color:#0b0b0c;text-decoration:none;max-width:560px}
+.pw-beanieline img{width:64px;height:64px;object-fit:contain;border-radius:14px;background:#efe6d6;flex:0 0 auto}
+.pw-beanieline>span:nth-child(2){display:flex;flex-direction:column;gap:2px;flex:1 1 auto;font-size:14px}
+.pw-beanieline .pw-fat{font-size:20px}
+.pw-beanieline b{color:#c0322a}
+.pw-beanieline .pw-mono{font-size:12px;letter-spacing:.06em;white-space:nowrap}
+a.pw-beanieline:hover{border-color:#0b0b0c}

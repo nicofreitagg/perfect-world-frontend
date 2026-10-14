@@ -107,18 +107,13 @@ export default function ShopV2() {
   const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
   const goMinimal = () => { setTab('minimal'); setPiece('all'); toShop() }
   const goOg = () => { setTab('og'); setCause('all'); toShop() }
-  const chip = (on: boolean) => ({ selected: on, border: on ? '#0b0b0c' : '#cfccc5', bg: on ? '#0b0b0c' : 'transparent', fg: on ? '#ffffff' : '#0b0b0c' })
 
   const tiles = PIECE_LIST.map((p) => ({ name: p.id === 'beanie' ? 'BEANIE · ALL SIX' : p.id === 'women' ? "WOMEN'S TEE" : p.label.toUpperCase(), price: p.price, give: p.give }))
   const tabs = ([
     { id: 'minimal', label: 'Minimal', isNew: true },
     { id: 'og', label: 'OG', isNew: false },
   ] as const).map((t) => ({ label: t.label, isNew: t.isNew, selected: t.id === tab, pick: () => setTab(t.id) }))
-  const filterLabel = tr(tab === 'minimal' ? 'Filter by piece' : 'Filter by cause')
   const tabNote = tab === 'minimal' ? 'Six new designs, each made with one of our six partners.' : "Big back print. Each design tells its partner's story."
-  const filters = tab === 'minimal'
-    ? [{ id: 'all' as const, label: 'All' }, ...PIECE_LIST.map((p) => ({ id: p.id, label: p.filter }))].map((f) => ({ label: tr(f.label), hasDot: false, dot: '', ...chip(f.id === piece), pick: () => setPiece(f.id) }))
-    : [{ id: 'all' as const, label: 'All', color: '' }, ...CAUSES.map((c) => ({ id: c.id, label: SHORT[c.id], color: c.color }))].map((f) => ({ label: tr(f.label), hasDot: !!f.color, dot: f.color, ...chip(f.id === cause), pick: () => setCause(f.id) }))
 
   const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
@@ -288,14 +283,6 @@ export default function ShopV2() {
           </button>
         </Fragment>))}
       </div>
-      <div role="group" aria-label={filterLabel} className="pw-filters">
-        {filters.map((f, fI) => (<Fragment key={fI}>
-          <button type="button" onClick={f.pick} aria-pressed={f.selected}>
-            {f.hasDot && (<><span aria-hidden="true" style={{ width: "9px", height: "9px", borderRadius: "50%", background: f.dot }}></span></>)}
-            {f.label}
-          </button>
-        </Fragment>))}
-      </div>
     </div>
     {tab === 'minimal' ? (
       <div className="pw-minbanner">
@@ -309,20 +296,21 @@ export default function ShopV2() {
       <div className="pw-designbar">
         <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
         <span className="pw-fat">{MIN_DESIGNS.find((d) => d.slug === minDesign)?.name}</span>
-        {/* Jump straight to any other design without going back to the overview. */}
-        <nav className="pw-designswitch" aria-label={tr('Minimal designs')}>
-          {MIN_DESIGNS.map((d) => (
-            <button key={d.slug} type="button" aria-current={d.slug === minDesign ? 'true' : undefined} onClick={() => d.slug !== minDesign && pickDesign(d.slug)} style={{ '--c': CAUSES.find((c) => c.slug === d.slug)?.color } as React.CSSProperties}>
-              <img src={`/v2/img/min-${d.img}.webp`} alt="" />{d.name}
-            </button>
-          ))}
-        </nav>
         {/* A swirl in the design's cause colour draws itself each time a design is picked. */}
         <PickSwirl key={minDesign} color={CAUSES.find((c) => c.slug === minDesign)?.color ?? '#e2453c'} />
       </div>
     )}
     {products.some((p) => p.small) ? (
+    <>
     <div className="pw-designgrid">{products.map(card)}</div>
+    {/* The logo beanie has no design, so it sits under the six as one line, straight to its page. */}
+    {(() => {
+      const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
+      const p = PIECE_LIST.find((x) => x.id === 'beanie')!
+      const body = <><img src={BEANIE_MOCKUP} alt="" /><span><span className="pw-fat">{tr('Logo beanie')}</span><span>€{p.price} · <b>€{p.give}</b> {tr('shared by all six partners')}</span></span><span className="pw-mono">{beanie ? tr('See the beanie') + ' →' : tr('Coming 11.11')}</span></>
+      return beanie ? <A href={`/product/${beanie.handle}`} className="pw-beanieline">{body}</A> : <div className="pw-beanieline">{body}</div>
+    })()}
+    </>
     ) : (
     <div key={minDesign + piece} className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map(card)}
