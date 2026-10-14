@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './v2.css'
 import './landing.css'
 import Flow from './Flow'
@@ -62,14 +62,31 @@ function Ico({ c, w = false, style }: { c: CauseKey; w?: boolean; style: React.C
   return <img className="pwl-ico" src={icon(c, w ? 'wa' : 'a')} alt="" aria-hidden="true" style={style} />
 }
 
+const LOOKS = ['now', 'raw', 'dark', 'mix'] as const
+type Look = typeof LOOKS[number]
+const LOOK_GROUND: Record<Look, string> = { now: '#f5f4f1', raw: '#ece3d2', dark: '#13110f', mix: '#ece3d2' }
+const LOOK_NAMES: [string, string][] = [['now', 'Now'], ['raw', 'Natural Raw'], ['dark', 'Dark'], ['mix', 'Raw + dark']]
+
+// Floating switch between the trial looks (only shown when a look is in the link).
+function LookSwitch({ look }: { look: string }) {
+  return (
+    <nav className="pwl-lookswitch" aria-label="Colour look">
+      {LOOK_NAMES.map(([k, name]) => <a key={k} href={`/?look=${k}`} aria-current={look === k ? 'true' : undefined}>{name}</a>)}
+    </nav>
+  )
+}
+
 export default function HomeV2() {
   const tr = useT()
   usePageTitle()
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const launched = isLaunched()
 
+  // Preview only: ?look=raw | dark | mix tries a warmer colour scheme (Nico's mom, 14 Oct: "feels cold").
+  const look = useMemo(() => { const l = new URLSearchParams(window.location.search).get('look') ?? ''; return (LOOKS as readonly string[]).includes(l) ? l as Look : '' }, [])
+  const darkMin = look === 'dark' || look === 'mix'
   useEffect(() => {
-    document.body.style.background = '#f5f4f1'
+    document.body.style.background = look ? LOOK_GROUND[look] : '#f5f4f1'
     return () => { document.body.style.background = '' }
   }, [])
 
@@ -104,9 +121,10 @@ export default function HomeV2() {
 
   return (
     <>
-<div className="pw2 pw-page pw-grain pwl" style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "#0b0b0c" }}>
+<div className={'pw2 pw-page pw-grain pwl' + (look ? ' look-' + look : '')} style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "var(--ink)" }}>
   <Flow />
-  <Header big active="/" cartCount={cartCount} openCart={openCart} />
+  <Header big dark={look === 'dark'} active="/" cartCount={cartCount} openCart={openCart} />
+  {look && <LookSwitch look={look} />}
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">
@@ -137,7 +155,7 @@ export default function HomeV2() {
   <section id="minimal" className="pwl-sec pwl-min pw-iso" aria-label={tr('The Minimal Collection')}>
     <div className="pwl-wrap pwl-center">
       <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
-      <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} /></A></h2>
+      <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src={darkMin ? "/v2/img/sig-minimal-collection-white.png" : "/v2/img/sig-minimal-collection-black.png"} alt={tr('The Minimal Collection')} /></A></h2>
       <p className="pw-fat pwl-min-line">{tr('Doing good never looked so clean.')}</p>
       <p className="pwl-sub">{tr('Six new designs, one for each partner. Every piece gives a fixed amount.')}</p>
       <ul className="pwl-min-row">
