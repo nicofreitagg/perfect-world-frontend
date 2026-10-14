@@ -69,7 +69,8 @@ export default function ProductV2() {
   const colourNames = ofKind.map((p) => (extractColorFromTitle(p.title) || p.title).trim())
   const product = ofKind[Math.max(colourNames.findIndex((n) => n.toLowerCase() === colour.toLowerCase()), 0)]
   const variants = product?.variants ?? []
-  const variant = variants.find((v) => sizeOf(v) === size && v.availableForSale) ?? variants.find((v) => v.availableForSale)
+  const fits = (z: string) => variants.find((v) => sizeOf(v).toUpperCase() === z.toUpperCase() && v.availableForSale)
+  const variant = fits(size) ?? fits('M') ?? variants.find((v) => v.availableForSale)
   const images = product?.images ?? []
   // Opens on the back print (the design), not the front logo; Shopify's photo order varies.
   const pair = useDesignPairOrGuess(images.length ? images : undefined)

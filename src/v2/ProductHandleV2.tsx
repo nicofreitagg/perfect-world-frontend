@@ -34,7 +34,8 @@ export default function ProductHandleV2() {
   const { handle } = useParams()
   const { addToCart, openCart } = useCart()
   const [p, setP] = useState<ShopifyProduct | null | undefined>(undefined)
-  const [vid, setVid] = useState('')
+  // Size M is picked by default; a picked size carries over when the colour changes.
+  const [size, setSize] = useState('M')
   const [shot, setShot] = useState(0)
   const [params, setParams] = useSearchParams()
 
@@ -51,8 +52,9 @@ export default function ProductHandleV2() {
   const wanted = params.get('colour')?.toLowerCase()
   const colour = colours.find((c) => c.toLowerCase() === wanted) ?? colours[0]
   const inColour = colours.length ? p.variants.filter((v) => optOf(v, COLOUR) === colour) : p.variants
-  const pickColour = (c: string) => { setVid(''); setShot(0); setParams((q) => { q.set('colour', c); return q }, { replace: true }) }
-  const variant = inColour.find((v) => v.id === vid && v.availableForSale) ?? inColour.find((v) => v.availableForSale)
+  const pickColour = (c: string) => { setShot(0); setParams((q) => { q.set('colour', c); return q }, { replace: true }) }
+  const fits = (z: string) => inColour.find((v) => sizeOf(v).toUpperCase() === z.toUpperCase() && v.availableForSale)
+  const variant = fits(size) ?? fits('M') ?? inColour.find((v) => v.availableForSale)
   const price = variant ? Number(variant.price.amount) : Number(p.priceRange.minVariantPrice.amount)
   const give = giveOf(p.title)
   // Minimal: the back (the design) leads, for the picked colour when Shopify has its photo.
@@ -96,7 +98,7 @@ export default function ProductHandleV2() {
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {inColour.map((v) => {
                   const on = v === variant
-                  return <button key={v.id} type="button" className="pw-chip" disabled={!v.availableForSale} aria-pressed={on} onClick={() => setVid(v.id)} style={{ fontFamily: mono, fontSize: '14px', minWidth: '52px', minHeight: '46px', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid #0b0b0c', background: on ? '#0b0b0c' : '#fff', color: on ? '#fff' : '#0b0b0c' }}>{sizeOf(v)}</button>
+                  return <button key={v.id} type="button" className="pw-chip" disabled={!v.availableForSale} aria-pressed={on} onClick={() => setSize(sizeOf(v))} style={{ fontFamily: mono, fontSize: '14px', minWidth: '52px', minHeight: '46px', borderRadius: '999px', cursor: 'pointer', border: '1.5px solid #0b0b0c', background: on ? '#0b0b0c' : '#fff', color: on ? '#fff' : '#0b0b0c' }}>{sizeOf(v)}</button>
                 })}
               </div>
             </div>
