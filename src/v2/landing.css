@@ -526,3 +526,15 @@
 .look-dark :is(.pwl-faq details,.pwl-faq details:last-of-type){border-color:rgba(242,235,223,.16)}
 .look-dark .pwl-loud-min,.look-dark .pwl-min:not(section){background:#1c1915}
 .look-dark #minimal{background:transparent}
+
+/* Dark home, one flowing surface (Nico, 14 Oct: "very chunky… clear there's a cut"):
+   no boxed bands; colour hazes fade in and out past the section edges, the footer melts into the page. */
+.look-dark .pwl-glow,.look-dark .pwl-paper,.look-dark .pwl-earth{background:none}
+.look-dark :is(.pwl-glow,.pwl-paper,.pwl-earth)::before{content:'';position:absolute;inset:-220px 0;z-index:-1;pointer-events:none;-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent);mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent)}
+.look-dark .pwl-glow::before{background:radial-gradient(ellipse 50% 45% at 14% 40%,rgba(255,140,66,.17),transparent 70%),radial-gradient(ellipse 45% 40% at 86% 38%,rgba(226,69,60,.13),transparent 70%),radial-gradient(ellipse 55% 40% at 34% 70%,rgba(176,126,82,.16),transparent 70%),radial-gradient(ellipse 50% 40% at 78% 66%,rgba(93,173,226,.11),transparent 70%)}
+.look-dark .pwl-paper::before{background:radial-gradient(ellipse 60% 45% at 70% 55%,rgba(226,69,60,.08),transparent 70%),radial-gradient(ellipse 55% 45% at 22% 50%,rgba(176,126,82,.10),transparent 70%)}
+.look-dark .pwl-earth::before{background:radial-gradient(ellipse 50% 45% at 75% 35%,rgba(76,195,127,.10),transparent 70%),radial-gradient(ellipse 50% 40% at 20% 70%,rgba(93,173,226,.09),transparent 70%)}
+.look-dark .pwl-hero::after{content:'';position:absolute;left:0;right:0;bottom:-120px;height:240px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(176,126,82,.10),transparent 70%)}
+.look-dark footer.pw-foot{background:linear-gradient(180deg,#13110f 0,#0b0a09 260px)}
+.look-dark .pwl-hardfoot{display:none}
+.look-dark .pwl-story-sec::before{content:'';position:absolute;inset:-200px 0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 45% 40% at 30% 50%,rgba(226,69,60,.08),transparent 70%),radial-gradient(ellipse 45% 40% at 75% 45%,rgba(255,140,66,.07),transparent 70%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent);mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent)}

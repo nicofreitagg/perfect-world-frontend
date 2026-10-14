@@ -82,13 +82,14 @@ export default function HomeV2() {
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
   const launched = isLaunched()
 
-  // Preview only: ?look=raw | dark | mix tries a warmer colour scheme (Nico's mom, 14 Oct: "feels cold").
-  const look = useMemo(() => { const l = new URLSearchParams(window.location.search).get('look') ?? ''; return (LOOKS as readonly string[]).includes(l) ? l as Look : '' }, [])
+  // Dark is the home look (Nico, 14 Oct); ?look= still shows the others for comparison.
+  const asked = useMemo(() => { const l = new URLSearchParams(window.location.search).get('look') ?? ''; return (LOOKS as readonly string[]).includes(l) ? l as Look : null }, [])
+  const look: Look = asked ?? 'dark'
   const darkMin = look === 'dark' || look === 'mix'
   useEffect(() => {
-    document.body.style.background = look ? LOOK_GROUND[look] : '#f5f4f1'
+    document.body.style.background = LOOK_GROUND[look]
     return () => { document.body.style.background = '' }
-  }, [])
+  }, [look])
 
   // Links like /#faq (footer) land on that section.
   useEffect(() => {
@@ -121,10 +122,10 @@ export default function HomeV2() {
 
   return (
     <>
-<div className={'pw2 pw-page pw-grain pwl' + (look ? ' look-' + look : '')} style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "var(--ink)" }}>
+<div className={'pw2 pw-page pw-grain pwl look-' + look} style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "var(--ink)" }}>
   <Flow />
   <Header big dark={look === 'dark'} active="/" cartCount={cartCount} openCart={openCart} />
-  {look && <LookSwitch look={look} />}
+  {asked && <LookSwitch look={look} />}
 
   {/* 1 · Brand hero: worn pieces, the line, the benefit */}
   <section id="top" className="pwl-hero pw-iso">
