@@ -680,3 +680,11 @@
 }
 .pwl-cine{padding-bottom:clamp(56px,7vw,96px)}
 .pwl-trust{margin-top:clamp(18px,2.4vw,28px)}
+
+/* Phones: SHOP HOPE stays at the bottom once the cover is passed */
+.pwl-shopbar{display:none}
+@media (max-width:900px){
+  .pwl-shopbar{display:block;position:fixed;left:0;right:0;bottom:0;z-index:90;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(19,17,15,0),rgba(19,17,15,.92) 40%);transform:translateY(110%);transition:transform .35s ease;pointer-events:none}
+  .pwl-shopbar.is-on{transform:none;pointer-events:auto}
+  .pwl-shopbar .pwl-btn{width:100%;min-height:52px;letter-spacing:.08em;background:#f2ebdf;color:#14110e!important;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+}

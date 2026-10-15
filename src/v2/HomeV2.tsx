@@ -36,6 +36,9 @@ const BEST = [
 ]
 // Answers a stranger's first questions at a glance.
 const TRUST = ['Printed to order in Europe', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
+// Home shows the three questions a stranger asks first; the rest open on request.
+const FIRST_Q = ['How long will delivery take?', 'How do I find my size?', 'How does giving work?']
+const HOME_FAQ = [...FIRST_Q.map((q) => FAQ.find((f) => f.q === q)!), ...FAQ.filter((f) => !FIRST_Q.includes(f.q))]
 // Friends and customers in their own words (quotes shortened from what they wrote; Nico is asking each for their OK).
 const VOICES = [
   { name: 'Sandro Gambardella', img: '/v2/img/voice-sandro.webp', pos: '45% 40%', quote: 'Other than the really cool designs, I love knowing that after I buy something, it goes to a cause that fuels something positive.' },
@@ -115,6 +118,29 @@ function DesignStage() {
   )
 }
 
+/** Phones: once the cover is behind you, SHOP HOPE stays one tap away at the bottom of the screen. */
+function ShopBar() {
+  const tr = useT()
+  const [on, setOn] = useState(false)
+  useEffect(() => {
+    const check = () => {
+      const hero = document.getElementById('top')
+      const foot = document.querySelector('footer')
+      const past = hero ? hero.getBoundingClientRect().bottom < 0 : window.scrollY > 700
+      const atFoot = foot ? foot.getBoundingClientRect().top < window.innerHeight : false
+      setOn(past && !atFoot)
+    }
+    check()
+    window.addEventListener('scroll', check, { passive: true })
+    return () => window.removeEventListener('scroll', check)
+  }, [])
+  return (
+    <div className={'pwl-shopbar' + (on ? ' is-on' : '')} aria-hidden={!on}>
+      <A href="/shop" className="pwl-btn" tabIndex={on ? 0 : -1}>{tr('SHOP HOPE')}</A>
+    </div>
+  )
+}
+
 function Ico({ c, w = false, style }: { c: CauseKey; w?: boolean; style: React.CSSProperties }) {
   return <img className="pwl-ico" src={icon(c, w ? 'wa' : 'a')} alt="" aria-hidden="true" style={style} />
 }
@@ -189,6 +215,7 @@ export default function HomeV2() {
     </AutoFilm>
     {/* Trust line: what a stranger wants to know in two seconds */}
     <ul className="pwl-trust" aria-label={tr('Good to know')}>
+      <li>{tr('T-shirts from')} €{PIECES.shirt.price}</li>
       {TRUST.map((t) => <li key={t}>{tr(t)}</li>)}
     </ul>
   </section>
@@ -319,14 +346,15 @@ export default function HomeV2() {
   <section id="faq" className={'pwl-sec pwl-faq pw-iso' + (allQ ? ' is-all' : '')} aria-labelledby="faq-h">
     <div className="pwl-wrap">
       <h2 id="faq-h" className="pw-fat pwl-h2">{tr('Questions')}</h2>
-      {FAQ.map((f, i) => (
-        <details key={f.q} className={i >= 5 ? 'pwl-faq-more' : undefined}><summary>{tr(f.q)}</summary><p>{tr(f.a)}</p></details>
+      {HOME_FAQ.map((f, i) => (
+        <details key={f.q} className={i >= 3 ? 'pwl-faq-more' : undefined}><summary>{tr(f.q)}</summary><p>{tr(f.a)}</p></details>
       ))}
-      {!allQ && <button type="button" className="pwl-faq-all" onClick={() => setAllQ(true)}>{tr('More questions')} ({FAQ.length - 5})</button>}
+      {!allQ && <button type="button" className="pwl-faq-all" onClick={() => setAllQ(true)}>{tr('More questions')} ({FAQ.length - 3})</button>}
       <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
     </div>
   </section>
 
+  <ShopBar />
   <Footer icons={["/v2/icons/ic-de6f599f.svg", "/v2/icons/ic-9eab075d.svg"]} />
 </div>
 
