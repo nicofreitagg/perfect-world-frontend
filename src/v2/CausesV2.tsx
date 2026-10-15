@@ -31,7 +31,7 @@ export default function CausesV2() {
 
   <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "clamp(40px, 7vw, 104px) clamp(16px, 4vw, 56px) clamp(36px, 4vw, 56px)", textAlign: "center" }}>
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-40px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#2f6fa8" strokeWidth="7"></path></svg>
-    <p className="pw-hand" style={{ margin: "0 0 10px", fontSize: "clamp(29px, 4.6vw, 68px)", lineHeight: "1.05", color: "#0b0b0c" }}>{tr("Six causes. Six designs.")} <span style={{ color: "#c0322a" }}>{tr("You pick one.")}</span></p>
+    <p className="pw-hand" style={{ margin: "0 0 10px", fontSize: "clamp(29px, 4.6vw, 68px)", lineHeight: "1.05", color: "#0b0b0c" }}>{tr("Six causes. Six designs.")} <span style={{ color: "#c0322a", whiteSpace: "nowrap" }}>{tr("You pick one.")}</span></p>
     <h1 className="pw-fat" style={{ margin: "12px 0 0", fontSize: "clamp(40px, 8vw, 120px)", lineHeight: ".9" }}>{tr("The people doing the work.")}</h1>
   </section>
 

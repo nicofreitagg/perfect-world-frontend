@@ -178,7 +178,7 @@ export default function ProductV2() {
         <div className="pw-mono" style={{ background: "#fbf6ec", padding: "22px 24px 18px", fontSize: "14px", display: "flex", flexDirection: "column", gap: "14px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#5c5c5c", borderBottom: "1px dashed #bdbab3", paddingBottom: "12px" }}><span>{tr("PERFECT WORLD")}</span><span>{tr("WHAT THIS PIECE GIVES")}</span></div>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{c.name} {tr(piece.upper)} · {shownSize}</span><span>€{shownPiece.price}</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{c.name} {tr(piece.upper)}{shownSize ? ` · ${shownSize}` : ""}</span><span>€{shownPiece.price}</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", color: "#5c5c5c" }}><span>{tr("Shipping")}</span><span>€5.00</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", fontWeight: "600" }}><span>→ {help.partner}</span><span style={{ color: "#c0322a" }}>€{piece.give}</span></div>
           </div>
@@ -204,7 +204,7 @@ export default function ProductV2() {
       <span style={{ position: "relative", width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }}><img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} /></span>
       <div style={{ position: "relative", flex: "1 1 460px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "26px" }}>{tr("the story behind the design")}</p>
-        <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(23px, 3.6vw, 52px)", lineHeight: ".95" }}>{c.name} · {tr(c.place)}</p>
+        <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(23px, 3.6vw, 52px)", lineHeight: "1" }}>{c.name}<span style={{ display: "block", marginTop: "6px", fontSize: ".62em" }}>{tr(c.place)}</span></p>
         <p style={{ margin: "14px 0 0", fontSize: "17px", lineHeight: "1.55", maxWidth: "640px" }}>{tr(c.teaser)}</p>
         <A href={`/project/${c.slug}`} style={{ display: "inline-block", marginTop: "20px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontWeight: "600", fontSize: "15px", padding: "13px 22px", borderRadius: "999px" }}>{tr("Meet")} {c.partner} →</A>
       </div>

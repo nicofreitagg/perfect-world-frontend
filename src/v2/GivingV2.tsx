@@ -58,7 +58,7 @@ export default function GivingV2() {
 
   <section className="pw-iso" id="payouts" aria-label={tr("When it's paid and how to check")} style={{ position: "relative", zIndex: "77", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
     <h2 style={{ margin: "0", fontWeight: "800", fontSize: "clamp(26px, 4.6vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("When it's paid")}</h2>
-    <div style={{ marginTop: "34px", background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "30px", maxWidth: "820px" }}>
+    <div style={{ marginTop: "34px", background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "30px" }}>
       <p style={{ margin: "0", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a" }}>{tr("We add up the fixed amounts from every order and transfer them to each partner directly. Ask us any time how much has gone to a cause, and we'll tell you.")}</p>
       <p style={{ margin: "14px 0 0", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a" }}>{tr("As Perfect World grows and orders come in more regularly, we'll publish the totals per partner here.")}</p>
     </div>
@@ -66,7 +66,7 @@ export default function GivingV2() {
 
   <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
     <div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", color: "#0b0b0c", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
-      <div style={{ flex: "0 1 260px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(29px, 5vw, 64px)", lineHeight: ".95" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
+      <div style={{ flex: "0 1 400px" }}><p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(29px, 4.2vw, 58px)", lineHeight: "1", textWrap: "balance" }} className="pw-fat">{tr("From profits to a fixed amount")}</p></div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#2a2a2a", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World: proof that buying and business can exist to help, not to take.")}</p>
         <p style={{ margin: "0" }}>{isLaunched() ? tr("Since 11.11, that mission has a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.") : tr("From 11.11, that mission gets a number: every piece gives a fixed amount, shown next to the price and passed on to the partner. It's our next step in transparency.")}</p>

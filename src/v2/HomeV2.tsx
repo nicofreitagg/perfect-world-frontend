@@ -48,12 +48,16 @@ const VOICES = [
 ]
 
 /** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
-function AutoFilm({ src, poster, card, label, children }: { src: string; poster: string; card: string; label: string; children: React.ReactNode }) {
+function AutoFilm({ src, card, label, children }: { src: string; card: string; label: string; children: React.ReactNode }) {
   const tr = useT()
   const ref = useRef<HTMLVideoElement>(null)
   const still = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
   const [intro, setIntro] = useState(!still)
   const [muted, setMuted] = useState(true)
+  // The 11.11 card stays up until the film is really playing (phones on low power never autoplay).
+  const [playing, setPlaying] = useState(false)
+  const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
+  const sq = card.replace('.webp', '-sq.webp')
   useEffect(() => {
     if (still) return
     const id = setTimeout(() => { setIntro(false); ref.current?.play().catch(() => {}) }, 2200)
@@ -63,9 +67,12 @@ function AutoFilm({ src, poster, card, label, children }: { src: string; poster:
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" />
+      <video ref={ref} src={src} poster={phone ? sq : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onPlaying={() => setPlaying(true)} />
       <div className="pwl-cine-shade" aria-hidden="true" />
-      <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? '' : ' is-gone')} />
+      <picture>
+        <source media="(max-width:700px)" srcSet={sq} />
+        <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (!intro && playing ? ' is-gone' : '')} />
+      </picture>
       <button type="button" className="pwl-autofilm-sound" onClick={sound} aria-pressed={!muted}>{muted ? tr('Sound on') : tr('Sound off')}</button>
     </div>
     {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
@@ -204,7 +211,7 @@ export default function HomeV2() {
 
   {/* 1 · Hero: the film fills the first screen; it opens on the 11.11 card, then the line and SHOP HOPE come in */}
   <section id="top" className="pwl-cine pw-iso">
-    <AutoFilm src="/assets/videos/home-film-720.mp4" poster="/v2/img/hero-film-poster.webp" card="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
+    <AutoFilm src="/assets/videos/home-film-720.mp4" card="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
       <h1 className="pwl-head">
         <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
         <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>

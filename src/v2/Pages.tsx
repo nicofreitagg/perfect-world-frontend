@@ -136,6 +136,7 @@ export function SizeGuideV2() {
                 </tbody>
               </table>
             </div>
+            {c.rows.length > 3 && <p className="pw-size-hint">{t('Swipe for every size →')}</p>}
           </section>
         ))}
         <p style={{ marginTop: '28px' }}>{t('Still unsure?')} <A href="/contact">{t('Write to us')}</A> {t('and we will help you pick.')}</p>

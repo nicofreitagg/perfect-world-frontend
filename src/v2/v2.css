@@ -527,3 +527,15 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw2 .pw-lightband{background:none!important;isolation:isolate}
 .pw2 .pw-lightband::before{content:'';position:absolute;inset:-120px 0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 12% 30%,rgba(255,170,110,.22),transparent 70%),radial-gradient(ellipse 50% 45% at 88% 35%,rgba(226,69,60,.08),transparent 70%),radial-gradient(ellipse 60% 45% at 30% 75%,rgba(176,126,82,.18),transparent 70%),radial-gradient(ellipse 55% 45% at 80% 70%,rgba(93,173,226,.10),transparent 70%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent)}
 .pw2.pw-darkpage .pw-lightband::before{background:radial-gradient(ellipse 50% 40% at 12% 18%,rgba(255,140,66,.12),transparent 70%),radial-gradient(ellipse 45% 40% at 88% 40%,rgba(226,69,60,.09),transparent 70%),radial-gradient(ellipse 55% 40% at 30% 75%,rgba(176,126,82,.12),transparent 70%)}
+
+/* 15 Oct formatting pass: big headlines get room so descenders never touch the next line */
+.pw2 h1.pw-fat,.pw2 h2.pw-fat{line-height:1!important}
+/* The hands drawing stays in the top-right corner of a cause card, away from the text */
+.pw-hands{-webkit-mask-image:radial-gradient(ellipse 48% 42% at 100% 0,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 48% 42% at 100% 0,#000 55%,transparent 100%)}
+.pw-size-hint{display:none}
+@media (max-width:700px){
+  .pw-size table{font-size:13px}
+  .pw-size th,.pw-size td{padding:10px 9px}
+  .pw-size tbody th{white-space:normal;min-width:92px;max-width:104px;line-height:1.25;box-shadow:6px 0 8px -6px rgba(0,0,0,.18)}
+  .pw-size-hint{display:block;margin:8px 2px 0;font:600 11px 'JetBrains Mono',monospace;letter-spacing:.04em;color:#6b6259;text-align:right}
+}

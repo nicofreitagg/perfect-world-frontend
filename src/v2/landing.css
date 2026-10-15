@@ -719,3 +719,8 @@
 .pwl-how-k{display:none}
 @media (max-width:700px){.pwl-how-k{display:inline;color:var(--red-t)}}
 @media (max-width:900px){.pwl-best,.pwl-voices,.pwl-alive{scroll-padding-inline:16px}}
+
+/* Phones: the square 11.11 card fills the film frame, like the wide card on desktop */
+@media (max-width:700px){
+  .pwl-cine .pwl-autofilm-card{object-fit:cover}
+}
