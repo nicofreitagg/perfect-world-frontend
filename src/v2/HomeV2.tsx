@@ -42,24 +42,74 @@ const WORN = [
   { src: '/v2/img/photo-og-back.jpg', alt: 'The back print of a Perfect World T-shirt', cap: 'Every day' },
 ]
 
-/** The film plays by itself, muted and looping; it opens on the 11.11 card for a moment. */
-function AutoFilm({ src, poster, label }: { src: string; poster: string; label: string }) {
+/** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
+function AutoFilm({ src, poster, card, label, children }: { src: string; poster: string; card: string; label: string; children: React.ReactNode }) {
   const tr = useT()
   const ref = useRef<HTMLVideoElement>(null)
-  const [intro, setIntro] = useState(true)
+  const still = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
+  const [intro, setIntro] = useState(!still)
   const [muted, setMuted] = useState(true)
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (still) return
     const id = setTimeout(() => { setIntro(false); ref.current?.play().catch(() => {}) }, 2200)
     return () => clearTimeout(id)
-  }, [])
+  }, [still])
   const sound = () => { const v = ref.current; if (!v) return; v.muted = !muted; setMuted(!muted); setIntro(false); v.play().catch(() => {}) }
   return (
-    <>
+    <div className="pwl-cine-box">
+    <div className="pwl-cine-stage">
       <video ref={ref} src={src} poster={poster} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" />
-      <img src={poster} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? '' : ' is-gone')} />
+      <div className="pwl-cine-shade" aria-hidden="true" />
+      <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? '' : ' is-gone')} />
       <button type="button" className="pwl-autofilm-sound" onClick={sound} aria-pressed={!muted}>{muted ? tr('Sound on') : tr('Sound off')}</button>
-    </>
+    </div>
+    {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
+    <div className={'pwl-cine-over' + (intro ? '' : ' is-in')}>{children}</div>
+    </div>
+  )
+}
+
+/** The six Minimal designs: the artwork draws itself, then the piece it's printed on floats in. Cycles until someone picks one. */
+function DesignStage() {
+  const tr = useT()
+  const [i, setI] = useState(0)
+  const [auto, setAuto] = useState(true)
+  useEffect(() => {
+    if (!auto || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(() => setI((n) => (n + 1) % ALIVE.length), 5200)
+    return () => clearInterval(id)
+  }, [auto])
+  const a = ALIVE[i]
+  const c = causeBySlug(a.slug)
+  const d = MIN_DESIGNS.find((x) => x.slug === a.slug)!
+  return (
+    <div className="pwl-stage" style={{ ['--c' as string]: c?.color ?? '#999' }}>
+      <div className="pwl-stage-show" key={a.slug} aria-live="polite">
+        <img className="pwl-stage-art" src={`/v2/img/art-${a.slug}-w.webp`} alt={`${d.name}, ${tr('artwork')}`} />
+        <img className="pwl-stage-piece" src={`/v2/img/mm-${a.img}.webp`} alt={`${d.name} ${tr(a.piece)}`} />
+        <div className="pwl-stage-cap">
+          <span className="pwl-tag">{tr('New')}</span>
+          <p className="pwl-stage-name pw-fat">{d.name}</p>
+          <p className="pwl-stage-who">{tr('Supports')} {c?.partner}{c ? `, ${tr(c.place)}` : ''}</p>
+          <A href={`/shop?design=${a.slug}`} className="pwl-link">{tr('Shop this design')} →</A>
+        </div>
+      </div>
+      <ul className="pwl-alive" aria-label={tr('The six designs')}>
+        {ALIVE.map((x, n) => {
+          const dx = MIN_DESIGNS.find((y) => y.slug === x.slug)!
+          const cx = causeBySlug(x.slug)
+          return (
+            <li key={x.slug} style={{ ['--c' as string]: cx?.color ?? '#999', ['--d' as string]: `${n * -0.9}s` }}>
+              <button type="button" className="pwl-alive-card" aria-pressed={n === i} onClick={() => { setI(n); setAuto(false) }}>
+                <span className="pwl-alive-img"><img src={`/v2/img/mm-${x.img}.webp`} alt="" loading="lazy" /></span>
+                <span className="pwl-alive-name">{dx.name}</span>
+                <span className="pwl-alive-cause">{cx ? titleCase(cx.name) : ''}</span>
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 }
 
@@ -124,26 +174,17 @@ export default function HomeV2() {
   <Header big dark={look === 'dark'} active="/" cartCount={cartCount} openCart={openCart} />
   {asked && <LookSwitch look={look} />}
 
-  {/* 1 · Hero: the line, one cause-led button, the film playing on its own */}
-  <section id="top" className="pwl-hero pw-iso">
-    <h1 className="pwl-head">
-      <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
-      <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
+  {/* 1 · Hero: the film fills the first screen; it opens on the 11.11 card, then the line and SHOP HOPE come in */}
+  <section id="top" className="pwl-cine pw-iso">
+    <AutoFilm src="/assets/videos/home-film-720.mp4" poster="/v2/img/hero-film-poster.webp" card="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
+      <h1 className="pwl-head">
+        <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
+        <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
 <span className="pw-hand pwl-head-b">{tr('for.')}</span></span>
-    </h1>
-    <figure className="pwl-hero-photo">
-      {/* Placeholder until the official 11.11 film: the film from the current site, opening on the 11.11 card */}
-      <div className="pwl-photo-box pwl-film">
-        <AutoFilm src="/assets/videos/home-film-720.mp4" poster="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')} />
-      </div>
-      <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span><span className="pw-hand">{tr('Not Alone.')}</span></p>
-    </figure>
-    <div className="pwl-hero-body">
-      <p className="pwl-lede"><b>{tr('Clothing that helps the world: every piece supports a cause.')}</b></p>
-      <div className="pwl-ctas">
-        <A href="/shop" className="pwl-btn">{tr('Join the movement')}</A>
-      </div>
-    </div>
+      </h1>
+      <p className="pwl-cine-lede">{tr('Clothing that helps the world: every piece supports a cause.')} <b>{tr('Join the movement.')}</b></p>
+      <A href="/shop" className="pwl-btn pwl-cine-btn">{tr('SHOP HOPE')}</A>
+    </AutoFilm>
   </section>
 
   <Lines />
@@ -154,21 +195,7 @@ export default function HomeV2() {
       <p className="pwl-kicker">{tr('NEW COLLECTION')}</p>
       <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src={darkMin ? "/v2/img/sig-minimal-collection-white.png" : "/v2/img/sig-minimal-collection-black.png"} alt={tr('The Minimal Collection')} /></A></h2>
       <p className="pwl-sub">{tr('Six new designs on T-shirts, hoodies, totes and more. Each one supports its own cause.')}</p>
-      <ul className="pwl-alive">
-        {ALIVE.map((a, i) => {
-          const c = causeBySlug(a.slug)
-          const d = MIN_DESIGNS.find((x) => x.slug === a.slug)!
-          return (
-            <li key={a.slug} style={{ ['--c' as string]: c?.color ?? '#999', ['--d' as string]: `${i * -0.9}s` }}>
-              <A href={`/shop?design=${a.slug}`} className="pwl-alive-card">
-                <span className="pwl-alive-img"><img src={`/v2/img/mm-${a.img}.webp`} alt={`${d.name} ${tr(a.piece)}`} loading="lazy" /><span className="pwl-tag">{tr('New')}</span></span>
-                <span className="pwl-alive-name">{d.name}</span>
-                <span className="pwl-alive-cause">{c ? titleCase(c.name) : ''}</span>
-              </A>
-            </li>
-          )
-        })}
-      </ul>
+      <DesignStage />
       <div className="pwl-ctas pwl-ctas-c">
         <A href="/shop#shop" className="pwl-btn">{tr('Shop the collection')}</A>
       </div>
