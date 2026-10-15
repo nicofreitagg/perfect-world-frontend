@@ -737,24 +737,18 @@
 @media (max-width:760px){
   .pwl-founder-c{flex:none;width:150px;height:150px;aspect-ratio:1}
 }
-/* Phones: copy on the left, a small globe on the right */
-@media (max-width:899px){
-  .pwl-causes-top{grid-template-columns:minmax(0,1fr) 112px;gap:12px;align-items:center}
-  .pwl-globe{height:112px;margin-top:0}
-  .pwl-globe-flat{width:112px;height:112px;margin:-56px 0 0 -56px;background-size:224px 112px;animation-name:pwl-spin-xs}
-}
-@keyframes pwl-spin-xs{to{background-position:-224px 50%}}
-@media (max-width:899px){
-  .pwl-causes-top>div:first-child{display:contents}
-  .pwl-causes-top{grid-template-areas:"kick kick" "head head" "sub globe" "link globe";row-gap:0}
-  .pwl-causes-top .pwl-kicker{grid-area:kick}
-  .pwl-causes-top .pwl-h2{grid-area:head}
-  .pwl-causes-top .pwl-sub{grid-area:sub}
-  .pwl-causes-top .pwl-link{grid-area:link;justify-self:start;margin-top:16px}
-  .pwl-causes-top .pwl-globe{grid-area:globe;align-self:center}
-}
 /* Phones: "More questions" and "How giving works" each get their own line */
 @media (max-width:900px){
   .pwl-faq-all{display:flex;width:fit-content}
   .pwl-faq .pwl-link{display:table;margin-top:8px}
 }
+/* Phones: intro, then the cause cards, then a big spinning globe closing the section */
+@media (max-width:899px){
+  #causes .pwl-wrap{display:flex;flex-direction:column}
+  #causes .pwl-causes-top{display:contents}
+  #causes .pwl-causes-top>div:first-child{order:1}
+  #causes .pwl-causes{order:2}
+  #causes .pwl-globe{order:3;height:300px;margin-top:24px}
+  #causes .pwl-globe-flat{width:280px;height:280px;margin:-140px 0 0 -140px;background-size:560px 280px;animation-name:pwl-spin-m}
+}
+@keyframes pwl-spin-m{to{background-position:-560px 50%}}
