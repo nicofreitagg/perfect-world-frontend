@@ -34,12 +34,14 @@ const BEST = [
   { slug: 'talk-about-it', img: 'talk', kind: 'hoodie', piece: 'Hoodie', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
   { slug: 'cool-down', img: 'cool-tote', kind: 'tote', piece: 'Tote bag', price: PIECES.tote.price, give: PIECES.tote.give },
 ]
-// Real photos of the pieces being worn; the lake shoot (24 Oct) can replace them.
-const WORN = [
-  { src: '/v2/img/hero-friends-800.webp', alt: 'Four friends on a bench wearing Perfect World hoodies', cap: 'Out with friends' },
-  { src: '/v2/img/park-tees-900.webp', alt: 'Friends in a park wearing Perfect World T-shirts', cap: 'Sundays in the park' },
-  { src: '/v2/img/two-friends-700.webp', alt: 'Two friends at sunset in Perfect World T-shirts', cap: 'Golden hour' },
-  { src: '/v2/img/photo-og-back.jpg', alt: 'The back print of a Perfect World T-shirt', cap: 'Every day' },
+// Answers a stranger's first questions at a glance.
+const TRUST = ['Printed to order in Europe', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
+// Friends and customers in their own words (quotes shortened from what they wrote; Nico is asking each for their OK).
+const VOICES = [
+  { name: 'Sandro Gambardella', img: '/v2/img/voice-sandro.webp', pos: '50% 30%', quote: 'Other than the really cool designs, I love knowing that after I buy something, it goes to a cause that fuels something positive.' },
+  { name: 'Shaan Patel', img: '/v2/img/voice-shaan.webp', pos: '50% 40%', quote: "It's not just about clothes. It's about making a difference and being part of something bigger that actually cares about the planet and people." },
+  { name: 'Ilai Bachrach', img: '/v2/img/voice-ilai.webp', pos: '50% 25%', quote: 'Perfect World for me is about creating one world where we care for each other and love each other the way we are, as imperfect beings.' },
+  { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 30%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
 /** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
@@ -185,6 +187,10 @@ export default function HomeV2() {
       <p className="pwl-cine-lede">{tr('Clothing that helps the world: every piece supports a cause.')} <b>{tr('Join the movement.')}</b></p>
       <A href="/shop" className="pwl-btn pwl-cine-btn">{tr('SHOP HOPE')}</A>
     </AutoFilm>
+    {/* Trust line: what a stranger wants to know in two seconds */}
+    <ul className="pwl-trust" aria-label={tr('Good to know')}>
+      {TRUST.map((t) => <li key={t}>{tr(t)}</li>)}
+    </ul>
   </section>
 
   <Lines />
@@ -229,16 +235,34 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 4 · Worn in real life */}
+  {/* 4 · How it works, in three pictures */}
+  <section id="how" className="pwl-sec pw-iso" aria-labelledby="how-h">
+    <div className="pwl-wrap">
+      <h2 id="how-h" className="pw-fat pwl-h2 pwl-center">{tr('How it works')}</h2>
+      <ol className="pwl-how">
+        <li><span className="pwl-how-pic pwl-how-art"><img src="/v2/img/art-endangered-oceans-w.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">1</span><b>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
+        <li><span className="pwl-how-pic"><img src="/v2/img/mm-oceans.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">2</span><b>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
+        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b>{tr('The partner gets their amount')}</b><span>{tr('A fixed amount from every piece, already in the price.')}</span></li>
+      </ol>
+    </div>
+  </section>
+
+  {/* 4b · Real people wearing it, in their own words (each has agreed to be shown) */}
   <section id="worn" className="pwl-sec pw-iso" aria-labelledby="worn-h">
     <div className="pwl-wrap">
       <div className="pwl-center">
-        <h2 id="worn-h" className="pw-fat pwl-h2">{tr('Made to be worn.')}</h2>
-        <p className="pwl-sub">{tr('Soft, everyday clothes. Your cause comes with you.')}</p>
+        <h2 id="worn-h" className="pw-fat pwl-h2">{tr('Why they wear it.')}</h2>
+        <p className="pwl-sub">{tr('Real people, real pieces, in their own words.')}</p>
       </div>
-      <ul className="pwl-life">
-        {WORN.map((w) => (
-          <li key={w.src}><img src={w.src} alt={tr(w.alt)} loading="lazy" /><span>{tr(w.cap)}</span></li>
+      <ul className="pwl-voices">
+        {VOICES.map((v) => (
+          <li key={v.name}>
+            <figure>
+              <img src={v.img} alt={`${v.name} ${tr('wearing Perfect World')}`} loading="lazy" style={{ objectPosition: v.pos }} />
+              <blockquote>“{tr(v.quote)}”</blockquote>
+              <figcaption>{v.name}</figcaption>
+            </figure>
+          </li>
         ))}
       </ul>
     </div>
