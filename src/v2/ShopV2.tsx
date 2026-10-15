@@ -235,7 +235,7 @@ export default function ShopV2() {
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
       <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(37px, 6vw, 84px)", lineHeight: "1" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
       <p style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.5", color: "#3a3a3a", maxWidth: "520px" }}>{tr("Every piece supports a cause. The design decides which one.")}</p>
-      <p className="pw-mono pw-shoptrust">{tr("T-shirts from")} €{PIECES.shirt.price} · {tr("Printed in Europe")} · {tr("€5 shipping")}</p>
+      <p className="pw-mono pw-shoptrust">{tr("T-shirts from")} €{PIECES.shirt.price} · {tr("Printed in Germany")} · {tr("€5 shipping")}</p>
     </div>
   </section>
 

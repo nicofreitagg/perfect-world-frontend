@@ -35,7 +35,7 @@ const BEST = [
   { slug: 'cool-down', img: 'cool-tote', kind: 'tote', piece: 'Tote bag', price: PIECES.tote.price, give: PIECES.tote.give },
 ]
 // Answers a stranger's first questions at a glance.
-const TRUST = ['Printed in Europe', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
+const TRUST = ['Printed in Germany', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
 // Home shows the three questions a stranger asks first; the rest open on request.
 const FIRST_Q = ['How long will delivery take?', 'How do I find my size?', 'How does giving work?']
 const HOME_FAQ = [...FIRST_Q.map((q) => FAQ.find((f) => f.q === q)!), ...FAQ.filter((f) => !FIRST_Q.includes(f.q))]
