@@ -126,7 +126,7 @@ export default function CauseV2() {
       </div>
       <div style={{ flex: "1 1 380px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "24px", color: "#c0322a" }}>{tr("wear the design")}</p>
-        <h2 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(26px, 4.4vw, 60px)", lineHeight: ".92" }}>{tr("The")} {c.title} {tr("collection")}</h2>
+        <h2 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(26px, 4.4vw, 60px)", lineHeight: "1", textWrap: "balance" }}>{tr("The")} <span style={{ whiteSpace: "nowrap" }}>{c.title}</span> {tr("collection")}</h2>
         <p style={{ margin: "16px 0 0", fontSize: "17px", lineHeight: "1.6", color: "#3a3a3a", maxWidth: "480px" }}>{tr("Designed for this project, so its amount always goes to")} {c.partner}. Prefer something quieter? Its Minimal piece gives to {c.partner} {tr("too.")}</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "24px" }}>
           <A href={`/design/${c.slug}`} style={{ display: "inline-flex", alignItems: "center", minHeight: "48px", padding: "0 22px", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontSize: "15px", fontWeight: "600" }}>{tr("Shop the")} {c.title} {tr("design")}</A>

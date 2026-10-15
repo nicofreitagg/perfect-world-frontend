@@ -539,3 +539,11 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-size tbody th{white-space:normal;min-width:92px;max-width:104px;line-height:1.25;box-shadow:6px 0 8px -6px rgba(0,0,0,.18)}
   .pw-size-hint{display:block;margin:8px 2px 0;font:600 11px 'JetBrains Mono',monospace;letter-spacing:.04em;color:#6b6259;text-align:right}
 }
+.pw-shoptrust{margin:16px 0 0;font-size:12px;letter-spacing:.06em;color:#5c5c5c}
+/* Fat Frank sets its words very close; give them room so "From pain to purpose." never reads as one word */
+.pw2 .pw-fat,.pw-prose h2{word-spacing:.14em;letter-spacing:0}
+/* Phones: on a cause page the partner name gets a full row, place and amount share the next */
+@media (max-width:700px){
+  .pw-m-facts3{grid-template-columns:1fr 1fr!important;gap:1px!important}
+  .pw-m-facts3>div:first-child{grid-column:1/-1}
+}

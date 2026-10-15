@@ -753,3 +753,8 @@
   .pwl-causes-top .pwl-link{grid-area:link;justify-self:start;margin-top:16px}
   .pwl-causes-top .pwl-globe{grid-area:globe;align-self:center}
 }
+/* Phones: "More questions" and "How giving works" each get their own line */
+@media (max-width:900px){
+  .pwl-faq-all{display:flex;width:fit-content}
+  .pwl-faq .pwl-link{display:table;margin-top:8px}
+}

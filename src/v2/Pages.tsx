@@ -125,7 +125,7 @@ export function SizeGuideV2() {
         {SIZE_CHARTS.map((c) => (
           <section key={c.id} id={c.id} className="pw-size">
             <h2>{t(c.piece)} {c.soon && <span className="pw-soon">{t('COMING SOON')}</span>}</h2>
-            <p className="pw-size-model">STANLEY/STELLA {c.model.toUpperCase()} · {c.code} · CM</p>
+            <p className="pw-size-model">STANLEY/STELLA {c.model.toUpperCase()} · <span style={{ whiteSpace: "nowrap" }}>{c.code} · CM</span></p>
             <div className="pw-size-scroll" tabIndex={0} role="region" aria-label={`${t(c.piece)}, ${t('measurements in cm')}`}>
               <table>
                 <thead><tr><th scope="col">{t('Size')}</th>{c.rows.map((r) => <th key={r[0]} scope="col">{r[0]}</th>)}</tr></thead>

@@ -255,7 +255,7 @@ export default function HomeV2() {
             <li key={b.img}>
               <A href={ph ? `/product/${ph.handle}` : `/shop?design=${b.slug}`} className="pwl-best-card">
                 <span className="pwl-best-img" style={{ ['--c' as string]: c.color }}><img src={`/v2/img/mm-${b.img}.webp`} alt={`${d.name} ${tr(b.piece)}`} loading="lazy" /></span>
-                <span className="pwl-best-name">{d.name} · {tr(b.piece)}<span>€{b.price}</span></span>
+                <span className="pwl-best-name">{d.name}<br />{tr(b.piece)}<span>€{b.price}</span></span>
                 <span className="pwl-best-give">
                   <span className="pwl-best-logo"><img src={c.logo} alt="" /></span>
                   <span><b className="pw-fat">€{b.give}</b> {tr('goes to')} {c.partner}</span>
