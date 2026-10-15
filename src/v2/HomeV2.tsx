@@ -322,7 +322,7 @@ export default function HomeV2() {
           <A key={c.id} href={`/project/${c.slug}`} className="pwl-cause" style={{ ['--c' as string]: c.color }}>
             <span className="pwl-cause-logo"><img src={c.logo} alt="" loading="lazy" /></span>
             <span className="pwl-cause-name">{titleCase(c.name)}</span>
-            <span className="pwl-cause-who">{c.partner} · <span className="pwl-nowrap">{tr(c.place)}</span></span>
+            <span className="pwl-cause-who">{c.partner}<span className="pwl-cause-place">{tr(c.place)}</span></span>
             <span className="pwl-cause-line">{tr(c.line)}</span>
             <span className="pwl-cause-go">{tr('Meet the project')} →</span>
           </A>

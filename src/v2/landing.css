@@ -724,3 +724,16 @@
 @media (max-width:700px){
   .pwl-cine .pwl-autofilm-card{object-fit:cover}
 }
+
+/* Cause cards: partner and place on their own lines (no stray "· place" line) */
+.pwl-cause-place{display:block;white-space:nowrap}
+/* Phones: a smaller spinning globe (flat, no 3D) above the cause cards */
+@media (max-width:899px){
+  .pwl-globe{display:block;height:250px;margin-top:8px}
+  .pwl-globe-flat{width:230px;height:230px;margin:-115px 0 0 -115px;background-size:460px 230px;animation-name:pwl-spin-s}
+}
+@keyframes pwl-spin-s{to{background-position:-460px 50%}}
+/* Phones: founder photo stays a round 150px circle inside its hand-drawn ring */
+@media (max-width:760px){
+  .pwl-founder-c{flex:none;width:150px;height:150px;aspect-ratio:1}
+}
