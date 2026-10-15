@@ -38,10 +38,10 @@ const BEST = [
 const TRUST = ['Printed to order in Europe', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
 // Friends and customers in their own words (quotes shortened from what they wrote; Nico is asking each for their OK).
 const VOICES = [
-  { name: 'Sandro Gambardella', img: '/v2/img/voice-sandro.webp', pos: '50% 30%', quote: 'Other than the really cool designs, I love knowing that after I buy something, it goes to a cause that fuels something positive.' },
-  { name: 'Shaan Patel', img: '/v2/img/voice-shaan.webp', pos: '50% 40%', quote: "It's not just about clothes. It's about making a difference and being part of something bigger that actually cares about the planet and people." },
-  { name: 'Ilai Bachrach', img: '/v2/img/voice-ilai.webp', pos: '50% 25%', quote: 'Perfect World for me is about creating one world where we care for each other and love each other the way we are, as imperfect beings.' },
-  { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 30%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
+  { name: 'Sandro Gambardella', img: '/v2/img/voice-sandro.webp', pos: '45% 40%', quote: 'Other than the really cool designs, I love knowing that after I buy something, it goes to a cause that fuels something positive.' },
+  { name: 'Shaan Patel', img: '/v2/img/voice-shaan.webp', pos: '50% 30%', quote: "It's not just about clothes. It's about making a difference and being part of something bigger that actually cares about the planet and people." },
+  { name: 'Ilai Bachrach', img: '/v2/img/voice-ilai.webp', pos: '50% 18%', quote: 'Perfect World for me is about creating one world where we care for each other and love each other the way we are, as imperfect beings.' },
+  { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
 /** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */

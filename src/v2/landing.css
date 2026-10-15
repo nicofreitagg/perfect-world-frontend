@@ -667,7 +667,7 @@
 
 .pwl-voices{list-style:none;margin:clamp(24px,3vw,40px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
 .pwl-voices figure{margin:0;height:100%;display:flex;flex-direction:column;border-radius:24px;overflow:hidden;background:#f3ebdd;color:#1c1813}
-.pwl-voices img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover}
+.pwl-voices img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
 .pwl-voices blockquote{margin:0;padding:16px 16px 6px;font-size:16px;line-height:1.45;font-weight:500;flex:1}
 .pwl-voices figcaption{margin:0 16px 16px;align-self:flex-start;padding:5px 12px;border-radius:999px;background:#c0322a;color:#fff;font:700 12px 'JetBrains Mono',monospace;letter-spacing:.04em}
 @media (max-width:900px){
