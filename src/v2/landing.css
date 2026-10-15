@@ -688,3 +688,34 @@
   .pwl-shopbar.is-on{transform:none;pointer-events:auto}
   .pwl-shopbar .pwl-btn{width:100%;min-height:52px;letter-spacing:.08em;background:#f2ebdf;color:#14110e!important;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 }
+
+/* 15 Oct · phone formatting pass (Nico's screenshots) */
+@media (max-width:700px){
+  .pwl-cine-stage{aspect-ratio:1/1}
+  .pwl-trust{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;padding:0 20px;font-size:11.5px;letter-spacing:.02em;line-height:1.35}
+  .pwl-trust li{align-items:flex-start}
+  .pwl-trust li::before{margin-top:4px}
+  .pwl-trust li:last-child{grid-column:1/-1}
+  .pwl-stage-show{gap:6px;padding:18px 12px 0}
+  .pwl-stage-art{width:84%;height:140px;max-height:none}
+  .pwl-stage-piece{width:auto;height:230px;max-width:80%;object-fit:contain;margin-top:0}
+  .pwl-stage-name{font-size:30px}
+  .pwl-stage-who{font-size:15px}
+  .pwl-how{max-width:none;gap:14px}
+  .pwl-how li{display:grid;grid-template-columns:104px 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;text-align:left}
+  .pwl-how li:not(:last-child)::after{display:none}
+  .pwl-how-pic{grid-row:1/3;aspect-ratio:1;border-radius:18px}
+  .pwl-how-n{display:none}
+  .pwl-how b{align-self:end;font-size:19px}
+  .pwl-how li>span:last-child{align-self:start;font-size:15px;max-width:none}
+  .pwl-how-amt{gap:6px}
+  .pwl-how-amt .pw-fat{font-size:28px}
+  .pwl-how-amt img{height:30px;padding:4px;border-radius:8px}
+  .pwl-best{grid-auto-columns:72%}
+  .pwl-voices{grid-auto-columns:72%}
+  .pwl-voices blockquote{font-size:15px}
+  .pwl-sec{padding:40px 0}
+}
+.pwl-how-k{display:none}
+@media (max-width:700px){.pwl-how-k{display:inline;color:var(--red-t)}}
+@media (max-width:900px){.pwl-best,.pwl-voices,.pwl-alive{scroll-padding-inline:16px}}

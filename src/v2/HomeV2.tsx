@@ -267,9 +267,9 @@ export default function HomeV2() {
     <div className="pwl-wrap">
       <h2 id="how-h" className="pw-fat pwl-h2 pwl-center">{tr('How it works')}</h2>
       <ol className="pwl-how">
-        <li><span className="pwl-how-pic pwl-how-art"><img src="/v2/img/art-endangered-oceans-w.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">1</span><b>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
-        <li><span className="pwl-how-pic"><img src="/v2/img/mm-oceans.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">2</span><b>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
-        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b>{tr('The partner gets their amount')}</b><span>{tr('A fixed amount from every piece, already in the price.')}</span></li>
+        <li><span className="pwl-how-pic pwl-how-art"><img src="/v2/img/art-endangered-oceans-w.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">1</span><b><span className="pwl-how-k">1. </span>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
+        <li><span className="pwl-how-pic"><img src="/v2/img/mm-oceans.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">2</span><b><span className="pwl-how-k">2. </span>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
+        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b><span className="pwl-how-k">3. </span>{tr('The partner gets their amount')}</b><span>{tr('A fixed amount from every piece, already in the price.')}</span></li>
       </ol>
     </div>
   </section>
