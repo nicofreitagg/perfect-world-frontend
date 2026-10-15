@@ -5,12 +5,12 @@ import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, minDesignOf, pieceOf, t
 import { useDesignPairOrGuess } from './printSide'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
-import { isLaunched } from './launch'
 import { getAllProducts } from '../utils/shopify'
 import { getCollectionKey, extractColorFromTitle } from '../utils/productGrouping'
 import type { ShopifyProduct } from '../types/shopify.types'
 
-// Home: one piece, its fixed amount and who receives it, side by side.
+// Giving page: one piece, its fixed amount and who receives it, side by side.
+// Kept short for cold visitors (15 Oct): three picks, then price, amount and partner.
 // Amounts come from PIECES / NEW_PIECES; the partner always follows from the design.
 // isNew = launches on 11.11 and has no Shopify product or photo yet.
 type PieceId = 'women' | 'tshirt' | 'oversized' | 'hoodie' | 'tote' | 'bomber' | 'beanie'
@@ -29,6 +29,12 @@ const ROWS: { id: PieceId; label: string; fit: string; price: string; give: stri
   { id: 'beanie', label: 'Beanie', fit: 'one size', price: beanie.price, give: beanie.give, isNew: true, split: true },
 ]
 const eur = (s: string) => '€' + s
+// Cut-out Minimal mockups (from Nico's Shopify) for when the live photo can't load.
+const MOCKUP: Record<string, string> = {
+  'cool-down-tshirt': 'cool', 'endangered-oceans-tshirt': 'oceans', 'rich-in-life-tshirt': 'rich', 'wild-at-heart-tshirt': 'wild',
+  'one-world-oversized': 'one-world-oversized', 'talk-about-it-hoodie': 'talk', 'cool-down-tote': 'cool-tote',
+  'talk-about-it-bomber': 'talk-bomber', 'rich-in-life-women': 'womens-rich', 'one-world-bomber': 'one-world',
+}
 
 // Step 4. Real colours come from Shopify; until a piece is listed there, these stand in.
 // Confirmed by Nico (9 Oct): beanie + tote black/natural, bomber black/khaki, OG oversized per design.
@@ -44,7 +50,7 @@ export default function GiveReceipt() {
   const t = useT()
   const [line, setLine] = useState<'og' | 'minimal'>('minimal')
   const [piece, setPiece] = useState<PieceId>('tshirt')
-  const [design, setDesign] = useState<CauseKey>('talk')
+  const [design, setDesign] = useState<CauseKey>('oceans')
   const [products, setProducts] = useState<ShopifyProduct[]>([])
   useEffect(() => { getAllProducts().then(setProducts).catch(() => {}) }, [])
 
@@ -63,14 +69,15 @@ export default function GiveReceipt() {
     if (piece === 'oversized' && !min) return [OG_OVERSIZED[design]]
     return FALLBACK[piece]
   }, [matches, piece, min, design, cause.slug])
-  const [wanted, setColour] = useState('')
-  const colour = colours.includes(wanted) ? wanted : colours[0]
+  // Colour is no longer a step; the piece shows in its first colour (the design's own for Minimal tees and hoodies).
+  const colour = colours[0]
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
   // The listed colour's own photo when Shopify has one, then the product photo; otherwise artwork or a sketch.
   const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
   // OG and Minimal both: the back print first, never the small front logo.
   const designPair = useDesignPairOrGuess(product?.images, colourPhoto)
-  const photo = (product ? designPair?.[0] : '') || (piece === 'beanie' && colour === 'Black' ? BEANIE_MOCKUP : '') || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
+  const mock = min && MOCKUP[`${cause.slug}-${piece}`]
+  const photo = (product ? designPair?.[0] : '') || (mock ? `/v2/img/mm-${mock}.webp` : '') || (piece === 'beanie' && colour === 'Black' ? BEANIE_MOCKUP : '') || (row.isNew || min ? '' : cause.id === 'rich' ? '/v2/img/og-rich-700.webp' : cause.print)
   const shopHref = product ? `/product/${product.handle}${variantColours(product.variants).includes(colour) ? `?colour=${encodeURIComponent(colour)}` : ''}` : ''
   const designName = MIN_DESIGNS.find((x) => x.slug === cause.slug)?.name ?? causeTitle(cause.name)
   const each = (Number(row.give) / CAUSES.length).toFixed(2)
@@ -92,7 +99,6 @@ export default function GiveReceipt() {
       <div className="pwl-chips">
         {ROWS.map((r) => chip(r.id === piece, () => { setPiece(r.id); next(1) }, <>{t(r.label)}{r.isNew && <span className="pwl-chip-new">{t('new')}</span>}</>, r.id, !min && r.minOnly))}
       </div>
-      {!min && <p className="pwl-note">{t("Women's T-shirt and bomber are Minimal only for now.")}</p>}
     </>) },
     { id: 'design', label: t('Design'), value: row.split ? t('All six') : min ? designName : causeTitle(cause.name), body: row.split ? (
       <><p className="pwl-note">{t('The beanie only carries the logo, so its amount is shared equally by all six partners.')}</p>
@@ -106,12 +112,7 @@ export default function GiveReceipt() {
             : <><span className="pwl-dot" style={{ background: c.color }} aria-hidden="true" />{causeTitle(c.name)}</>, c.id)
         })}
       </div>
-      <p className="pwl-note">{t('The design decides the partner. Each design was made with one of them.')}</p></>
-    ) },
-    { id: 'colour', label: t('Colour'), value: t(colour), body: (
-      <div className="pwl-chips">
-        {colours.map((c) => chip(c === colour, () => { setColour(c); next(3) }, <><span className="pwl-dot pwl-dot-sw" style={{ background: hexOf(c) }} aria-hidden="true" />{t(c)}</>, c))}
-      </div>
+</>
     ) },
   ]
 
@@ -142,7 +143,7 @@ export default function GiveReceipt() {
           ) : (
             <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} fill={hexOf(colour)} />
           )}
-          <figcaption>{photo ? (product ? t('Product photo') : photo === BEANIE_MOCKUP ? t('Mockup') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
+          <figcaption>{photo ? (product ? t('Product photo') : photo === BEANIE_MOCKUP || mock ? t('Mockup') : t('Design artwork')) : t('Sketch · photos follow')}</figcaption>
         </figure>
 
         <svg className="pwl-give-line" viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true" key={'l' + key}>
@@ -157,7 +158,6 @@ export default function GiveReceipt() {
           </div>
           <dl>
             <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${min ? designName : causeTitle(cause.name)} · ${t(row.label)}`}</dd></div>
-            <div><dt>{t('COLOUR')}</dt><dd>{t(colour)}</dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">
               <dt>{t('GOES TO')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
@@ -175,7 +175,6 @@ export default function GiveReceipt() {
               <p><b>{cause.partner}</b><br />{t(cause.place)}</p>
             </div>
           )}
-          <p className="pwl-receipt-foot">{t('Included in the price. Nothing is added at checkout.')}{!isLaunched() && <><br />{t('Fixed amounts apply from 11.11.')}</>}</p>
           {shopHref && min
             ? <A href={shopHref} className="pwl-receipt-cta">{t('See this piece')} →</A>
             : row.isNew

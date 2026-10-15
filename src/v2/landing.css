@@ -538,3 +538,52 @@
 .look-dark footer.pw-foot{background:linear-gradient(180deg,#13110f 0,#0b0a09 260px)}
 .look-dark .pwl-hardfoot{display:none}
 .look-dark .pwl-story-sec::before{content:'';position:absolute;inset:-200px 0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 45% 40% at 30% 50%,rgba(226,69,60,.08),transparent 70%),radial-gradient(ellipse 45% 40% at 75% 45%,rgba(255,140,66,.07),transparent 70%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent);mask-image:linear-gradient(180deg,transparent,#000 32%,#000 68%,transparent)}
+
+/* 15 Oct · simpler home for cold visitors: autoplay film, live designs, best sellers, worn */
+.pwl-autofilm{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#0b0b0c}
+.pwl-autofilm-card{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .9s ease;pointer-events:none}
+.pwl-autofilm-card.is-gone{opacity:0}
+.pwl-autofilm-sound{position:absolute;right:14px;bottom:14px;min-height:40px;padding:0 16px;border:0;border-radius:999px;background:rgba(11,11,12,.62);color:#fff;font:700 13px 'JetBrains Mono',monospace;letter-spacing:.04em;cursor:pointer;backdrop-filter:blur(6px)}
+.pwl-autofilm-sound:hover{background:rgba(11,11,12,.85)}
+
+.pwl-alive{list-style:none;margin:clamp(28px,4vw,48px) 0 0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(10px,1.4vw,20px)}
+.pwl-alive-card{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:inherit}
+.pwl-alive-img{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:24px;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--c) 55%,transparent),transparent 68%);transition:transform .35s ease}
+.pwl-alive-img img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain;filter:drop-shadow(0 14px 18px rgba(0,0,0,.35));animation:pwl-bob 5.5s ease-in-out infinite;animation-delay:var(--d,0s);transition:transform .35s ease}
+.pwl-alive-img .pwl-tag{position:absolute;left:8px;top:8px;margin:0;background:var(--red-t);color:#fff}
+.pwl-alive-card:hover .pwl-alive-img img{transform:scale(1.08) rotate(-2deg)}
+.pwl-alive-name{margin-top:8px;font-weight:800;font-size:16px;line-height:1.15;text-align:center}
+.pwl-alive-cause{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+@keyframes pwl-bob{0%,100%{translate:0 0;rotate:0deg}50%{translate:0 -10px;rotate:1.5deg}}
+@media (prefers-reduced-motion:reduce){.pwl-alive-img img{animation:none}}
+
+.pwl-best{list-style:none;margin:clamp(24px,3vw,40px) 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,22px)}
+.pwl-best-card{display:flex;flex-direction:column;gap:10px;height:100%;padding:12px 12px 16px;border-radius:24px;background:#f3ebdd;color:#1c1813;text-decoration:none;transition:transform .25s}
+.pwl-best-card:hover{transform:translateY(-4px)}
+.pwl-best-img{position:relative;display:block;aspect-ratio:1;border-radius:18px;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--c) 40%,#efe5d3),#e9dfcd 72%)}
+.pwl-best-img img{position:absolute;inset:7%;width:86%;height:86%;object-fit:contain;filter:drop-shadow(0 12px 14px rgba(0,0,0,.22))}
+.pwl-best-name{display:flex;justify-content:space-between;gap:10px;font-weight:800;font-size:17px;line-height:1.2;padding:0 4px}
+.pwl-best-name span{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:15px;white-space:nowrap}
+.pwl-best-give{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:#fffaf1;font-size:15px;line-height:1.3}
+.pwl-best-give b{color:#c0322a;font-size:20px;white-space:nowrap}
+.pwl-best-logo{flex:0 0 44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pwl-best-logo img{max-width:80%;max-height:80%;object-fit:contain}
+
+.pwl-life{list-style:none;margin:clamp(24px,3vw,40px) 0 0;padding:0;display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:auto auto;gap:clamp(10px,1.4vw,18px)}
+.pwl-life li{position:relative;margin:0;border-radius:22px;overflow:hidden;min-height:220px}
+.pwl-life li:first-child{grid-row:span 2}
+.pwl-life img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pwl-life span{position:absolute;left:12px;bottom:12px;padding:6px 12px;border-radius:999px;background:rgba(11,11,12,.6);color:#fff;font:700 12px 'JetBrains Mono',monospace;letter-spacing:.04em}
+.pwl-life li:nth-child(4){grid-column:span 2}
+
+@media (max-width:900px){
+  .pwl-alive{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pwl-best{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:78%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px}
+  .pwl-best li{scroll-snap-align:start}
+  .pwl-life{grid-template-columns:1fr 1fr;grid-template-rows:none;grid-auto-rows:auto}
+  .pwl-life li:first-child{grid-row:auto;grid-column:span 2;min-height:260px}
+  .pwl-life li:nth-child(4){grid-column:span 2}
+}
+@media (max-width:520px){.pwl-alive{grid-template-columns:repeat(2,minmax(0,1fr))}.pwl-alive-name{font-size:15px}}
+.pwl-hero-photo .pwl-autofilm-card{height:100%;border-radius:0;object-position:50% 50%}
+@media (max-width:700px){.pwl-autofilm-sound{right:8px;bottom:8px;min-height:30px;padding:0 10px;font-size:11px}}

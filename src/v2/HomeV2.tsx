@@ -4,17 +4,12 @@ import './landing.css'
 import Flow from './Flow'
 import { Lines } from './Seams'
 
-const SIX = ['#FF8C42', '#5DADE2', '#4cc37f', '#b07e52', '#8e8f94', '#2f6fa8']
 import { Header, Footer } from './Chrome'
 import { A } from './A'
-import GiveReceipt, { PieceSketch } from './GiveReceipt'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
-import { useDesignPairOrGuess } from './printSide'
-import PosterVideo from './PosterVideo'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, icon, pieceOf, type CauseKey } from './data'
-import { isLaunched } from './launch'
+import { PIECES, MIN_DESIGNS, icon, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -24,40 +19,50 @@ import { FAQ } from './faq'
 const Globe3D = lazy(() => import('./Globe3D'))
 
 
-// New pieces launching on 11.11: the real Minimal listing photo once Shopify has one, a drawing until then.
-const NEW = [
-  ...NEW_PIECES.map((n) => ({ id: n.id, name: n.name, note: n.sub, price: n.price, give: n.give, from: false, split: 'split' in n })),
+// Cold visitors first (Nico's boss, 15 Oct): each Minimal design shown as a real garment, gently moving.
+const ALIVE = [
+  { slug: 'talk-about-it', img: 'talk', piece: 'Hoodie' },
+  { slug: 'endangered-oceans', img: 'oceans', piece: 'T-shirt' },
+  { slug: 'cool-down', img: 'cool', piece: 'T-shirt' },
+  { slug: 'one-world', img: 'one-world-oversized', piece: 'Oversized shirt' },
+  { slug: 'wild-at-heart', img: 'wild', piece: 'T-shirt' },
+  { slug: 'rich-in-life', img: 'rich', piece: 'T-shirt' },
+]
+// Three pieces up front, each with only its price and where its amount goes.
+const BEST = [
+  { slug: 'endangered-oceans', img: 'oceans', kind: 'tshirt', piece: 'T-shirt', price: PIECES.shirt.price, give: PIECES.shirt.give },
+  { slug: 'talk-about-it', img: 'talk', kind: 'hoodie', piece: 'Hoodie', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
+  { slug: 'cool-down', img: 'cool-tote', kind: 'tote', piece: 'Tote bag', price: PIECES.tote.price, give: PIECES.tote.give },
+]
+// Real photos of the pieces being worn; the lake shoot (24 Oct) can replace them.
+const WORN = [
+  { src: '/v2/img/hero-friends-800.webp', alt: 'Four friends on a bench wearing Perfect World hoodies', cap: 'Out with friends' },
+  { src: '/v2/img/park-tees-900.webp', alt: 'Friends in a park wearing Perfect World T-shirts', cap: 'Sundays in the park' },
+  { src: '/v2/img/two-friends-700.webp', alt: 'Two friends at sunset in Perfect World T-shirts', cap: 'Golden hour' },
+  { src: '/v2/img/photo-og-back.jpg', alt: 'The back print of a Perfect World T-shirt', cap: 'Every day' },
 ]
 
-// Every piece and its fixed amount, for the 11.11 block. Women's tee, bomber and beanie are new on 11.11.
-const byId = (id: string) => NEW_PIECES.find((n) => n.id === id)!
-const AMOUNTS = [
-  { label: 'TOTE BAG', price: PIECES.tote.price, give: PIECES.tote.give },
-  { label: 'T-SHIRT', price: PIECES.shirt.price, give: PIECES.shirt.give, mark: true },
-  { label: "WOMEN'S T-SHIRT", price: byId('women').price, give: byId('women').give },
-  { label: 'OVERSIZED', price: PIECES.oversized.price, give: PIECES.oversized.give },
-  { label: 'HOODIE', price: PIECES.hoodie.price, give: PIECES.hoodie.give },
-  { label: 'BOMBER', price: byId('bomber').price, give: byId('bomber').give },
-  { label: 'BEANIE', price: byId('beanie').price, give: byId('beanie').give, split: true },
-]
-
-// A loopy line in one cause colour, run edge to edge in the space between sections (never over text).
-// A new piece's listing photo: the back design first, the front logo on hover.
-function NewShot({ p, alt }: { p: ShopifyProduct; alt: string }) {
-  const pair = useDesignPairOrGuess(p.images)
-  if (!pair) return null
-  return (<><img className="pwl-new-photo" src={pair[0]} alt={alt} loading="lazy" />{pair[1] !== pair[0] && <img className="pwl-new-photo pwl-new-alt" src={pair[1]} alt="" aria-hidden="true" loading="lazy" />}</>)
-}
-
-function Swirl({ color, flip = false }: { color: string; flip?: boolean }) {
+/** The film plays by itself, muted and looping; it opens on the 11.11 card for a moment. */
+function AutoFilm({ src, poster, label }: { src: string; poster: string; label: string }) {
+  const tr = useT()
+  const ref = useRef<HTMLVideoElement>(null)
+  const [intro, setIntro] = useState(true)
+  const [muted, setMuted] = useState(true)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = setTimeout(() => { setIntro(false); ref.current?.play().catch(() => {}) }, 2200)
+    return () => clearTimeout(id)
+  }, [])
+  const sound = () => { const v = ref.current; if (!v) return; v.muted = !muted; setMuted(!muted); setIntro(false); v.play().catch(() => {}) }
   return (
-    <svg className="pwl-swirl" viewBox="0 0 1440 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style={flip ? { transform: 'scaleX(-1)' } : undefined}>
-      <path d="M-60 150 C 240 60, 310 290, 520 210 C 650 160, 610 60, 545 100 C 470 145, 620 330, 900 265 C 1150 210, 1250 80, 1500 135" stroke={color} />
-    </svg>
+    <>
+      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" />
+      <img src={poster} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? '' : ' is-gone')} />
+      <button type="button" className="pwl-autofilm-sound" onClick={sound} aria-pressed={!muted}>{muted ? tr('Sound on') : tr('Sound off')}</button>
+    </>
   )
 }
 
-// Small cause line icons in the empty margins (hidden on narrow screens so they never touch text).
 function Ico({ c, w = false, style }: { c: CauseKey; w?: boolean; style: React.CSSProperties }) {
   return <img className="pwl-ico" src={icon(c, w ? 'wa' : 'a')} alt="" aria-hidden="true" style={style} />
 }
@@ -80,7 +85,6 @@ export default function HomeV2() {
   const tr = useT()
   usePageTitle()
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
-  const launched = isLaunched()
 
   // Dark is the home look (Nico, 14 Oct); ?look= still shows the others for comparison.
   const asked = useMemo(() => { const l = new URLSearchParams(window.location.search).get('look') ?? ''; return (LOOKS as readonly string[]).includes(l) ? l as Look : null }, [])
@@ -101,8 +105,6 @@ export default function HomeV2() {
   const globeBox = useRef<HTMLDivElement>(null)
   const [live, setLive] = useState<ShopifyProduct[]>([])
   useEffect(() => { getAllProducts().then((all) => setLive(all.filter((p) => /minimal/i.test(p.title) && p.images.length))).catch(() => {}) }, [])
-  const newPhoto = (id: string) => live.find((p) => pieceOf(p.title) === id)
-  const sketches = NEW.some((n) => !newPhoto(n.id) && n.id !== 'beanie')
   const [show3d, setShow3d] = useState(false)
   const [allQ, setAllQ] = useState(false)
   const [globe3d, setGlobe3d] = useState(false)
@@ -115,11 +117,6 @@ export default function HomeV2() {
     return () => io.disconnect()
   }, [])
 
-  const heroLine = (launched
-    ? tr('Every design is made with one of six cause partners, and a fixed amount of its price goes to that partner: from €{a} for a tote to €{b} for a hoodie.')
-    : tr('Every design is made with one of six cause partners. From 11.11, a fixed amount of its price goes to that partner: from €{a} for a tote to €{b} for a hoodie.')
-  ).replace('{a}', PIECES.tote.give).replace('{b}', PIECES.hoodie.give)
-
   return (
     <>
 <div className={'pw2 pw-page pw-grain pwl look-' + look} style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", color: "var(--ink)" }}>
@@ -127,7 +124,7 @@ export default function HomeV2() {
   <Header big dark={look === 'dark'} active="/" cartCount={cartCount} openCart={openCart} />
   {asked && <LookSwitch look={look} />}
 
-  {/* 1 · Brand hero: worn pieces, the line, the benefit */}
+  {/* 1 · Hero: the line, one cause-led button, the film playing on its own */}
   <section id="top" className="pwl-hero pw-iso">
     <h1 className="pwl-head">
       <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
@@ -135,124 +132,92 @@ export default function HomeV2() {
 <span className="pw-hand pwl-head-b">{tr('for.')}</span></span>
     </h1>
     <figure className="pwl-hero-photo">
-      {/* Placeholder until the official 11.11 film: the film from the current site */}
+      {/* Placeholder until the official 11.11 film: the film from the current site, opening on the 11.11 card */}
       <div className="pwl-photo-box pwl-film">
-        <PosterVideo src="/assets/videos/now-and-forever-home.mp4" poster="/v2/img/hero-film-poster.webp" label={tr('Perfect World film: the future exists for those who dare to dream')} playLabel={tr('Play the video')} below />
+        <AutoFilm src="/assets/videos/home-film-720.mp4" poster="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')} />
       </div>
       <p className="pwl-sign"><span className="pw-fat">{tr('Together.')}</span><span className="pw-hand">{tr('Not Alone.')}</span></p>
     </figure>
     <div className="pwl-hero-body">
-      <p className="pwl-lede"><b>{tr('Clothing that gives.')}</b> {heroLine} <span className="pwl-stroke">{tr('Included in the price, never added on top.')}</span></p>
+      <p className="pwl-lede"><b>{tr('Clothing that helps the world: every piece supports a cause.')}</b></p>
       <div className="pwl-ctas">
-        <A href="/shop" className="pwl-btn">{tr('Shop the pieces')}</A>
-        <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
+        <A href="/shop" className="pwl-btn">{tr('Join the movement')}</A>
       </div>
     </div>
   </section>
 
   <Lines />
 
-  {/* 1b · The Minimal collection, the focus of 11.11 */}
+  {/* 2 · New: the Minimal designs, shown as the clothes they are */}
   <section id="minimal" className="pwl-sec pwl-min pw-iso" aria-label={tr('The Minimal Collection')}>
     <div className="pwl-wrap pwl-center">
-      <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
+      <p className="pwl-kicker">{tr('NEW COLLECTION')}</p>
       <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src={darkMin ? "/v2/img/sig-minimal-collection-white.png" : "/v2/img/sig-minimal-collection-black.png"} alt={tr('The Minimal Collection')} /></A></h2>
-      <p className="pw-fat pwl-min-line">{tr('Doing good never looked so clean.')}</p>
-      <p className="pwl-sub">{tr('Six new designs, one for each partner. Every piece gives a fixed amount.')}</p>
-      <ul className="pwl-min-row">
-        {MIN_DESIGNS.map((d) => {
-          const c = causeBySlug(d.slug)
+      <p className="pwl-sub">{tr('Six new designs on T-shirts, hoodies, totes and more. Each one supports its own cause.')}</p>
+      <ul className="pwl-alive">
+        {ALIVE.map((a, i) => {
+          const c = causeBySlug(a.slug)
+          const d = MIN_DESIGNS.find((x) => x.slug === a.slug)!
           return (
-            <li key={d.slug} style={{ '--c': c?.color } as React.CSSProperties}>
-              <A href={`/shop?design=${d.slug}`} className="pwl-min-card">
-                <span className="pwl-min-img"><img src={`/v2/img/min-${d.img}.webp`} alt={d.name} loading="lazy" /></span>
-                <span className="pwl-min-name">{d.name}</span>
-                <span className="pwl-min-cause">{c ? titleCase(c.name) : ''}</span>
+            <li key={a.slug} style={{ ['--c' as string]: c?.color ?? '#999', ['--d' as string]: `${i * -0.9}s` }}>
+              <A href={`/shop?design=${a.slug}`} className="pwl-alive-card">
+                <span className="pwl-alive-img"><img src={`/v2/img/mm-${a.img}.webp`} alt={`${d.name} ${tr(a.piece)}`} loading="lazy" /><span className="pwl-tag">{tr('New')}</span></span>
+                <span className="pwl-alive-name">{d.name}</span>
+                <span className="pwl-alive-cause">{c ? titleCase(c.name) : ''}</span>
               </A>
             </li>
           )
         })}
       </ul>
-      <p className="pwl-min-price">{tr('T-shirt')} €{PIECES.shirt.price} · <b>€{PIECES.shirt.give}</b> {tr('to its partner')}</p>
       <div className="pwl-ctas pwl-ctas-c">
-        <A href="/shop#shop" className="pwl-btn">{tr('Shop the whole collection')}</A>
+        <A href="/shop#shop" className="pwl-btn">{tr('Shop the collection')}</A>
       </div>
     </div>
   </section>
 
-  {/* 2 · The 11.11 moment: every piece gives a fixed amount */}
-  <section id="eleven" className="pwl-sec pwl-glow pw-iso" aria-labelledby="eleven-h">
-    <Ico c="cool" style={{ right: '5%', top: '150px', transform: 'rotate(8deg)' }} />
-    <div className="pwl-wrap pwl-center">
-      <p className="pwl-kicker pwl-date">{tr('11.11.2026 · 11:11 AM')}</p>
-      <p className="pw-fat pwl-1111" aria-label="11:11">11<span>:</span>11</p>
-      <h2 id="eleven-h" className="pw-fat pwl-h2 pwl-1111-h">{tr('Every piece gives a fixed amount.')}</h2>
-      <p className="pwl-sub">{launched
-        ? tr('You\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')
-        : tr('From 11.11, you\'ll see it right next to the price, and it\'s the same every time. It goes to the partner behind your design.')}</p>
-      {/* On phones the tickets run as a slow moving strip; the second set only fills the loop. */}
-      <div className="pwl-tix-wrap">
-      <ul className="pwl-tickets">
-        {[...AMOUNTS, ...AMOUNTS].map((a, i) => (
-          <li key={i} className={[a.mark ? 'is-mark' : '', i >= AMOUNTS.length ? 'pwl-dup' : ''].join(' ').trim() || undefined} aria-hidden={i >= AMOUNTS.length || undefined} style={{ '--c': SIX[i % AMOUNTS.length % SIX.length] } as React.CSSProperties}>
-            <span className="pwl-ticket-k">{tr(a.label)}<br />€{a.price}</span>
-            <span className="pwl-ticket-v">€{a.give}{a.mark && <svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path d="M150 12 C 110 2, 30 6, 12 34 C -2 58, 60 74, 120 70 C 170 66, 196 46, 182 24 C 172 10, 140 6, 118 8" /></svg>}</span>
-            <span className="pwl-ticket-t">{a.split ? tr('shared by all six partners') : tr('to its cause partner')}</span>
-          </li>
+  {/* 3 · Best sellers: the piece, its price, and simply where the money goes */}
+  <section id="best" className="pwl-sec pw-iso" aria-labelledby="best-h">
+    <div className="pwl-wrap">
+      <h2 id="best-h" className="pw-fat pwl-h2 pwl-center">{tr('Best sellers')}</h2>
+      <ul className="pwl-best">
+        {BEST.map((b) => {
+          const c = causeBySlug(b.slug)!
+          const d = MIN_DESIGNS.find((x) => x.slug === b.slug)!
+          const ph = live.find((p) => minDesignOf(p.title)?.slug === b.slug && pieceOf(p.title) === b.kind)
+          return (
+            <li key={b.img}>
+              <A href={ph ? `/product/${ph.handle}` : `/shop?design=${b.slug}`} className="pwl-best-card">
+                <span className="pwl-best-img" style={{ ['--c' as string]: c.color }}><img src={`/v2/img/mm-${b.img}.webp`} alt={`${d.name} ${tr(b.piece)}`} loading="lazy" /></span>
+                <span className="pwl-best-name">{d.name} · {tr(b.piece)}<span>€{b.price}</span></span>
+                <span className="pwl-best-give">
+                  <span className="pwl-best-logo"><img src={c.logo} alt="" /></span>
+                  <span><b className="pw-fat">€{b.give}</b> {tr('goes to')} {c.partner}</span>
+                </span>
+              </A>
+            </li>
+          )
+        })}
+      </ul>
+      <p className="pwl-fine pwl-center">{tr('Already included in the price, never added on top.')} <A href="/how-giving-works" className="pwl-link">{tr('See every piece')} →</A></p>
+    </div>
+  </section>
+
+  {/* 4 · Worn in real life */}
+  <section id="worn" className="pwl-sec pw-iso" aria-labelledby="worn-h">
+    <div className="pwl-wrap">
+      <div className="pwl-center">
+        <h2 id="worn-h" className="pw-fat pwl-h2">{tr('Made to be worn.')}</h2>
+        <p className="pwl-sub">{tr('Soft, everyday clothes. Your cause comes with you.')}</p>
+      </div>
+      <ul className="pwl-life">
+        {WORN.map((w) => (
+          <li key={w.src}><img src={w.src} alt={tr(w.alt)} loading="lazy" /><span>{tr(w.cap)}</span></li>
         ))}
       </ul>
-      </div>
-      <div className="pwl-ctas pwl-ctas-c">
-        <A href="/shop" className="pwl-btn">{tr('Shop every piece')}</A>
-        <A href="/how-giving-works" className="pwl-link">{tr('How giving works')} →</A>
-      </div>
     </div>
   </section>
 
-  <Lines colors={['#4cc37f', '#5DADE2', '#FF8C42']} flip />
-
-  {/* 3 · New pieces, launching on 11.11 */}
-  <section id="new" className="pwl-sec pw-iso" aria-label={tr('New pieces.')}>
-    <div className="pwl-wrap">
-      <div className="pwl-sechead">
-        <div>
-          <p className="pwl-kicker">{tr('NEW ON 11.11')}</p>
-          <h2 className="pw-fat pwl-h2">{tr('New pieces.')}</h2>
-        </div>
-      </div>
-      <ul className="pwl-new">
-        {NEW.map((n) => { const ph = newPhoto(n.id); return (
-          <li key={n.id} >
-            <A href={ph ? `/product/${ph.handle}` : '/shop'} className="pwl-new-card">
-              <span className={`pwl-new-img${ph || n.id === 'beanie' ? ' has-photo' : ''}`}>{ph ? <NewShot p={ph} alt={tr(n.name)} /> : n.id === 'beanie' ? <img className="pwl-new-photo" style={{ objectFit: "contain" }} src={BEANIE_MOCKUP} alt={tr(n.name)} loading="lazy" /> : <PieceSketch id={n.id} />}<span className="pwl-tag">{tr('New')}</span></span>
-              <span className="pwl-new-name">{tr(n.name)}</span>
-              <span className="pwl-new-note">{tr(n.note)}</span>
-              <span className="pwl-new-meta">€{n.price} · <b>€{n.give}</b> {n.split ? tr('shared by all six partners') : tr('to its partner')}</span>
-            </A>
-          </li>
-        ) })}
-      </ul>
-      <p className="pwl-fine">{sketches && tr('Drawings, not product photos. Photos follow once the samples are made.')} {tr('Every piece is made to order, with care. Allow 1.5 to 2 weeks, so wish early.')}</p>
-    </div>
-  </section>
-
-  <Swirl color="#4cc37f" />
-
-  {/* 5 · The receipt: price, amount, partner */}
-  <section id="giving" className="pwl-sec pwl-paper pw-iso" aria-labelledby="give-h">
-    <div className="pwl-wrap">
-      <div className="pwl-sechead pwl-center">
-        <div>
-          <p className="pwl-kicker">{tr('TRY IT · FOUR TAPS')}</p>
-          <h2 id="give-h" className="pw-fat pwl-h2">{tr('Doing good has never been')} <span className="pwl-red">{tr('easier.')}</span></h2>
-          <p className="pwl-sub">{tr('Pick a collection, a piece, a design and a colour. The receipt shows the price, how much goes to the partner, and who that partner is.')}</p>
-        </div>
-      </div>
-      <GiveReceipt />
-    </div>
-  </section>
-
-  {/* 6 · The six causes and the people behind them */}
+  {/* 5 · The six causes and the people behind them */}
   <section id="causes" className="pwl-sec pwl-earth pw-iso" aria-labelledby="causes-h">
     <div className="pwl-wrap">
       <div className="pwl-causes-top">
@@ -281,7 +246,7 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 8 · Founder note at the very end, from existing approved copy */}
+  {/* 6 · Founder note at the very end, from existing approved copy */}
   <section id="story" className="pwl-sec pwl-story-sec pw-iso" aria-labelledby="story-h">
     <Ico c="oceans" style={{ right: '8%', top: '30px', transform: 'rotate(-6deg)' }} />
     <div className="pwl-wrap pwl-story pwl-story-s">
@@ -299,7 +264,7 @@ export default function HomeV2() {
     </div>
   </section>
 
-  {/* 9 · Questions, at the very end */}
+  {/* 7 · Questions, at the very end */}
   <section id="faq" className={'pwl-sec pwl-faq pw-iso' + (allQ ? ' is-all' : '')} aria-labelledby="faq-h">
     <div className="pwl-wrap">
       <h2 id="faq-h" className="pw-fat pwl-h2">{tr('Questions')}</h2>
