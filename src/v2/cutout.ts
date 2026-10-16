@@ -62,7 +62,12 @@ function cut(url: string): Promise<string> {
               const nb = [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]
               for (const q of nb) if (q >= 0 && !seen[q] && !bg[q] && pure(q * 4)) { seen[q] = 1; region.push(q) }
             }
-            if (region.length > w * h * 0.004) for (const p of region) bg[p] = 1
+            // A flat white print in the middle of the garment (the OG polar bear, Nico 16 Oct) is not a gap: skip pockets centred there.
+            let sx = 0, sy = 0
+            for (const p of region) { sx += p % w; sy += (p - (p % w)) / w }
+            const cx = sx / region.length / w, cy = sy / region.length / h
+            const inPrint = cx > 0.3 && cx < 0.7 && cy > 0.25 && cy < 0.8
+            if (region.length > w * h * 0.004 && !inPrint) for (const p of region) bg[p] = 1
           }
           return bg
         }
