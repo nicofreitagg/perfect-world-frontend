@@ -179,7 +179,7 @@ export default function ProductV2() {
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: "11px", color: "#5c5c5c", borderBottom: "1px dashed #bdbab3", paddingBottom: "12px" }}><span>{tr("PERFECT WORLD")}</span><span>{tr("WHAT THIS PIECE GIVES")}</span></div>
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{c.name} {tr(piece.upper)}{shownSize ? ` · ${shownSize}` : ""}</span><span>€{shownPiece.price}</span></div>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", color: "#5c5c5c" }}><span>{tr("Shipping")}</span><span>€5.00</span></div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", color: "#5c5c5c" }}><span>{tr("Shipping")}</span><span>{tr("€5 Germany · €8 Europe")}</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", fontWeight: "600" }}><span>→ {help.partner}</span><span style={{ color: "#c0322a" }}>€{piece.give}</span></div>
           </div>
           <p style={{ margin: "0", fontSize: "12px", color: "#5c5c5c" }}>{tr("Same amount, every time. Included in the price.")}</p>
@@ -192,7 +192,7 @@ export default function ProductV2() {
       <div className="pw-mono pw-pd-facts" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.5" }}>
         <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("MADE TO ORDER")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Printed just for you")}</span></span>
         <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("ABOUT 1½ TO 2 WEEKS")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Depends on where you live")}</span></span>
-        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("SHIPPING €5")}<br /><span style={{ color: "#5c5c5c" }}>{tr("On every order")}</span></span>
+        <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("SHIPPING FROM €5")}<br /><span style={{ color: "#5c5c5c" }}>{tr("€5 Germany · €8 Europe")}</span></span>
         <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("ORGANIC COTTON")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Stanley/Stella, GOTS certified")}</span></span>
       </div>
     </div>

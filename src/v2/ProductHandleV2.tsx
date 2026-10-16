@@ -107,7 +107,7 @@ export default function ProductHandleV2() {
             {variant ? `${t('ADD TO CART')} · €${price.toFixed(2)}` : t('SOLD OUT')}
           </button>
           {p.descriptionHtml ? <div className="pw-desc" dangerouslySetInnerHTML={{ __html: cleanDescription(p.descriptionHtml) }} /> : p.description && <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, color: '#3a3a3a' }}>{p.description}</p>}
-          <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{t('MADE TO ORDER · ABOUT 1½ TO 2 WEEKS · SHIPPING €5')}</p>
+          <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{t('MADE TO ORDER · ABOUT 1½ TO 2 WEEKS · SHIPPING FROM €5')}</p>
         </div>
       </section>
     </Shell>

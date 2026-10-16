@@ -92,7 +92,7 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
           <footer style={{ padding: '0 22px 22px' }}>
             <div style={{ background: '#ffffff', padding: '16px 18px', fontFamily: mono, fontSize: '13px', boxShadow: '0 10px 24px rgba(0,0,0,.08)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>{tr("SUBTOTAL")}</span><span>{eur(cartTotal)}</span></div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5c5c5c', marginTop: '6px' }}><span>{tr("SHIPPING")}</span><span>€5.00</span></div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5c5c5c', marginTop: '6px' }}><span>{tr("SHIPPING")}</span><span>{tr("€5 Germany · €8 Europe")}</span></div>
               {[...gives].map(([partner, amount]) => (
                 <div key={partner} style={{ display: 'flex', justifyContent: 'space-between', color: '#c0322a', marginTop: '6px' }}><span>→ {partner.toUpperCase()}</span><span>{eur(amount)}</span></div>
               ))}
@@ -100,7 +100,7 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
             <div className="pw-tear" aria-hidden="true" style={{ height: '14px', background: 'linear-gradient(135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x,linear-gradient(-135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x' }} />
             {error && <p role="alert" style={{ margin: '12px 0 0', fontSize: '13px', color: '#c0322a' }}>{tr(error)}</p>}
             <button type="button" onClick={checkout} disabled={busy} style={{ width: '100%', marginTop: '14px', minHeight: '54px', borderRadius: '999px', border: 'none', background: '#0b0b0c', color: '#ffffff', fontFamily: 'inherit', fontSize: '15px', fontWeight: 700, cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.6 : 1 }}>
-              {busy ? tr('Opening checkout…') : `${tr('Checkout')} · ${eur(cartTotal + 5)}`}
+              {busy ? tr('Opening checkout…') : `${tr('Checkout')} · ${eur(cartTotal)}`}
             </button>
             <p style={{ margin: '10px 0 0', textAlign: 'center', fontSize: '12px', color: '#5c5c5c' }}>{tr("Secure checkout by Shopify. Made to order, about 1½ to 2 weeks.")}</p>
           </footer>

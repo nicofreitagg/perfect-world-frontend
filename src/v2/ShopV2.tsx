@@ -249,7 +249,7 @@ export default function ShopV2() {
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
       <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(37px, 6vw, 84px)", lineHeight: "1" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
       <p style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.5", color: "#3a3a3a", maxWidth: "520px" }}>{tr("Every piece supports a cause. The design decides which one.")}</p>
-      <p className="pw-mono pw-shoptrust">{tr("T-shirts from")} €{PIECES.shirt.price} · {tr("Printed in Germany")} · {tr("€5 shipping")}</p>
+      <p className="pw-mono pw-shoptrust">{tr("T-shirts from")} €{PIECES.shirt.price} · {tr("Printed in Germany")} · {tr("Shipping from €5")}</p>
     </div>
   </section>
 
@@ -371,7 +371,7 @@ export default function ShopV2() {
     <div style={{ maxWidth: "1320px", margin: "0 auto", padding: "28px clamp(16px, 4vw, 56px)", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }} className="pw-m-g2 pw-m-facts">
       <div><p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "20px" }}>{tr("MADE TO ORDER")}</p><p style={{ margin: "4px 0 0", fontSize: "14px", color: "#3a3a3a" }}>{tr("No piles of unsold stock.")}</p></div>
       <div><p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "20px" }}>{tr("ORGANIC COTTON")}</p><p style={{ margin: "4px 0 0", fontSize: "14px", color: "#3a3a3a" }}>{tr("100% organic cotton. 100% vegan.")}</p></div>
-      <div><p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "20px" }}>{tr("SHIPPING €5")}</p><p style={{ margin: "4px 0 0", fontSize: "14px", color: "#3a3a3a" }}>{tr("About 1½ to 2 weeks, depending on where you live.")}</p></div>
+      <div><p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "20px" }}>{tr("SHIPPING FROM €5")}</p><p style={{ margin: "4px 0 0", fontSize: "14px", color: "#3a3a3a" }}>{tr("About 1½ to 2 weeks, depending on where you live.")}</p></div>
       <div><p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "0", fontSize: "20px" }}>{tr("YOU CHOOSE")}</p><p style={{ margin: "4px 0 0", fontSize: "14px", color: "#3a3a3a" }}>{tr("Every design belongs to one partner.")}</p></div>
     </div>
   </section>
