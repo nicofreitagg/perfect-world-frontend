@@ -718,7 +718,7 @@
 }
 .pwl-how-k{display:none}
 @media (max-width:700px){.pwl-how-k{display:inline;color:var(--red-t)}}
-@media (max-width:900px){.pwl-best,.pwl-voices,.pwl-alive{scroll-padding-inline:16px}}
+@media (max-width:900px){.pwl-best,.pwl-voices,.pwl-alive,.pwl-causes,.pwl-new{scroll-padding-inline:16px}}
 
 /* Phones: the square 11.11 card fills the film frame, like the wide card on desktop */
 @media (max-width:700px){
@@ -829,9 +829,24 @@
 @media (max-width:700px){.pwl-cine .pwl-autofilm-sound{min-height:38px;padding:0 14px 0 11px;font-size:12px}}
 @media (prefers-reduced-motion:reduce){.pwl-cine .pwl-autofilm-card.is-intro,.pwl-cine-load,.pwl-cine .pwl-autofilm-sound.is-muted{animation:none}}
 /* 16 Oct, Nico: SHOP HOPE quieter ("not so in your face"): a slim outlined button with an arrow, filled only on hover */
-.pwl-cine .pwl-btn.pwl-cine-btn{min-height:46px;padding:0 24px;font-size:14px;letter-spacing:.12em;background:transparent;color:#f2ebdf!important;border:1px solid rgba(242,235,223,.7);box-shadow:none}
+.pwl-cine:is(#pw-quiet,.pwl-cine) .pwl-btn.pwl-cine-btn{min-height:46px;padding:0 24px;font-size:14px;letter-spacing:.12em;background:transparent!important;color:#f2ebdf!important;border:1px solid rgba(242,235,223,.7);box-shadow:none}
 .pwl-cine .pwl-btn.pwl-cine-btn::after{content:'→';margin-left:10px;transition:transform .25s ease}
-.pwl-cine .pwl-btn.pwl-cine-btn:hover{background:#f2ebdf;color:#14110e!important;border-color:#f2ebdf}
+.pwl-cine:is(#pw-quiet,.pwl-cine) .pwl-btn.pwl-cine-btn:hover{background:#f2ebdf!important;color:#14110e!important;border-color:#f2ebdf}
 .pwl-cine .pwl-btn.pwl-cine-btn:hover::after{transform:translateX(3px)}
 @media (max-width:700px){.pwl-cine .pwl-btn.pwl-cine-btn{width:auto}}
-.pwl-shopbar .pwl-btn{min-height:44px;font-size:14px;letter-spacing:.12em;background:rgba(19,17,15,.75);color:#f2ebdf!important;border:1px solid rgba(242,235,223,.6);box-shadow:none;backdrop-filter:blur(8px)}
+.pwl-shopbar:is(#pw-quiet,.pwl-shopbar) .pwl-btn{min-height:44px;font-size:14px;letter-spacing:.12em;background:rgba(19,17,15,.75)!important;color:#f2ebdf!important;border:1px solid rgba(242,235,223,.6);box-shadow:none;backdrop-filter:blur(8px)}
+/* 16 Oct, Nico: on phones the design on show fits one screen: artwork and piece side by side, a tighter caption, smaller picker */
+@media (max-width:700px){
+  .pwl-stage-show{grid-template-columns:1fr 1fr;gap:4px;padding:16px 10px 0;align-items:center}
+  .pwl-stage-art{width:100%;height:150px;max-height:none}
+  .pwl-stage-piece{width:auto;max-width:100%;height:200px;object-fit:contain}
+  .pwl-stage-cap{grid-column:1/-1;padding:6px 0 16px}
+  .pwl-stage-cap .pwl-tag{font-size:11px;padding:3px 9px}
+  .pwl-stage-name{margin:6px 0 2px;font-size:28px}
+  .pwl-stage-who{margin:0 0 8px;font-size:14px;line-height:1.35}
+  .pwl-alive{margin-top:12px}
+  .pwl-alive li{flex:0 0 24%}
+  .pwl-alive-img{border-radius:16px}
+  .pwl-alive-name{margin-top:4px;font-size:12px}
+  .pwl-alive-cause{font-size:9px}
+}
