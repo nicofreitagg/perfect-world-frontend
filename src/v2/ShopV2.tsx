@@ -122,7 +122,7 @@ export default function ShopV2() {
       const m = mine.find((x) => kindOf(x.title) === want.kind) ?? mine.find((x) => kindOf(x.title) !== 'beanie')
       const kind = m ? kindOf(m.title) : want.fk ?? want.kind
       const p = PIECE_LIST.find((x) => x.id === kind)!
-      const base = { ...blank, small: true, name: d.name, sub: tr(p.label) + ' · ' + c.partner, price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: `linear-gradient(170deg, ${TINT[c.id]} 0%, color-mix(in srgb, ${c.color} 26%, ${TINT[c.id]}) 100%)`, isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: mine.length ? tr('See the pieces') + ` (${mine.length})` : tr('See the pieces') }
+      const base = { ...blank, small: true, ico: icon(c.id, 'a'), name: d.name, sub: tr(p.label) + ' · ' + c.partner, price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: `linear-gradient(170deg, ${TINT[c.id]} 0%, color-mix(in srgb, ${c.color} 26%, ${TINT[c.id]}) 100%)`, isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: mine.length ? tr('See the pieces') + ` (${mine.length})` : tr('See the pieces') }
       if (!m) return { ...base, isDesign: true, img: `/v2/img/mm-${want.img}.webp` }
       const cols = rankColours(c.name, variantColours(m.variants), (x) => x)
       const lead = leadColour(kind, d.slug, cols)
