@@ -806,3 +806,12 @@
 .pwl-faq summary::after{content:"+";flex:none;font:400 22px/1 'JetBrains Mono',monospace;opacity:.6;transition:transform .25s}
 .pwl-faq details[open] summary::after{transform:rotate(45deg)}
 .pwl-faq .pwl-faq-all{margin-right:20px}
+
+/* Design stage, faster and calmer (Nico, 16 Oct): quick draw, piece slides in, small float without tilt. */
+@keyframes pwl-stage-in{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes pwl-float{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.pwl-stage-art{animation:pwl-draw 1s cubic-bezier(.4,0,.2,1) both}
+.pwl-stage-piece{animation:pwl-stage-in .55s cubic-bezier(.2,.7,.2,1) .35s both,pwl-float 6s ease-in-out .9s infinite}
+.pwl-stage-cap{animation:pwl-in .45s ease-out .45s both}
+.pwl-alive-img img{animation-name:pwl-float}
+@media (prefers-reduced-motion:reduce){.pwl-stage-art,.pwl-stage-piece,.pwl-stage-cap,.pwl-alive-img img{animation:none}}

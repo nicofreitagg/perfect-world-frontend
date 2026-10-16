@@ -89,7 +89,7 @@ function DesignStage() {
   const [auto, setAuto] = useState(true)
   useEffect(() => {
     if (!auto || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = setInterval(() => setI((n) => (n + 1) % ALIVE.length), 5200)
+    const id = setInterval(() => setI((n) => (n + 1) % ALIVE.length), 4200)
     return () => clearInterval(id)
   }, [auto])
   const a = ALIVE[i]
