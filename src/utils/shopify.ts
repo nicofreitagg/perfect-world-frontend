@@ -90,8 +90,9 @@ async function shopifyFetch<T>(query: string, variables: Record<string, string |
   }
 }
 
-// The Minimal collection launches on 11.11 on the new site; until then this site never shows it.
-const isMinimal = (p: { title: string }) => /minimal/i.test(p.title)
+// The Minimal collection and the new OG listings ("Hoodie | OG | One World") launch on 11.11 on the new site;
+// until then this site never shows them.
+const isMinimal = (p: { title: string }) => /minimal/i.test(p.title) || /\|\s*og\s*(\||$)/i.test(p.title)
 
 // Get products by collection handle
 export async function getCollectionProducts(handle: string): Promise<ShopifyCollection> {
