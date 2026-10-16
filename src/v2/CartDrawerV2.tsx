@@ -114,7 +114,6 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
             <div style={{ background: '#ffffff', padding: '16px 18px', fontFamily: mono, fontSize: '13px', boxShadow: '0 10px 24px rgba(0,0,0,.08)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>{tr("SUBTOTAL")}</span><span>{eur(cartTotal)}</span></div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', color: '#5c5c5c', marginTop: '6px' }}><span>{tr("SHIPPING")}</span><span>{tr("from €5.95")}</span></div>
-              <div style={{ color: '#8a8a8a', fontSize: '10.5px', marginTop: '2px', textAlign: 'right' }}>{tr("€5.95 DE · €8.95 Europe · €10.95 CH")}</div>
               {[...gives].map(([partner, amount]) => (
                 <div key={partner} style={{ display: 'flex', justifyContent: 'space-between', color: '#c0322a', marginTop: '6px' }}><span>→ {partner === ALL ? tr(ALL) : partner.toUpperCase()}</span><span>{eur(amount)}</span></div>
               ))}
