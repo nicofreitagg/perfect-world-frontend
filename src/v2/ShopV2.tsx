@@ -93,19 +93,15 @@ export default function ShopV2() {
   }, [minDesign])
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
+  const [embLive, setEmbLive] = useState<ShopifyProduct[]>([])
 
   // Real Minimal products replace the silhouettes as soon as they exist in Shopify.
   useEffect(() => {
-    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')) }).catch(() => {})
+    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')); setEmbLive(all.filter((p) => /embroider/i.test(p.title) && p.availableForSale)) }).catch(() => {})
   }, [])
 
 
   const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
-  const tabs = ([
-    { id: 'minimal', label: 'Minimal', isNew: true },
-    { id: 'og', label: 'OG', isNew: false },
-  ] as const).map((t) => ({ label: t.label, isNew: t.isNew, selected: t.id === tab, pick: () => setTab(t.id) }))
-  const tabNote = tab === 'minimal' ? 'Six new designs, each made with one of our six partners.' : "Big back print. Each design tells its partner's story."
 
   const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
@@ -229,7 +225,7 @@ export default function ShopV2() {
 
   
   <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "clamp(32px, 4vw, 64px) clamp(16px, 4vw, 56px) clamp(24px, 3vw, 40px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(32px, 5vw, 72px)" }}>
-    <img className="pw-ico" src="/v2/icons/ic-df3d515b.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "410px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "50px", width: "96px", transform: "rotate(9deg)" }} />
+    <img className="pw-ico pw-m-hide" src="/v2/icons/ic-df3d515b.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "410px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "50px", width: "96px", transform: "rotate(9deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ bottom: "-80px" }}><path d="M-60 560 C 200 650, 380 420, 560 520 C 700 600, 770 470, 690 430 C 610 390, 600 570, 770 610 C 990 660, 1160 470, 1500 540" stroke="#FF8C42" strokeWidth="8"></path></svg>
     <div style={{ flex: "1 1 520px" }}>
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
@@ -243,12 +239,25 @@ export default function ShopV2() {
   <section className="pw-iso" id="shop" aria-label={tr("Products")} style={{ position: "relative", zIndex: "78", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px) clamp(40px, 7vw, 72px)" }}>
     
     <div className="pw-shopbar">
-      <div role="tablist" aria-label={tr("Collections")} className="pw-seg">
-        {tabs.map((tb, tbI) => (<Fragment key={tbI}>
-          <button type="button" role="tab" aria-selected={tb.selected} onClick={tb.pick}>
-            {tr(tb.label)}{tb.isNew && <span className="pw-seg-new">{tr("new")}</span>}
-          </button>
-        </Fragment>))}
+      {/* Same cause, two styles: the Oceans tee in each collection shows the difference at a glance. */}
+      <div role="tablist" aria-label={tr("Collections")} className="pw-split">
+        <button type="button" role="tab" aria-selected={tab === 'minimal'} className="pw-split-min" onClick={() => setTab('minimal')}>
+          <img className="pw-split-img" src="/v2/img/mm-oceans.webp" alt="" />
+          <span className="pw-split-txt">
+            <span className="pw-split-tag">{tr('NEW')}</span>
+            <img className="pw-split-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
+            <span className="pw-split-line">{tr('Quiet lettering, a small back print.')}</span>
+            <span className="pw-split-go">{tab === 'minimal' ? tr('Showing') + ' ✓' : tr('See Minimal') + ' →'}</span>
+          </span>
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'og'} className="pw-split-og" onClick={() => setTab('og')}>
+          <img className="pw-split-img" src="/v2/img/og-oceans.webp" alt="" />
+          <span className="pw-split-txt">
+            <span className="pw-fat pw-split-og-t">OG</span>
+            <span className="pw-split-line">{tr('The originals. Big, bold back prints.')}</span>
+            <span className="pw-split-go">{tab === 'og' ? tr('Showing') + ' ✓' : tr('See OG') + ' →'}</span>
+          </span>
+        </button>
       </div>
       {/* One quiet way to find a piece type (Nico, 14 Oct: "searching for a tote bag only"). */}
       {tab === 'minimal' && (
@@ -261,13 +270,6 @@ export default function ShopV2() {
         </label>
       )}
     </div>
-    {tab === 'minimal' ? (
-      <div className="pw-minbanner">
-        <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
-        <p className="pw-fat pw-minline">{tr('Doing good never looked so clean.')}</p>
-        <p><span className="pw-mono">{tr('NEW')}</span> {tr(tabNote)}</p>
-      </div>
-    ) : <p className="pw-shopnote">{tr(tabNote)}</p>}
 
     {tab === 'minimal' && minDesign !== 'all' && (
       <div className="pw-designbar">
@@ -279,14 +281,25 @@ export default function ShopV2() {
     )}
     {products.some((p) => p.small) ? (
     <>
-    <div className="pw-designgrid">{products.map(card)}</div>
-    {/* The logo beanie has no design, so it sits under the six as one line, straight to its page. */}
-    {(() => {
-      const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
-      const p = PIECE_LIST.find((x) => x.id === 'beanie')!
-      const body = <><img src={BEANIE_MOCKUP} alt="" /><span><span className="pw-fat">{tr('Logo beanie')}</span><span>€{p.price} · <b>€{p.give}</b> {tr('shared by all six partners')}</span></span><span className="pw-mono">{beanie ? tr('See the beanie') + ' →' : tr('Coming 11.11')}</span></>
-      return beanie ? <A href={`/product/${beanie.handle}`} className="pw-beanieline">{body}</A> : <div className="pw-beanieline">{body}</div>
-    })()}
+    {/* 3x3: the six designs, then a last row for pieces that support all six partners at once (Nico, 16 Oct). */}
+    <div className="pw-designgrid">
+      {products.map(card)}
+      <div className="pw-allrow">
+        <div className="pw-allintro">
+          <span className="pw-mono">{tr('ONE PIECE, SIX PARTNERS')}</span>
+          <h2 className="pw-fat">{tr('Support all causes in one')}</h2>
+          <p>{tr('No single design. These carry our logo and support all six partners together.')}</p>
+          <span className="pw-allicons" aria-hidden="true">{CAUSES.map((c) => <img key={c.id} src={icon(c.id, 'a')} alt="" />)}</span>
+        </div>
+        {(() => {
+          const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
+          const p = PIECE_LIST.find((x) => x.id === 'beanie')!
+          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('For all six partners'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: '#efe6d6', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
+        })()}
+        {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
+        {embLive.map((m, i) => card({ ...blank, small: true, name: formatDisplayTitle(m.title), sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: tr('For all six partners'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, swatches: variantColours(m.variants).map((x) => ({ c: hexOf(x), label: x })), href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i))}
+      </div>
+    </div>
     </>
     ) : (
     <div key={minDesign + piece} className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
