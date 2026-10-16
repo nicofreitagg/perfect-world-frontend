@@ -6,6 +6,7 @@ import { CAUSES } from './causes'
 import { PIECES, NEW_PIECES, WOMEN, minDesignOf } from './data'
 import { useCauseGround } from './ground'
 import { useDesignPairOrGuess } from './printSide'
+import { useCutout } from './cutout'
 import { hexOf } from './colours'
 import { useT } from './t'
 import FitScale from './FitScale'
@@ -66,7 +67,7 @@ export default function ProductHandleV2() {
     <Shell active="/shop">
       <section className="pw-iso" style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(24px, 4vw, 56px) clamp(16px, 4vw, 56px) clamp(64px, 8vw, 110px)', display: 'flex', flexWrap: 'wrap', gap: 'clamp(24px, 4vw, 56px)' }}>
         <div style={{ flex: '1 1 480px', minWidth: 0, display: 'grid', gap: '12px' }}>
-          <div style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
+          <div className="pw-pd-stage" style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
             <MainPhoto images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
           </div>
           {images.length > 1 && <Thumbs images={images} shot={shot} colourUrl={colourFront} minimal={minimal} setShot={setShot} />}
@@ -119,7 +120,13 @@ function MainPhoto({ images, shot, colourUrl, minimal, alt }: { images: { url: s
   const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
   // shot 0 = the design side, -1 = the front of the same pair, otherwise a photo index.
   const img = (shot === 0 && (minimal ? pair?.[0] : colourUrl)) || (shot === -1 && pair?.[1]) || images[shot]?.url
-  return img ? <img src={img} alt={alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} /> : null
+  return img ? <CutPhoto src={img} alt={alt} /> : null
+}
+
+// Cut out on the page with a soft shadow, like the shop; the plain photo while it works or when it can't be cut.
+function CutPhoto({ src, alt }: { src: string; alt: string }) {
+  const cut = useCutout(src)
+  return <img src={cut || src} alt={alt} className={cut ? 'is-cut' : undefined} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
 }
 
 // Thumbnails: for Minimal, the picked colour's two photos (design first, then the front logo);
@@ -136,8 +143,8 @@ function Thumbs({ images, shot, colourUrl, minimal, setShot }: { images: { url: 
         const k = minimal && pair ? (url === pair[0] ? 0 : -1) : Math.max(idx, 0)
         const on = url === shown
         return (
-          <button key={url} type="button" onClick={() => setShot(k)} aria-pressed={on} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: on ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }}>
-            <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          <button key={url} type="button" onClick={() => setShot(k)} aria-pressed={on} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: on ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }} className="pw-pd-thumb">
+            <CutPhoto src={url} alt="" />
           </button>
         )
       })}

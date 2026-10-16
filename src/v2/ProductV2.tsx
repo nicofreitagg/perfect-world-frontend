@@ -4,6 +4,7 @@ import { CAUSES, causeBySlug, causeFg, causeTeaser } from './causes'
 import { PIECES, icon, RAW_GROUND } from './data'
 import { getAllProducts } from '../utils/shopify'
 import { useDesignPairOrGuess } from './printSide'
+import { useCutout } from './cutout'
 import { getCollectionKey, extractProductType, extractColorFromTitle } from '../utils/productGrouping'
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 import NotFound from '../pages/NotFound'
@@ -125,14 +126,14 @@ export default function ProductV2() {
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "380px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#FF8C42" strokeWidth="7"></path></svg>
 
     <div className="pw-pd-media" style={{ flex: "1 1 520px", minWidth: "0", display: "flex", flexDirection: "column", gap: "12px" }}>
-      <div style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "28px", overflow: "hidden", background: c.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div className="pw-pd-stage" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "28px", overflow: "hidden", background: c.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
-        {photo ? <img src={photo} alt={`${c.name} ${piece.name}`} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} /> : c.hasPrint && (<><img src={c.print} alt={`${c.name} back print`} style={{ position: "relative", width: "74%", height: "74%", objectFit: "contain", filter: "drop-shadow(0 22px 24px rgba(0,0,0,.2))" }} /></>)}
+        {photo ? <CutPhoto src={photo} alt={`${c.name} ${piece.name}`} /> : c.hasPrint && (<><img src={c.print} alt={`${c.name} back print`} style={{ position: "relative", width: "74%", height: "74%", objectFit: "contain", filter: "drop-shadow(0 22px 24px rgba(0,0,0,.2))" }} /></>)}
         {c.noPrint && (<><span className="pw-hand" style={{ position: "relative", fontSize: "64px", textAlign: "center", lineHeight: "1" }}>{c.name}</span></>)}
       </div>
       {images.length > 1 && (<div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
         {images.slice(0, 3).map((im, k) => (
-          <button type="button" key={im.url} onClick={() => setShot(k)} aria-pressed={k === shotIdx} style={{ aspectRatio: "1 / 1", borderRadius: "18px", background: "#fbf6ec", border: k === shotIdx ? "2px solid #0b0b0c" : "1px solid #e3e1dc", padding: "0", overflow: "hidden", cursor: "pointer" }}><img src={im.url} alt={im.altText ?? ''} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} /></button>
+          <button type="button" key={im.url} onClick={() => setShot(k)} aria-pressed={k === shotIdx} style={{ aspectRatio: "1 / 1", borderRadius: "18px", background: "#fbf6ec", border: k === shotIdx ? "2px solid #0b0b0c" : "1px solid #e3e1dc", padding: "0", overflow: "hidden", cursor: "pointer" }} className="pw-pd-thumb"><CutPhoto src={im.url} alt={im.altText ?? ''} /></button>
         ))}
       </div>)}
     </div>
@@ -218,4 +219,10 @@ export default function ProductV2() {
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
     </>
   )
+}
+
+// Cut out on the page with a soft shadow, like the shop; the plain photo while it works or when it can't be cut.
+function CutPhoto({ src, alt }: { src: string; alt: string }) {
+  const cut = useCutout(src)
+  return <img src={cut || src} alt={alt} className={cut ? 'is-cut' : undefined} style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
 }

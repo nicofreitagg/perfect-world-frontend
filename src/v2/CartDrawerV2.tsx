@@ -1,13 +1,33 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { createCheckout } from '../utils/shopify'
-import { getCollectionKey, extractProductType } from '../utils/productGrouping'
+import { getCollectionKey, formatDisplayTitle } from '../utils/productGrouping'
 import { CAUSES } from './causes'
-import { PIECES } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, pieceOf } from './data'
 import { useT } from './t'
+import { useCutout } from './cutout'
 
 // The cart as a receipt, in the 11.11 look: what you pay, and what each piece gives to whom.
-const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give }
+const np = (id: string) => NEW_PIECES.find((n) => n.id === id)!
+const GIVE: Record<string, string> = { tote: PIECES.tote.give, tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give, women: np('women').give, bomber: np('bomber').give, beanie: np('beanie').give }
+const LABEL: Record<string, string> = { tote: 'Tote bag', tshirt: 'T-shirt', oversized: 'Oversized shirt', hoodie: 'Hoodie', women: "Women's T-shirt", bomber: 'Bomber jacket', beanie: 'Logo beanie' }
+const ALL = 'ALL SIX PARTNERS'
+// Who a cart line gives to: the design's partner, or all six for logo pieces (beanie, embroidered).
+const partnerOf = (title: string) => {
+  if (/beanie|embroider/i.test(title)) return ALL
+  const d = minDesignOf(title)
+  const c = CAUSES.find((x) => (d && x.slug === d.slug) || x.name === getCollectionKey(title))
+  return c?.partner ?? ''
+}
+// A readable line name: Minimal titles ("T-Shirt | Minimal | A World Below") become design + piece.
+const nameOf = (title: string) => {
+  const d = /minimal/i.test(title) ? MIN_DESIGNS.find((x) => x.slug === minDesignOf(title)?.slug) : undefined
+  return d ? { name: d.name, sub: 'Minimal' } : { name: formatDisplayTitle(title), sub: '' }
+}
+function Thumb({ src }: { src: string }) {
+  const cut = useCutout(src)
+  return <span style={{ width: '84px', height: '96px', borderRadius: '16px', background: '#efe6d6', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><img src={cut || src} alt="" style={{ width: '100%', height: '100%', objectFit: cut ? 'contain' : 'cover', padding: cut ? '8%' : 0, borderRadius: '16px', mixBlendMode: cut ? 'normal' : 'multiply' }} /></span>
+}
 const eur = (n: number) => '€' + n.toFixed(2)
 const mono = "'JetBrains Mono', monospace"
 
@@ -29,9 +49,9 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
   // Per partner: what this cart gives.
   const gives = new Map<string, number>()
   for (const item of cart) {
-    const cause = CAUSES.find((c) => c.name === getCollectionKey(item.title))
-    const give = GIVE[extractProductType(item.title)]
-    if (cause && give) gives.set(cause.partner, (gives.get(cause.partner) ?? 0) + Number(give) * item.quantity)
+    const partner = partnerOf(item.title)
+    const give = GIVE[pieceOf(item.title)]
+    if (partner && give) gives.set(partner, (gives.get(partner) ?? 0) + Number(give) * item.quantity)
   }
 
   const checkout = async () => {
@@ -52,7 +72,7 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
   return (
     <Overlay inline={inline} onClose={onClose}>
       <aside role={inline ? undefined : 'dialog'} aria-label={tr("Your cart")} style={{ width: '100%', maxWidth: inline ? '640px' : '420px', height: inline ? 'auto' : '100%', margin: inline ? '0 auto' : undefined, borderRadius: inline ? '28px' : undefined, border: inline ? '1px solid #e3e1dc' : undefined, background: '#f5f4f1', color: '#0b0b0c', display: 'flex', flexDirection: 'column', fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: 500, boxShadow: '-20px 0 50px rgba(0,0,0,.15)' }}>
-        <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 22px 16px', borderBottom: '1.5px solid #0b0b0c' }}>
+        <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '22px 22px 16px', borderBottom: '1px solid rgba(11,11,12,.12)' }}>
           <h2 className="pw-fat" style={{ margin: 0, fontSize: '34px', lineHeight: 1, fontFamily: "'fatfrank', system-ui, sans-serif", fontWeight: 400 }}>{tr("Your cart")}</h2>
           {!inline && <button type="button" onClick={onClose} aria-label={tr("Close cart")} style={{ ...round, width: '40px', height: '40px' }}>✕</button>}
         </header>
@@ -68,10 +88,11 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
             <div style={{ display: 'grid', gap: '14px' }}>
               {cart.map((item) => (
                 <div key={item.variantId} style={{ display: 'flex', gap: '14px', alignItems: 'center' }}>
-                  <img src={item.image} alt="" style={{ width: '76px', height: '76px', borderRadius: '16px', objectFit: 'cover', background: '#e9e7e2', flexShrink: 0 }} />
+                  <Thumb src={item.image} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ margin: 0, fontWeight: 700, fontSize: '15px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</p>
-                    {item.variant !== 'Default Title' && <p style={{ margin: '2px 0 8px', fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{item.variant}</p>}
+                    <p style={{ margin: 0, fontWeight: 700, fontSize: '15px', lineHeight: 1.25 }}>{nameOf(item.title).name}</p>
+                    <p style={{ margin: '3px 0 2px', fontSize: '13px', color: '#5c5c5c' }}>{[tr(LABEL[pieceOf(item.title)] ?? ''), nameOf(item.title).sub, item.variant !== 'Default Title' ? item.variant.replace(/ \/ /g, ' · ') : ''].filter(Boolean).join(' · ')}</p>
+                    {GIVE[pieceOf(item.title)] && partnerOf(item.title) && <p style={{ margin: '0 0 8px', fontFamily: mono, fontSize: '11.5px', color: '#c0322a' }}>€{GIVE[pieceOf(item.title)]} {partnerOf(item.title) === ALL ? tr('shared by all six') : tr('to') + ' ' + partnerOf(item.title)}</p>}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <button type="button" style={round} aria-label={tr("One less")} onClick={() => updateQuantity(item.variantId, Math.max(0, item.quantity - 1))}>−</button>
                       <span style={{ fontFamily: mono, fontSize: '14px', minWidth: '16px', textAlign: 'center' }}>{item.quantity}</span>
@@ -94,7 +115,7 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
               <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>{tr("SUBTOTAL")}</span><span>{eur(cartTotal)}</span></div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: '#5c5c5c', marginTop: '6px' }}><span>{tr("SHIPPING")}</span><span>{tr("€5 Germany · €8 Europe")}</span></div>
               {[...gives].map(([partner, amount]) => (
-                <div key={partner} style={{ display: 'flex', justifyContent: 'space-between', color: '#c0322a', marginTop: '6px' }}><span>→ {partner.toUpperCase()}</span><span>{eur(amount)}</span></div>
+                <div key={partner} style={{ display: 'flex', justifyContent: 'space-between', color: '#c0322a', marginTop: '6px' }}><span>→ {partner === ALL ? tr(ALL) : partner.toUpperCase()}</span><span>{eur(amount)}</span></div>
               ))}
             </div>
             <div className="pw-tear" aria-hidden="true" style={{ height: '14px', background: 'linear-gradient(135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x,linear-gradient(-135deg,#ffffff 7px,transparent 0) 0 0/14px 14px repeat-x' }} />
