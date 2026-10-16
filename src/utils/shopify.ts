@@ -525,6 +525,7 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
             title
             description
             handle
+            isGiftCard
             availableForSale
             priceRange {
               minVariantPrice {
@@ -592,7 +593,8 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
     after = data.products.pageInfo.endCursor
   }
 
-  return edges.map((edge: any) => ({
+  // Gift cards are sold from Mon 14 Dec through their own page, never in the product lists.
+  return edges.filter((edge: any) => !edge.node.isGiftCard && !/gift ?card/i.test(edge.node.title)).map((edge: any) => ({
     id: edge.node.id,
     title: edge.node.title,
     description: edge.node.description,
