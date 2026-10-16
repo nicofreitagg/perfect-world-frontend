@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
-import { CAUSES } from './causes'
-import { PIECES, NEW_PIECES, WOMEN, minDesignOf } from './data'
+import { CAUSES, causeTitle } from './causes'
+import { PIECES, NEW_PIECES, WOMEN, minDesignOf, isNewOG } from './data'
 import { useCauseGround } from './ground'
 import { useDesignPairOrGuess } from './printSide'
 import { useCutout } from './cutout'
@@ -11,7 +11,7 @@ import { hexOf } from './colours'
 import { useT } from './t'
 import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
-import { getProduct } from '../utils/shopify'
+import { getProduct, getAllProducts } from '../utils/shopify'
 import { cleanDescription } from './richText'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
@@ -41,12 +41,17 @@ export default function ProductHandleV2() {
   const [params, setParams] = useSearchParams()
 
   useEffect(() => { if (handle) getProduct(handle).then(setP).catch(() => setP(null)) }, [handle])
-  useCauseGround(p ? minDesignOf(p.title)?.slug : undefined)
+  // OG: the other pieces of the same design (T-shirt, oversized, hoodie), to switch between them.
+  const [siblings, setSiblings] = useState<ShopifyProduct[]>([])
+  const og = !!p && isNewOG(p.title)
+  const ogKey = p && og ? getCollectionKey(p.title) : ''
+  useEffect(() => { if (ogKey) getAllProducts().then((all) => setSiblings(all.filter((x) => isNewOG(x.title) && getCollectionKey(x.title) === ogKey))).catch(() => {}) }, [ogKey])
+  useCauseGround(p ? minDesignOf(p.title)?.slug ?? (og ? CAUSES.find((c) => c.name === ogKey)?.slug : undefined) : undefined)
 
   if (p === undefined) return <Shell><p style={{ padding: '120px 16px', textAlign: 'center', fontFamily: mono }}>{t('LOADING…')}</p></Shell>
   if (p === null) return <Navigate to="/shop" replace />
   const cause = CAUSES.find((c) => c.name === getCollectionKey(p.title))
-  if (cause && !/minimal/i.test(p.title)) return <Navigate to={`/design/${cause.slug}`} replace />
+  if (cause && !/minimal/i.test(p.title) && !og) return <Navigate to={`/design/${cause.slug}`} replace />
 
   // Colour and size are separate pickers; ?colour= (from the shop's colour dots) preselects the colour.
   const colours = [...new Set(p.variants.map((v) => optOf(v, COLOUR)).filter((c): c is string => !!c))]
@@ -59,7 +64,8 @@ export default function ProductHandleV2() {
   const price = variant ? Number(variant.price.amount) : Number(p.priceRange.minVariantPrice.amount)
   const give = giveOf(p.title)
   // Minimal: the back (the design) leads, for the picked colour when Shopify has its photo.
-  const minimal = /minimal/i.test(p.title)
+  // OG listings come in the same front/back pairs, so the back print leads there too.
+  const minimal = /minimal/i.test(p.title) || og
   const images = p.images
   const colourFront = (variant ?? inColour[0])?.image?.url
 
@@ -74,9 +80,17 @@ export default function ProductHandleV2() {
         </div>
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div>
+            {og && <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', letterSpacing: '.14em' }}>{t('THE OG COLLECTION')}</p>}
             {/minimal/i.test(p.title) && <img className="pw-sig" src="/v2/img/sig-minimal-collection-black.png" alt={t('The Minimal Collection')} style={{ height: 'clamp(30px, 3vw, 42px)' }} />}
-            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{minimal && minDesignOf(p.title) ? minDesignOf(p.title)!.name : /beanie/i.test(p.title) ? t('Logo beanie') : p.title}</h1>
-            {minimal && minDesignOf(p.title) && <p style={{ margin: '8px 0 0', fontSize: '18px', fontWeight: 600 }}>{t(pieceLabel(p.title))}</p>}
+            <h1 className="pw-fat" style={{ margin: '10px 0 0', fontSize: 'clamp(26px, 4.4vw, 60px)', lineHeight: 0.95 }}>{og && cause ? causeTitle(cause.name) : /minimal/i.test(p.title) && minDesignOf(p.title) ? minDesignOf(p.title)!.name : /beanie/i.test(p.title) ? t('Logo beanie') : p.title}</h1>
+            {((/minimal/i.test(p.title) && minDesignOf(p.title)) || (og && cause)) && <p style={{ margin: '8px 0 0', fontSize: '18px', fontWeight: 600 }}>{t(pieceLabel(p.title))}</p>}
+            {og && siblings.length > 1 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px' }}>
+                {['tshirt', 'oversized', 'hoodie', 'tote'].flatMap((k) => siblings.filter((x) => extractProductType(x.title) === k)).map((x) => (
+                  <A key={x.id} href={`/product/${x.handle}${colour ? `?colour=${encodeURIComponent(colour)}` : ''}`} className="pw-chip" aria-current={x.handle === p.handle ? 'page' : undefined} style={{ display: 'inline-flex', alignItems: 'center', minHeight: '40px', padding: '0 16px', borderRadius: '999px', border: x.handle === p.handle ? '2px solid #0b0b0c' : '1px solid rgba(11,11,12,.2)', background: x.handle === p.handle ? '#0b0b0c' : '#fbf6ec', color: x.handle === p.handle ? '#fff' : '#0b0b0c', textDecoration: 'none', fontSize: '14px', fontWeight: 600 }}>{t(pieceLabel(x.title))}</A>
+                ))}
+              </div>
+            )}
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {/beanie/i.test(p.title) ? t('shared by all six partners') : t('goes to the partner it was made with')}</p>}
           </div>

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
-import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, icon, type CauseKey, RAW_GROUND } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, isNewOG, icon, type CauseKey, RAW_GROUND } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useCutout } from './cutout'
 import { getAllProducts } from '../utils/shopify'
@@ -39,6 +39,7 @@ const kindOf = (title: string): Kind => {
 // Which colour a Minimal card opens on (Nico 12 Oct): T-shirts and hoodies on the design's own
 // cause colour; bombers, women's tees and oversized rotate through their colours design by design.
 const CAUSE_COLOUR: Record<string, string> = { 'one-world': 'blue soul', 'cool-down': 'green bay', 'endangered-oceans': 'bright blue', 'talk-about-it': 'lavender', 'wild-at-heart': 'india ink', 'rich-in-life': 'red brown' }
+const GIVE_OF: Record<string, string> = { tshirt: PIECES.shirt.give, oversized: PIECES.oversized.give, hoodie: PIECES.hoodie.give, tote: PIECES.tote.give }
 const leadColour = (kind: Kind, slug: string, cols: string[]) => {
   const i = Math.max(0, MIN_DESIGNS.findIndex((d) => d.slug === slug))
   if (kind === 'tee' || kind === 'hoodie') {
@@ -99,10 +100,11 @@ export default function ShopV2() {
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
   const [embLive, setEmbLive] = useState<ShopifyProduct[]>([])
+  const [ogNew, setOgNew] = useState<ShopifyProduct[]>([])
 
   // Real Minimal products replace the silhouettes as soon as they exist in Shopify.
   useEffect(() => {
-    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')); setEmbLive(all.filter((p) => /embroider/i.test(p.title) && p.availableForSale)) }).catch(() => {})
+    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')); setEmbLive(all.filter((p) => /embroider/i.test(p.title) && p.availableForSale)); setOgNew(all.filter((p) => isNewOG(p.title))) }).catch(() => {})
   }, [])
 
 
@@ -169,7 +171,25 @@ export default function ShopV2() {
       return rankColours(name, [...seen.values()].map((p) => ({ name: extractColorFromTitle(p.title).trim(), img: p.images[0]?.url ?? '', photos: p.images })), (x) => x.name)
     }
     const card = (c: (typeof CAUSES)[number]) => ({ ...blank, ico: icon(c.id, 'a'), name: c.name, sub: c.partner + ' · ' + tr(SHORT[c.id]), price: tr('from') + ' €' + PIECES.shirt.price, give: tr('from') + ' €' + PIECES.shirt.give + ' ' + tr('to') + ' ' + c.partner, bg: TINT[c.id], isPrint: !!c.print, isPlaceholderPrint: !c.print, img: c.print, grad: c.bg, swatches: [{ c: '#1b1b1d' }, { c: '#f2efe8' }] as { c: string; href?: string; label?: string }[], href: `/design/${c.slug}`, addLabel: tr('Choose your piece') })
-    products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
+    // The relisted OG pieces (16 Oct): one product per piece with colours as options, back print first.
+    const ogCard = (c: (typeof CAUSES)[number], m: ShopifyProduct, sub: string) => {
+      const cols = rankColours(c.name, variantColours(m.variants), (x) => x)
+      const kind = extractProductType(m.title)
+      const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === cols[0]))?.image?.url ?? ''
+      const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
+      return { ...card(c), sub, isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
+    }
+    const ORDER = ['tshirt', 'oversized', 'hoodie', 'tote']
+    const ogOf = (c: (typeof CAUSES)[number]) => ogNew.filter((m) => getCollectionKey(m.title) === c.name).sort((a, b) => ORDER.indexOf(extractProductType(a.title)) - ORDER.indexOf(extractProductType(b.title)))
+    const label = (m: ShopifyProduct) => tr(({ tshirt: 'T-shirt', oversized: 'Oversized shirt', hoodie: 'Hoodie', tote: 'Tote bag' } as Record<string, string>)[extractProductType(m.title)] ?? 'T-shirt')
+    if (ogNew.length) products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
+      const mine = ogOf(c)
+      if (!mine.length) return [card(c)]
+      // All designs: one card per design on its T-shirt; a picked design shows each of its pieces.
+      if (cause === 'all') return [{ ...ogCard(c, mine[0], mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price }]
+      return mine.map((m) => ogCard(c, m, label(m) + ' · ' + c.partner))
+    })
+    else products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
       const cols = coloursOf(c.name)
       const link = (n: string) => `/design/${c.slug}?colour=${encodeURIComponent(n)}`
       if (!cols.length) return [card(c)]

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { CAUSES, causeBySlug, causeFg, causeTeaser } from './causes'
-import { PIECES, icon, RAW_GROUND } from './data'
+import { PIECES, icon, RAW_GROUND, isNewOG } from './data'
 import { getAllProducts } from '../utils/shopify'
 import { useDesignPairOrGuess } from './printSide'
 import { useCutout } from './cutout'
@@ -54,6 +54,10 @@ export default function ProductV2() {
   // This design's real Shopify products, grouped by piece.
   const mine = useMemo(() => (all ?? []).filter((p) => raw && getCollectionKey(p.title) === raw.name && !/minimal/i.test(p.title)), [all, raw])
   const kinds = PIECE_LIST.filter((k) => mine.some((p) => extractProductType(p.title) === k.id))
+  // The relisted OG pieces ("T-Shirt | OG | Cool Down", colours as options) have their own product pages:
+  // this design page hands over to the T-shirt (or the first piece), keeping a picked colour.
+  const ogLead = mine.find((p) => isNewOG(p.title) && extractProductType(p.title) === 'tshirt') ?? mine.find((p) => isNewOG(p.title))
+  useEffect(() => { if (ogLead) navigate(`/product/${ogLead.handle}${colour ? `?colour=${encodeURIComponent(colour)}` : ''}`, { replace: true }) }, [ogLead, colour, navigate])
   const piece = kinds.find((k) => k.id === kind) ?? kinds[0] ?? PIECE_LIST[1]
   // Shopify can hold two products for the same colour; show each colour once, using the one with most sizes in stock.
   const ofKind = useMemo(() => {

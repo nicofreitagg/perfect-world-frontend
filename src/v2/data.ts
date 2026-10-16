@@ -105,6 +105,8 @@ export const MIN_DESIGNS = [
 
 // Which Minimal design a Shopify title is: by design name, or by its cause's name.
 const CAUSE_NAMES: Record<string, string> = { 'one-world': 'one world', 'cool-down': 'cool down', 'endangered-oceans': 'endangered oceans', 'talk-about-it': 'talk about it', 'wild-at-heart': 'wild at heart', 'rich-in-life': 'rich in life' }
+// The OG designs as relisted with Western Print (16 Oct): "Hoodie | OG | Talk About It", one product per piece with colour options.
+export const isNewOG = (title: string) => /\|\s*og\s*(\||$)/i.test(title)
 export const minDesignOf = (title: string) => {
   const t = title.toLowerCase()
   return MIN_DESIGNS.find((d) => t.includes(d.name.toLowerCase())) ?? MIN_DESIGNS.find((d) => t.includes(CAUSE_NAMES[d.slug]))

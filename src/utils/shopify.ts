@@ -1,4 +1,5 @@
 import { SHOPIFY } from './constants'
+import { getCollectionKey } from './productGrouping'
 import type {
   ShopifyCollection,
   ShopifyProduct,
@@ -594,7 +595,7 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
   }
 
   // Gift cards are sold from Mon 14 Dec through their own page, never in the product lists.
-  return edges.filter((edge: any) => !edge.node.isGiftCard && !/gift ?card/i.test(edge.node.title)).map((edge: any) => ({
+  const list = edges.filter((edge: any) => !edge.node.isGiftCard && !/gift ?card/i.test(edge.node.title)).map((edge: any) => ({
     id: edge.node.id,
     title: edge.node.title,
     description: edge.node.description,
@@ -609,6 +610,11 @@ async function fetchAllProducts(): Promise<ShopifyProduct[]> {
     })),
     collections: edge.node.collections?.edges.map((colEdge: any) => colEdge.node) || [],
   }))
+  // The OG designs were relisted with Western Print as "Piece | OG | Design" (16 Oct). Once those exist,
+  // the old one-per-colour OG listings stay off the new site (embroidered pieces are kept).
+  const newOG = (t: string) => /\|\s*og\s*(\||$)/i.test(t)
+  if (!list.some((p) => newOG(p.title))) return list
+  return list.filter((p) => newOG(p.title) || /minimal|embroider/i.test(p.title) || !getCollectionKey(p.title))
 }
 
 
