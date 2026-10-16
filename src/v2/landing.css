@@ -775,3 +775,21 @@
 .pwl-give-media::after{content:"";position:absolute;left:24%;right:24%;bottom:9%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(70,48,24,.3),rgba(70,48,24,0));pointer-events:none;z-index:0}
 .pwl-give-media figcaption{display:none}
 .pwl-give-media img{padding:9%}
+/* 16 Oct (Nico: cleaner, "less Claude Code"): causes as an open, editorial list, no boxes.
+   A thin rule with a short stroke in the cause colour (it runs the full width on hover), the name in Fat Frank,
+   the cause line handwritten in its colour, a quiet link. */
+#causes .pwl-causes{gap:clamp(28px,3vw,44px) clamp(20px,2.6vw,40px)}
+#causes .pwl-cause,:is(.look-dark,.look-mix) #causes .pwl-cause{background:none!important;border:0!important;border-radius:0;padding:22px 0 0;overflow:visible;column-gap:14px;grid-template-columns:44px 1fr;box-shadow:none}
+#causes .pwl-cause::before{left:0;right:0;top:0;bottom:auto;width:auto;height:1px;background:rgba(242,235,223,.18)}
+#causes .pwl-cause::after{content:"";position:absolute;left:0;top:-1px;height:3px;width:56px;border-radius:3px;background:var(--c);transition:width .5s cubic-bezier(.3,1,.4,1)}
+#causes .pwl-cause:hover::after,#causes .pwl-cause:focus-visible::after{width:100%}
+#causes .pwl-cause:hover,#causes .pwl-cause:focus-visible{transform:none}
+#causes .pwl-cause-logo{width:44px;height:44px}
+#causes .pwl-cause-name{font-weight:400;font-size:22px;line-height:1.05}
+#causes .pwl-cause-who{font-size:13px;line-height:1.45;color:rgba(242,235,223,.62)}
+#causes .pwl-cause-line{margin-top:16px;font-size:clamp(20px,1.7vw,24px);font-weight:400;letter-spacing:0;line-height:1.15;color:var(--c)!important;text-wrap:balance}
+#causes .pwl-cause-go{margin-top:14px;font:500 11.5px 'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(242,235,223,.75)!important;text-decoration:none!important}
+#causes .pwl-cause:hover .pwl-cause-go{color:#f2ebdf!important}
+@media (max-width:760px){#causes .pwl-causes>*{flex:0 0 78%}}
+#causes .pwl-cause-line{font-size:clamp(26px,2.2vw,32px);line-height:1;padding-left:3px;margin-top:18px}
+@media (max-width:760px){#causes .pwl-cause-line{font-size:26px}}
