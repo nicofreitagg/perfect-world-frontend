@@ -356,7 +356,9 @@ export default function ShopV2() {
             }))]
             return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
           }
-          const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
+          // Until the Printful beanies are active (Draft until 11.11, Nico 16 Oct), show the card without a link:
+          // the older Minimal beanie listings still carry the old €33.33.
+          const beanie = undefined as ShopifyProduct | undefined
           return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
         })()}
         {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
