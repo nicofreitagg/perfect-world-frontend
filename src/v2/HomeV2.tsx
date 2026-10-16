@@ -21,12 +21,13 @@ const Globe3D = lazy(() => import('./Globe3D'))
 
 // Cold visitors first (Nico's boss, 15 Oct): each Minimal design shown as a real garment, gently moving.
 const ALIVE = [
-  { slug: 'talk-about-it', img: 'talk', piece: 'Hoodie' },
+  // A different piece per design, so every kind shows up (Nico, 16 Oct): bomber, tee, tote, oversized, women's tee.
+  { slug: 'talk-about-it', img: 'talk-bomber', piece: 'Bomber jacket' },
   { slug: 'endangered-oceans', img: 'oceans', piece: 'T-shirt' },
-  { slug: 'cool-down', img: 'cool', piece: 'T-shirt' },
+  { slug: 'cool-down', img: 'cool-tote', piece: 'Tote bag' },
   { slug: 'one-world', img: 'one-world-oversized', piece: 'Oversized shirt' },
   { slug: 'wild-at-heart', img: 'wild', piece: 'T-shirt' },
-  { slug: 'rich-in-life', img: 'rich', piece: 'T-shirt' },
+  { slug: 'rich-in-life', img: 'womens-rich', piece: "Women's T-shirt" },
 ]
 // Three pieces up front, each with only its price and where its amount goes.
 const BEST = [
