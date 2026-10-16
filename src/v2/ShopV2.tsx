@@ -49,6 +49,8 @@ const leadColour = (kind: Kind, slug: string, cols: string[]) => {
 }
 // Which piece each design shows in the Minimal overview, with the cut-out mockup used until the listing has photos.
 const MIX: { kind: Kind; img: string; fk?: Kind }[] = [{ kind: 'over', img: 'one-world-oversized' }, { kind: 'tote', img: 'cool-tote' }, { kind: 'tee', img: 'oceans' }, { kind: 'bomber', img: 'talk-bomber' }, { kind: 'hoodie', img: 'wild', fk: 'tee' }, { kind: 'women', img: 'womens-rich' }]
+// Warm Natural Raw behind the pieces that support all six.
+const ALL_BG = 'linear-gradient(170deg, #f4ede1 0%, #e4d5bd 100%)'
 const SHORT = Object.fromEntries(CAUSES.map((c) => [c.id, c.short])) as Record<CauseKey, string>
 import './v2.css'
 import { useCauseGround } from './ground'
@@ -120,7 +122,7 @@ export default function ShopV2() {
       const m = mine.find((x) => kindOf(x.title) === want.kind) ?? mine.find((x) => kindOf(x.title) !== 'beanie')
       const kind = m ? kindOf(m.title) : want.fk ?? want.kind
       const p = PIECE_LIST.find((x) => x.id === kind)!
-      const base = { ...blank, small: true, name: d.name, sub: tr(p.label) + ' · ' + c.partner, price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: TINT[c.id], isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: mine.length ? tr('See the pieces') + ` (${mine.length})` : tr('See the pieces') }
+      const base = { ...blank, small: true, name: d.name, sub: tr(p.label) + ' · ' + c.partner, price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: `linear-gradient(170deg, ${TINT[c.id]} 0%, color-mix(in srgb, ${c.color} 26%, ${TINT[c.id]}) 100%)`, isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: mine.length ? tr('See the pieces') + ` (${mine.length})` : tr('See the pieces') }
       if (!m) return { ...base, isDesign: true, img: `/v2/img/mm-${want.img}.webp` }
       const cols = rankColours(c.name, variantColours(m.variants), (x) => x)
       const lead = leadColour(kind, d.slug, cols)
@@ -154,7 +156,7 @@ export default function ShopV2() {
     // The logo beanie has no design. Until its Shopify listing exists: one card with the mockup, both colours.
     const p = PIECE_LIST.find((x) => x.id === 'beanie')!
     const kinds = MINIMAL.filter((m) => m.kind === 'beanie')
-    products = [{ ...blank, name: kinds[0].name, sub: kinds.map((m) => tr(m.colour)).join(' · '), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: '#ffffff', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: kinds.map((m) => ({ c: m.fill })), href: '', addLabel: tr('Coming 11.11') }]
+    products = [{ ...blank, name: kinds[0].name, sub: kinds.map((m) => tr(m.colour)).join(' · '), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: kinds.map((m) => ({ c: m.fill })), href: '', addLabel: tr('Coming 11.11') }]
   } else {
     // T-shirt colours per design from Shopify, each opening the product page on that colour.
     const coloursOf = (name: string) => {
@@ -307,7 +309,7 @@ export default function ShopV2() {
         {(() => {
           const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
           const p = PIECE_LIST.find((x) => x.id === 'beanie')!
-          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: '#ffffff', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
+          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
         })()}
         {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
         {embLive.map((m, i) => {
@@ -316,7 +318,7 @@ export default function ShopV2() {
           const imgs = m.images.map((x) => x.url)
           const front = imgs.find((u) => /front|vorne/i.test(u)) ?? imgs.find((u) => !/back|hinten|rueck|rück/i.test(u)) ?? imgs[0] ?? ''
           const name = formatDisplayTitle(m.title).replace(/embroidered logo\s*/i, '').replace(/organic\s*/i, '')
-          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('shared by all six') : tr('For all six partners'), bg: '#ffffff', isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
+          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('shared by all six') : tr('For all six partners'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
         })}
       </div>
     </div>

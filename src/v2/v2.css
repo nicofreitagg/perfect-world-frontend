@@ -631,3 +631,6 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-split>button[aria-selected="false"]{opacity:1}
 .pw-split>button[aria-selected="false"] .pw-split-img{opacity:.8}
 .pw-split-og-t{font-size:clamp(28px,2.8vw,38px)}
+/* 16 Oct, Nico: no plain white behind the photos. White studio backgrounds take on the card's colour. */
+.pw-designgrid .pw-media .pw-photo{mix-blend-mode:multiply}
+.pw-allrow .pw-prod-sm .pw-media{background:linear-gradient(170deg,#f4ede1 0%,#e4d5bd 100%)!important}
