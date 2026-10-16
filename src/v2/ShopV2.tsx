@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, isNewOG, icon, type CauseKey, RAW_GROUND } from './data'
 import { useDesignPairOrGuess } from './printSide'
-import { useCutout } from './cutout'
+import { useCutout, precut } from './cutout'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
@@ -70,6 +70,8 @@ export default function ShopV2() {
   const { cartCount, isCartOpen, openCart, closeCart } = useCart()
 
   const location = useLocation()
+  // Hovering a colour dot shows that colour on the card (desktop, Nico 16 Oct).
+  const [hover, setHover] = useState<{ k: string; url: string } | null>(null)
   const [tab, setTab] = useState<'minimal' | 'og'>(location.hash === '#og' ? 'og' : 'minimal')
   const [piece, setPiece] = useState<'all' | Kind>('all')
   const [cause, setCause] = useState<'all' | CauseKey>('all')
@@ -111,7 +113,7 @@ export default function ShopV2() {
   const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
 
   const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, isFront: false, markX: 0, markY: 0, isNew: false }
-  type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
+  type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string; url?: string }[]; href: string; addLabel: string }
   let products: Card[]
   const liveShown = minimalLive
     .filter((m) => (piece === 'all' || kindOf(m.title) === piece) && (minDesign === 'all' || minDesignOf(m.title)?.slug === minDesign))
@@ -146,7 +148,7 @@ export default function ShopV2() {
       const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
       // Inside one design the piece is the headline; across designs the design name is.
       const one = minDesign !== 'all'
-      return { ...blank, name: one ? tr(p.label) : d?.name ?? formatDisplayTitle(m.title), sub: one ? (c?.partner ?? '') : tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, colourUrl, isNew: true, swatches: order.map((x) => ({ c: hexOf(x), label: x, href: link(x) })), href: lead ? link(lead) : `/product/${m.handle}`, addLabel: tr('Choose your size') }
+      return { ...blank, name: one ? tr(p.label) : d?.name ?? formatDisplayTitle(m.title), sub: one ? (c?.partner ?? '') : tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, colourUrl, isNew: true, swatches: order.map((x) => ({ c: hexOf(x), label: x, href: link(x), url: urlOfColour(m, x) })), href: lead ? link(lead) : `/product/${m.handle}`, addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal' && piece !== 'beanie') {
     // Pieces not listed yet: the designs as artwork on their partner's tint.
@@ -177,7 +179,7 @@ export default function ShopV2() {
       const kind = extractProductType(m.title)
       const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === cols[0]))?.image?.url ?? ''
       const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
-      return { ...card(c), sub, isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
+      return { ...card(c), sub, isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x), url: urlOfColour(m, x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
     }
     const ORDER = ['tshirt', 'oversized', 'hoodie', 'tote']
     const ogOf = (c: (typeof CAUSES)[number]) => ogNew.filter((m) => getCollectionKey(m.title) === c.name).sort((a, b) => ORDER.indexOf(extractProductType(a.title)) - ORDER.indexOf(extractProductType(b.title)))
@@ -205,7 +207,7 @@ export default function ShopV2() {
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
             {/* Picture layers melt into a patch of page ground with soft edges (16 Oct). */}
             <div className="pw-melt">
-            {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={p.colourUrl || undefined} alt={p.name} />}
+            {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={(hover?.k === pI + ':' + p.name && hover.url) || p.colourUrl || undefined} alt={p.name} />}
             {p.isFront && <CutImg src={p.img} alt={p.name} className="pw-photo" />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
@@ -238,9 +240,11 @@ export default function ShopV2() {
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", margin: "10px 4px 0" }}>
             <span className="pw-mono" style={{ fontSize: "13px", color: "#c0322a" }}>{tr(p.give)}</span>
-            <span style={{ display: "flex", gap: "6px" }} aria-label={tr("Colours")}>
+            <span style={{ display: "flex", gap: "6px" }} aria-label={tr("Colours")} onMouseEnter={() => p.swatches.forEach((sw) => sw.url && precut(sw.url))} onMouseLeave={() => setHover(null)}>
               {p.swatches.map((sw, swI) => (<Fragment key={swI}>{sw.href
-                ? <A href={sw.href} className="pw-sw" aria-label={sw.label} title={sw.label} style={{ background: sw.c }} />
+                ? <A href={sw.href} className="pw-sw" aria-label={sw.label} title={sw.label} style={{ background: sw.c }}
+                    onMouseEnter={sw.url ? () => setHover({ k: pI + ':' + p.name, url: sw.url! }) : undefined}
+                    onFocus={sw.url ? () => setHover({ k: pI + ':' + p.name, url: sw.url! }) : undefined} />
                 : <span style={{ width: "14px", height: "14px", borderRadius: "50%", background: sw.c, border: "1px solid rgba(0,0,0,.2)" }}></span>}</Fragment>))}
             </span>
           </div>
@@ -488,4 +492,9 @@ function PiecePick({ value, onChange, tr }: { value: 'all' | Kind; onChange: (v:
       )}
     </div>
   )
+}
+
+// A colour's own photo (the variant image Shopify links to that colour).
+function urlOfColour(m: ShopifyProduct, colour: string) {
+  return m.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
 }

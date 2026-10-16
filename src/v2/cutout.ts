@@ -120,3 +120,6 @@ export function useCutout(url?: string) {
   }, [url])
   return out.url === url ? out.cut : ''
 }
+
+/** Start cutting a photo ahead of time (for example when the pointer nears a colour dot). */
+export function precut(url: string) { void cut(url) }
