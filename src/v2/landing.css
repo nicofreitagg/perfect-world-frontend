@@ -793,3 +793,5 @@
 @media (max-width:760px){#causes .pwl-causes>*{flex:0 0 78%}}
 #causes .pwl-cause-line{font-size:clamp(26px,2.2vw,32px);line-height:1;padding-left:3px;margin-top:18px}
 @media (max-width:760px){#causes .pwl-cause-line{font-size:26px}}
+.pwl-give-media:has(img.is-cut){background:none;-webkit-mask-image:none;mask-image:none}
+.pwl-give-media img.is-cut{mix-blend-mode:normal;filter:drop-shadow(0 18px 18px rgba(60,40,20,.2)) drop-shadow(0 3px 4px rgba(60,40,20,.12))}

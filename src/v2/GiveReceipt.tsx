@@ -3,6 +3,7 @@ import { A } from './A'
 import { CAUSES, causeTitle } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
+import { useCutout } from './cutout'
 import { useT } from './t'
 import { hexOf, variantColours } from './colours'
 import { getAllProducts } from '../utils/shopify'
@@ -141,7 +142,7 @@ export default function GiveReceipt() {
       <div className="pwl-give-stage" aria-live="polite">
         <figure className="pwl-give-media" key={'m' + key}>
           {photo ? (
-            <img src={photo} alt={`${t(row.label)}, ${causeTitle(cause.name)}`} loading="lazy" />
+            <GiveImg src={photo} alt={`${t(row.label)}, ${causeTitle(cause.name)}`} />
           ) : (
             <PieceSketch id={min && !row.isNew ? (piece === 'tshirt' || piece === 'oversized' ? 'minimal' : piece) : piece} dot={min && !row.split ? cause.color : undefined} fill={hexOf(colour)} />
           )}
@@ -192,6 +193,11 @@ export default function GiveReceipt() {
       </div>
     </div>
   )
+}
+
+function GiveImg({ src, alt }: { src: string; alt: string }) {
+  const cut = useCutout(src)
+  return <img src={cut || src} alt={alt} className={cut ? 'is-cut' : undefined} loading="lazy" />
 }
 
 /** Simple line drawings for pieces without photos yet, clearly not product shots. */

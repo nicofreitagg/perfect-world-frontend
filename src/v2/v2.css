@@ -684,3 +684,8 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 #shop .pw-prod .pw-media .pw-add,#shop .pw-prod .pw-media>.pw-mono,#shop .pw-prod .pw-media>img[aria-hidden="true"]{z-index:3}
 @media (prefers-reduced-motion:reduce){#shop .pw-prod:hover .pw-melt .pw-photo,#shop .pw-prod:hover .pw-melt .pw-art{transform:none}}
 #shop .pw-melt .pw-photo{object-fit:contain!important;padding:7% 6% 9%}
+/* 16 Oct, take 3: photos are cut out in the browser (cutout.ts), so the garment itself stands on the page with a real shadow.
+   No patch, no fade over the garment. A photo that can't be cut keeps a soft light glow as a fallback. */
+#shop .pw-melt{background:none;-webkit-mask-image:none;mask-image:none}
+#shop .pw-melt img:not(.is-cut):not(.pw-design){-webkit-mask-image:radial-gradient(closest-side,#000 74%,transparent 100%);mask-image:radial-gradient(closest-side,#000 74%,transparent 100%);mix-blend-mode:normal}
+#shop .pw-melt img.is-cut{mix-blend-mode:normal;object-fit:contain!important;padding:5% 4% 9%;filter:drop-shadow(0 18px 18px rgba(60,40,20,.2)) drop-shadow(0 3px 4px rgba(60,40,20,.12))}

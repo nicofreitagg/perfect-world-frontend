@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, icon, type CauseKey, RAW_GROUND } from './data'
 import { useDesignPairOrGuess } from './printSide'
+import { useCutout } from './cutout'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { useT } from './t'
@@ -185,7 +186,7 @@ export default function ShopV2() {
             {/* Picture layers melt into a patch of page ground with soft edges (16 Oct). */}
             <div className="pw-melt">
             {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={p.colourUrl || undefined} alt={p.name} />}
-            {p.isFront && <img src={p.img} alt={p.name} className="pw-photo" loading="lazy" />}
+            {p.isFront && <CutImg src={p.img} alt={p.name} className="pw-photo" />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.pick && <button type="button" className="pw-cardlink" onClick={p.pick} aria-label={`${p.name}: ${p.addLabel}`} />}
@@ -399,9 +400,15 @@ function DesignPhotos({ images, colourUrl, alt }: { images: { url: string }[]; c
   }, [lead])
   if (!pair) return null
   return (<>
-    <img ref={ref} src={pair[0]} alt={alt} className="pw-photo" loading="lazy" />
-    {pair[1] !== pair[0] && <img src={pair[1]} alt="" aria-hidden="true" className="pw-photo pw-photo2" loading="lazy" />}
+    <CutImg imgRef={ref} src={pair[0]} alt={alt} className="pw-photo" />
+    {pair[1] !== pair[0] && <CutImg src={pair[1]} alt="" className="pw-photo pw-photo2" />}
   </>)
+}
+
+// A product photo cut out of its white studio background (see cutout.ts); the original shows until then.
+function CutImg({ src, alt, className, style, imgRef }: { src: string; alt: string; className: string; style?: React.CSSProperties; imgRef?: React.Ref<HTMLImageElement> }) {
+  const cut = useCutout(src)
+  return <img ref={imgRef} src={cut || src} alt={alt} aria-hidden={alt ? undefined : true} className={className + (cut ? ' is-cut' : '')} style={style} loading="lazy" />
 }
 
 // A swirl in the picked design's cause colour; it draws itself once it is on screen (phones included).
@@ -425,5 +432,5 @@ function PickSwirl({ color }: { color: string }) {
 // An OG colour's own product photo, back print first (Shopify often lists the front first).
 function OgShot({ photos, alt }: { photos: { url: string }[]; alt: string }) {
   const pair = useDesignPairOrGuess(photos)
-  return pair ? <img src={pair[0]} alt={alt} loading="lazy" className="pw-art" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} /> : null
+  return pair ? <CutImg src={pair[0]} alt={alt} className="pw-art" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} /> : null
 }
