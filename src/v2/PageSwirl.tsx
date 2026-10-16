@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 // Moving between pages of the new site: three thin cause-colour swirls glide across the whole
@@ -52,50 +52,85 @@ function sweep(w: number, h: number) {
 }
 
 // Dark pages (Home, Our story) and Natural Raw pages (everything else, Nico 16 Oct): when you cross
-// between them, the dark ground melts away downwards (or wells up from below) instead of cutting.
+// between them, the old ground is wiped away by one clean, gently curved edge with a thin
+// cause-colour line riding on it. Minimal on purpose (Nico: "more subtle", "something minimal").
+// Direction, tilt, curve and line colour change every time; both ways work the same.
 let lastDark: boolean | null = null
-// Dark pages by address, so the melt can start before the new page paints.
+// Dark pages by address, so the wipe can start before the new page paints.
 const isDarkNow = () => ['/', '/about'].includes(window.location.pathname.replace(/\/+$/, '') || '/')
-const DRIPS = (() => {
-  // Drips of different length hanging from a wavy line, in a 1000-wide box.
-  let d = 'M0 0 H1000 V40'
-  for (let x = 1000; x > 0; x -= 50) {
-    const len = 30 + ((x * 37) % 90)
-    d += ` C${x - 8} 40, ${x - 10} ${40 + len}, ${x - 25} ${40 + len} C${x - 40} ${40 + len}, ${x - 42} 40, ${x - 50} 40`
-  }
-  return d + ' V0 Z'
-})()
+// Did this page change cross between dark and Raw? Asked by both effects below, answered once
+// per page change (so React's double effect run in development gives the same answer).
+let crossMemo = { key: '', val: false }
+function crossed() {
+  const key = window.location.href + ':' + JSON.stringify(window.history.state)
+  if (key === crossMemo.key) return crossMemo.val
+  const dark = isDarkNow()
+  crossMemo = { key, val: lastDark !== null && lastDark !== dark }
+  lastDark = dark
+  return crossMemo.val
+}
+const DARK = '#13110f', RAW = '#ece3d2'
+const WIPE_MS = 950
 
-function Melt({ up }: { up: boolean }) {
+function Wipe({ from }: { from: string }) {
+  const ref = useRef<SVGSVGElement>(null)
+  useLayoutEffect(() => {
+    const svg = ref.current
+    if (!svg) return
+    const w = window.innerWidth, h = window.innerHeight
+    const L = Math.hypot(w, h) / 2 + 40
+    const angle = [0, 90, 180, 270][Math.floor(Math.random() * 4)] + rnd(-14, 14)
+    const amp = rnd(0.025, 0.06) * L, freq = rnd(0.6, 1.4) * Math.PI / L, phase = rnd(0, Math.PI * 2)
+    const drift = rnd(-1.2, 1.2)
+    const g = svg.querySelector('g')!, cover = svg.querySelector('.pw-wipe-cover')!, line = svg.querySelector('.pw-wipe-line')!
+    g.setAttribute('transform', `translate(${w / 2} ${h / 2}) rotate(${angle.toFixed(1)})`)
+    line.setAttribute('stroke', SIX[Math.floor(Math.random() * SIX.length)])
+    const t0 = performance.now()
+    let raf = 0
+    const frame = (now: number) => {
+      const k = Math.min(1, (now - t0) / WIPE_MS)
+      const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
+      const y0 = -L - amp + e * (2 * L + 2 * amp)
+      const pts: string[] = []
+      for (let i = 0; i <= 24; i++) {
+        const x = -L + (i / 24) * 2 * L
+        pts.push(`${x.toFixed(1)} ${(y0 + amp * Math.sin(freq * x + phase + drift * e * Math.PI)).toFixed(1)}`)
+      }
+      const edge = 'M' + pts.join(' L')
+      cover.setAttribute('d', `${edge} L${L} ${L} L${-L} ${L} Z`)
+      line.setAttribute('d', edge)
+      line.setAttribute('opacity', String(0.75 * Math.sin(Math.PI * k)))
+      if (k < 1) raf = requestAnimationFrame(frame)
+    }
+    frame(t0)
+    return () => cancelAnimationFrame(raf)
+  }, [])
   return createPortal(
-    <div className={'pw-melt-nav' + (up ? ' is-up' : '')} aria-hidden="true">
-      <div className="pw-melt-body">
-        {/* Natural Raw runs down into the dark in drips, ahead of the edge. */}
-        <svg className="pw-melt-edge" viewBox="0 0 1000 170" preserveAspectRatio="none"><path d={DRIPS} /></svg>
-      </div>
-    </div>,
+    <svg ref={ref} className="pw-wipe-nav" aria-hidden="true">
+      <g><path className="pw-wipe-cover" fill={from} /><path className="pw-wipe-line" fill="none" strokeWidth="2" strokeLinecap="round" /></g>
+    </svg>,
     document.body,
   )
 }
 
 export default function PageSwirl() {
-  const [melt, setMelt] = useState<null | { up: boolean }>(null)
+  const [wipe, setWipe] = useState<null | { from: string }>(null)
   useLayoutEffect(() => {
-    const dark = isDarkNow()
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { lastDark = dark; return }
-    if (lastDark !== null && lastDark !== dark) setMelt({ up: dark })
-    lastDark = dark
-    const t = setTimeout(() => setMelt(null), 1500)
+    if (!crossed() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    setWipe({ from: isDarkNow() ? RAW : DARK })
+    const t = setTimeout(() => setWipe(null), WIPE_MS + 60)
     return () => clearTimeout(t)
   }, [])
   const swirlEl = <Swirl />
-  return <>{melt && <Melt up={melt.up} />}{swirlEl}</>
+  return <>{wipe && <Wipe from={wipe.from} />}{swirlEl}</>
 }
 
 function Swirl() {
   const [swirl, setSwirl] = useState<null | { w: number; h: number; paths: string[]; colours: string[]; reverse: boolean }>(null)
   useLayoutEffect(() => {
     if (firstPage) { firstPage = false; return }
+    // Crossing between dark and Raw pages gets the wipe instead (this runs before PageSwirl's effect).
+    if (crossed()) return
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const root = document.documentElement
     const w = window.innerWidth, h = window.innerHeight
