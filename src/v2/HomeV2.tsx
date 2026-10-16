@@ -53,6 +53,21 @@ const VOICES = [
 // The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: longer, 5 s).
 const INTRO_MS = 5000
 
+// A small countdown on the 11.11 card (Nico 16 Oct), a ring that empties as the seconds run down.
+function IntroCount() {
+  const [n, setN] = useState(Math.round(INTRO_MS / 1000))
+  useEffect(() => {
+    const id = setInterval(() => setN((x) => Math.max(1, x - 1)), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return (
+    <span className="pwl-cine-count" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" /><circle className="is-run" cx="24" cy="24" r="21" pathLength={100} /></svg>
+      <b key={n}>{n}</b>
+    </span>
+  )
+}
+
 /** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, card, label, children }: { src: string; card: string; label: string; children: React.ReactNode }) {
   const tr = useT()
@@ -95,7 +110,7 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
         <source media="(max-width:700px)" srcSet={sq} />
         <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
       </picture>
-      {intro && <span className="pwl-cine-load" aria-hidden="true" />}
+      {intro && <IntroCount />}
       <div className="pwl-film-ctrls">
       <button type="button" className="pwl-autofilm-pause" onClick={toggle} aria-label={paused ? tr('Play') : tr('Pause')}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{paused ? <path d="M8 5v14l11-7z" fill="currentColor" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />}</svg>
