@@ -103,7 +103,7 @@ export default function ShopV2() {
 
   const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
 
-  const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, isFront: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string }[]; href: string; addLabel: string }
   let products: Card[]
   const liveShown = minimalLive
@@ -170,6 +170,7 @@ export default function ShopV2() {
         <article className={p.small ? 'pw-prod pw-prod-sm' : 'pw-prod'} style={{ position: "relative", display: "flex", flexDirection: "column" }}>
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
             {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={p.colourUrl || undefined} alt={p.name} />}
+            {p.isFront && <img src={p.img} alt={p.name} className="pw-photo" loading="lazy" />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.pick && <button type="button" className="pw-cardlink" onClick={p.pick} aria-label={`${p.name}: ${p.addLabel}`} />}
@@ -294,10 +295,17 @@ export default function ShopV2() {
         {(() => {
           const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
           const p = PIECE_LIST.find((x) => x.id === 'beanie')!
-          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('For all six partners'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: '#efe6d6', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
+          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: '#ffffff', isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
         })()}
         {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
-        {embLive.map((m, i) => card({ ...blank, small: true, name: formatDisplayTitle(m.title), sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: tr('For all six partners'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, swatches: variantColours(m.variants).map((x) => ({ c: hexOf(x), label: x })), href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i))}
+        {embLive.map((m, i) => {
+          // Same model as the designs, split across all six (Nico, 16 Oct). Only the front is shown: there is no back print.
+          const give = /hoodie/i.test(m.title) ? PIECES.hoodie.give : /shirt|tee/i.test(m.title) ? PIECES.shirt.give : ''
+          const imgs = m.images.map((x) => x.url)
+          const front = imgs.find((u) => /front|vorne/i.test(u)) ?? imgs.find((u) => !/back|hinten|rueck|rück/i.test(u)) ?? imgs[0] ?? ''
+          const name = formatDisplayTitle(m.title).replace(/embroidered logo\s*/i, '').replace(/organic\s*/i, '')
+          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('shared by all six') : tr('For all six partners'), bg: '#ffffff', isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
+        })}
       </div>
     </div>
     </>

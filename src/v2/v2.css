@@ -576,7 +576,7 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-allintro p{margin:0;font-size:15px;line-height:1.45;color:#3a3a3a}
 .pw-allicons{display:flex;flex-wrap:wrap;gap:6px}
 .pw-allicons img{width:34px;height:34px}
-.pw-allrow .pw-prod-sm .pw-media{background:#f8f2e7!important}
+.pw-allrow .pw-prod-sm .pw-media{background:#fff!important}
 @media (max-width:700px){
   .pw-split{gap:10px}
   .pw-split>button{flex-direction:column;align-items:flex-start;min-height:0;padding:12px;gap:8px;border-radius:18px}
@@ -592,4 +592,22 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-allintro h2{font-size:26px}
   .pw-allintro p{font-size:14px}
   .pw-allicons img{width:26px;height:26px}
+}
+/* 16 Oct, Nico: the all-causes segment is one smaller row, fronts only. */
+.pw-allrow{display:flex;align-items:stretch;gap:14px;padding:16px;border-radius:22px;overflow-x:auto;scrollbar-width:none}
+.pw-allrow::-webkit-scrollbar{display:none}
+.pw-allintro{flex:0 0 200px;gap:8px;padding:4px}
+.pw-allintro h2{font-size:24px}
+.pw-allintro p{font-size:13px;line-height:1.4}
+.pw-allicons img{width:22px;height:22px}
+.pw-allrow .pw-prod-sm{flex:1 0 128px;min-width:0}
+.pw-allrow .pw-prod-sm .pw-media{aspect-ratio:1/1!important;border-radius:14px!important}
+.pw-allrow .pw-prod-sm .pw-photo{object-fit:contain}
+.pw-allrow .pw-prod-sm h3{font-size:14px!important}
+.pw-allrow .pw-prod-sm p{font-size:12px!important}
+.pw-allrow .pw-add{min-height:34px!important;font-size:12px!important;left:8px!important;right:8px!important;bottom:8px!important}
+@media (max-width:700px){
+  .pw-allrow{flex-wrap:wrap;overflow:visible;padding:14px 12px;gap:10px}
+  .pw-allintro{flex:1 1 100%}
+  .pw-allrow .pw-prod-sm{flex:1 0 calc(33.333% - 7px);max-width:calc(33.333% - 7px)}
 }
