@@ -190,7 +190,10 @@ export default function ShopV2() {
       if (!mine.length) return [card(c)]
       // All designs: one card per design on its hoodie; a picked design shows each of its pieces.
       // Clicking a design opens its pieces right here (Nico, 16 Oct), the colour dots still go straight to the T-shirt.
-      if (cause === 'all') return [{ ...ogCard(c, mine[0], mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price, href: '', pick: () => { setCause(c.id); toShop() }, addLabel: tr('See the pieces') + ` (${mine.length})` }]
+      // The lead piece varies across the grid, hoodie first and twice (Nico, 16 Oct: "varying between OS, hoodie and tshirt").
+      const want = ['hoodie', 'tshirt', 'oversized', 'hoodie', 'oversized', 'tshirt'][CAUSES.indexOf(c) % 6]
+      const lead = mine.find((m) => extractProductType(m.title) === want) ?? mine[0]
+      if (cause === 'all') return [{ ...ogCard(c, lead, mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price, href: '', pick: () => { setCause(c.id); toShop() }, addLabel: tr('See the pieces') + ` (${mine.length})` }]
       return mine.map((m) => ogCard(c, m, label(m) + ' · ' + c.partner))
     })
     else products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
