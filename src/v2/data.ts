@@ -4,7 +4,7 @@ export const PIECES = {
   tote: { name: 'Tote bag', price: '27.77', give: '7.77' },
   shirt: { name: 'T-shirt', price: '33.33', give: '11.11' },
   oversized: { name: 'Oversized shirt', price: '55.55', give: '22.22' },
-  hoodie: { name: 'Hoodie', price: '77.77', give: '33.33' },
+  hoodie: { name: 'Hoodie', price: '77.77', give: '22.22' },
 } as const
 
 // New pieces, shown as "coming soon" placeholders. Prices are Claude's suggestion (9 Oct), not confirmed by Nico yet.
@@ -52,11 +52,11 @@ export interface MinimalPiece {
 export const MINIMAL: MinimalPiece[] = [
   { label: 'MINIMAL TEE · BLACK', color: '#1b1b1d', mark: '#e2453c', kind: 'tee', sub: '€33.33 · €11.11 to your cause', isNew: true },
   { label: 'MINIMAL TEE · OFF-WHITE', color: '#f2efe8', mark: '#0b0b0c', kind: 'tee', sub: '€33.33 · €11.11 to your cause' },
-  { label: 'MINIMAL HOODIE · SAND', color: '#cdb89a', mark: '#0b0b0c', kind: 'hoodie', sub: '€77.77 · €33.33 to your cause' },
+  { label: 'MINIMAL HOODIE · SAND', color: '#cdb89a', mark: '#0b0b0c', kind: 'hoodie', sub: '€77.77 · €22.22 to your cause' },
   { label: 'MINIMAL TEE · OLIVE', color: '#6b6f4a', mark: '#f2efe8', kind: 'tee', sub: '€33.33 · €11.11 to your cause' },
-  { label: 'MINIMAL HOODIE · BURGUNDY', color: '#5a2328', mark: '#f2efe8', kind: 'hoodie', sub: '€77.77 · €33.33 to your cause' },
+  { label: 'MINIMAL HOODIE · BURGUNDY', color: '#5a2328', mark: '#f2efe8', kind: 'hoodie', sub: '€77.77 · €22.22 to your cause' },
   { label: 'MINIMAL TEE · STONE', color: '#9a9a96', mark: '#0b0b0c', kind: 'tee', sub: '€33.33 · €11.11 to your cause' },
-  { label: 'MINIMAL HOODIE · NAVY', color: '#1d2a44', mark: '#e2453c', kind: 'hoodie', sub: '€77.77 · €33.33 to your cause' },
+  { label: 'MINIMAL HOODIE · NAVY', color: '#1d2a44', mark: '#e2453c', kind: 'hoodie', sub: '€77.77 · €22.22 to your cause' },
 ]
 
 export const TEE_PATH = 'M60 20 L95 8 Q120 26 145 8 L180 20 L218 62 L190 86 L176 72 L176 214 L64 214 L64 72 L50 86 L22 62 Z'
@@ -87,10 +87,10 @@ export interface WishTag {
 export const TAGS: WishTag[] = [
   { loud: true, ico: icon('talk', 'wa'), name: 'TALK ABOUT IT', partner: 'MHI', wish: 'someone to talk to, for everyone.', piece: 'T-shirt', price: '€33.33', give: '€11.11', img: '/v2/img/og-talk.webp', bg: 'linear-gradient(160deg,#f5862e,#d65a0f)', btnFg: '#d65a0f', rot: -2 },
   { loud: false, ico: icon('one-world', 'a'), lc: '#2b86c4', name: 'ONE WORLD', partner: 'Care in Action', wish: 'nobody faces the hard times alone.', piece: 'Minimal tee, black', price: '€33.33', give: '€11.11', path: TEE_PATH, color: '#1b1b1d', mark: '#e2453c', rot: 1.6 },
-  { loud: true, ico: icon('cool', 'wa'), name: 'COOL DOWN', partner: 'Plant-for-the-Planet', wish: 'more trees than we can count.', piece: 'Hoodie', price: '€77.77', give: '€33.33', img: '/v2/img/og-cool.webp', bg: 'linear-gradient(160deg,#4fae63,#2a7140)', btnFg: '#2a7140', rot: -1.2 },
+  { loud: true, ico: icon('cool', 'wa'), name: 'COOL DOWN', partner: 'Plant-for-the-Planet', wish: 'more trees than we can count.', piece: 'Hoodie', price: '€77.77', give: '€22.22', img: '/v2/img/og-cool.webp', bg: 'linear-gradient(160deg,#4fae63,#2a7140)', btnFg: '#2a7140', rot: -1.2 },
   { loud: false, ico: icon('rich', 'a'), lc: '#9a6a40', name: 'RICH IN LIFE', partner: 'Mission Positivity', wish: 'every child in Paya keeps learning.', piece: 'Minimal tee, off-white', price: '€33.33', give: '€11.11', path: TEE_PATH, color: '#f2efe8', mark: '#0b0b0c', rot: 2 },
   { loud: true, ico: icon('wild', 'wa'), name: 'WILD AT HEART', partner: 'Elephants for Africa', wish: 'room for elephants and people.', piece: 'T-shirt', price: '€33.33', give: '€11.11', img: '/v2/img/og-wild.webp', bg: 'linear-gradient(160deg,#8e8f94,#2e3a5a)', btnFg: '#2e3a5a', rot: -1.6 },
-  { loud: false, ico: icon('oceans', 'a'), lc: '#2f6fa8', name: 'ENDANGERED OCEANS', partner: 'SECORE', wish: 'reefs that grow back.', piece: 'Minimal hoodie, sand', price: '€77.77', give: '€33.33', path: HOODIE_PATH, color: '#cdb89a', mark: '#0b0b0c', rot: 1.2 },
+  { loud: false, ico: icon('oceans', 'a'), lc: '#2f6fa8', name: 'ENDANGERED OCEANS', partner: 'SECORE', wish: 'reefs that grow back.', piece: 'Minimal hoodie, sand', price: '€77.77', give: '€22.22', path: HOODIE_PATH, color: '#cdb89a', mark: '#0b0b0c', rot: 1.2 },
 ]
 
 // The Minimal designs, one per partner, for the Minimal section (Talk About It = the face, Nico 12 Oct; One World pairing is a guess).
