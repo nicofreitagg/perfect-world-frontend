@@ -835,3 +835,19 @@
 .pwl-cine .pwl-btn.pwl-cine-btn:hover::after{transform:translateX(3px)}
 @media (max-width:700px){.pwl-cine .pwl-btn.pwl-cine-btn{width:auto}}
 .pwl-shopbar .pwl-btn{min-height:44px;font-size:14px;letter-spacing:.12em;background:rgba(19,17,15,.75);color:#f2ebdf!important;border:1px solid rgba(242,235,223,.6);box-shadow:none;backdrop-filter:blur(8px)}
+/* 16 Oct, Nico: the Minimal section fits one desktop screen (heading, the design on show, the six to pick from) */
+@media (min-width:901px){
+  .pwl-min{padding-top:clamp(18px,3vh,36px);padding-bottom:clamp(18px,3vh,36px)}
+  .pwl-min .pwl-kicker{margin:0}
+  .pwl-min-h{margin-top:6px}
+  .pwl-min-h .pw-sig{width:auto;height:clamp(64px,10vh,112px);max-width:100%}
+  .pwl-min .pwl-sub{margin-top:6px;font-size:16px}
+  .pwl-min .pwl-stage{margin-top:clamp(12px,2vh,22px)}
+  .pwl-stage-show{grid-template-columns:1fr 1fr .9fr;gap:clamp(10px,2vw,32px);padding:clamp(14px,2.4vh,28px) clamp(20px,3vw,44px)}
+  .pwl-stage-art{width:100%;height:clamp(170px,calc(40vh - 70px),360px);max-height:none}
+  .pwl-stage-piece{width:auto;max-width:100%;height:clamp(200px,calc(40vh - 30px),400px);object-fit:contain}
+  .pwl-stage-cap{grid-column:auto;padding:0;text-align:center}
+  .pwl-alive{margin-top:clamp(12px,2vh,22px)}
+  .pwl-alive-img{aspect-ratio:auto;height:clamp(72px,10vh,112px);border-radius:18px}
+  .pwl-alive-name{margin-top:4px;font-size:14px}
+}
