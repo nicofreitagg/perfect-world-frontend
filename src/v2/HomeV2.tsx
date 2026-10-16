@@ -50,8 +50,8 @@ const VOICES = [
   { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
-// The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: longer, 5 s).
-const INTRO_MS = 5000
+// The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: 3 s with a countdown).
+const INTRO_MS = 3000
 
 // A small countdown on the 11.11 card (Nico 16 Oct), a ring that empties as the seconds run down.
 function IntroCount() {
