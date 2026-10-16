@@ -30,42 +30,57 @@ function cut(url: string): Promise<string> {
         }
         // Already transparent (a cut-out PNG): leave it alone.
         if (d[3] < 250) return resolve('')
-        const bg = new Uint8Array(w * h)
-        const stack: number[] = []
-        const push = (x: number, y: number) => { const p = y * w + x; if (!bg[p] && white(p * 4)) { bg[p] = 1; stack.push(p) } }
-        for (let x = 0; x < w; x++) { push(x, 0); push(x, h - 1) }
-        for (let y = 0; y < h; y++) { push(0, y); push(w - 1, y) }
-        while (stack.length) {
-          const p = stack.pop()!, x = p % w, y = (p - x) / w
-          if (x > 0) push(x - 1, y)
-          if (x < w - 1) push(x + 1, y)
-          if (y > 0) push(x, y - 1)
-          if (y < h - 1) push(x, y + 1)
-        }
-        // Closed gaps (inside a tote handle, between arm and body): large, flat, pure-white pockets are background too.
-        // Printed white has texture and sits below this, so designs stay.
-        const pure = (i: number) => d[i] >= 248 && d[i + 1] >= 248 && d[i + 2] >= 248
-        const seen = new Uint8Array(w * h)
-        for (let s0 = 0; s0 < w * h; s0++) {
-          if (bg[s0] || seen[s0] || !pure(s0 * 4)) continue
-          const region: number[] = [s0]
-          seen[s0] = 1
-          for (let k = 0; k < region.length; k++) {
-            const p = region[k], x = p % w, y = (p - x) / w
-            const nb = [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]
-            for (const q of nb) if (q >= 0 && !seen[q] && !bg[q] && pure(q * 4)) { seen[q] = 1; region.push(q) }
+        // Strict mode matches only the studio background's own colour (sampled at the corners), so a white
+        // garment with its soft shading stays (Nico, 16 Oct: the white tee showed as a glowing box).
+        const cs = [0, (w - 1) * 4, (h - 1) * w * 4, ((h - 1) * w + w - 1) * 4]
+        const ref = [0, 1, 2].map((k) => Math.round(cs.reduce((t, i) => t + d[i + k], 0) / 4))
+        const strict = (i: number) => Math.abs(d[i] - ref[0]) <= 3 && Math.abs(d[i + 1] - ref[1]) <= 3 && Math.abs(d[i + 2] - ref[2]) <= 3
+        const flood = (isBg: (i: number) => boolean, pockets: boolean) => {
+          const bg = new Uint8Array(w * h)
+          const stack: number[] = []
+          const push = (x: number, y: number) => { const p = y * w + x; if (!bg[p] && isBg(p * 4)) { bg[p] = 1; stack.push(p) } }
+          for (let x = 0; x < w; x++) { push(x, 0); push(x, h - 1) }
+          for (let y = 0; y < h; y++) { push(0, y); push(w - 1, y) }
+          while (stack.length) {
+            const p = stack.pop()!, x = p % w, y = (p - x) / w
+            if (x > 0) push(x - 1, y)
+            if (x < w - 1) push(x + 1, y)
+            if (y > 0) push(x, y - 1)
+            if (y < h - 1) push(x, y + 1)
           }
-          if (region.length > w * h * 0.004) for (const p of region) bg[p] = 1
+          if (!pockets) return bg
+          // Closed gaps (inside a tote handle, between arm and body): large, flat, pure-white pockets are background too.
+          // Printed white has texture and sits below this, so designs stay.
+          const pure = (i: number) => d[i] >= 248 && d[i + 1] >= 248 && d[i + 2] >= 248
+          const seen = new Uint8Array(w * h)
+          for (let s0 = 0; s0 < w * h; s0++) {
+            if (bg[s0] || seen[s0] || !pure(s0 * 4)) continue
+            const region: number[] = [s0]
+            seen[s0] = 1
+            for (let k = 0; k < region.length; k++) {
+              const p = region[k], x = p % w, y = (p - x) / w
+              const nb = [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]
+              for (const q of nb) if (q >= 0 && !seen[q] && !bg[q] && pure(q * 4)) { seen[q] = 1; region.push(q) }
+            }
+            if (region.length > w * h * 0.004) for (const p of region) bg[p] = 1
+          }
+          return bg
         }
+        const count = (bg: Uint8Array) => { let n = 0; for (let p = 0; p < bg.length; p++) n += bg[p]; return n }
+        // How much of the middle of the photo was removed: a lot means the garment went with the background.
+        const midGone = (bg: Uint8Array) => {
+          let mid = 0, midN = 0
+          for (let y = Math.round(h * 0.3); y < h * 0.7; y += 2) for (let x = Math.round(w * 0.3); x < w * 0.7; x += 2) { midN++; mid += bg[y * w + x] }
+          return mid > midN * 0.25
+        }
+        let bg = flood(white, true)
         // Hardly any background found: not a studio photo (a lifestyle shot), keep the original.
-        let n = 0
-        for (let p = 0; p < bg.length; p++) n += bg[p]
-        if (n < w * h * 0.12) return resolve('')
-        // A white or very light garment floods away with its background (Nico, 16 Oct: the white tee vanished).
-        // If most of the middle of the photo was removed, keep the original photo instead.
-        let mid = 0, midN = 0
-        for (let y = Math.round(h * 0.3); y < h * 0.7; y += 2) for (let x = Math.round(w * 0.3); x < w * 0.7; x += 2) { midN++; mid += bg[y * w + x] }
-        if (mid > midN * 0.25) return resolve('')
+        if (count(bg) < w * h * 0.12) return resolve('')
+        // A white or very light garment floods away with its background: retry matching only the exact background colour.
+        if (midGone(bg)) {
+          bg = flood(strict, false)
+          if (count(bg) < w * h * 0.12 || midGone(bg)) return resolve('')
+        }
         for (let p = 0; p < bg.length; p++) {
           if (bg[p]) { d[p * 4 + 3] = 0; continue }
           const x = p % w, y = (p - x) / w
