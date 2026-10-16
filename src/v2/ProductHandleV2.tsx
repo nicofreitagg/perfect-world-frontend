@@ -66,7 +66,7 @@ export default function ProductHandleV2() {
   return (
     <Shell active="/shop">
       <section className="pw-iso" style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(24px, 4vw, 56px) clamp(16px, 4vw, 56px) clamp(64px, 8vw, 110px)', display: 'flex', flexWrap: 'wrap', gap: 'clamp(24px, 4vw, 56px)' }}>
-        <div style={{ flex: '1 1 480px', minWidth: 0, display: 'grid', gap: '12px' }}>
+        <div className="pw-pd-media" style={{ flex: '1 1 480px', minWidth: 0, display: 'grid', gap: '12px', alignContent: 'start', alignSelf: 'flex-start' }}>
           <div className="pw-pd-stage" style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
             <MainPhoto images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
           </div>
