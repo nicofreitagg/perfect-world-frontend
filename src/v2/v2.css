@@ -716,3 +716,13 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 /* A cut-out photo needs no tall frame: square stage, so the small photos sit right under it. */
 .pw-pd-stage:has(img.is-cut) { aspect-ratio: 1 / 1 !important; }
 @media (min-width: 900px) { .pw-pd-media { position: sticky; top: 24px; } }
+/* Dark to Natural Raw between pages: Natural Raw runs down over the dark in drips (Nico, 16 Oct). */
+.pw-melt-nav{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}
+.pw-melt-body{position:absolute;left:0;right:0;top:0;height:calc(100% + 220px);background:#13110f;animation:pwMeltDown 1.5s cubic-bezier(.65,0,.35,1) forwards}
+.pw-melt-edge{position:absolute;left:0;top:0;width:100%;height:clamp(110px,18vh,200px);display:block}
+.pw-melt-edge path{fill:#ece3d2}
+@keyframes pwMeltDown{0%{transform:translateY(-200px)}100%{transform:translateY(calc(100% + 10px))}}
+/* Natural Raw to dark: the same, the other way round (dark runs down over the light). */
+.pw-melt-nav.is-up .pw-melt-body{background:#ece3d2}
+.pw-melt-nav.is-up .pw-melt-edge path{fill:#13110f}
+@media (prefers-reduced-motion:reduce){.pw-melt-nav{display:none}}

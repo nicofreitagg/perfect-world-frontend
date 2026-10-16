@@ -51,7 +51,48 @@ function sweep(w: number, h: number) {
   return { kind, paths: lines.map(smooth), colours: shuffle(SIX).slice(0, 3), reverse: Math.random() < 0.5 }
 }
 
+// Dark pages (Home, Our story) and Natural Raw pages (everything else, Nico 16 Oct): when you cross
+// between them, the dark ground melts away downwards (or wells up from below) instead of cutting.
+let lastDark: boolean | null = null
+// Dark pages by address, so the melt can start before the new page paints.
+const isDarkNow = () => ['/', '/about'].includes(window.location.pathname.replace(/\/+$/, '') || '/')
+const DRIPS = (() => {
+  // Drips of different length hanging from a wavy line, in a 1000-wide box.
+  let d = 'M0 0 H1000 V40'
+  for (let x = 1000; x > 0; x -= 50) {
+    const len = 30 + ((x * 37) % 90)
+    d += ` C${x - 8} 40, ${x - 10} ${40 + len}, ${x - 25} ${40 + len} C${x - 40} ${40 + len}, ${x - 42} 40, ${x - 50} 40`
+  }
+  return d + ' V0 Z'
+})()
+
+function Melt({ up }: { up: boolean }) {
+  return createPortal(
+    <div className={'pw-melt-nav' + (up ? ' is-up' : '')} aria-hidden="true">
+      <div className="pw-melt-body">
+        {/* Natural Raw runs down into the dark in drips, ahead of the edge. */}
+        <svg className="pw-melt-edge" viewBox="0 0 1000 170" preserveAspectRatio="none"><path d={DRIPS} /></svg>
+      </div>
+    </div>,
+    document.body,
+  )
+}
+
 export default function PageSwirl() {
+  const [melt, setMelt] = useState<null | { up: boolean }>(null)
+  useLayoutEffect(() => {
+    const dark = isDarkNow()
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { lastDark = dark; return }
+    if (lastDark !== null && lastDark !== dark) setMelt({ up: dark })
+    lastDark = dark
+    const t = setTimeout(() => setMelt(null), 1500)
+    return () => clearTimeout(t)
+  }, [])
+  const swirlEl = <Swirl />
+  return <>{melt && <Melt up={melt.up} />}{swirlEl}</>
+}
+
+function Swirl() {
   const [swirl, setSwirl] = useState<null | { w: number; h: number; paths: string[]; colours: string[]; reverse: boolean }>(null)
   useLayoutEffect(() => {
     if (firstPage) { firstPage = false; return }
