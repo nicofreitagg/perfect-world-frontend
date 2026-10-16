@@ -57,7 +57,7 @@ function sweep(w: number, h: number) {
 // The angle changes a little every time; both ways work the same.
 let lastDark: boolean | null = null
 // Dark pages by address, so the fade can start before the new page paints.
-const isDarkNow = () => ['/', '/about'].includes(window.location.pathname.replace(/\/+$/, '') || '/')
+const isDarkNow = () => ['/', '/about', '/how-giving-works'].includes(window.location.pathname.replace(/\/+$/, '') || '/')
 // Did this page change cross between dark and Raw? Asked by both effects below, answered once
 // per page change (so React's double effect run in development gives the same answer).
 let crossMemo = { key: '', val: false }
@@ -70,8 +70,8 @@ function crossed() {
   return crossMemo.val
 }
 const DARK = '#13110f', RAW = '#ece3d2'
-const WIPE_MS = 1700
-const FEATHER = 55 // how wide the soft band is, in % of the screen
+const WIPE_MS = 900
+const FEATHER = 90 // how wide the soft band is, in % of the screen
 
 function Wipe({ from }: { from: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -79,7 +79,7 @@ function Wipe({ from }: { from: string }) {
     const el = ref.current
     if (!el) return
     // Mostly top to bottom, sometimes bottom to top, always a little slanted.
-    const angle = (Math.random() < 0.7 ? 180 : 0) + rnd(-14, 14)
+    const angle = (Math.random() < 0.7 ? 180 : 0) + rnd(-8, 8)
     const t0 = performance.now()
     let raf = 0
     const frame = (now: number) => {

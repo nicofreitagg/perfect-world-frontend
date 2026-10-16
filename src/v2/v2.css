@@ -716,3 +716,20 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 /* Dark to Natural Raw between pages: Natural Raw runs down over the dark in drips (Nico, 16 Oct). */
 .pw-wipe-nav{position:fixed;inset:0;width:100%;height:100%;z-index:9998;pointer-events:none;overflow:hidden}
 @media (prefers-reduced-motion:reduce){.pw-wipe-nav{display:none}}
+/* Giving on the dark ground (16 Oct): the sustainability card gets a hairline so it doesn't melt into the page */
+.pw-giving.pw-darkpage section[aria-label] > div[style*="#0b0b0c"]{border:1px solid rgba(242,235,223,.14)}
+/* Giving on phones (Nico 16 Oct: more compact): tighter sections, smaller table and cards */
+@media (max-width:700px){
+  .pw-giving section.pw-iso{padding-top:36px!important}
+  .pw-giving #top{padding-top:24px!important;padding-bottom:32px!important}
+  .pw-giving #top h1{font-size:34px!important}
+  .pw-giving #top p{font-size:16px!important;margin-top:14px!important}
+  .pw-giving .pw-m-ptable{margin-top:28px!important}
+  .pw-giving .pw-m-ptable > div:not(:first-child){padding:11px 0!important;font-size:16px!important;gap:12px!important}
+  .pw-giving .pw-m-ptable .pw-fat{font-size:21px!important;min-width:80px!important}
+  .pw-giving .pw-givetag{padding:20px 16px 18px}
+  .pw-giving h2.pw-fat{font-size:26px!important}
+  .pw-giving section [style*="#fbf6ec"]{padding:20px!important;border-radius:20px!important}
+  .pw-giving section [style*="#fbf6ec"] p{font-size:16px!important}
+  .pw-giving .pw-m-logos > div{height:64px!important}
+}
