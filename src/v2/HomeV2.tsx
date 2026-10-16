@@ -286,14 +286,15 @@ export default function HomeV2() {
     <div className="pwl-wrap">
       <div className="pwl-center">
         <h2 id="worn-h" className="pw-fat pwl-h2">{tr('Why they wear it.')}</h2>
-        <p className="pwl-sub">{tr('Real people, real pieces, in their own words.')}</p>
+        <p className="pwl-sub">{tr('Real people, in their own words.')}</p>
       </div>
       <ul className="pwl-voices">
         {VOICES.map((v) => (
           <li key={v.name}>
+            {/* Quotes only, no photos (Nico, 16 Oct). */}
             <figure>
-              <img src={v.img} alt={`${v.name} ${tr('wearing Perfect World')}`} loading="lazy" style={{ objectPosition: v.pos }} />
-              <blockquote>“{tr(v.quote)}”</blockquote>
+              <span className="pwl-voice-mark" aria-hidden="true">“</span>
+              <blockquote>{tr(v.quote)}</blockquote>
               <figcaption>{v.name}</figcaption>
             </figure>
           </li>
