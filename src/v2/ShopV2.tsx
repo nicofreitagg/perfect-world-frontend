@@ -101,14 +101,14 @@ export default function ShopV2() {
   }, [minDesign])
   const [minimalLive, setMinimalLive] = useState<ShopifyProduct[]>([])
   // The logo beanie (Printful, 16 Oct: black + walnut, €27.77); the older Minimal beanies are the fallback.
-  const [logoBeanie, setLogoBeanie] = useState<ShopifyProduct | null>(null)
+  const [logoBeanies, setLogoBeanies] = useState<ShopifyProduct[]>([])
   const [ogLive, setOgLive] = useState<ShopifyProduct[]>([])
   const [embLive, setEmbLive] = useState<ShopifyProduct[]>([])
   const [ogNew, setOgNew] = useState<ShopifyProduct[]>([])
 
   // Real Minimal products replace the silhouettes as soon as they exist in Shopify.
   useEffect(() => {
-    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')); setEmbLive(all.filter((p) => /embroider/i.test(p.title) && p.availableForSale)); setOgNew(all.filter((p) => isNewOG(p.title))); setLogoBeanie(all.find((p) => /beanie/i.test(p.title) && !/minimal/i.test(p.title) && p.availableForSale) ?? null) }).catch(() => {})
+    getAllProducts().then((all) => { setMinimalLive(all.filter((p) => /minimal/i.test(p.title))); setOgLive(all.filter((p) => !/minimal/i.test(p.title) && extractProductType(p.title) === 'tshirt')); setEmbLive(all.filter((p) => /embroider/i.test(p.title) && p.availableForSale)); setOgNew(all.filter((p) => isNewOG(p.title))); setLogoBeanies(all.filter((p) => /beanie/i.test(p.title) && !/minimal/i.test(p.title) && p.availableForSale)) }).catch(() => {})
   }, [])
 
 
@@ -344,11 +344,17 @@ export default function ShopV2() {
         </div>
         {(() => {
           const p = PIECE_LIST.find((x) => x.id === 'beanie')!
-          if (logoBeanie) {
-            const imgs = logoBeanie.images.map((x) => x.url)
+          if (logoBeanies.length) {
+            // One card for all of them: "Fisherman beanie | Perfect World Logo | Natural Raw" names its colour in the
+            // title; otherwise the colours come from the variants.
+            const lead = logoBeanies[0]
+            const imgs = lead.images.map((x) => x.url)
             const front = imgs.find((u) => /front|vorne/i.test(u)) ?? imgs[0] ?? ''
-            const colours = [...new Set(logoBeanie.variants.map((v) => v.title.split(' / ')[0]))]
-            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(logoBeanie.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${logoBeanie.handle}`, addLabel: tr('See the beanie') }, 99)
+            const colours = [...new Set(logoBeanies.flatMap((b) => {
+              const named = b.title.split('|').map((x) => x.trim())[2]
+              return named ? [named] : b.variants.map((v) => v.title.split(' / ')[0]).filter((c) => !/^(os|one size|default title)$/i.test(c))
+            }))]
+            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
           }
           const beanie = minimalLive.find((m) => kindOf(m.title) === 'beanie')
           return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
