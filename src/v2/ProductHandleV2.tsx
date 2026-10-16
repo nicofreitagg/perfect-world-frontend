@@ -86,7 +86,7 @@ export default function ProductHandleV2() {
             {((/minimal/i.test(p.title) && minDesignOf(p.title)) || (og && cause)) && <p style={{ margin: '8px 0 0', fontSize: '18px', fontWeight: 600 }}>{t(pieceLabel(p.title))}</p>}
             {og && siblings.length > 1 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px' }}>
-                {['tshirt', 'oversized', 'hoodie', 'tote'].flatMap((k) => siblings.filter((x) => extractProductType(x.title) === k)).map((x) => (
+                {['hoodie', 'tshirt', 'oversized', 'tote'].flatMap((k) => siblings.filter((x) => extractProductType(x.title) === k)).map((x) => (
                   <A key={x.id} href={`/product/${x.handle}${colour ? `?colour=${encodeURIComponent(colour)}` : ''}`} className="pw-chip" aria-current={x.handle === p.handle ? 'page' : undefined} style={{ display: 'inline-flex', alignItems: 'center', minHeight: '40px', padding: '0 16px', borderRadius: '999px', border: x.handle === p.handle ? '2px solid #0b0b0c' : '1px solid rgba(11,11,12,.2)', background: x.handle === p.handle ? '#0b0b0c' : '#fbf6ec', color: x.handle === p.handle ? '#fff' : '#0b0b0c', textDecoration: 'none', fontSize: '14px', fontWeight: 600 }}>{t(pieceLabel(x.title))}</A>
                 ))}
               </div>

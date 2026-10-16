@@ -78,14 +78,27 @@ function cut(url: string): Promise<string> {
           for (let y = Math.round(h * 0.3); y < h * 0.7; y += 2) for (let x = Math.round(w * 0.3); x < w * 0.7; x += 2) { midN++; mid += bg[y * w + x] }
           return mid > midN * 0.25
         }
-        let bg = flood(white, true)
-        // Hardly any background found: not a studio photo (a lifestyle shot), keep the original.
-        if (count(bg) < w * h * 0.12) return resolve('')
-        // A white or very light garment floods away with its background: retry matching only the exact background colour.
-        if (midGone(bg)) {
-          bg = flood(strict, false)
+        // Studio photos have a flat background: match its exact colour first, so light garments keep clean edges
+        // (Nico, 16 Oct: a white tee came out ragged when near-white fabric was eaten in patches).
+        let bg = flood(strict, true)
+        if (count(bg) >= w * h * 0.12) {
+          // Then take two more rings of near-white anti-aliasing, so dark garments get no light halo.
+          for (let ring = 0; ring < 2; ring++) {
+            const add: number[] = []
+            for (let p = 0; p < bg.length; p++) {
+              if (bg[p] || !white(p * 4)) continue
+              const x = p % w
+              if ((x > 0 && bg[p - 1]) || (x < w - 1 && bg[p + 1]) || (p >= w && bg[p - w]) || (p < bg.length - w && bg[p + w])) add.push(p)
+            }
+            for (const p of add) bg[p] = 1
+          }
+        } else {
+          // Not a flat background: fall back to the looser near-white flood.
+          bg = flood(white, true)
+          // Hardly any background found: not a studio photo (a lifestyle shot), keep the original.
           if (count(bg) < w * h * 0.12 || midGone(bg)) return resolve('')
         }
+        if (midGone(bg)) return resolve('')
         for (let p = 0; p < bg.length; p++) {
           if (bg[p]) { d[p * 4 + 3] = 0; continue }
           const x = p % w, y = (p - x) / w

@@ -181,14 +181,16 @@ export default function ShopV2() {
       const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
       return { ...card(c), sub, isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x), url: urlOfColour(m, x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
     }
-    const ORDER = ['tshirt', 'oversized', 'hoodie', 'tote']
+    // Hoodie first: it's the piece we push (Christmas hero, Nico 16 Oct).
+    const ORDER = ['hoodie', 'tshirt', 'oversized', 'tote']
     const ogOf = (c: (typeof CAUSES)[number]) => ogNew.filter((m) => getCollectionKey(m.title) === c.name).sort((a, b) => ORDER.indexOf(extractProductType(a.title)) - ORDER.indexOf(extractProductType(b.title)))
     const label = (m: ShopifyProduct) => tr(({ tshirt: 'T-shirt', oversized: 'Oversized shirt', hoodie: 'Hoodie', tote: 'Tote bag' } as Record<string, string>)[extractProductType(m.title)] ?? 'T-shirt')
     if (ogNew.length) products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
       const mine = ogOf(c)
       if (!mine.length) return [card(c)]
-      // All designs: one card per design on its T-shirt; a picked design shows each of its pieces.
-      if (cause === 'all') return [{ ...ogCard(c, mine[0], mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price }]
+      // All designs: one card per design on its hoodie; a picked design shows each of its pieces.
+      // Clicking a design opens its pieces right here (Nico, 16 Oct), the colour dots still go straight to the T-shirt.
+      if (cause === 'all') return [{ ...ogCard(c, mine[0], mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price, href: '', pick: () => { setCause(c.id); toShop() }, addLabel: tr('See the pieces') + ` (${mine.length})` }]
       return mine.map((m) => ogCard(c, m, label(m) + ' · ' + c.partner))
     })
     else products = CAUSES.filter((c) => cause === 'all' || c.id === cause).flatMap((c) => {
@@ -308,6 +310,13 @@ export default function ShopV2() {
       )}
     </div>
 
+    {tab === 'og' && cause !== 'all' && ogNew.length > 0 && (
+      <div className="pw-designbar">
+        <button type="button" onClick={() => setCause('all')}>← {tr('All designs')}</button>
+        <span className="pw-fat">{CAUSES.find((c) => c.id === cause)?.name}</span>
+        <PickSwirl key={cause} color={CAUSES.find((c) => c.id === cause)?.color ?? '#e2453c'} />
+      </div>
+    )}
     {tab === 'minimal' && minDesign !== 'all' && (
       <div className="pw-designbar">
         <button type="button" onClick={() => pickDesign('all')}>← {tr('All designs')}</button>
@@ -349,6 +358,13 @@ export default function ShopV2() {
     <div key={minDesign + piece} className="pw-m-g2 pw-m-prods" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", columnGap: "24px", rowGap: "44px" }}>
       {products.map(card)}
     </div>)}
+    {tab === 'og' && cause !== 'all' && ogNew.length > 0 && (
+      <div className="pw-designbar">
+        <button type="button" onClick={() => setCause('all')}>← {tr('All designs')}</button>
+        <span className="pw-fat">{CAUSES.find((c) => c.id === cause)?.name}</span>
+        <PickSwirl key={cause} color={CAUSES.find((c) => c.id === cause)?.color ?? '#e2453c'} />
+      </div>
+    )}
     {tab === 'minimal' && minDesign !== 'all' && (() => {
       // Previous and next design at the end of the pieces, so the designs read as one loop.
       const i = MIN_DESIGNS.findIndex((d) => d.slug === minDesign)
