@@ -752,3 +752,12 @@
   #causes .pwl-globe-flat{width:280px;height:280px;margin:-140px 0 0 -140px;background-size:560px 280px;animation-name:pwl-spin-m}
 }
 @keyframes pwl-spin-m{to{background-position:-560px 50%}}
+/* Giving receipt, 16 Oct: colour can be switched right on the receipt. */
+.pwl-receipt-colour dd{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.pwl-receipt-dots{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;max-width:220px}
+.pwl-receipt-dots button{width:24px;height:24px;border-radius:50%;border:1px solid rgba(11,11,12,.25);padding:0;cursor:pointer;box-shadow:0 0 0 0 transparent;transition:box-shadow .2s}
+.pwl-receipt-dots button[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--red)}
+.pwl-receipt-dots button:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+.pwl-receipt-cname{font-size:12px;color:#5c5c5c}
+.pwl-receipt-note{margin:10px 0 0;font:12px 'JetBrains Mono',monospace;color:#5c5c5c}
+@media (max-width:700px){.pwl-receipt-dots button{width:28px;height:28px}}

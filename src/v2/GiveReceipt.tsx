@@ -69,8 +69,10 @@ export default function GiveReceipt() {
     if (piece === 'oversized' && !min) return [OG_OVERSIZED[design]]
     return FALLBACK[piece]
   }, [matches, piece, min, design, cause.slug])
-  // Colour is no longer a step; the piece shows in its first colour (the design's own for Minimal tees and hoodies).
-  const colour = colours[0]
+  // Colour is not a step; it opens on the first colour (the design's own for Minimal tees and hoodies)
+  // and can be switched on the receipt (Nico, 16 Oct). Every colour gives the same amount.
+  const [picked, setPicked] = useState('')
+  const colour = colours.includes(picked) ? picked : colours[0]
   const product = matches.find((p) => extractColorFromTitle(p.title) === colour || variantColours(p.variants).includes(colour)) ?? matches[0]
   // The listed colour's own photo when Shopify has one, then the product photo; otherwise artwork or a sketch.
   const colourPhoto = product?.variants.find((v) => v.selectedOptions?.some((o) => o.value === colour))?.image?.url
@@ -158,6 +160,10 @@ export default function GiveReceipt() {
           </div>
           <dl>
             <div><dt>{t('PIECE')}</dt><dd>{row.split ? t('Logo beanie') : `${min ? designName : causeTitle(cause.name)} · ${t(row.label)}`}</dd></div>
+            <div className="pwl-receipt-colour"><dt>{t('COLOUR')}</dt><dd>
+              <span className="pwl-receipt-dots">{colours.map((c) => <button key={c} type="button" aria-pressed={c === colour} aria-label={t(c)} title={t(c)} style={{ background: hexOf(c) }} onClick={() => setPicked(c)} />)}</span>
+              <span className="pwl-receipt-cname">{t(colour)}</span>
+            </dd></div>
             <div><dt>{t('PRICE')}</dt><dd>{eur(row.price)}</dd></div>
             <div className="pwl-receipt-give">
               <dt>{t('GOES TO')} {row.split ? t('ALL SIX PARTNERS') : cause.partner.toUpperCase()}</dt>
@@ -175,8 +181,9 @@ export default function GiveReceipt() {
               <p><b>{cause.partner}</b><br />{t(cause.place)}</p>
             </div>
           )}
-          {shopHref && min
-            ? <A href={shopHref} className="pwl-receipt-cta">{t('See this piece')} →</A>
+          <p className="pwl-receipt-note">{t('Every colour gives the same amount.')}</p>
+          {shopHref
+            ? <A href={shopHref} className="pwl-receipt-cta">{t('See this piece in the shop')} →</A>
             : row.isNew
             ? <A href="/shop" className="pwl-receipt-cta">{t('See the shop')} →</A>
             : <A href={`/design/${cause.slug}`} className="pwl-receipt-cta">{t('See this piece')} →</A>}
