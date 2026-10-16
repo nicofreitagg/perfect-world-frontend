@@ -62,21 +62,37 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
   const sq = card.replace('.webp', '-sq.webp')
   useEffect(() => {
-    if (still) return
-    const id = setTimeout(() => { setIntro(false); ref.current?.play().catch(() => {}) }, 2200)
-    return () => clearTimeout(id)
+    const v = ref.current
+    if (!v) return
+    // Browsers only autoplay a film that is muted as an attribute too (React sets just the property).
+    v.muted = true; v.defaultMuted = true; v.setAttribute('muted', '')
+    const go = () => { v.play().catch(() => {}) }
+    // If the browser still holds it back (low power mode, data saver), the first touch, scroll or key starts it.
+    const kick = () => { go(); if (!v.paused) off() }
+    const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
+    ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
+    if (still) { go(); return off }
+    // A short intro (Nico 16 Oct): the 11.11 card drifts in for two seconds while a thin red line fills, then the film runs.
+    const id = setTimeout(() => { setIntro(false); go() }, 2000)
+    return () => { clearTimeout(id); off() }
   }, [still])
   const sound = () => { const v = ref.current; if (!v) return; v.muted = !muted; setMuted(!muted); setIntro(false); v.play().catch(() => {}) }
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={src} poster={phone ? sq : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onPlaying={() => setPlaying(true)} />
+      <video ref={ref} src={src} poster={phone ? sq : card} muted autoPlay loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onPlaying={() => setPlaying(true)} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={sq} />
-        <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (!intro && playing ? ' is-gone' : '')} />
+        <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
       </picture>
-      <button type="button" className="pwl-autofilm-sound" onClick={sound} aria-pressed={!muted}>{muted ? tr('Sound on') : tr('Sound off')}</button>
+      {intro && <span className="pwl-cine-load" aria-hidden="true" />}
+      <button type="button" className={'pwl-autofilm-sound' + (muted ? ' is-muted' : '')} onClick={sound} aria-pressed={!muted} aria-label={muted ? tr('Sound on') : tr('Sound off')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />{muted
+          ? <path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+          : <path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" />}</svg>
+        <span>{muted ? tr('Turn sound on') : tr('Sound off')}</span>
+      </button>
     </div>
     {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
     <div className={'pwl-cine-over' + (intro ? '' : ' is-in')}>{children}</div>

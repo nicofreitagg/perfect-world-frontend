@@ -815,3 +815,23 @@
 .pwl-stage-cap{animation:pwl-in .45s ease-out .45s both}
 .pwl-alive-img img{animation-name:pwl-float}
 @media (prefers-reduced-motion:reduce){.pwl-stage-art,.pwl-stage-piece,.pwl-stage-cap,.pwl-alive-img img{animation:none}}
+
+/* 16 Oct, Nico: a 2-second intro before the film, and a sound button that reads at a glance */
+.pwl-cine .pwl-autofilm-card.is-intro{animation:pwlIntroDrift 2.1s cubic-bezier(.25,.6,.3,1) both}
+@keyframes pwlIntroDrift{0%{opacity:0;transform:scale(1.06)}25%{opacity:1}100%{opacity:1;transform:scale(1)}}
+.pwl-cine-load{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#e2453c;transform-origin:left;animation:pwlIntroLine 2s linear both;z-index:3}
+@keyframes pwlIntroLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.pwl-cine .pwl-autofilm-sound{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px 0 14px;font-size:13px;background:rgba(242,235,223,.92);color:#14110e;z-index:4}
+.pwl-cine .pwl-autofilm-sound:hover{background:#fff}
+.pwl-cine .pwl-autofilm-sound svg{width:20px;height:20px;flex:none}
+.pwl-cine .pwl-autofilm-sound.is-muted{animation:pwlSoundPulse 2.4s ease-out 2.2s 3}
+@keyframes pwlSoundPulse{0%{box-shadow:0 0 0 0 rgba(242,235,223,.55)}100%{box-shadow:0 0 0 14px rgba(242,235,223,0)}}
+@media (max-width:700px){.pwl-cine .pwl-autofilm-sound{min-height:38px;padding:0 14px 0 11px;font-size:12px}}
+@media (prefers-reduced-motion:reduce){.pwl-cine .pwl-autofilm-card.is-intro,.pwl-cine-load,.pwl-cine .pwl-autofilm-sound.is-muted{animation:none}}
+/* 16 Oct, Nico: SHOP HOPE quieter ("not so in your face"): a slim outlined button with an arrow, filled only on hover */
+.pwl-cine .pwl-btn.pwl-cine-btn{min-height:46px;padding:0 24px;font-size:14px;letter-spacing:.12em;background:transparent;color:#f2ebdf!important;border:1px solid rgba(242,235,223,.7);box-shadow:none}
+.pwl-cine .pwl-btn.pwl-cine-btn::after{content:'→';margin-left:10px;transition:transform .25s ease}
+.pwl-cine .pwl-btn.pwl-cine-btn:hover{background:#f2ebdf;color:#14110e!important;border-color:#f2ebdf}
+.pwl-cine .pwl-btn.pwl-cine-btn:hover::after{transform:translateX(3px)}
+@media (max-width:700px){.pwl-cine .pwl-btn.pwl-cine-btn{width:auto}}
+.pwl-shopbar .pwl-btn{min-height:44px;font-size:14px;letter-spacing:.12em;background:rgba(19,17,15,.75);color:#f2ebdf!important;border:1px solid rgba(242,235,223,.6);box-shadow:none;backdrop-filter:blur(8px)}
