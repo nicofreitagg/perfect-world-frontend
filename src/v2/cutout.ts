@@ -42,6 +42,21 @@ function cut(url: string): Promise<string> {
           if (y > 0) push(x, y - 1)
           if (y < h - 1) push(x, y + 1)
         }
+        // Closed gaps (inside a tote handle, between arm and body): large, flat, pure-white pockets are background too.
+        // Printed white has texture and sits below this, so designs stay.
+        const pure = (i: number) => d[i] >= 248 && d[i + 1] >= 248 && d[i + 2] >= 248
+        const seen = new Uint8Array(w * h)
+        for (let s0 = 0; s0 < w * h; s0++) {
+          if (bg[s0] || seen[s0] || !pure(s0 * 4)) continue
+          const region: number[] = [s0]
+          seen[s0] = 1
+          for (let k = 0; k < region.length; k++) {
+            const p = region[k], x = p % w, y = (p - x) / w
+            const nb = [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, y > 0 ? p - w : -1, y < h - 1 ? p + w : -1]
+            for (const q of nb) if (q >= 0 && !seen[q] && !bg[q] && pure(q * 4)) { seen[q] = 1; region.push(q) }
+          }
+          if (region.length > w * h * 0.004) for (const p of region) bg[p] = 1
+        }
         // Hardly any background found: not a studio photo (a lifestyle shot), keep the original.
         let n = 0
         for (let p = 0; p < bg.length; p++) n += bg[p]
