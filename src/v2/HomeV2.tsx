@@ -76,6 +76,14 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
   const [intro, setIntro] = useState(true)
   const [muted, setMuted] = useState(true)
   const [paused, setPaused] = useState(false)
+  // The countdown starts only once the 11.11 card is on screen (Nico 16 Oct: on a slow phone the time ran out before it showed).
+  const cardRef = useRef<HTMLImageElement>(null)
+  const [cardReady, setCardReady] = useState(false)
+  useEffect(() => {
+    if (cardRef.current?.complete) setCardReady(true)
+    const id = setTimeout(() => setCardReady(true), 6000)
+    return () => clearTimeout(id)
+  }, [])
   // The 11.11 card stays up until the film is really playing (phones on low power never autoplay).
   const [playing, setPlaying] = useState(false)
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
@@ -92,10 +100,13 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
     const kick = () => { if (stopped.current) return off(); if (!ready) return; go(); if (!v.paused) off() }
     const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
-    // A short intro (Nico 16 Oct): the 11.11 card drifts in for two seconds while a thin red line fills, then the film runs.
+    // The intro (Nico 16 Oct): the 11.11 card holds with a slow zoom and a countdown, then the film runs from its start.
+    if (!cardReady || !introRef.current) return off
     const id = setTimeout(() => { ready = true; v.currentTime = 0; setIntro(false); go() }, INTRO_MS)
     return () => { clearTimeout(id); off() }
-  }, [])
+  }, [cardReady])
+  const introRef = useRef(true)
+  useEffect(() => { introRef.current = intro }, [intro])
   // Pause and play (Nico 16 Oct); once paused by hand, nothing restarts it by itself.
   const stopped = useRef(false)
   const toggle = () => { const v = ref.current; if (!v) return; setIntro(false); if (v.paused) { stopped.current = false; v.play().catch(() => {}); setPaused(false) } else { stopped.current = true; v.pause(); setPaused(true) } }
@@ -107,9 +118,9 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={sq} />
-        <img src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
+        <img ref={cardRef} onLoad={() => setCardReady(true)} src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro && cardReady ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
       </picture>
-      {intro && <IntroCount />}
+      {intro && cardReady && <IntroCount />}
       <div className="pwl-film-ctrls">
       <button type="button" className="pwl-autofilm-pause" onClick={toggle} aria-label={paused ? tr('Play') : tr('Pause')}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{paused ? <path d="M8 5v14l11-7z" fill="currentColor" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />}</svg>
