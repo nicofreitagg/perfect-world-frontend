@@ -691,5 +691,8 @@
  "SHIPPING FROM €5.95": "VERSAND AB €5,95",
  "Shipping from €5.95": "Versand ab €5,95",
  "No. Shipping is €5.95 within Germany, €8.95 to the rest of Europe and €10.95 to Switzerland, and it covers delivery. The amount next to the price is what the cause gets.": "Nein. Der Versand kostet €5,95 innerhalb Deutschlands, €8,95 ins restliche Europa und €10,95 in die Schweiz und deckt die Lieferung. Der Betrag neben dem Preis ist das, was das Projekt bekommt.",
- "from €5.95": "ab €5,95"
+ "from €5.95": "ab €5,95",
+ "Every design, every piece": "Jedes Design, jedes Teil",
+ "€{x} shared by all six": "€{x} geteilt auf alle sechs",
+ "€{x} to the partner": "€{x} an den Partner"
 }

@@ -519,10 +519,25 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-givetag-note{margin:12px 0 0;font:500 14px 'Bricolage Grotesque',system-ui,sans-serif;color:#5b5146}
 .pw-givehero h1{font-size:clamp(35px,5.2vw,78px)!important}
 @media (max-width:900px){.pw-givetag{margin-top:8px}}
-.pw-piecepick{position:relative;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 14px 0 18px;border-radius:999px;border:1.5px solid rgba(11,11,12,.25);background:#f8f2e7;cursor:pointer}
+.pw-piecepick{position:relative;display:inline-block;z-index:30}
+.pw-piecepick-btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:999px;border:1.5px solid rgba(11,11,12,.25);background:#f8f2e7;color:#0b0b0c;cursor:pointer;font:700 15px 'Bricolage Grotesque',system-ui,sans-serif;transition:border-color .2s,box-shadow .2s,background .2s}
+.pw-piecepick-btn:hover,.pw-piecepick.is-open .pw-piecepick-btn{border-color:#0b0b0c;background:#fffaf1;box-shadow:0 6px 18px rgba(11,11,12,.08)}
+.pw-piecepick-btn:focus-visible{outline:2.5px solid #e2453c;outline-offset:3px}
 .pw-piecepick .pw-mono{font-size:11px;letter-spacing:.12em;color:#8a7c6b}
-.pw-piecepick select{appearance:none;-webkit-appearance:none;border:0;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230b0b0c' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right center;padding:0 22px 0 0;font:700 15px 'Bricolage Grotesque',system-ui,sans-serif;color:#0b0b0c;cursor:pointer;min-height:44px}
-.pw-piecepick:focus-within{outline:2.5px solid #e2453c;outline-offset:3px}
+.pw-piecepick-btn svg{transition:transform .25s ease}
+.pw-piecepick.is-open .pw-piecepick-btn svg{transform:rotate(180deg)}
+.pw-piecepick-menu{position:absolute;left:0;top:calc(100% + 8px);min-width:290px;margin:0;padding:8px;list-style:none;background:#fffaf1;border:1px solid rgba(11,11,12,.12);border-radius:20px;box-shadow:0 22px 50px -12px rgba(11,11,12,.28),0 2px 6px rgba(11,11,12,.06);transform-origin:top left;animation:pw-pp-in .2s cubic-bezier(.2,.8,.2,1)}
+.pw-piecepick-menu li{animation:pw-pp-item .22s ease both}
+.pw-piecepick-menu button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;padding:10px 14px 10px 30px;border:0;border-radius:12px;background:transparent;text-align:left;cursor:pointer;position:relative;color:#0b0b0c}
+.pw-piecepick-menu button:hover,.pw-piecepick-menu button:focus-visible{background:#f1e8d8;outline:none}
+.pw-piecepick-menu [aria-selected=true] button::before{content:"";position:absolute;left:12px;top:17px;width:8px;height:8px;border-radius:50%;background:#e2453c}
+.pw-piecepick-name{font:700 15px 'Bricolage Grotesque',system-ui,sans-serif}
+.pw-piecepick-sub{font:400 11px 'JetBrains Mono',monospace;letter-spacing:.04em;color:#8a7c6b}
+.pw-piecepick-menu [aria-selected=true] .pw-piecepick-sub{color:#e2453c}
+@keyframes pw-pp-in{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes pw-pp-item{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media (max-width:760px){.pw-piecepick-menu{min-width:min(300px,calc(100vw - 32px))}}
+@media (prefers-reduced-motion:reduce){.pw-piecepick-menu,.pw-piecepick-menu li{animation:none}}
 /* Light bands without a visible edge: the colour wash sits on a layer that fades out past the band (Nico, 14 Oct: "gradient isn't clean") */
 .pw2 .pw-lightband{background:none!important;isolation:isolate}
 .pw2 .pw-lightband::before{content:'';position:absolute;inset:-120px 0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 55% 50% at 12% 30%,rgba(255,170,110,.22),transparent 70%),radial-gradient(ellipse 50% 45% at 88% 35%,rgba(226,69,60,.08),transparent 70%),radial-gradient(ellipse 60% 45% at 30% 75%,rgba(176,126,82,.18),transparent 70%),radial-gradient(ellipse 55% 45% at 80% 70%,rgba(93,173,226,.10),transparent 70%);-webkit-mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(180deg,transparent,#000 25%,#000 75%,transparent)}

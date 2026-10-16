@@ -300,13 +300,7 @@ export default function ShopV2() {
       </div>
       {/* One quiet way to find a piece type (Nico, 14 Oct: "searching for a tote bag only"). */}
       {tab === 'minimal' && (
-        <label className="pw-piecepick">
-          <span className="pw-mono">{tr('PIECE')}</span>
-          <select value={piece} onChange={(e) => setPiece(e.target.value as 'all' | Kind)}>
-            <option value="all">{tr('All pieces')}</option>
-            {PIECE_LIST.map((p) => <option key={p.id} value={p.id}>{tr(p.filter)}</option>)}
-          </select>
-        </label>
+        <PiecePick value={piece} onChange={setPiece} tr={tr} />
       )}
     </div>
 
@@ -453,4 +447,45 @@ function PickSwirl({ color }: { color: string }) {
 function OgShot({ photos, alt }: { photos: { url: string }[]; alt: string }) {
   const pair = useDesignPairOrGuess(photos)
   return pair ? <CutImg src={pair[0]} alt={alt} className="pw-art" style={{ position: "absolute", inset: "0", width: "100%", height: "100%", objectFit: "cover" }} /> : null
+}
+
+// The piece filter as a soft card menu instead of the browser's plain list (Nico, 16 Oct: "very basic").
+function PiecePick({ value, onChange, tr }: { value: 'all' | Kind; onChange: (v: 'all' | Kind) => void; tr: (s: string) => string }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    if (!open) return
+    const off = (e: MouseEvent) => { if (!ref.current?.contains(e.target as Node)) setOpen(false) }
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false) }
+    document.addEventListener('mousedown', off)
+    document.addEventListener('keydown', esc)
+    return () => { document.removeEventListener('mousedown', off); document.removeEventListener('keydown', esc) }
+  }, [open])
+  const opts: { id: 'all' | Kind; name: string; sub: string }[] = [
+    { id: 'all', name: tr('All pieces'), sub: tr('Every design, every piece') },
+    ...PIECE_LIST.map((p) => ({ id: p.id, name: tr(p.filter), sub: `€${p.price} · ${p.split ? tr('€{x} shared by all six').replace('{x}', p.give) : tr('€{x} to the partner').replace('{x}', p.give)}` })),
+  ]
+  const cur = opts.find((o) => o.id === value) ?? opts[0]
+  const pick = (id: 'all' | Kind) => { onChange(id); setOpen(false) }
+  return (
+    <div className={`pw-piecepick${open ? ' is-open' : ''}`} ref={ref}>
+      <button type="button" className="pw-piecepick-btn" aria-haspopup="listbox" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+        <span className="pw-mono">{tr('PIECE')}</span>
+        <span className="pw-piecepick-cur">{cur.name}</span>
+        <svg width="12" height="8" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.8" fill="none" strokeLinecap="round" /></svg>
+      </button>
+      {open && (
+        <ul className="pw-piecepick-menu" role="listbox" aria-label={tr('Piece')}>
+          {opts.map((o, i) => (
+            <li key={o.id} role="option" aria-selected={o.id === value} style={{ animationDelay: `${i * 22}ms` }}>
+              <button type="button" onClick={() => pick(o.id)} autoFocus={o.id === value}>
+                <span className="pw-piecepick-name">{o.name}</span>
+                <span className="pw-piecepick-sub">{o.sub}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
 }

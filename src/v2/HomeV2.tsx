@@ -1,3 +1,4 @@
+import { useCutout } from './cutout'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './v2.css'
 import './landing.css'
@@ -20,13 +21,14 @@ const Globe3D = lazy(() => import('./Globe3D'))
 
 
 // Cold visitors first (Nico's boss, 15 Oct): each Minimal design shown as a real garment, gently moving.
-const ALIVE = [
+const ALIVE: { slug: string; img: string; piece: string; src?: string }[] = [
   // A different piece per design, so every kind shows up (Nico, 16 Oct): bomber, tee, tote, oversized, women's tee.
   { slug: 'talk-about-it', img: 'talk-bomber', piece: 'Bomber jacket' },
   { slug: 'endangered-oceans', img: 'oceans', piece: 'T-shirt' },
   { slug: 'cool-down', img: 'cool-tote', piece: 'Tote bag' },
   { slug: 'one-world', img: 'one-world-oversized', piece: 'Oversized shirt' },
-  { slug: 'wild-at-heart', img: 'wild', piece: 'T-shirt' },
+  // Hoodie in India Ink Grey (Nico, 16 Oct): no local mockup yet, so the Shopify photo is cut out in the browser.
+  { slug: 'wild-at-heart', img: 'wild', piece: 'Hoodie', src: 'https://cdn.shopify.com/s/files/1/0862/1110/1009/files/mockup-c715-back_0293fc2a-f3eb-4550-8923-ba3a9a602961.jpg?v=1791818463' },
   { slug: 'rich-in-life', img: 'womens-rich', piece: "Women's T-shirt" },
 ]
 // Three pieces up front, each with only its price and where its amount goes.
@@ -99,7 +101,7 @@ function DesignStage() {
     <div className="pwl-stage" style={{ ['--c' as string]: c?.color ?? '#999' }}>
       <div className="pwl-stage-show" key={a.slug} aria-live="polite">
         <img className="pwl-stage-art" src={`/v2/img/art-${a.slug}-w.webp`} alt={`${d.name}, ${tr('artwork')}`} />
-        <img className="pwl-stage-piece" src={`/v2/img/mm-${a.img}.webp`} alt={`${d.name} ${tr(a.piece)}`} />
+        <PieceImg className="pwl-stage-piece" a={a} alt={`${d.name} ${tr(a.piece)}`} />
         <div className="pwl-stage-cap">
           <span className="pwl-tag">{tr('New')}</span>
           <p className="pwl-stage-name pw-fat">{d.name}</p>
@@ -114,7 +116,7 @@ function DesignStage() {
           return (
             <li key={x.slug} style={{ ['--c' as string]: cx?.color ?? '#999', ['--d' as string]: `${n * -0.9}s` }}>
               <button type="button" className="pwl-alive-card" aria-pressed={n === i} onClick={() => { setI(n); setAuto(false) }}>
-                <span className="pwl-alive-img"><img src={`/v2/img/mm-${x.img}.webp`} alt="" loading="lazy" /></span>
+                <span className="pwl-alive-img"><PieceImg a={x} alt="" /></span>
                 <span className="pwl-alive-name">{dx.name}</span>
                 <span className="pwl-alive-cause">{cx ? titleCase(cx.name) : ''}</span>
               </button>
@@ -371,3 +373,40 @@ export default function HomeV2() {
     </>
   )
 }
+
+// A stage garment: the local cut-out mockup, or a Shopify photo cut out in the browser (hidden until cut, never a white box).
+function PieceImg({ a, alt, className }: { a: { img: string; src?: string }; alt: string; className?: string }) {
+  const cut = useCutout(a.src)
+  const [tight, setTight] = useState<{ from: string; url: string }>({ from: '', url: '' })
+  // Trim the empty edges so the photo sits at the same size as the local mockups.
+  useEffect(() => {
+    if (!cut) return
+    let live = true
+    trimAlpha(cut).then((url) => { if (live) setTight({ from: cut, url }) })
+    return () => { live = false }
+  }, [cut])
+  if (!a.src) return <img className={className} src={`/v2/img/mm-${a.img}.webp`} alt={alt} loading="lazy" />
+  const ready = tight.from === cut && tight.url
+  return <img className={className} src={ready || TRANSPARENT} alt={alt} style={ready ? undefined : { opacity: 0 }} />
+}
+function trimAlpha(src: string): Promise<string> {
+  return new Promise((res) => {
+    const img = new Image()
+    img.onload = () => {
+      const w = img.naturalWidth, h = img.naturalHeight
+      const c = document.createElement('canvas'); c.width = w; c.height = h
+      const g = c.getContext('2d'); if (!g) return res(src)
+      g.drawImage(img, 0, 0)
+      const d = g.getImageData(0, 0, w, h).data
+      let x0 = w, y0 = h, x1 = -1, y1 = -1
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) if (d[(y * w + x) * 4 + 3] > 24) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y }
+      if (x1 < 0) return res(src)
+      const o = document.createElement('canvas'); o.width = x1 - x0 + 1; o.height = y1 - y0 + 1
+      o.getContext('2d')!.drawImage(c, x0, y0, o.width, o.height, 0, 0, o.width, o.height)
+      res(o.toDataURL('image/png'))
+    }
+    img.onerror = () => res(src)
+    img.src = src
+  })
+}
+const TRANSPARENT = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
