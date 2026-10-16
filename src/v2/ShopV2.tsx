@@ -182,6 +182,8 @@ export default function ShopV2() {
   const card = (p: Card, pI: number) => (<Fragment key={pI}>
         <article className={p.small ? 'pw-prod pw-prod-sm' : 'pw-prod'} style={{ position: "relative", display: "flex", flexDirection: "column" }}>
           <div className="pw-media" style={{ position: "relative", aspectRatio: "4 / 5", borderRadius: "20px", overflow: "hidden", background: p.bg, display: "flex", alignItems: "center", justifyContent: "center" }}>{p.ico && (<><img src={p.ico} alt="" aria-hidden="true" style={{ position: "absolute", left: "16px", bottom: "16px", width: "62px", zIndex: "2", transform: "rotate(-6deg)" }} /></>)}
+            {/* Picture layers melt into a patch of page ground with soft edges (16 Oct). */}
+            <div className="pw-melt">
             {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={p.colourUrl || undefined} alt={p.name} />}
             {p.isFront && <img src={p.img} alt={p.name} className="pw-photo" loading="lazy" />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
@@ -201,6 +203,7 @@ export default function ShopV2() {
                 {!p.isBeanie && <text x={p.markX} y={p.markY} fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#c0322a">11.11</text>}
               </svg>
             </>)}
+            </div>
             {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW")}</span></>)}
             
             {p.pick ? <button type="button" onClick={p.pick} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{p.addLabel}</button> : p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}

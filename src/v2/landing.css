@@ -768,3 +768,10 @@
 .pwl-voices blockquote{padding:10px 0 18px;font-size:clamp(16px,1.25vw,18px);line-height:1.5;font-weight:400;text-wrap:pretty}
 .pwl-voices figcaption{margin:0;padding:0;background:none;border-radius:0;color:inherit;opacity:.7;font:500 12px 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
 @media (max-width:900px){.pwl-voices blockquote{font-size:16px}}
+/* 16 Oct (Nico): the Giving piece floats on the page like the shop, no white frame. */
+.pwl-give-media,:is(.look-raw,.look-mix) .pwl-give-media{background:#f3ece0;border-radius:0;overflow:visible;isolation:isolate;
+  -webkit-mask-image:radial-gradient(closest-side,#000 74%,transparent 100%);mask-image:radial-gradient(closest-side,#000 74%,transparent 100%)}
+.pwl-give-media img{mix-blend-mode:multiply;position:relative;z-index:1}
+.pwl-give-media::after{content:"";position:absolute;left:24%;right:24%;bottom:9%;height:6%;border-radius:50%;background:radial-gradient(closest-side,rgba(70,48,24,.3),rgba(70,48,24,0));pointer-events:none;z-index:0}
+.pwl-give-media figcaption{display:none}
+.pwl-give-media img{padding:9%}
