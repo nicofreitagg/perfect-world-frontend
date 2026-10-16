@@ -15,7 +15,7 @@ export const NEW_PIECES = [
   { id: 'women', name: "Women's T-shirt", sub: 'Fitted cut · made with one partner', price: '33.33', give: '11.11', fill: '#1b1b1d', bg: '#e9e7e2' },
   { id: 'bomber', name: 'Bomber jacket', sub: 'Made with one partner', price: '111.11', give: '44.44', fill: '#1d2a44', bg: '#dedbd4' },
   // Logo only, so no single cause: its amount is split equally across all six partners (Nico, 9 Oct).
-  { id: 'beanie', name: 'Beanie', sub: 'Just the logo · black or natural', price: '33.33', give: '7.77', fill: '#1b1b1d', bg: '#ecebe6', split: true },
+  { id: 'beanie', name: 'Beanie', sub: 'Just the logo · black or walnut', price: '27.77', give: '7.77', fill: '#1b1b1d', bg: '#ecebe6', split: true },
 ] as const
 
 export type CauseKey = 'rich' | 'one-world' | 'talk' | 'oceans' | 'cool' | 'wild'
