@@ -50,8 +50,8 @@ const VOICES = [
   { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
-// The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: 1.5 s longer).
-const INTRO_MS = 3500
+// The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: longer, 5 s).
+const INTRO_MS = 5000
 
 /** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, card, label, children }: { src: string; card: string; label: string; children: React.ReactNode }) {
@@ -72,12 +72,14 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
     v.muted = true; v.defaultMuted = true; v.setAttribute('muted', '')
     const go = () => { v.play().catch(() => {}) }
     // If the browser still holds it back (low power mode, data saver), the first touch, scroll or key starts it.
-    const kick = () => { if (stopped.current) return off(); go(); if (!v.paused) off() }
+    // The film waits for the intro, then starts from its first frame.
+    let ready = still
+    const kick = () => { if (stopped.current) return off(); if (!ready) return; go(); if (!v.paused) off() }
     const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
     if (still) { go(); return off }
     // A short intro (Nico 16 Oct): the 11.11 card drifts in for two seconds while a thin red line fills, then the film runs.
-    const id = setTimeout(() => { setIntro(false); go() }, INTRO_MS)
+    const id = setTimeout(() => { ready = true; v.currentTime = 0; setIntro(false); go() }, INTRO_MS)
     return () => { clearTimeout(id); off() }
   }, [still])
   // Pause and play (Nico 16 Oct); once paused by hand, nothing restarts it by itself.
@@ -87,7 +89,7 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={src} poster={phone ? sq : card} muted autoPlay loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} />
+      <video ref={ref} src={src} poster={phone ? sq : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={sq} />

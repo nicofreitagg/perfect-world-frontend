@@ -817,14 +817,14 @@
 @media (prefers-reduced-motion:reduce){.pwl-stage-art,.pwl-stage-piece,.pwl-stage-cap,.pwl-alive-img img{animation:none}}
 
 /* 16 Oct, Nico: a 2-second intro before the film, and a sound button that reads at a glance */
-.pwl-cine .pwl-autofilm-card.is-intro{animation:pwlIntroZoom 3.6s cubic-bezier(.3,.1,.3,1) both}
-@keyframes pwlIntroZoom{0%{opacity:0;transform:scale(1)}12%{opacity:1}100%{opacity:1;transform:scale(1.07)}}
-.pwl-cine-load{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#e2453c;transform-origin:left;animation:pwlIntroLine 3.5s linear both;z-index:3}
+.pwl-cine .pwl-autofilm-card.is-intro{animation:pwlIntroZoom 5.1s cubic-bezier(.3,.1,.3,1) both}
+@keyframes pwlIntroZoom{0%{opacity:0;transform:scale(1)}8%{opacity:1}100%{opacity:1;transform:scale(1.08)}}
+.pwl-cine-load{position:absolute;left:0;bottom:0;height:3px;width:100%;background:#e2453c;transform-origin:left;animation:pwlIntroLine 5s linear both;z-index:3}
 @keyframes pwlIntroLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 .pwl-cine .pwl-autofilm-sound{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px 0 14px;font-size:13px;background:rgba(242,235,223,.92);color:#14110e;z-index:4}
 .pwl-cine .pwl-autofilm-sound:hover{background:#fff}
 .pwl-cine .pwl-autofilm-sound svg{width:20px;height:20px;flex:none}
-.pwl-cine .pwl-autofilm-sound.is-muted{animation:pwlSoundPulse 2.4s ease-out 3.7s 3}
+.pwl-cine .pwl-autofilm-sound.is-muted{animation:pwlSoundPulse 2.4s ease-out 5.2s 3}
 @keyframes pwlSoundPulse{0%{box-shadow:0 0 0 0 rgba(242,235,223,.55)}100%{box-shadow:0 0 0 14px rgba(242,235,223,0)}}
 @media (max-width:700px){.pwl-cine .pwl-autofilm-sound{min-height:38px;padding:0 14px 0 11px;font-size:12px}}
 @media (prefers-reduced-motion:reduce){.pwl-cine .pwl-autofilm-card.is-intro,.pwl-cine-load,.pwl-cine .pwl-autofilm-sound.is-muted{animation:none}}
