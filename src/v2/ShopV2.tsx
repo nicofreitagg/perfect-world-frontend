@@ -47,6 +47,8 @@ const leadColour = (kind: Kind, slug: string, cols: string[]) => {
   if ((kind === 'bomber' || kind === 'women' || kind === 'over') && cols.length) return cols[i % cols.length]
   return cols[0]
 }
+// Which piece each design shows in the Minimal overview, with the cut-out mockup used until the listing has photos.
+const MIX: { kind: Kind; img: string; fk?: Kind }[] = [{ kind: 'over', img: 'one-world-oversized' }, { kind: 'tote', img: 'cool-tote' }, { kind: 'tee', img: 'oceans' }, { kind: 'bomber', img: 'talk-bomber' }, { kind: 'hoodie', img: 'wild', fk: 'tee' }, { kind: 'women', img: 'womens-rich' }]
 const SHORT = Object.fromEntries(CAUSES.map((c) => [c.id, c.short])) as Record<CauseKey, string>
 import './v2.css'
 import { useCauseGround } from './ground'
@@ -110,11 +112,20 @@ export default function ShopV2() {
     .filter((m) => (piece === 'all' || kindOf(m.title) === piece) && (minDesign === 'all' || minDesignOf(m.title)?.slug === minDesign))
     .sort((x, y) => PIECE_LIST.findIndex((q) => q.id === kindOf(x.title)) - PIECE_LIST.findIndex((q) => q.id === kindOf(y.title)) || MIN_DESIGNS.indexOf(minDesignOf(x.title)!) - MIN_DESIGNS.indexOf(minDesignOf(y.title)!))
   if (tab === 'minimal' && piece === 'all' && minDesign === 'all') {
-    // The six designs are the main cards; each opens that design's pieces.
-    products = MIN_DESIGNS.map((d) => {
+    // The six designs as a mix of real pieces, like the OG grid (Nico, 16 Oct): each design shows a different piece; the card opens all its pieces.
+    products = MIN_DESIGNS.map((d, i) => {
       const c = CAUSES.find((x) => x.slug === d.slug)!
-      const n = minimalLive.filter((m) => minDesignOf(m.title)?.slug === d.slug).length
-      return { ...blank, small: true, name: d.name, sub: c.partner, price: tr('from') + ' €' + PIECES.tote.price, give: tr('from') + ' €' + PIECES.tote.give + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: n ? tr('See the pieces') + ` (${n})` : tr('See the pieces') }
+      const mine = minimalLive.filter((m) => minDesignOf(m.title)?.slug === d.slug)
+      const want = MIX[i]
+      const m = mine.find((x) => kindOf(x.title) === want.kind) ?? mine.find((x) => kindOf(x.title) !== 'beanie')
+      const kind = m ? kindOf(m.title) : want.fk ?? want.kind
+      const p = PIECE_LIST.find((x) => x.id === kind)!
+      const base = { ...blank, small: true, name: d.name, sub: tr(p.label) + ' · ' + c.partner, price: '€' + p.price, give: '€' + p.give + ' ' + tr('to its partner'), bg: TINT[c.id], isNew: true, swatches: [], href: '', pick: () => pickDesign(d.slug), addLabel: mine.length ? tr('See the pieces') + ` (${mine.length})` : tr('See the pieces') }
+      if (!m) return { ...base, isDesign: true, img: `/v2/img/mm-${want.img}.webp` }
+      const cols = rankColours(c.name, variantColours(m.variants), (x) => x)
+      const lead = leadColour(kind, d.slug, cols)
+      const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === lead))?.image?.url ?? ''
+      return { ...base, isPhoto: !!m.images[0], photos: m.images, colourUrl, isDesign: !m.images[0], img: `/v2/img/mm-${want.img}.webp` }
     })
   } else if (tab === 'minimal' && liveShown.length) {
     // Real listings: one card per product on its lead colour, the design side first, the front on hover.
@@ -226,7 +237,7 @@ export default function ShopV2() {
 
   
   <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "clamp(32px, 4vw, 64px) clamp(16px, 4vw, 56px) clamp(24px, 3vw, 40px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "clamp(32px, 5vw, 72px)" }}>
-    <img className="pw-ico pw-m-hide" src="/v2/icons/ic-df3d515b.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "410px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "50px", width: "96px", transform: "rotate(9deg)" }} />
+    <img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "57.5%", top: "50px", width: "96px", transform: "rotate(9deg)" }} />
     <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ bottom: "-80px" }}><path d="M-60 560 C 200 650, 380 420, 560 520 C 700 600, 770 470, 690 430 C 610 390, 600 570, 770 610 C 990 660, 1160 470, 1500 540" stroke="#FF8C42" strokeWidth="8"></path></svg>
     <div style={{ flex: "1 1 520px" }}>
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
@@ -246,16 +257,17 @@ export default function ShopV2() {
           <img className="pw-split-img" src="/v2/img/mm-oceans.webp" alt="" />
           <span className="pw-split-txt">
             <span className="pw-split-tag">{tr('NEW')}</span>
-            <img className="pw-split-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
-            <span className="pw-split-line">{tr('Quiet lettering, a small back print.')}</span>
+            <img className="pw-split-sig" src="/v2/img/sig-minimal-collection-white.png" alt={tr('The Minimal Collection')} />
+            <span className="pw-split-line">{tr('Doing good never looked so clean.')}</span>
             <span className="pw-split-go">{tab === 'minimal' ? tr('Showing') + ' ✓' : tr('See Minimal') + ' →'}</span>
           </span>
         </button>
         <button type="button" role="tab" aria-selected={tab === 'og'} className="pw-split-og" onClick={() => setTab('og')}>
           <img className="pw-split-img" src="/v2/img/og-oceans.webp" alt="" />
           <span className="pw-split-txt">
-            <span className="pw-fat pw-split-og-t">OG</span>
-            <span className="pw-split-line">{tr('The originals. Big, bold back prints.')}</span>
+            <span className="pw-split-tag pw-split-tag-og">{tr('THE ORIGINALS')}</span>
+            <span className="pw-fat pw-split-og-t">{tr('OG collection')}</span>
+            <span className="pw-split-line">{tr('Big, bold back prints.')}</span>
             <span className="pw-split-go">{tab === 'og' ? tr('Showing') + ' ✓' : tr('See OG') + ' →'}</span>
           </span>
         </button>
