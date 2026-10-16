@@ -52,11 +52,11 @@ function sweep(w: number, h: number) {
 }
 
 // Dark pages (Home, Our story) and Natural Raw pages (everything else, Nico 16 Oct): when you cross
-// between them, the old ground is wiped away by one clean, gently curved edge with a thin
-// cause-colour line riding on it. Minimal on purpose (Nico: "more subtle", "something minimal").
-// Direction, tilt, curve and line colour change every time; both ways work the same.
+// between them, the old ground fades away behind a wide, soft linear gradient that glides across
+// the screen. Slow and quiet on purpose (Nico: "elegant, lowkey, fitting with the linear aspect").
+// The angle changes a little every time; both ways work the same.
 let lastDark: boolean | null = null
-// Dark pages by address, so the wipe can start before the new page paints.
+// Dark pages by address, so the fade can start before the new page paints.
 const isDarkNow = () => ['/', '/about'].includes(window.location.pathname.replace(/\/+$/, '') || '/')
 // Did this page change cross between dark and Raw? Asked by both effects below, answered once
 // per page change (so React's double effect run in development gives the same answer).
@@ -70,47 +70,31 @@ function crossed() {
   return crossMemo.val
 }
 const DARK = '#13110f', RAW = '#ece3d2'
-const WIPE_MS = 950
+const WIPE_MS = 1700
+const FEATHER = 55 // how wide the soft band is, in % of the screen
 
 function Wipe({ from }: { from: string }) {
-  const ref = useRef<SVGSVGElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
-    const svg = ref.current
-    if (!svg) return
-    const w = window.innerWidth, h = window.innerHeight
-    const L = Math.hypot(w, h) / 2 + 40
-    const angle = [0, 90, 180, 270][Math.floor(Math.random() * 4)] + rnd(-14, 14)
-    const amp = rnd(0.025, 0.06) * L, freq = rnd(0.6, 1.4) * Math.PI / L, phase = rnd(0, Math.PI * 2)
-    const drift = rnd(-1.2, 1.2)
-    const g = svg.querySelector('g')!, cover = svg.querySelector('.pw-wipe-cover')!, line = svg.querySelector('.pw-wipe-line')!
-    g.setAttribute('transform', `translate(${w / 2} ${h / 2}) rotate(${angle.toFixed(1)})`)
-    line.setAttribute('stroke', SIX[Math.floor(Math.random() * SIX.length)])
+    const el = ref.current
+    if (!el) return
+    // Mostly top to bottom, sometimes bottom to top, always a little slanted.
+    const angle = (Math.random() < 0.7 ? 180 : 0) + rnd(-14, 14)
     const t0 = performance.now()
     let raf = 0
     const frame = (now: number) => {
       const k = Math.min(1, (now - t0) / WIPE_MS)
-      const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2
-      const y0 = -L - amp + e * (2 * L + 2 * amp)
-      const pts: string[] = []
-      for (let i = 0; i <= 24; i++) {
-        const x = -L + (i / 24) * 2 * L
-        pts.push(`${x.toFixed(1)} ${(y0 + amp * Math.sin(freq * x + phase + drift * e * Math.PI)).toFixed(1)}`)
-      }
-      const edge = 'M' + pts.join(' L')
-      cover.setAttribute('d', `${edge} L${L} ${L} L${-L} ${L} Z`)
-      line.setAttribute('d', edge)
-      line.setAttribute('opacity', String(0.75 * Math.sin(Math.PI * k)))
+      const e = 0.5 - Math.cos(Math.PI * k) / 2
+      const p = -FEATHER + e * (100 + FEATHER)
+      const m = `linear-gradient(${angle.toFixed(1)}deg, transparent ${p.toFixed(2)}%, #000 ${(p + FEATHER).toFixed(2)}%)`
+      el.style.maskImage = m
+      el.style.webkitMaskImage = m
       if (k < 1) raf = requestAnimationFrame(frame)
     }
     frame(t0)
     return () => cancelAnimationFrame(raf)
   }, [])
-  return createPortal(
-    <svg ref={ref} className="pw-wipe-nav" aria-hidden="true">
-      <g><path className="pw-wipe-cover" fill={from} /><path className="pw-wipe-line" fill="none" strokeWidth="2" strokeLinecap="round" /></g>
-    </svg>,
-    document.body,
-  )
+  return createPortal(<div ref={ref} className="pw-wipe-nav" style={{ background: from }} aria-hidden="true" />, document.body)
 }
 
 export default function PageSwirl() {
