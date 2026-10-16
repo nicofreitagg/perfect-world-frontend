@@ -72,8 +72,8 @@ function IntroCount() {
 function AutoFilm({ src, card, label, children }: { src: string; card: string; label: string; children: React.ReactNode }) {
   const tr = useT()
   const ref = useRef<HTMLVideoElement>(null)
-  const still = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
-  const [intro, setIntro] = useState(!still)
+  // The 11.11 card and countdown run for everyone, Reduce Motion included (only the zoom is left out then).
+  const [intro, setIntro] = useState(true)
   const [muted, setMuted] = useState(true)
   const [paused, setPaused] = useState(false)
   // The 11.11 card stays up until the film is really playing (phones on low power never autoplay).
@@ -88,15 +88,14 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
     const go = () => { v.play().catch(() => {}) }
     // If the browser still holds it back (low power mode, data saver), the first touch, scroll or key starts it.
     // The film waits for the intro, then starts from its first frame.
-    let ready = still
+    let ready = false
     const kick = () => { if (stopped.current) return off(); if (!ready) return; go(); if (!v.paused) off() }
     const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
-    if (still) { go(); return off }
     // A short intro (Nico 16 Oct): the 11.11 card drifts in for two seconds while a thin red line fills, then the film runs.
     const id = setTimeout(() => { ready = true; v.currentTime = 0; setIntro(false); go() }, INTRO_MS)
     return () => { clearTimeout(id); off() }
-  }, [still])
+  }, [])
   // Pause and play (Nico 16 Oct); once paused by hand, nothing restarts it by itself.
   const stopped = useRef(false)
   const toggle = () => { const v = ref.current; if (!v) return; setIntro(false); if (v.paused) { stopped.current = false; v.play().catch(() => {}); setPaused(false) } else { stopped.current = true; v.pause(); setPaused(true) } }
