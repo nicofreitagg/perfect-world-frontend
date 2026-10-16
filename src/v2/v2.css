@@ -634,3 +634,13 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 /* 16 Oct, Nico: no plain white behind the photos. White studio backgrounds take on the card's colour. */
 .pw-designgrid .pw-media .pw-photo{mix-blend-mode:multiply}
 .pw-allrow .pw-prod-sm .pw-media{background:linear-gradient(170deg,#f4ede1 0%,#e4d5bd 100%)!important}
+/* 16 Oct: photos now blend into the card colour (multiply), so the two sides must never show at once. */
+@media (hover:hover) and (pointer:fine){
+  .pw-prod:hover .pw-photo:not(.pw-photo2):has(+ .pw-photo2){opacity:0}
+}
+@media (hover:none){
+  .pw-prod .pw-photo:not(.pw-photo2):has(+ .pw-photo2){opacity:0}
+  .pw-prod .pw-media.pw-flip .pw-photo:not(.pw-photo2){animation:pw-back-on 1s linear .15s both}
+}
+@keyframes pw-back-on{0%,49.9%{opacity:0}50%,100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.pw-prod .pw-photo:not(.pw-photo2){opacity:1!important;animation:none!important}}
