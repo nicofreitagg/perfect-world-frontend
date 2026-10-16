@@ -61,6 +61,11 @@ function cut(url: string): Promise<string> {
         let n = 0
         for (let p = 0; p < bg.length; p++) n += bg[p]
         if (n < w * h * 0.12) return resolve('')
+        // A white or very light garment floods away with its background (Nico, 16 Oct: the white tee vanished).
+        // If most of the middle of the photo was removed, keep the original photo instead.
+        let mid = 0, midN = 0
+        for (let y = Math.round(h * 0.3); y < h * 0.7; y += 2) for (let x = Math.round(w * 0.3); x < w * 0.7; x += 2) { midN++; mid += bg[y * w + x] }
+        if (mid > midN * 0.25) return resolve('')
         for (let p = 0; p < bg.length; p++) {
           if (bg[p]) { d[p * 4 + 3] = 0; continue }
           const x = p % w, y = (p - x) / w
