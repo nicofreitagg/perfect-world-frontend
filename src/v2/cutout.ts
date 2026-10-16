@@ -99,15 +99,54 @@ function cut(url: string): Promise<string> {
           if (count(bg) < w * h * 0.12 || midGone(bg)) return resolve('')
         }
         if (midGone(bg)) return resolve('')
+        // Clean outline (Nico 16 Oct: light shirts showed a ragged, whitish rim and white flecks). Pixels near the
+        // edge are part garment, part white studio light. Each one takes the colour of the fabric just inside it,
+        // and its opacity from how far it is from white towards that fabric colour.
+        const RIM = 6, dist = new Uint8Array(w * h)
+        let ring: number[] = []
         for (let p = 0; p < bg.length; p++) {
-          if (bg[p]) { d[p * 4 + 3] = 0; continue }
-          const x = p % w, y = (p - x) / w
-          const edge = (x > 0 && bg[p - 1]) || (x < w - 1 && bg[p + 1]) || (y > 0 && bg[p - w]) || (y < h - 1 && bg[p + w])
-          if (edge) {
-            const i = p * 4, mn = Math.min(d[i], d[i + 1], d[i + 2])
-            d[i + 3] = Math.max(60, Math.min(255, (255 - mn) * 6))
-          }
+          if (bg[p]) continue
+          const x = p % w
+          if ((x > 0 && bg[p - 1]) || (x < w - 1 && bg[p + 1]) || (p >= w && bg[p - w]) || (p < bg.length - w && bg[p + w])) { dist[p] = 1; ring.push(p) }
         }
+        const rims: number[] = [...ring]
+        for (let r = 2; r <= RIM + 3; r++) {
+          const next: number[] = []
+          for (const p of ring) {
+            const x = p % w
+            for (const q of [x > 0 ? p - 1 : -1, x < w - 1 ? p + 1 : -1, p - w, p + w]) {
+              if (q < 0 || q >= bg.length || bg[q] || dist[q]) continue
+              dist[q] = r; next.push(q)
+            }
+          }
+          if (r <= RIM) rims.push(...next)
+          ring = next
+        }
+        const fix: [number, number, number, number, number][] = []
+        for (const p of rims) {
+          const x = p % w, y = (p - x) / w
+          let fr = 0, fg = 0, fb = 0, n = 0
+          for (let dy = -9; dy <= 9; dy += 2) for (let dx = -9; dx <= 9; dx += 2) {
+            const xx = x + dx, yy = y + dy
+            if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue
+            const q = yy * w + xx
+            if (bg[q] || dist[q] <= RIM) continue
+            fr += d[q * 4]; fg += d[q * 4 + 1]; fb += d[q * 4 + 2]; n++
+          }
+          const i = p * 4
+          if (!n) { fix.push([p, d[i], d[i + 1], d[i + 2], dist[p] === 1 ? 140 : 255]); continue }
+          fr /= n; fg /= n; fb /= n
+          const span = 255 - Math.min(fr, fg, fb)
+          // White fabric can't be told apart from the white studio: keep it, only soften the outer pixel.
+          if (span < 14) { fix.push([p, d[i], d[i + 1], d[i + 2], dist[p] === 1 ? 170 : 255]); continue }
+          const ch = fr <= fg && fr <= fb ? 0 : fg <= fb ? 1 : 2
+          const a = Math.max(0, Math.min(1, (255 - d[i + ch]) / span))
+          // Solid fabric keeps its own pixel (seams, shading); only the see-through rim takes the inside colour.
+          if (a > 0.97) fix.push([p, d[i], d[i + 1], d[i + 2], 255])
+          else fix.push([p, fr, fg, fb, Math.round(a * 255)])
+        }
+        for (let p = 0; p < bg.length; p++) if (bg[p]) d[p * 4 + 3] = 0
+        for (const [p, r, gg, b, a] of fix) { const i = p * 4; d[i] = r; d[i + 1] = gg; d[i + 2] = b; d[i + 3] = a }
         g.putImageData(im, 0, 0)
         c.toBlob((blob) => resolve(blob ? URL.createObjectURL(blob) : ''), 'image/png')
       } catch {

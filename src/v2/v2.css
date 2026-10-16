@@ -357,7 +357,7 @@
 .pw-prod .pw-photo2{opacity:0}
 /* Hover swap only with a real pointer; on phones a long press must not blend the two photos. */
 @media (hover:hover) and (pointer:fine){
-  .pw-prod:hover .pw-photo2{opacity:1}
+  /* Hover keeps the back print (Nico 16 Oct: "when hovering show backprint on all"); the garment just grows a little. */
   .pw-prod:hover .pw-photo{transform:scale(1.03)}
 }
 .pw-prod .pw-photo{-webkit-touch-callout:none;user-select:none}
@@ -650,9 +650,6 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-designgrid .pw-media .pw-photo{mix-blend-mode:multiply}
 .pw-allrow .pw-prod-sm .pw-media{background:linear-gradient(170deg,#f4ede1 0%,#e4d5bd 100%)!important}
 /* 16 Oct: photos now blend into the card colour (multiply), so the two sides must never show at once. */
-@media (hover:hover) and (pointer:fine){
-  .pw-prod:hover .pw-photo:not(.pw-photo2):has(+ .pw-photo2){opacity:0}
-}
 @media (hover:none){
   .pw-prod .pw-photo:not(.pw-photo2):has(+ .pw-photo2){opacity:0}
   .pw-prod .pw-media.pw-flip .pw-photo:not(.pw-photo2){animation:pw-back-on 1s linear .15s both}
