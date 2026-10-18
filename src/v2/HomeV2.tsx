@@ -1,3 +1,4 @@
+import { WORN_HOME } from './worn'
 import { useCutout } from './cutout'
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './v2.css'
@@ -293,6 +294,8 @@ export default function HomeV2() {
       <p className="pwl-kicker">{tr('NEW COLLECTION')}</p>
       <h2 className="pwl-min-h"><A href="/shop#shop" className="pwl-min-hlink"><span className="pwl-min-new">{tr('New')}</span><img className="pw-sig" src={darkMin ? "/v2/img/sig-minimal-collection-white.png" : "/v2/img/sig-minimal-collection-black.png"} alt={tr('The Minimal Collection')} /></A></h2>
       <p className="pwl-sub">{tr('Six new designs on T-shirts, hoodies, totes and more. Each one supports its own cause.')}</p>
+      <A href="/shop#shop" className="pwl-min-explore">{tr('Explore the collection')} <span aria-hidden="true">→</span></A>
+      {WORN_HOME && <figure className="pwl-worn"><img src={WORN_HOME.src} alt={tr(WORN_HOME.alt)} loading="lazy" /></figure>}
       <DesignStage />
       <div className="pwl-ctas pwl-ctas-c">
         <A href="/shop#shop" className="pwl-btn">{tr('Shop the collection')}</A>
@@ -334,7 +337,7 @@ export default function HomeV2() {
       <ol className="pwl-how">
         <li><span className="pwl-how-pic pwl-how-art"><img src="/v2/img/art-endangered-oceans-w.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">1</span><b><span className="pwl-how-k">1. </span>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
         <li><span className="pwl-how-pic"><img src="/v2/img/mm-oceans.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">2</span><b><span className="pwl-how-k">2. </span>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
-        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b><span className="pwl-how-k">3. </span>{tr('The partner gets their amount')}</b><span>{tr('A fixed amount from every piece, already in the price.')}</span></li>
+        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b><span className="pwl-how-k">3. </span>{tr('A fixed amount supports the partner')}</b><span>{tr('Already in the price of every piece.')} <A href="/how-giving-works" className="pwl-how-link">{tr('How giving works')}</A></span></li>
       </ol>
     </div>
   </section>

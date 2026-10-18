@@ -733,3 +733,11 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-giving section [style*="#fbf6ec"] p{font-size:16px!important}
   .pw-giving .pw-m-logos > div{height:64px!important}
 }
+
+/* Shoot photos (worn.ts): on desktop hover the card shows the piece on a person. Hidden when none is set. */
+#shop .pw-melt img.pw-photo.pw-worn{mix-blend-mode:normal;object-fit:cover!important;padding:0;opacity:0;z-index:1;transform:none!important;transition:opacity .45s ease}
+@media (hover:hover){#shop .pw-prod:hover .pw-melt img.pw-photo.pw-worn{opacity:1}}
+.pw-pd-stage img.is-worn,.pw-pd-thumb img.is-worn{object-fit:cover}
+.pwl-worn{margin:clamp(28px,4vw,48px) auto 0;max-width:1100px;border-radius:24px;overflow:hidden}
+.pwl-worn img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+@media (max-width:700px){.pwl-worn{border-radius:18px}.pwl-worn img{aspect-ratio:4/5}}

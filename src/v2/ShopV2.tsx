@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { CAUSES, TINT } from './causes'
+import { wornFor } from './worn'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, WOMEN, BEANIE_MOCKUP, minDesignOf, isNewOG, icon, type CauseKey, RAW_GROUND } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useCutout, precut } from './cutout'
@@ -114,7 +115,7 @@ export default function ShopV2() {
 
   const toShop = () => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })
 
-  const blank = { ico: '', img: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, isFront: false, markX: 0, markY: 0, isNew: false }
+  const blank = { ico: '', img: '', worn: '', photos: [] as { url: string }[], colourUrl: '', pick: undefined as undefined | (() => void), small: false, isPhoto: false, isDesign: false, grad: '', fill: '', isGarment: false, isPrint: false, isPlaceholderPrint: false, isTee: false, isWomen: false, isOver: false, isHoodie: false, isBomber: false, isTote: false, isBeanie: false, isFront: false, markX: 0, markY: 0, isNew: false }
   type Card = typeof blank & { name: string; sub: string; price: string; give: string; bg: string; swatches: { c: string; href?: string; label?: string; url?: string }[]; href: string; addLabel: string }
   let products: Card[]
   const liveShown = minimalLive
@@ -134,7 +135,7 @@ export default function ShopV2() {
       const cols = rankColours(c.name, variantColours(m.variants), (x) => x)
       const lead = leadColour(kind, d.slug, cols)
       const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === lead))?.image?.url ?? ''
-      return { ...base, isPhoto: !!m.images[0], photos: m.images, colourUrl, isDesign: !m.images[0], img: `/v2/img/mm-${want.img}.webp` }
+      return { ...base, worn: wornFor(m.title), isPhoto: !!m.images[0], photos: m.images, colourUrl, isDesign: !m.images[0], img: `/v2/img/mm-${want.img}.webp` }
     })
   } else if (tab === 'minimal' && liveShown.length) {
     // Real listings: one card per product on its lead colour, the design side first, the front on hover.
@@ -150,7 +151,7 @@ export default function ShopV2() {
       const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
       // Inside one design the piece is the headline; across designs the design name is.
       const one = minDesign !== 'all'
-      return { ...blank, name: one ? tr(p.label) : d?.name ?? formatDisplayTitle(m.title), sub: one ? (c?.partner ?? '') : tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, colourUrl, isNew: true, swatches: order.map((x) => ({ c: hexOf(x), label: x, href: link(x), url: urlOfColour(m, x) })), href: lead ? link(lead) : `/product/${m.handle}`, addLabel: tr('Choose your size') }
+      return { ...blank, worn: wornFor(m.title), name: one ? tr(p.label) : d?.name ?? formatDisplayTitle(m.title), sub: one ? (c?.partner ?? '') : tr(p.label) + (c ? ' · ' + c.partner : ''), price: '€' + p.price, give: '€' + p.give + ' ' + tr(p.split ? 'shared by all six partners' : 'to its partner'), bg: '#ecebe6', isPhoto: !!m.images[0], photos: m.images, colourUrl, isNew: true, swatches: order.map((x) => ({ c: hexOf(x), label: x, href: link(x), url: urlOfColour(m, x) })), href: lead ? link(lead) : `/product/${m.handle}`, addLabel: tr('Choose your size') }
     })
   } else if (tab === 'minimal' && piece !== 'beanie') {
     // Pieces not listed yet: the designs as artwork on their partner's tint.
@@ -181,7 +182,7 @@ export default function ShopV2() {
       const kind = extractProductType(m.title)
       const colourUrl = m.variants.find((v) => v.selectedOptions?.some((o) => o.value === cols[0]))?.image?.url ?? ''
       const link = (x: string) => `/product/${m.handle}?colour=${encodeURIComponent(x)}`
-      return { ...card(c), sub, isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x), url: urlOfColour(m, x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
+      return { ...card(c), sub, worn: wornFor(m.title), isPrint: false, isPlaceholderPrint: false, isPhoto: !!m.images[0], photos: m.images, colourUrl, price: (sub.includes('·') ? tr('from') + ' ' : '') + '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + (GIVE_OF[kind] ?? PIECES.shirt.give) + ' ' + tr('to') + ' ' + c.partner, swatches: cols.map((x) => ({ c: hexOf(x), href: link(x), label: tr(x), url: urlOfColour(m, x) })), href: cols[0] ? link(cols[0]) : `/product/${m.handle}` }
     }
     // Hoodie first: it's the piece we push (Christmas hero, Nico 16 Oct).
     const ORDER = ['hoodie', 'tshirt', 'oversized', 'tote']
@@ -216,6 +217,7 @@ export default function ShopV2() {
             <div className="pw-melt">
             {p.isPhoto && <DesignPhotos images={p.photos} colourUrl={(hover?.k === pI + ':' + p.name && hover.url) || p.colourUrl || undefined} alt={p.name} />}
             {p.isFront && <CutImg src={p.img} alt={p.name} className="pw-photo" />}
+            {p.worn && <img src={p.worn} alt="" className="pw-photo pw-worn" loading="lazy" />}
             {p.isDesign && (<><img src={p.img} alt={p.name} className="pw-art pw-design" loading="lazy" /></>)}
             {p.href && <A href={p.href} className="pw-cardlink" aria-hidden="true" tabIndex={-1}><span /></A>}
             {p.pick && <button type="button" className="pw-cardlink" onClick={p.pick} aria-label={`${p.name}: ${p.addLabel}`} />}

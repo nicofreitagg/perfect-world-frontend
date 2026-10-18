@@ -14,6 +14,7 @@ import { useCart } from '../contexts/CartContext'
 import { getProduct, getAllProducts } from '../utils/shopify'
 import { cleanDescription } from './richText'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
+import { wornFor } from './worn'
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 
 // /product/:handle on the new site. Cause designs go to their /design page;
@@ -68,15 +69,16 @@ export default function ProductHandleV2() {
   const minimal = /minimal/i.test(p.title) || og
   const images = p.images
   const colourFront = (variant ?? inColour[0])?.image?.url
+  const worn = wornFor(p.title)
 
   return (
     <Shell active="/shop">
       <section className="pw-iso" style={{ maxWidth: '1240px', margin: '0 auto', padding: 'clamp(24px, 4vw, 56px) clamp(16px, 4vw, 56px) clamp(64px, 8vw, 110px)', display: 'flex', flexWrap: 'wrap', gap: 'clamp(24px, 4vw, 56px)' }}>
         <div className="pw-pd-media" style={{ flex: '1 1 480px', minWidth: 0, display: 'grid', gap: '12px', alignContent: 'start', alignSelf: 'flex-start' }}>
           <div className="pw-pd-stage" style={{ aspectRatio: '4 / 5', borderRadius: '28px', overflow: 'hidden', background: '#e9e7e2' }}>
-            <MainPhoto images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
+            <MainPhoto worn={worn} images={images} shot={shot} colourUrl={colourFront} minimal={minimal} alt={p.title} />
           </div>
-          {images.length > 1 && <Thumbs images={images} shot={shot} colourUrl={colourFront} minimal={minimal} setShot={setShot} />}
+          {(images.length > 1 || worn) && <Thumbs worn={worn} images={images} shot={shot} colourUrl={colourFront} minimal={minimal} setShot={setShot} />}
         </div>
         <div style={{ flex: '1 1 380px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: '22px' }}>
           <div>
@@ -130,8 +132,10 @@ export default function ProductHandleV2() {
 }
 
 // The big photo: for Minimal, the design side of the picked colour leads (see printSide.ts).
-function MainPhoto({ images, shot, colourUrl, minimal, alt }: { images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; alt: string }) {
+function MainPhoto({ worn, images, shot, colourUrl, minimal, alt }: { worn: string; images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; alt: string }) {
   const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
+  // shot -2 = the shoot photo (worn.ts), shown as it is, not cut out.
+  if (shot === -2 && worn) return <img src={worn} alt={alt} className="is-worn" style={{ width: '100%', height: '100%', display: 'block' }} />
   // shot 0 = the design side, -1 = the front of the same pair, otherwise a photo index.
   const img = (shot === 0 && (minimal ? pair?.[0] : colourUrl)) || (shot === -1 && pair?.[1]) || images[shot]?.url
   return img ? <CutPhoto src={img} alt={alt} /> : null
@@ -145,22 +149,29 @@ function CutPhoto({ src, alt }: { src: string; alt: string }) {
 
 // Thumbnails: for Minimal, the picked colour's two photos (design first, then the front logo);
 // otherwise the first four photos.
-function Thumbs({ images, shot, colourUrl, minimal, setShot }: { images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; setShot: (n: number) => void }) {
+function Thumbs({ worn, images, shot, colourUrl, minimal, setShot }: { worn: string; images: { url: string }[]; shot: number; colourUrl?: string; minimal: boolean; setShot: (n: number) => void }) {
   const pair = useDesignPairOrGuess(minimal ? images : undefined, colourUrl)
   const urls = minimal && pair ? [...new Set(pair)] : images.slice(0, 4).map((im) => im.url)
   const shown = minimal && pair && shot === 0 ? pair[0] : minimal && pair && shot === -1 ? pair[1] : images[shot]?.url
-  if (urls.length < 2) return null
+  if (urls.length + (worn ? 1 : 0) < 2) return null
+  // The shoot photo sits second, right after the design side.
+  const wornThumb = worn && (
+    <button key="worn" type="button" onClick={() => setShot(-2)} aria-pressed={shot === -2} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: shot === -2 ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }} className="pw-pd-thumb">
+      <img src={worn} alt="" className="is-worn" style={{ width: '100%', height: '100%', display: 'block' }} />
+    </button>
+  )
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
-      {urls.map((url) => {
+      {urls.flatMap((url, i) => {
         const idx = images.findIndex((im) => im.url === url)
         const k = minimal && pair ? (url === pair[0] ? 0 : -1) : Math.max(idx, 0)
-        const on = url === shown
-        return (
+        const on = url === shown && shot !== -2
+        const btn = (
           <button key={url} type="button" onClick={() => setShot(k)} aria-pressed={on} style={{ aspectRatio: '1 / 1', borderRadius: '16px', overflow: 'hidden', padding: 0, cursor: 'pointer', border: on ? '2px solid #0b0b0c' : '1px solid #e3e1dc', background: '#fff' }} className="pw-pd-thumb">
             <CutPhoto src={url} alt="" />
           </button>
         )
+        return i === 0 && wornThumb ? [btn, wornThumb] : [btn]
       })}
     </div>
   )
