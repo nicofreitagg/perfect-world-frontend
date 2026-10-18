@@ -1,7 +1,7 @@
 // One FAQ for the new site: the old site's questions plus the 11.11 giving questions,
 // rewritten for the fixed-amount model.
 export const FAQ: { q: string; a: string }[] = [
-  { q: 'How does giving work?', a: 'Every piece gives a fixed amount to the partner behind its design: €7.77 for a tote, €11.11 for a T-shirt or women\'s T-shirt, €22.22 for an oversized shirt, €22.22 for a hoodie and €44.44 for a bomber jacket. The logo beanie gives €7.77, shared by all six partners. You\'ll always find the amount right next to the price.' },
+  { q: 'How does giving work?', a: 'Every piece gives a fixed amount to the partner behind its design: €7.77 for a tote, €11.11 for a T-shirt or women\'s T-shirt, €17.77 for an oversized shirt, €22.22 for a hoodie and €44.44 for a bomber jacket. The logo beanie gives €7.77, shared by all six partners. You\'ll always find the amount right next to the price.' },
   { q: 'Can I choose a different cause for a piece?', a: 'No. Every design, OG or Minimal, was made with one partner, so its amount always goes to that partner. Just pick a design from the cause you want to support.' },
   { q: 'How do I know the money really arrives?', a: 'We add up the fixed amounts from every order and transfer them to each partner directly. Ask us any time how much has gone to a cause, and we will tell you. As orders come in more regularly, we will publish the totals per partner.' },
   { q: 'Does the shipping fee go to the cause?', a: 'No. Shipping is €5.95 within Germany, €8.95 to the rest of Europe and €10.95 to Switzerland, and it covers delivery. The amount next to the price is what the cause gets.' },

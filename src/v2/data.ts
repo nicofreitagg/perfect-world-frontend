@@ -3,7 +3,7 @@ import { extractProductType } from '../utils/productGrouping'
 export const PIECES = {
   tote: { name: 'Tote bag', price: '27.77', give: '7.77' },
   shirt: { name: 'T-shirt', price: '33.33', give: '11.11' },
-  oversized: { name: 'Oversized shirt', price: '55.55', give: '22.22' },
+  oversized: { name: 'Oversized shirt', price: '55.55', give: '17.77' },
   hoodie: { name: 'Hoodie', price: '77.77', give: '22.22' },
 } as const
 
