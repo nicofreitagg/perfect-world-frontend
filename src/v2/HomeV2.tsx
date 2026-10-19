@@ -18,8 +18,8 @@ import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
 // Phones show the flat globe; the same ?globe= trial skins as the 3D one (Nico 19 Oct).
-// The hand-drawn map replaced the globe (Nico 19 Oct); ?obj=globe or ?obj=swirls still show the others.
-const OBJ = (() => { const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('obj') : null; return q === 'globe' || q === 'swirls' ? q : 'map' })()
+// The six swirls replaced the globe (Nico 19 Oct); ?obj=map or ?obj=globe still show the others.
+const OBJ = (() => { const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('obj') : null; return q === 'globe' || q === 'map' ? q : 'swirls' })()
 const FLAT_SKIN = typeof window !== 'undefined' ? ['day', 'paper', 'ocean'].find((k) => new URLSearchParams(window.location.search).get('globe') === k) : undefined
 import { FAQ } from './faq'
 

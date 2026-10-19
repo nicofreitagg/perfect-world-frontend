@@ -1047,3 +1047,6 @@
 @media (max-width:899px){.pwl-swirl-name.is-t{bottom:calc(100% + 6px)}.pwl-swirl-name.is-b{top:calc(100% + 6px)}.pwl-swirl-name.is-r{left:calc(100% + 6px)}.pwl-swirl-name.is-l{right:calc(100% + 6px)}}
 @media (max-width:899px){.pwl-swirl-name.is-r,.pwl-swirl-name.is-l{white-space:normal;width:min-content;line-height:1.25}.pwl-swirl-name.is-l{text-align:right}}
 @media (max-width:899px){.pwl-swirl-name.is-r,.pwl-swirl-name.is-l{width:max-content;max-width:60px}}
+/* Minimal hover zoom on the swirl icons (Nico 19 Oct) */
+.pwl-swirls-4 .pwl-swirl-ico{scale:1;transition:scale .35s cubic-bezier(.3,1.4,.5,1),box-shadow .35s}
+.pwl-swirls-4 .pwl-swirl-ico:hover,.pwl-swirls-4 .pwl-swirl-ico:focus-visible{scale:1.14}

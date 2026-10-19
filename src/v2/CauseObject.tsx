@@ -3,7 +3,7 @@ import { A } from './A'
 import { CAUSES } from './causes'
 import { icon, type CauseKey } from './data'
 
-// Replacements for the home globe (Nico, 19 Oct: globe "too serious"); he picked the map:
+// Replacements for the home globe (Nico, 19 Oct: globe "too serious"); the swirls are on home:
 // ?obj=map    a hand-drawn map, six pins, one red thread drawing itself between them
 // ?obj=swirls six cause-colour swirls flowing in and knotting into one
 const useInView = () => {
