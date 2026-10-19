@@ -910,3 +910,43 @@
 .pwl-stage-arrow.is-prev:hover{transform:translateX(-3px)}
 .pwl-stage-arrow.is-next:hover{transform:translateX(3px)}
 @media (max-width:700px){.pwl-stage-arrow{top:92px;width:38px;height:38px;font-size:16px}.pwl-stage-arrow.is-prev{left:-6px}.pwl-stage-arrow.is-next{right:-6px}}
+/* Trial objects instead of the globe (Nico 19 Oct): ?obj=map and ?obj=swirls */
+.pwl-obj{position:relative;width:100%}
+.pwl-map{aspect-ratio:3/2}
+.pwl-map-img,.pwl-map-svg{position:absolute;inset:0;width:100%;height:100%}
+.pwl-map-img{opacity:.9}
+.pwl-map-thread{fill:none;stroke:#e2453c;stroke-width:5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 3.2s cubic-bezier(.5,0,.3,1) .3s}
+.pwl-map.is-in .pwl-map-thread{stroke-dashoffset:0}
+.pwl-map-lead{stroke:rgba(242,235,223,.5);stroke-width:2;stroke-dasharray:6 6}
+.pwl-map-pin{opacity:0;transform-box:fill-box;transform-origin:center;transition:opacity .5s var(--d)}
+.pwl-map.is-in .pwl-map-pin{opacity:1}
+.pwl-map-label{position:absolute;transform:translate(-100%,-50%);display:flex;flex-direction:column;align-items:flex-end;text-align:right;color:#f2ebdf;text-decoration:none;opacity:0;transition:opacity .5s var(--d),transform .5s var(--d);white-space:nowrap}
+.pwl-map-label.is-r{transform:translate(0,-50%);align-items:flex-start;text-align:left}
+.pwl-map.is-in .pwl-map-label{opacity:1}
+.pwl-map-label .pw-hand{font-size:clamp(13px,1.3vw,19px);color:var(--c);line-height:1.1}
+.pwl-map-label small{font:500 clamp(9px,.8vw,11px) 'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+.pwl-map-label:hover .pw-hand{text-decoration:underline}
+.pwl-swirls{aspect-ratio:1;max-width:560px;margin:0 auto}
+.pwl-swirls svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pwl-swirl-path{fill:none;stroke-width:9;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s cubic-bezier(.45,0,.25,1) var(--d)}
+.pwl-swirls.is-in .pwl-swirl-path{stroke-dashoffset:0}
+.pwl-swirl-knot{fill:none;stroke:#f2ebdf;stroke-width:5;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1s ease 2.4s}
+.pwl-swirls.is-in .pwl-swirl-knot{stroke-dashoffset:0}
+.pwl-swirl-ico{position:absolute;width:13%;aspect-ratio:1;transform:translate(-50%,-50%) scale(.6);opacity:0;border-radius:50%;background:#f2ebdf;display:flex;align-items:center;justify-content:center;transition:opacity .5s var(--d),transform .5s var(--d);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.pwl-swirl-ico img{width:66%;height:66%;object-fit:contain}
+.pwl-swirls.is-in .pwl-swirl-ico{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.pwl-swirl-ico:hover{transform:translate(-50%,-50%) scale(1.1)!important}
+.pwl-swirl-line{position:absolute;left:0;right:0;top:57%;margin:0;text-align:center;color:#f2ebdf;font-size:clamp(18px,2vw,26px);opacity:0;transition:opacity .8s ease 3s}
+.pwl-swirls.is-in .pwl-swirl-line{opacity:1}
+@media (max-width:899px){#causes .pwl-obj{order:3;margin-top:28px}}
+@media (prefers-reduced-motion:reduce){.pwl-obj *{transition:none!important}}
+.pwl-map-label{text-shadow:0 1px 6px #14110e,0 0 2px #14110e}
+.pwl-map-label.is-c{transform:translate(-50%,-50%);align-items:center;text-align:center}
+.pwl-swirl-line{top:auto;bottom:-9%}
+@media (max-width:899px){
+  .pwl-map{width:calc(100% + 16px);margin-left:-8px}
+  .pwl-map-label .pw-hand{font-size:11px}
+  .pwl-map-label small{font-size:8px}
+  .pwl-swirls{max-width:340px;margin-bottom:40px}
+}
+.pwl-swirl-line{font-size:clamp(18px,2vw,26px)!important}

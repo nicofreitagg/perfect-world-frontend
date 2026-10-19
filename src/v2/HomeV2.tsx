@@ -8,6 +8,7 @@ import { Lines } from './Seams'
 
 import { Header, Footer } from './Chrome'
 import { A } from './A'
+import { SketchMap, SixSwirls } from './CauseObject'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
@@ -17,6 +18,8 @@ import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
 // Phones show the flat globe; the same ?globe= trial skins as the 3D one (Nico 19 Oct).
+// Trial objects instead of the globe (Nico 19 Oct): ?obj=map | swirls
+const OBJ = typeof window !== 'undefined' ? ['map', 'swirls'].find((k) => new URLSearchParams(window.location.search).get('obj') === k) : undefined
 const FLAT_SKIN = typeof window !== 'undefined' ? ['day', 'paper', 'ocean'].find((k) => new URLSearchParams(window.location.search).get('globe') === k) : undefined
 import { FAQ } from './faq'
 
@@ -260,7 +263,7 @@ export default function HomeV2() {
   const onGlobe = useCallback(() => setGlobe3d(true), [])
   useEffect(() => {
     const el = globeBox.current
-    if (!el || !window.matchMedia('(min-width: 900px)').matches || !('IntersectionObserver' in window)) return
+    if (OBJ || !el || !window.matchMedia('(min-width: 900px)').matches || !('IntersectionObserver' in window)) return
     const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { setShow3d(true); io.disconnect() } }, { rootMargin: '400px 0px' })
     io.observe(el)
     return () => io.disconnect()
@@ -313,10 +316,12 @@ export default function HomeV2() {
           <p className="pwl-sub">{tr('Far away and right next door, people are already making these wishes come true. Every collection was made with one of them.')}</p>
           <A href="/projects" className="pwl-link pwl-link-l">{tr('All six causes')} →</A>
         </div>
+        {OBJ === 'map' ? <SketchMap /> : OBJ === 'swirls' ? <SixSwirls tr={tr} /> : (
         <div ref={globeBox} className={globe3d ? 'pwl-globe is-3d' : 'pwl-globe'}>
           <div className="pwl-globe-flat" style={FLAT_SKIN ? { backgroundImage: `url(/v2/img/globe-${FLAT_SKIN}.webp)` } : undefined} role="img" aria-label={tr('Globe with the six causes marked')} />
           {show3d && <Suspense fallback={null}><Globe3D onReady={onGlobe} /></Suspense>}
         </div>
+        )}
       </div>
       <div className="pwl-causes">
         {CAUSES.map((c) => (
