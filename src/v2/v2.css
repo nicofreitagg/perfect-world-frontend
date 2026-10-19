@@ -806,3 +806,7 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-allrow .pw-prod-sm h3{font-size:12.5px!important;line-height:1.1!important}
   .pw-allrow .pw-prod-sm p,.pw-allrow .pw-prod-sm .pw-mono{font-size:10.5px!important}
 }
+/* all-six row: amount only per card, one shared note fills the empty cell (Nico 19 Oct) */
+.pw-allrow .pw-prod-sm > div:last-child > .pw-mono{white-space:normal!important}
+.pw-allnote{margin:0;align-self:center;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:18px;border:1.5px dashed rgba(192,50,42,.45);color:#c0322a;font-size:14px;line-height:1.35;font-weight:600;text-wrap:balance}
+@media (max-width:700px){.pw-allnote{grid-column:1/-1;flex-direction:row;padding:10px 12px;font-size:12.5px;border-radius:12px}}

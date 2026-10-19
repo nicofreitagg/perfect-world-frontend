@@ -358,12 +358,12 @@ export default function ShopV2() {
               const named = b.title.split('|').map((x) => x.trim())[2]
               return named ? [named] : b.variants.map((v) => v.title.split(' / ')[0]).filter((c) => !/^(os|one size|default title)$/i.test(c))
             }))]
-            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('split between all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
+            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: tr('gives') + ' €' + p.give, bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
           }
           // Until the Printful beanies are active (Draft until 11.11, Nico 16 Oct), show the card without a link:
           // the older Minimal beanie listings still carry the old €33.33.
           const beanie = undefined as ShopifyProduct | undefined
-          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('split between all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
+          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: tr('gives') + ' €' + p.give, bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
         })()}
         {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
         {embLive.map((m, i) => {
@@ -372,8 +372,10 @@ export default function ShopV2() {
           const imgs = m.images.map((x) => x.url)
           const front = imgs.find((u) => /front|vorne/i.test(u)) ?? imgs.find((u) => !/back|hinten|rueck|rück/i.test(u)) ?? imgs[0] ?? ''
           const name = formatDisplayTitle(m.title).replace(/embroidered logo\s*/i, '').replace(/organic\s*/i, '')
-          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('split between all six') : tr('For all six partners'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
+          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? tr('gives') + ' €' + give : '', bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
         })}
+        {/* One shared note instead of a line under every card (Nico 19 Oct). */}
+        <p className="pw-allnote">{tr('Every amount is split between all six partners.')}</p>
       </div>
     </div>
     </>
