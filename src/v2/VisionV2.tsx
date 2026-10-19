@@ -56,10 +56,10 @@ export default function VisionV2() {
   </section>
 
   <section className="pw-iso" aria-label={tr("Why we do it")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
-    <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
-      <div style={{ flex: "0 1 260px", textAlign: "center" }}>
-        <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(38px, 5vw, 64px)", letterSpacing: "-0.02em", lineHeight: "0.95", color: "#c0322a" }} className="pw-fat">{tr("Help, not take.")}</p>
-        <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE DO IT")}</p>
+    <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "clamp(20px, 3vw, 36px)", alignItems: "flex-start" }}>
+      <div style={{ flex: "0 1 300px" }}>
+        <p style={{ margin: "0", fontFamily: "'JetBrains Mono', monospace", fontWeight: "600", letterSpacing: ".08em", fontSize: "12px", color: "#6b5d4c" }}>{tr("WHY WE DO IT")}</p>
+        <p style={{ margin: "10px 0 0", fontWeight: "800", fontSize: "clamp(38px, 5vw, 64px)", letterSpacing: "-0.02em", lineHeight: "0.95", color: "#c0322a" }} className="pw-fat">{tr("Help, not take.")}</p>
       </div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#3a3128", display: "flex", flexDirection: "column", gap: "14px" }}>
         <p style={{ margin: "0" }}>{tr("From day one, Perfect World was my way of showing that buying and business can exist to help, not to take.")}</p>
