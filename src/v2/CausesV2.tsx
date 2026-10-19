@@ -47,7 +47,7 @@ export default function CausesV2() {
           <span style={{ position: "relative", display: "flex", flexDirection: "column", gap: "10px" }}>
             {/* The partner is the focus here; the cause name is the small label (Nico, 19 Oct). */}
             <span className="pw-mono" style={{ fontSize: "12px", letterSpacing: ".1em" }}>{tr(c.name)}</span>
-            <span className="pw-hand" style={{ fontSize: "clamp(28px, 3.4vw, 50px)", lineHeight: ".95" }}>{c.partner}</span>
+            <span className="pw-label-it" style={{ fontSize: "clamp(24px, 2.8vw, 40px)", lineHeight: "1" }}>{c.partner}</span>
             <span  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "20px" }}>{tr(c.line)}</span>
             <span className="pw-m-hide-t" style={{ fontSize: "15px", lineHeight: "1.5", maxWidth: "440px" }}>{tr(c.teaser)}</span>
           </span>

@@ -827,3 +827,6 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-plogo-tile img{max-height:40px!important}
   .pw-plogo-cap{font-size:9px;letter-spacing:.06em}
 }
+
+/* Partner names and section labels: a clean italic, easier to read than the handwriting (Nico 19 Oct) */
+.pw2 .pw-label-it{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-style:italic;font-weight:700;letter-spacing:-.01em;text-transform:none}

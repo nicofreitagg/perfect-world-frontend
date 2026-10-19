@@ -144,7 +144,7 @@ export default function ProductV2() {
 
     <div className="pw-pd" style={{ flex: "1 1 420px", minWidth: "0", display: "flex", flexDirection: "column", gap: "22px" }}>
       <div>
-        <p className="pw-hand" style={{ margin: "0", fontSize: "28px", color: "#c0322a" }}>{tr("made with")} {c.partnerLower}</p>
+        <p className="pw-label-it" style={{ margin: "0", fontSize: "22px", color: "#c0322a" }}>{tr("made with")} {c.partner}</p>
         <h1 className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(32px, 5vw, 72px)", lineHeight: ".92" }}>{c.name}<br />{tr(piece.upper)}</h1>
         <p  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", margin: "14px 0 0", fontSize: "22px" }}>{tr(c.line)}</p>
         <p className="pw-mono" style={{ margin: "16px 0 0", fontSize: "22px" }}>€{shownPiece.price}</p>

@@ -88,7 +88,7 @@ export default function CauseV2() {
     <div style={{ flex: "1 1 600px", minWidth: "0", display: "flex", flexDirection: "column", gap: "clamp(36px, 4vw, 52px)" }}>
       {c.blocks.map((bl, blI) => (<Fragment key={blI}>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 32px" }}>
-          <h2 className="pw-hand" style={{ flex: "0 0 200px", margin: "0", fontSize: "26px", lineHeight: "1.1", color: "#c0322a" }}>{tr(bl.title)}</h2>
+          <h2 className="pw-label-it" style={{ flex: "0 0 200px", margin: "0", fontSize: "24px", lineHeight: "1.15", color: "#c0322a" }}>{tr(bl.title)}</h2>
           <div style={{ flex: "1 1 360px", minWidth: "0" }}>
             {bl.paras.map((p, pI) => (<Fragment key={pI}>
               <p style={{ margin: "0 0 14px", fontSize: "18px", lineHeight: "1.7", color: "#2a2a2a", maxWidth: "64ch" }}>{tr(p)}</p>
