@@ -795,3 +795,14 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-split>button[aria-selected="true"]{border-color:rgba(20,17,14,.85)}
 .pw-split>button[aria-selected="true"] .pw-split-go,.pw-split-og[aria-selected="true"] .pw-split-go{color:#14110e}
 @media (hover:hover){.pw-split>button:hover .pw-split-go{color:#14110e}}
+/* all-six row smaller on phones: three across (Nico 19 Oct "too big") */
+@media (max-width:700px){
+  .pw-allrow{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px 8px!important;padding:14px 10px!important}
+  .pw-allrow .pw-allintro h2{font-size:22px!important}
+  .pw-allrow .pw-allintro p{font-size:13px!important}
+  .pw-allrow .pw-prod-sm .pw-media{border-radius:12px!important}
+  .pw-allrow .pw-prod-sm .pw-media::after{left:8px;right:8px;bottom:6px;height:3px}
+  .pw-allrow .pw-prod-sm > div:last-child{padding:8px 2px 0!important;gap:4px!important}
+  .pw-allrow .pw-prod-sm h3{font-size:12.5px!important;line-height:1.1!important}
+  .pw-allrow .pw-prod-sm p,.pw-allrow .pw-prod-sm .pw-mono{font-size:10.5px!important}
+}

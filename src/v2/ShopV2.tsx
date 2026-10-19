@@ -27,6 +27,8 @@ const MINIMAL = [
   { id: 'k1', name: 'Logo Beanie', colour: 'Black', kind: 'beanie', fill: '#1b1b1d', bg: '#e9e7e2' },
   { id: 'k2', name: 'Logo Beanie', colour: 'Natural', kind: 'beanie', fill: '#e8dcc4', bg: '#dedbd4' },
 ] as const
+// OG comes in these pieces only; the rest are Minimal-only for now.
+const OG_KINDS: Kind[] = ['tee', 'over', 'hoodie', 'tote']
 const kindOf = (title: string): Kind => {
   const t = title.toLowerCase()
   if (t.includes('hoodie')) return 'hoodie'
@@ -158,13 +160,13 @@ export default function ShopV2() {
     const p = PIECE_LIST.find((x) => x.id === piece)
     products = MIN_DESIGNS.filter((d) => minDesign === 'all' || d.slug === minDesign).map((d) => {
       const c = CAUSES.find((x) => x.slug === d.slug)!
-      return { ...blank, name: d.name, sub: c.partner + (p ? ' · ' + tr(p.label) : ''), price: p ? '€' + p.price : tr('from') + ' €' + PIECES.tote.price, give: (p ? '' : tr('from') + ' ') + '€' + (p ? p.give : PIECES.tote.give) + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', addLabel: tr('Coming 11.11') }
+      return { ...blank, name: d.name, sub: c.partner + (p ? ' · ' + tr(p.label) : ''), price: p ? '€' + p.price : tr('from') + ' €' + PIECES.tote.price, give: (p ? '' : tr('from') + ' ') + '€' + (p ? p.give : PIECES.tote.give) + ' ' + tr('to its partner'), bg: TINT[c.id], isDesign: true, img: `/v2/img/min-${d.img}.webp`, isNew: true, swatches: [], href: '', addLabel: '' }
     })
   } else if (tab === 'minimal') {
     // The logo beanie has no design. Until its Shopify listing exists: one card with the mockup, both colours.
     const p = PIECE_LIST.find((x) => x.id === 'beanie')!
     const kinds = MINIMAL.filter((m) => m.kind === 'beanie')
-    products = [{ ...blank, name: kinds[0].name, sub: kinds.map((m) => tr(m.colour)).join(' · '), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: kinds.map((m) => ({ c: m.fill })), href: '', addLabel: tr('Coming 11.11') }]
+    products = [{ ...blank, name: kinds[0].name, sub: kinds.map((m) => tr(m.colour)).join(' · '), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six partners'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: kinds.map((m) => ({ c: m.fill })), href: '', addLabel: '' }]
   } else {
     // T-shirt colours per design from Shopify, each opening the product page on that colour.
     const coloursOf = (name: string) => {
@@ -196,6 +198,8 @@ export default function ShopV2() {
       // The lead piece varies across the grid, hoodie first and twice (Nico, 16 Oct: "varying between OS, hoodie and tshirt").
       const want = ['hoodie', 'tshirt', 'oversized', 'hoodie', 'oversized', 'tshirt'][CAUSES.indexOf(c) % 6]
       const lead = mine.find((m) => extractProductType(m.title) === want) ?? mine[0]
+      // A picked piece shows that piece for every design, same selector as Minimal (Nico 19 Oct).
+      if (piece !== 'all') return mine.filter((m) => kindOf(m.title) === piece).map((m) => ogCard(c, m, label(m) + ' · ' + c.partner))
       if (cause === 'all') return [{ ...ogCard(c, lead, mine.map(label).join(' · ')), price: tr('from') + ' €' + PIECES.shirt.price, href: '', pick: () => { setCause(c.id); toShop() }, addLabel: tr('See the pieces') + ` (${mine.length})` }]
       return mine.map((m) => ogCard(c, m, label(m) + ' · ' + c.partner))
     })
@@ -238,7 +242,7 @@ export default function ShopV2() {
             </div>
             {p.isNew && (<><span className="pw-mono" style={{ position: "absolute", top: "16px", left: "16px", fontSize: "11px", fontWeight: "600", color: "#ffffff", background: "#c0322a", padding: "6px 11px", borderRadius: "999px" }}>{tr("NEW")}</span></>)}
             
-            {p.pick ? <button type="button" onClick={p.pick} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{p.addLabel}</button> : p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
+            {p.pick ? <button type="button" onClick={p.pick} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{p.addLabel}</button> : p.href ? <A href={p.href} className="pw-add pw-add-h" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</A> : p.addLabel && <span className="pw-add" style={{ position: "absolute", left: "16px", right: "16px", bottom: "16px", fontFamily: "inherit", fontSize: "15px", fontWeight: "600", minHeight: "48px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{tr(p.addLabel)}</span>}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "14px", padding: "16px 4px 0" }}>
             <div style={{ minWidth: "0" }}>
@@ -259,7 +263,8 @@ export default function ShopV2() {
           </div>
         </article>
   </Fragment>)
-  const causeTiles = CAUSES.map((c) => ({ icon: icon(c.id, c.id === 'oceans' ? 'wa' : 'a'), name: c.name, logo: c.logo, bg: c.bg, fg: c.id === 'oceans' ? '#ffffff' : '#0b0b0c', pick: () => { setTab('og'); setCause(c.id); toShop() } }))
+  const toOg = () => { setTab('og'); if (piece !== 'all' && !OG_KINDS.includes(piece)) setPiece('all') }
+  const causeTiles = CAUSES.map((c) => ({ icon: icon(c.id, c.id === 'oceans' ? 'wa' : 'a'), name: c.name, logo: c.logo, bg: c.bg, fg: c.id === 'oceans' ? '#ffffff' : '#0b0b0c', pick: () => { toOg(); setCause(c.id); toShop() } }))
 
   useEffect(() => {
     document.body.style.background = RAW_GROUND
@@ -300,7 +305,7 @@ export default function ShopV2() {
             <span className="pw-split-go">{tab === 'minimal' ? tr('Showing') + ' ✓' : tr('See Minimal') + ' →'}</span>
           </span>
         </button>
-        <button type="button" role="tab" aria-selected={tab === 'og'} className="pw-split-og" onClick={() => setTab('og')}>
+        <button type="button" role="tab" aria-selected={tab === 'og'} className="pw-split-og" onClick={toOg}>
           <img className="pw-split-img" src="/v2/img/og-oceans.webp" alt="" />
           <span className="pw-split-txt">
             <span className="pw-split-tag pw-split-tag-og">{tr('THE ORIGINALS')}</span>
@@ -311,9 +316,7 @@ export default function ShopV2() {
         </button>
       </div>
       {/* One quiet way to find a piece type (Nico, 14 Oct: "searching for a tote bag only"). */}
-      {tab === 'minimal' && (
-        <PiecePick value={piece} onChange={setPiece} tr={tr} />
-      )}
+      <PiecePick value={piece} onChange={setPiece} tr={tr} only={tab === 'og' ? OG_KINDS : undefined} />
     </div>
 
     {tab === 'og' && cause !== 'all' && ogNew.length > 0 && (
@@ -490,7 +493,7 @@ function OgShot({ photos, alt }: { photos: { url: string }[]; alt: string }) {
 }
 
 // The piece filter as a soft card menu instead of the browser's plain list (Nico, 16 Oct: "very basic").
-function PiecePick({ value, onChange, tr }: { value: 'all' | Kind; onChange: (v: 'all' | Kind) => void; tr: (s: string) => string }) {
+function PiecePick({ value, onChange, tr, only }: { value: 'all' | Kind; onChange: (v: 'all' | Kind) => void; tr: (s: string) => string; only?: Kind[] }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -503,7 +506,7 @@ function PiecePick({ value, onChange, tr }: { value: 'all' | Kind; onChange: (v:
   }, [open])
   const opts: { id: 'all' | Kind; name: string; sub: string }[] = [
     { id: 'all', name: tr('All pieces'), sub: tr('Every design, every piece') },
-    ...PIECE_LIST.map((p) => ({ id: p.id, name: tr(p.filter), sub: `€${p.price} · ${p.split ? tr('€{x} shared by all six').replace('{x}', p.give) : tr('€{x} to the partner').replace('{x}', p.give)}` })),
+    ...PIECE_LIST.filter((p) => !only || only.includes(p.id)).map((p) => ({ id: p.id, name: tr(p.filter), sub: `€${p.price} · ${p.split ? tr('€{x} shared by all six').replace('{x}', p.give) : tr('€{x} to the partner').replace('{x}', p.give)}` })),
   ]
   const cur = opts.find((o) => o.id === value) ?? opts[0]
   const pick = (id: 'all' | Kind) => { onChange(id); setOpen(false) }
