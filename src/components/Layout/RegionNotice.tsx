@@ -20,6 +20,9 @@ export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
 
   useEffect(() => {
     if (!country || SHIPS_TO.has(country)) return
+    // The country can come from the browser language (e.g. an English phone says "US"),
+    // so a visitor whose clock runs on a European time zone never sees the note.
+    if (Intl.DateTimeFormat().resolvedOptions().timeZone?.startsWith('Europe/')) return
     if (localStorage.getItem(DISMISS_KEY)) return
     const timer = setTimeout(() => setIsVisible(true), 1500)
     return () => clearTimeout(timer)
