@@ -950,3 +950,28 @@
   .pwl-swirls{max-width:340px;margin-bottom:40px}
 }
 .pwl-swirl-line{font-size:clamp(18px,2vw,26px)!important}
+@media (max-width:899px){.pwl-map-label .pw-hand{font-size:12.5px}.pwl-map-label small{font-size:8.5px}}
+/* Map, homelier (Nico 19 Oct) */
+.pwl-map::before{content:"";position:absolute;inset:-6% -4%;background:radial-gradient(50% 55% at 52% 48%,rgba(240,190,130,.16),transparent 70%);pointer-events:none}
+.pwl-map-img{opacity:.9}
+.pwl-map-img.is-b{animation:pwl-boil .9s steps(1) infinite}
+@keyframes pwl-boil{0%{opacity:0}50%{opacity:.9}}
+.pwl-map-draw{fill:none;stroke:#fff;stroke-width:14;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 3.2s cubic-bezier(.5,0,.3,1) .3s}
+.pwl-map.is-in .pwl-map-draw{stroke-dashoffset:0}
+.pwl-map-thread{fill:none;stroke:#e2453c;stroke-width:4.5;stroke-linecap:round;stroke-dasharray:16 11!important;stroke-dashoffset:0!important;transition:none!important;animation:pwl-stitch 2.4s linear infinite}
+@keyframes pwl-stitch{to{stroke-dashoffset:-54}}
+.pwl-map-heart{fill:#e2453c;stroke:#f2ebdf;stroke-width:2;opacity:0;transition:opacity .6s ease 3.4s}
+.pwl-map.is-in .pwl-map-heart{opacity:1}
+.pwl-map-ring{transform-box:fill-box;transform-origin:center;opacity:.5;animation:pwl-breathe 2.8s ease-out infinite;animation-delay:var(--d)}
+@keyframes pwl-breathe{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.6);opacity:0}}
+.pwl-map-label{flex-direction:row!important;align-items:center!important;gap:8px}
+.pwl-map-label>span{display:flex;flex-direction:column}
+.pwl-map-label.is-l{flex-direction:row-reverse!important}
+.pwl-map-label.is-l>span{align-items:flex-end}
+.pwl-map-label.is-c{flex-direction:column!important}
+.pwl-map-ico{width:clamp(26px,2.4vw,34px);height:clamp(26px,2.4vw,34px);padding:4px;border-radius:50%;background:#f2ebdf;box-shadow:0 4px 12px rgba(0,0,0,.35);flex:none;transition:transform .3s}
+.pwl-map-label:hover .pwl-map-ico{transform:rotate(-8deg) scale(1.12)}
+.pwl-map.is-in .pwl-map-label .pwl-map-ico{animation:pwl-bob 3.6s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes pwl-bob{0%,100%{translate:0 0}50%{translate:0 -3px}}
+@media (max-width:899px){.pwl-map-ico{width:20px;height:20px;padding:2px}.pwl-map-label{gap:4px}}
+@media (prefers-reduced-motion:reduce){.pwl-map *{animation:none!important}}

@@ -18,8 +18,8 @@ import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
 // Phones show the flat globe; the same ?globe= trial skins as the 3D one (Nico 19 Oct).
-// Trial objects instead of the globe (Nico 19 Oct): ?obj=map | swirls
-const OBJ = typeof window !== 'undefined' ? ['map', 'swirls'].find((k) => new URLSearchParams(window.location.search).get('obj') === k) : undefined
+// The hand-drawn map replaced the globe (Nico 19 Oct); ?obj=globe or ?obj=swirls still show the others.
+const OBJ = (() => { const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('obj') : null; return q === 'globe' || q === 'swirls' ? q : 'map' })()
 const FLAT_SKIN = typeof window !== 'undefined' ? ['day', 'paper', 'ocean'].find((k) => new URLSearchParams(window.location.search).get('globe') === k) : undefined
 import { FAQ } from './faq'
 
@@ -263,7 +263,7 @@ export default function HomeV2() {
   const onGlobe = useCallback(() => setGlobe3d(true), [])
   useEffect(() => {
     const el = globeBox.current
-    if (OBJ || !el || !window.matchMedia('(min-width: 900px)').matches || !('IntersectionObserver' in window)) return
+    if (OBJ !== 'globe' || !el || !window.matchMedia('(min-width: 900px)').matches || !('IntersectionObserver' in window)) return
     const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { setShow3d(true); io.disconnect() } }, { rootMargin: '400px 0px' })
     io.observe(el)
     return () => io.disconnect()
