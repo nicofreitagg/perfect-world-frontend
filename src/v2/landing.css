@@ -133,11 +133,11 @@
 .pwl-amount svg{position:absolute;left:-4%;bottom:-10px;width:108%;height:12px;overflow:visible}
 .pwl-amount path{fill:none;stroke:var(--red);stroke-width:2.4;stroke-linecap:round}
 .pwl-receipt-partner{display:flex;align-items:center;gap:12px;margin-top:16px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:14px;line-height:1.35}
-.pwl-receipt-partner>span,.pwl-logos>span{flex:0 0 auto;width:52px;height:52px;border-radius:50%;background:#fff;border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pwl-receipt-partner>span,.pwl-logos>span,.pwl-receipt-partner>a,.pwl-logos>a{flex:0 0 auto;width:52px;height:52px;border-radius:50%;background:#fff;border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .pwl-receipt-partner img,.pwl-logos img{max-width:72%;max-height:60%;object-fit:contain}
 .pwl-receipt-partners{margin-top:16px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-size:14px}
 .pwl-logos{display:flex;flex-wrap:wrap;gap:6px}
-.pwl-logos>span{width:40px;height:40px;border-color:rgba(11,11,12,.2)}
+.pwl-logos>span,.pwl-logos>a{width:40px;height:40px;border-color:rgba(11,11,12,.2)}
 .pwl-receipt-partners p{margin:10px 0 0}
 .pwl-receipt-foot{margin:16px 0 0;padding-top:12px;border-top:1.5px dashed rgba(11,11,12,.3);font-size:11.5px;line-height:1.6;color:#3a3a3a}
 .pwl-receipt-cta{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:700;font-size:15px;color:var(--ink);text-decoration:none;background:linear-gradient(var(--red),var(--red)) 0 calc(100% - 9px)/100% 2px no-repeat}

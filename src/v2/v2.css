@@ -229,7 +229,7 @@
   .pw-m-certs .pw-cert p{font-size:12px!important}
 
   /* partner logos: 3 across, shorter */
-  .pw-m-logos>div{height:64px!important;border-radius:12px!important;padding:8px!important}
+  .pw-m-logos>div,.pw-m-logos>a{height:64px!important;border-radius:12px!important;padding:8px!important}
   .pw-m-logos img{max-height:44px!important}
 
   /* causes list: compact cards */
@@ -731,7 +731,7 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
   .pw-giving h2.pw-fat{font-size:26px!important}
   .pw-giving section [style*="#fbf6ec"]{padding:20px!important;border-radius:20px!important}
   .pw-giving section [style*="#fbf6ec"] p{font-size:16px!important}
-  .pw-giving .pw-m-logos > div{height:64px!important}
+  .pw-giving .pw-m-logos > div,.pw-giving .pw-m-logos > a{height:64px!important}
 }
 
 /* Shoot photos (worn.ts): on desktop hover the card shows the piece on a person. Hidden when none is set. */
@@ -810,3 +810,9 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-allrow .pw-prod-sm > div:last-child > .pw-mono{white-space:normal!important}
 .pw-allnote{margin:0;align-self:center;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:18px;border:1.5px dashed rgba(192,50,42,.45);color:#c0322a;font-size:14px;line-height:1.35;font-weight:600;text-wrap:balance}
 @media (max-width:700px){.pw-allnote{grid-column:1/-1;flex-direction:row;padding:10px 12px;font-size:12.5px;border-radius:12px}}
+
+/* Partner logos link to the partner's own site (Nico 19 Oct) */
+.pw-plogo{transition:transform .2s ease,box-shadow .2s ease;cursor:pointer}
+.pw-plogo:hover,.pw-plogo:focus-visible{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.12)!important}
+.pw-plink{text-decoration:underline;text-underline-offset:3px;opacity:.85}
+.pw-plink:hover{opacity:1}

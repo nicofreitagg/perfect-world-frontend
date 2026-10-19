@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { A } from './A'
-import { CAUSES, causeTitle } from './causes'
+import { CAUSES, causeTitle, SITES, ext } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, BEANIE_MOCKUP, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useDesignPairOrGuess } from './printSide'
 import { useCutout } from './cutout'
@@ -173,12 +173,12 @@ export default function GiveReceipt() {
           </dl>
           {row.split ? (
             <div className="pwl-receipt-partners">
-              <div className="pwl-logos">{CAUSES.map((c) => <span key={c.id}><img src={c.logo} alt={c.partner} /></span>)}</div>
+              <div className="pwl-logos">{CAUSES.map((c) => SITES[c.id] ? <a key={c.id} href={SITES[c.id]} {...ext} className="pw-plogo"><img src={c.logo} alt={c.partner} /></a> : <span key={c.id}><img src={c.logo} alt={c.partner} /></span>)}</div>
               <p>{t('About')} €{each} {t('to each partner')}</p>
             </div>
           ) : (
             <div className="pwl-receipt-partner">
-              <span><img src={cause.logo} alt="" /></span>
+              {SITES[cause.id] ? <a href={SITES[cause.id]} {...ext} className="pw-plogo" aria-label={`${cause.partner}, ${t('website')}`}><img src={cause.logo} alt="" /></a> : <span><img src={cause.logo} alt="" /></span>}
               <p><b>{cause.partner}</b><br />{t(cause.place)}</p>
             </div>
           )}

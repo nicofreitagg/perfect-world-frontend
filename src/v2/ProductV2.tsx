@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { CAUSES, causeBySlug, causeFg, causeTeaser } from './causes'
+import { CAUSES, causeBySlug, causeFg, causeTeaser, SITES, ext } from './causes'
 import { PIECES, icon, RAW_GROUND, isNewOG } from './data'
 import { getAllProducts } from '../utils/shopify'
 import { useDesignPairOrGuess } from './printSide'
@@ -206,7 +206,7 @@ export default function ProductV2() {
   <section className="pw-iso" aria-label={tr("The story behind the design")} style={{ position: "relative", zIndex: "78", padding: "0 clamp(12px, 2.5vw, 32px) clamp(48px, 6vw, 80px)" }}>
     <div className="pw-pd-story" style={{ position: "relative", overflow: "hidden", maxWidth: "1400px", margin: "0 auto", borderRadius: "36px", background: c.bg, color: c.fg, padding: "clamp(32px, 5vw, 72px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "36px" }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
-      <span style={{ position: "relative", width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }}><img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} /></span>
+      {(() => { const st = { position: "relative" as const, width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }; const img = <img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} />; return SITES[c.id] ? <a href={SITES[c.id]} {...ext} className="pw-plogo" style={st} aria-label={`${c.partner}, ${tr("website")}`}>{img}</a> : <span style={st}>{img}</span> })()}
       <div style={{ position: "relative", flex: "1 1 460px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "26px" }}>{tr("the story behind the design")}</p>
         <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(23px, 3.6vw, 52px)", lineHeight: "1" }}>{c.name}<span style={{ display: "block", marginTop: "6px", fontSize: ".62em" }}>{tr(c.place)}</span></p>

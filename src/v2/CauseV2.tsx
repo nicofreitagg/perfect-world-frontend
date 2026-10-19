@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CAUSES, TINT, causeFg, causeTitle, FACTS, FILMS } from './causes'
+import { CAUSES, TINT, causeFg, causeTitle, FACTS, FILMS, SITES, ext } from './causes'
 import { PIECES, icon, RAW_GROUND } from './data'
 import { useCauseGround } from './ground'
 import NotFound from '../pages/NotFound'
@@ -51,10 +51,11 @@ export default function CauseV2() {
   <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1320px", margin: "0 auto", padding: "0 clamp(16px, 4vw, 56px)" }}>
     <div className="pw-m-chero" style={{ position: "relative", overflow: "hidden", minHeight: "560px", borderRadius: "36px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "48px 24px", boxSizing: "border-box", background: c.bg, color: c.fg }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
-      <span className="pw-m-clogo" style={{ position: "relative", width: "128px", height: "128px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 18px rgba(0,0,0,.12)" }}><img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "96px", maxHeight: "80px", objectFit: "contain" }} /></span>
+      {(() => { const st = { position: "relative" as const, width: "128px", height: "128px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 18px rgba(0,0,0,.12)" }; const img = <img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "96px", maxHeight: "80px", objectFit: "contain" }} />; return SITES[c.id] ? <a href={SITES[c.id]} {...ext} className="pw-m-clogo pw-plogo" style={st} aria-label={`${c.partner}, ${tr("website")}`}>{img}</a> : <span className="pw-m-clogo" style={st}>{img}</span> })()}
       <h1 className="pw-hand" style={{ position: "relative", margin: "22px 0 0", fontSize: "clamp(43px, 8vw, 120px)", lineHeight: ".92" }}>{c.name}</h1>
       <p className="pw-hand" style={{ position: "relative", margin: "12px 0 0", fontSize: "clamp(22px, 2.2vw, 28px)" }}>{tr(c.line)}</p>
       <p style={{ position: "relative", margin: "16px 0 0", fontSize: "12px", fontWeight: "600", letterSpacing: ".16em" }}>{c.partnerUpper} · {c.placeUpper} {tr("· IN COLLABORATION WITH PERFECT WORLD")}</p>
+      {SITES[c.id] && <a href={SITES[c.id]} {...ext} className="pw-plink" style={{ position: "relative", marginTop: "14px", color: "inherit", fontSize: "14px", fontWeight: "600" }}>{tr("Visit")} {c.partner} ↗</a>}
     </div>
   </section>
 

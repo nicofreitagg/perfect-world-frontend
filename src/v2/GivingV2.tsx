@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import './v2.css'
 import './landing.css'
-import { PIECES, NEW_PIECES } from './data'
+import { PIECES, NEW_PIECES, type CauseKey } from './data'
+import { CAUSES, SITES, ext } from './causes'
+
+const LOGO_ORDER: CauseKey[] = ['one-world', 'rich', 'talk', 'oceans', 'cool', 'wild']
 import Flow from './Flow'
 import { Header, Footer } from './Chrome'
 import { useCart } from '../contexts/CartContext'
@@ -43,7 +46,7 @@ export default function GivingV2() {
     <div style={{ marginTop: "34px", background: "#fbf6ec", color: "#0b0b0c", border: "1px solid #e2d6c1", borderRadius: "28px", padding: "clamp(28px, 4vw, 48px)" }}>
       <p style={{ margin: "16px 0 0", fontSize: "clamp(18px, 1.6vw, 21px)", lineHeight: "1.6", color: "#2a2a2a", maxWidth: "820px" }}>{tr("Every design is made with one of six partners, and its amount always goes to that partner. We pass it on directly, and you can ask us any time what a cause has received.")}</p>
     </div>
-    <div className="pw-m-g3 pw-m-logos" style={{ marginTop: "26px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-care-in-action.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mission-positivity.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-mhi.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-secore.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-pftp.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div><div style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }}><img src="/v2/img/logo-efa.png" alt="" style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} /></div></div>
+    <div className="pw-m-g3 pw-m-logos" style={{ marginTop: "26px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}>{LOGO_ORDER.map((id) => { const c = CAUSES.find((x) => x.id === id)!; const box = { background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "16px", height: "86px", display: "flex", alignItems: "center", justifyContent: "center", padding: "12px" }; const img = <img src={c.logo} alt={`${c.partner} logo`} style={{ maxHeight: "58px", maxWidth: "100%", objectFit: "contain" }} />; return SITES[id] ? <a key={id} href={SITES[id]} {...ext} className="pw-plogo" style={box} aria-label={`${c.partner}, ${tr("website")}`}>{img}</a> : <div key={id} style={box}>{img}</div> })}</div>
   </section>
 
   <section className="pw-iso" aria-label={tr("Why we changed")} style={{ position: "relative", zIndex: "76", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 0" }}>
