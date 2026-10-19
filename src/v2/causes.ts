@@ -246,9 +246,10 @@ export const FACTS: Partial<Record<CauseKey, string>> = {}
 /** Film link per cause; the film section stays hidden until one is set. */
 export const FILMS: Partial<Record<CauseKey, string>> = {}
 
-// Partner websites, linked from their logos (Nico 19 Oct). Care in Action and MHI wait for Nico to confirm
-// their addresses; until then their logos stay unlinked.
+// Partner websites, linked from their logos (addresses from Nico, 19 Oct).
 export const SITES: Partial<Record<CauseKey, string>> = {
+  'one-world': 'https://care-in-action.org/',
+  talk: 'https://mental-health-initiative.org/',
   rich: 'https://missionpositivity.org/',
   oceans: 'https://www.secore.org/',
   cool: 'https://www.plant-for-the-planet.org/',
