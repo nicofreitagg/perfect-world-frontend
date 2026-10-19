@@ -21,7 +21,9 @@ const useInView = () => {
 
 const byId = (id: CauseKey) => CAUSES.find((c) => c.id === id)!
 // What each cause is about, in a word or two (Nico 19 Oct: the topic, not the collection name).
-const TOPIC: Record<CauseKey, string> = { rich: 'Education', 'one-world': 'Children', talk: 'Mental health', oceans: 'Oceans', cool: 'Climate', wild: 'Wildlife' }
+// Three words or more: keep the last two together, so it breaks as "Children / in crisis".
+const keepEnd = (t: string) => (t.split(' ').length > 2 ? t.replace(/ (\S+) (\S+)$/, ' $1\u00a0$2') : t)
+const TOPIC: Record<CauseKey, string> = { rich: 'Opportunity', 'one-world': 'Children in crisis', talk: 'Mental health', oceans: 'Oceans', cool: 'Climate', wild: 'Wildlife' }
 
 // Map frame: lon -105..45, lat 62..-38, 10 units per degree (matches map-sketch.webp).
 const xy = (lon: number, lat: number) => [(lon + 105) * 10, (62 - lat) * 10] as const
@@ -148,7 +150,7 @@ export function SixSwirls({ tr }: { tr: (s: string) => string }) {
           <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-ico" style={{ left: `${x / 6}%`, top: `${y / 6}%`, ['--d' as string]: `${i * 0.18}s`, ['--c' as string]: c.color }}
             onMouseEnter={() => setOn(c.id)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(c.id)} onBlur={() => setOn(null)} aria-label={c.partner}>
             <img src={icon(c.id, 'a')} alt="" />
-            <span className={`pwl-swirl-name is-${['t', 'r', 'r', 'b', 'l', 'l'][i]}`}>{tr(TOPIC[c.id])}</span>
+            <span className={`pwl-swirl-name is-${['t', 'r', 'r', 'b', 'l', 'l'][i]}`}>{keepEnd(tr(TOPIC[c.id]))}</span>
           </A>
         )
       })}
