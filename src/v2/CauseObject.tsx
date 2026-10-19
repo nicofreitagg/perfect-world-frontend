@@ -86,80 +86,76 @@ export function SketchMap() {
   )
 }
 
+// Free, hand-drawn arms (Nico 19 Oct v3: thinner, crisper, less rigid): a loose spiral with a small
+// curl halfway, drawn through points with a Catmull-Rom curve; a second wobbled copy lets each arm sway.
+const rnd = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+const curve = (pts: number[][]) => {
+  let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`
+  for (let k = 0; k < pts.length - 1; k++) {
+    const p0 = pts[Math.max(k - 1, 0)], p1 = pts[k], p2 = pts[k + 1], p3 = pts[Math.min(k + 2, pts.length - 1)]
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6]
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6]
+    d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`
+  }
+  return d
+}
+const arm = (i: number, wob: number) => {
+  const C = 300, a0 = -90 + i * 60, pts: number[][] = []
+  const N = 9
+  for (let k = 0; k <= N; k++) {
+    const t = k / N
+    const r = 240 - 212 * Math.pow(t, 0.9) + (k && k < N ? (rnd(i * 31 + k + wob * 7) - 0.5) * 22 : 0)
+    const a = ((a0 + 200 * t + (k && k < N ? (rnd(i * 17 + k * 3 + wob * 11) - 0.5) * 10 : 0)) * Math.PI) / 180
+    pts.push([C + r * Math.cos(a), C + r * Math.sin(a)])
+    if (k === 4) {
+      // a little curl, like a pen flourish
+      const [px, py] = pts[pts.length - 1], cr = 13 + rnd(i + wob) * 4, base = a + Math.PI / 2
+      for (let q = 1; q <= 7; q++) pts.push([px + cr * Math.cos(base + q * 0.9) - cr * Math.cos(base), py + cr * Math.sin(base + q * 0.9) - cr * Math.sin(base)])
+    }
+  }
+  return curve(pts)
+}
+
 export function SixSwirls({ tr }: { tr: (s: string) => string }) {
   const [ref, seen] = useInView()
   const [on, setOn] = useState<CauseKey | null>(null)
   const C = 300
   const at = (deg: number, r: number) => [C + r * Math.cos((deg * Math.PI) / 180), C + r * Math.sin((deg * Math.PI) / 180)].map((n) => Math.round(n))
-  const swirl = (i: number) => {
-    const a = -90 + i * 60
-    const [sx, sy] = at(a, 240)
-    const [ax, ay] = at(a + 55, 225)
-    const [bx, by] = at(a + 120, 120)
-    const [ex, ey] = at(a + 190, 34)
-    return `M${sx},${sy} C${ax},${ay} ${bx},${by} ${ex},${ey}`
-  }
   const hot = on ? byId(on) : null
-  // Homelier and livelier (Nico 19 Oct): the strokes wobble like ink, the whole swirl slowly turns,
-  // little drops keep flowing from every cause into a beating heart, the icons ride along upright.
   return (
-    <div ref={ref} className={`pwl-obj pwl-swirls${seen ? ' is-in' : ''}${on ? ' has-on' : ''}`}>
-      <div className="pwl-swirl-rot">
+    <div ref={ref} className={`pwl-obj pwl-swirls pwl-swirls-3${seen ? ' is-in' : ''}${on ? ' has-on' : ''}`}>
       <svg viewBox="0 0 600 600" aria-hidden="true">
-        <defs>
-          <filter id="pwl-ink" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves={2} seed={4}>
-              <animate attributeName="seed" values="4;9;4" dur="0.8s" calcMode="discrete" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" scale={4} />
-          </filter>
-        </defs>
-        <g>
-          <g filter="url(#pwl-ink)">
-            {CAUSES.map((c, i) => (
-              <g key={c.id} className={`pwl-swirl-arm${on === c.id ? ' is-on' : ''}`}>
-                <path d={swirl(i)} pathLength={1} stroke={c.color} className="pwl-swirl-glow" style={{ ['--d' as string]: `${i * 0.18}s` }} />
-                <path d={swirl(i)} pathLength={1} stroke={c.color} className="pwl-swirl-path" style={{ ['--d' as string]: `${i * 0.18}s` }} />
-              </g>
-            ))}
+        {CAUSES.map((c, i) => {
+          const d0 = arm(i, 0), d1 = arm(i, 1)
+          return (
+            <g key={c.id} className={`pwl-swirl-arm${on === c.id ? ' is-on' : ''}`}>
+              <path d={d0} pathLength={1} stroke={c.color} className="pwl-swirl-path" style={{ ['--d' as string]: `${i * 0.18}s` }}>
+                {seen && <animate attributeName="d" values={`${d0};${d1};${d0}`} dur={`${6 + i * 0.7}s`} begin="2.6s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" />}
+              </path>
+              {seen && [0, 2].map((b) => (
+                <circle key={b} r={3.5} fill={c.color} className="pwl-swirl-drop">
+                  <animateMotion dur="4.6s" begin={`${2.6 + b + i * 0.27}s`} repeatCount="indefinite" path={d0} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".5 0 .7 1" />
+                  <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="4.6s" begin={`${2.6 + b + i * 0.27}s`} repeatCount="indefinite" />
+                </circle>
+              ))}
+            </g>
+          )
+        })}
+        <g transform={`translate(${C} ${C})`}>
+          <g className="pwl-swirl-heart">
+            <path d="M0,16 C-30,-5 -20,-31 0,-15 C20,-31 30,-5 0,16 Z" />
           </g>
-          {seen && CAUSES.map((c, i) => [0, 1.4, 2.8].map((b) => (
-            <circle key={c.id + b} r={5} fill={c.color} className="pwl-swirl-drop">
-              <animateMotion dur="4.2s" begin={`${2.6 + b + i * 0.23}s`} repeatCount="indefinite" path={swirl(i)} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".5 0 .7 1" />
-              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="4.2s" begin={`${2.6 + b + i * 0.23}s`} repeatCount="indefinite" />
-            </circle>
-          )))}
-          {CAUSES.map((c, i) => {
-            const [x, y] = at(-90 + i * 60, 240)
-            return (
-              <g key={c.id} transform={`translate(${x} ${y})`}>
-                <g className="pwl-swirl-upright">
-                  <g className="pwl-swirl-badge" style={{ ['--d' as string]: `${i * 0.18}s` }}>
-                    <circle r={34} fill="#f2ebdf" />
-                    <circle r={34} fill="none" stroke={c.color} strokeWidth={3} className="pwl-swirl-badge-ring" />
-                    <image href={icon(c.id, 'a')} x={-22} y={-22} width={44} height={44} />
-                  </g>
-                </g>
-              </g>
-            )
-          })}
         </g>
       </svg>
       {CAUSES.map((c, i) => {
         const [x, y] = at(-90 + i * 60, 240)
         return (
-          <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-hit" style={{ left: `${x / 6}%`, top: `${y / 6}%` }}
-            onMouseEnter={() => setOn(c.id)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(c.id)} onBlur={() => setOn(null)} aria-label={c.partner} />
+          <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-ico" style={{ left: `${x / 6}%`, top: `${y / 6}%`, ['--d' as string]: `${i * 0.18}s`, ['--c' as string]: c.color }}
+            onMouseEnter={() => setOn(c.id)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(c.id)} onBlur={() => setOn(null)} aria-label={c.partner}>
+            <img src={icon(c.id, 'a')} alt="" />
+          </A>
         )
       })}
-      </div>
-      <svg viewBox="0 0 600 600" className="pwl-swirl-mid" aria-hidden="true">
-        <g transform={`translate(${C} ${C})`}>
-          <g className="pwl-swirl-heart">
-            <path d="M0,20 C-36,-6 -24,-38 0,-18 C24,-38 36,-6 0,20 Z" />
-          </g>
-        </g>
-      </svg>
       <p className="pwl-swirl-line">
         {hot ? <><span className="pw-hand" style={{ color: hot.color }}>{hot.partner}</span><small>{tr(hot.place)}</small></> : <span className="pw-hand">{tr('Together. Not Alone.')}</span>}
       </p>

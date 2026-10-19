@@ -1008,3 +1008,11 @@
 .pwl-swirl-line{bottom:-17%}
 .pwl-swirl-line .pw-hand{font-size:clamp(20px,2vw,26px)!important}
 .pwl-swirls{margin-bottom:clamp(60px,8vw,90px)}
+/* Swirls v3 (Nico 19 Oct): thin crisp free lines, no blur filter, no spin */
+.pwl-swirls-3 .pwl-swirl-path{stroke-width:3.2;stroke-linejoin:round}
+.pwl-swirls-3 .pwl-swirl-arm.is-on .pwl-swirl-path{stroke-width:4.5}
+.pwl-swirls-3 .pwl-swirl-ico{width:11%;background:#f2ebdf;box-shadow:0 0 0 1.5px var(--c),0 6px 16px rgba(0,0,0,.3)}
+.pwl-swirls-3.is-in .pwl-swirl-ico{animation:pwl-float 4.4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes pwl-float{0%,100%{translate:0 0;rotate:-3deg}50%{translate:0 -5px;rotate:3deg}}
+.pwl-swirls-3 .pwl-swirl-ico img{width:70%;height:70%}
+.pwl-swirls-3 .pwl-swirl-heart path{stroke-width:2.5}
