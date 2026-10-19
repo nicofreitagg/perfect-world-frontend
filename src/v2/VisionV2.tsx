@@ -28,8 +28,6 @@ export default function VisionV2() {
   <Header dark active="/about" cartCount={cartCount} openCart={openCart} />
 
     <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1240px", margin: "0 auto", padding: "clamp(32px, 5vw, 72px) clamp(16px, 4vw, 56px) clamp(40px, 7vw, 100px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "48px" }}>
-    <img className="pw-ico" src="/v2/icons/ic-df3d515b.svg" alt="" aria-hidden="true" style={{ right: "3%", top: "30px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-745e6390.svg" alt="" aria-hidden="true" style={{ left: "95%", top: "390px", width: "96px", transform: "rotate(9deg)" }} />
-    <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-40px" }}><path d="M1500 90 C 1250 30, 1120 180, 1010 150 C 930 128, 950 50, 1015 70 C 1100 98, 1000 270, 860 330 C 760 375, 740 560, 980 610 S 1320 580, 1500 650" stroke="#FF8C42" strokeWidth="7"></path></svg>
       <div className="pw-m-founder" style={{ flex: "0 1 380px", margin: "0 auto", position: "relative" }}>
         <img src="/v2/img/vision.webp" alt={tr("Nico, founder of Perfect World, smiling")} style={{ width: "100%", aspectRatio: "1 / 1", objectFit: "cover", borderRadius: "50%", display: "block", boxShadow: "0 0 0 10px rgba(242,235,223,.08), 0 30px 60px rgba(0,0,0,.18)", objectPosition: "50% 0.0386%" }} />
         <span style={{ position: "absolute", right: "-6px", bottom: "22px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px", background: "#f2ebdf", color: "#14110e", padding: "6px 14px", borderRadius: "999px", transform: "rotate(-5deg)" }}>{tr("FOUNDER")}</span>
@@ -57,45 +55,17 @@ export default function VisionV2() {
     <blockquote style={{ margin: "12px 0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "clamp(20px, 3.4vw, 44px)", lineHeight: "1.2", color: "#f2ebdf" }} className="pw-hand">{tr("MONEY SHOULD HELP PEOPLE,")} <span style={{ color: "#c0322a" }}>{tr("NOT HURT THEM.")}</span></blockquote>
   </section>
 
-  <section className="pw-iso" aria-label={tr("Why 11.11")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
+  <section className="pw-iso" aria-label={tr("Why we do it")} style={{ position: "relative", zIndex: "76", maxWidth: "1100px", margin: "24px auto 0", padding: "0 clamp(16px, 4vw, 56px)" }}>
     <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "32px", padding: "clamp(28px, 4vw, 56px)", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
       <div style={{ flex: "0 1 260px", textAlign: "center" }}>
-        <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(46px, 8vw, 110px)", letterSpacing: "-0.04em", lineHeight: "0.9", color: "#c0322a" }} className="pw-fat">11.11</p>
-        <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE CHANGED")}</p>
+        <p style={{ margin: "0", fontWeight: "800", fontSize: "clamp(38px, 5vw, 64px)", letterSpacing: "-0.02em", lineHeight: "0.95", color: "#c0322a" }} className="pw-fat">{tr("Help, not take.")}</p>
+        <p style={{ margin: "8px 0 0", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px" }}>{tr("WHY WE DO IT")}</p>
       </div>
       <div style={{ flex: "1 1 420px", fontSize: "18px", lineHeight: "1.6", color: "#3a3128", display: "flex", flexDirection: "column", gap: "14px" }}>
-        <p style={{ margin: "0" }}>{tr("From day one, 100% of profits was the mission behind Perfect World. It was my way of showing that buying and business can exist to help, not to take.")}</p>
-        <p style={{ margin: "0" }}>{tr("100% of profits was always the mission. From 11.11, that mission gets a number: every piece gives a fixed amount, shown right next to the price, and the design you choose decides which partner gets it. It's our next step in transparency: turning a promise into impact you can count.")}</p>
+        <p style={{ margin: "0" }}>{tr("From day one, Perfect World was my way of showing that buying and business can exist to help, not to take.")}</p>
         <p style={{ margin: "0", fontWeight: "600", color: "#1c1813" }}>{tr("Because I believe we are stronger together. Change happens and hope grows when we join forces.")}</p>
         <p style={{ margin: "0", fontWeight: 700 }}>Together. Not Alone. 😉</p>
       </div>
-    </div>
-  </section>
-
-  <section className="pw-iso" aria-label={tr("Our vision")} style={{ position: "relative", zIndex: "75", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 8vw, 110px) clamp(16px, 4vw, 56px) 24px" }}>
-    <img className="pw-ico" src="/v2/icons/ic-a60f6b2e.svg" alt="" aria-hidden="true" style={{ left: "95%", top: "50px", width: "90px", transform: "rotate(-6deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-91ae13b8.svg" alt="" aria-hidden="true" style={{ left: "0.5%", top: "70px", width: "96px", transform: "rotate(9deg)" }} />
-    <svg className="pw-swirl pw-wide" viewBox="0 0 1440 720" aria-hidden="true" style={{ top: "-20px" }}><path d="M-60 260 C 160 120, 330 330, 470 250 C 560 200, 520 120, 465 150 C 400 185, 470 330, 640 300 C 820 268, 900 120, 1060 170 C 1160 200, 1150 300, 1080 290 C 1010 280, 1080 140, 1240 130 C 1350 124, 1420 170, 1500 150" stroke="#4cc37f" strokeWidth="7"></path></svg>
-    <p style={{ margin: "0", textAlign: "center", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "26px", color: "#c0322a" }} className="pw-hand">{tr("our vision")}</p>
-    <h2 style={{ margin: "8px 0 0", textAlign: "center", fontWeight: "800", fontSize: "clamp(24px, 4.4vw, 62px)", letterSpacing: "-0.02em", lineHeight: "1" }} className="pw-fat">{tr("We can do better. Together.")}</h2>
-    <div className="pw-m-swipe pw-m-s80" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "18px", marginTop: "40px" }}>
-      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HUMAN.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("Perfect World isn't about clothes. It's about the people wearing them, and the people on the ground doing the work.")}</p></div>
-      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("HONEST.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("A fixed amount on every price tag. Nothing to work out, nothing to guess.")}</p></div>
-      <div style={{ background: "#f3ebdd", color: "#1c1813", border: "1px solid #e2d6c1", borderRadius: "24px", padding: "28px" }}><p style={{ margin: "0", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "30px" }} className="pw-hand">{tr("CONNECTED.")}</p><p style={{ margin: "10px 0 0", fontSize: "16px", lineHeight: "1.55", color: "#4a4038" }}>{tr("A way to stand for something, even if you don't always know where to begin. You choose the cause.")}</p></div>
-    </div>
-  </section>
-
-  <section className="pw-iso" aria-label={tr("The team")} style={{ position: "relative", zIndex: "74", maxWidth: "1240px", margin: "0 auto", padding: "clamp(40px, 7vw, 96px) clamp(16px, 4vw, 56px) 24px" }}>
-    <img className="pw-ico" src="/v2/icons/ic-f40a9d4d.svg" alt="" aria-hidden="true" style={{ left: "71%", top: "30px", width: "96px", transform: "rotate(-8deg)" }} /><img className="pw-ico pw-m-hide" src="/v2/icons/ic-1e094dbe.svg" alt="" aria-hidden="true" style={{ left: "95%", top: "30px", width: "84px", transform: "rotate(10deg)" }} />
-    
-    
-    <p style={{ margin: "36px 0 14px", fontFamily: "'Hand', cursive", letterSpacing: ".01em", fontSize: "42px" }} className="pw-hand">{tr("OUR PARTNERS ON THE GROUND")}</p>
-    <div className="pw-m-g3 pw-m-logos" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "12px" }}>
-      <A href="/project/one-world" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-care-in-action.png" alt={tr("Care in Action")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
-      <A href="/project/rich-in-life" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mission-positivity.png" alt={tr("Mission Positivity")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/talk-about-it" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-mhi.png" alt={tr("Mental Health Initiative")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/endangered-oceans" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-secore.png" alt={tr("SECORE International")} style={{ maxWidth: "70%", maxHeight: "54px", objectFit: "contain" }} /></A>
-      <A href="/project/cool-down" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-pftp.png" alt={tr("Plant-for-the-Planet")} style={{ maxWidth: "70%", maxHeight: "64px", objectFit: "contain" }} /></A>
-      <A href="/project/wild-at-heart" style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "18px", height: "96px", display: "flex", alignItems: "center", justifyContent: "center" }}><img src="/v2/img/logo-efa.png" alt={tr("Elephants for Africa")} style={{ maxWidth: "70%", maxHeight: "44px", objectFit: "contain" }} /></A>
     </div>
   </section>
 
