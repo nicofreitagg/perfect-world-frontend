@@ -1050,3 +1050,9 @@
 /* Minimal hover zoom on the swirl icons (Nico 19 Oct) */
 .pwl-swirls-4 .pwl-swirl-ico{scale:1;transition:scale .35s cubic-bezier(.3,1.4,.5,1),box-shadow .35s}
 .pwl-swirls-4 .pwl-swirl-ico:hover,.pwl-swirls-4 .pwl-swirl-ico:focus-visible{scale:1.14}
+/* Centre logo (Nico 19 Oct: our logo instead of the heart) */
+.pwl-swirl-logo{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;border-radius:50%;background:#f7f1e6;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 22px rgba(0,0,0,.28);transform:translate(-50%,-50%) scale(0);transition:transform .8s cubic-bezier(.3,1.5,.5,1) 2.4s;z-index:2}
+.pwl-swirls.is-in .pwl-swirl-logo{transform:translate(-50%,-50%) scale(1);animation:pwl-logo-breathe 4.5s ease-in-out 3.4s infinite}
+.pwl-swirl-logo img{width:74%;height:auto;display:block}
+@keyframes pwl-logo-breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
+@media (prefers-reduced-motion:reduce){.pwl-swirls.is-in .pwl-swirl-logo{animation:none}}

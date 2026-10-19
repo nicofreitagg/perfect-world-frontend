@@ -138,12 +138,9 @@ export function SixSwirls({ tr }: { tr: (s: string) => string }) {
             </g>
           )
         })}
-        <g transform={`translate(${C} ${C})`}>
-          <g className="pwl-swirl-heart">
-            <path d="M0,16 C-30,-5 -20,-31 0,-15 C20,-31 30,-5 0,16 Z" />
-          </g>
-        </g>
       </svg>
+      {/* Our logo where the six flow together (Nico 19 Oct, replaced the heart) */}
+      <span className="pwl-swirl-logo"><img src="/v2/img/logo-black.png" alt="Perfect World" /></span>
       {CAUSES.map((c, i) => {
         const [x, y] = at(-90 + i * 60, 240)
         return (

@@ -29,7 +29,9 @@ export default function VisionV2() {
 
     <section className="pw-iso" id="top" style={{ position: "relative", zIndex: "79", maxWidth: "1240px", margin: "0 auto", padding: "clamp(32px, 5vw, 72px) clamp(16px, 4vw, 56px) clamp(40px, 7vw, 100px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "48px" }}>
       <div className="pw-m-founder" style={{ flex: "0 1 380px", margin: "0 auto", position: "relative" }}>
-        <img src="/v2/img/vision.webp" alt={tr("Nico, founder of Perfect World, smiling")} style={{ width: "100%", aspectRatio: "1 / 1", objectFit: "cover", borderRadius: "50%", display: "block", boxShadow: "0 0 0 10px rgba(242,235,223,.08), 0 30px 60px rgba(0,0,0,.18)", objectPosition: "50% 0.0386%" }} />
+        <img src="/v2/img/vision.webp" alt={tr("Nico, founder of Perfect World, smiling")} style={{ width: "100%", aspectRatio: "1 / 1", objectFit: "cover", borderRadius: "50%", display: "block", boxShadow: "0 30px 60px rgba(0,0,0,.18)", objectPosition: "50% 0.0386%" }} />
+        {/* The hand-drawn red ring from the home page (Nico 19 Oct) */}
+        <svg className="pw-founder-ring" viewBox="0 0 200 200" aria-hidden="true"><path d="M150 24 C 112 2, 46 10, 22 58 C 2 100, 22 162, 84 182 C 146 200, 192 160, 190 104 C 188 58, 160 30, 118 22 C 96 18, 76 22, 64 28" /></svg>
         <span style={{ position: "absolute", right: "-6px", bottom: "22px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "20px", background: "#f2ebdf", color: "#14110e", padding: "6px 14px", borderRadius: "999px", transform: "rotate(-5deg)" }}>{tr("FOUNDER")}</span>
       </div>
       <div style={{ flex: "1 1 480px" }}>

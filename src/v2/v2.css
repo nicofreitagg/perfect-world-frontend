@@ -830,3 +830,5 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 
 /* Partner names and section labels: a clean italic, easier to read than the handwriting (Nico 19 Oct) */
 .pw2 .pw-label-it{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-style:italic;font-weight:700;letter-spacing:-.01em;text-transform:none}
+.pw-founder-ring{position:absolute;inset:-9%;width:118%;height:118%;overflow:visible;pointer-events:none;transform:rotate(-8deg)}
+.pw-founder-ring path{fill:none;stroke:#e2453c;stroke-width:2.4;stroke-linecap:round}
