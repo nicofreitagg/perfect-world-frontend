@@ -16,6 +16,8 @@ import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 import { useT } from './t'
+// Phones show the flat globe; the same ?globe= trial skins as the 3D one (Nico 19 Oct).
+const FLAT_SKIN = typeof window !== 'undefined' ? ['day', 'paper', 'ocean'].find((k) => new URLSearchParams(window.location.search).get('globe') === k) : undefined
 import { FAQ } from './faq'
 
 const Globe3D = lazy(() => import('./Globe3D'))
@@ -312,7 +314,7 @@ export default function HomeV2() {
           <A href="/projects" className="pwl-link pwl-link-l">{tr('All six causes')} →</A>
         </div>
         <div ref={globeBox} className={globe3d ? 'pwl-globe is-3d' : 'pwl-globe'}>
-          <div className="pwl-globe-flat" role="img" aria-label={tr('Globe with the six causes marked')} />
+          <div className="pwl-globe-flat" style={FLAT_SKIN ? { backgroundImage: `url(/v2/img/globe-${FLAT_SKIN}.webp)` } : undefined} role="img" aria-label={tr('Globe with the six causes marked')} />
           {show3d && <Suspense fallback={null}><Globe3D onReady={onGlobe} /></Suspense>}
         </div>
       </div>
