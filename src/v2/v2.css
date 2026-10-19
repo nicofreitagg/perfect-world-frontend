@@ -816,3 +816,14 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-plogo:hover,.pw-plogo:focus-visible{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.12)!important}
 .pw-plink{text-decoration:underline;text-underline-offset:3px;opacity:.85}
 .pw-plink:hover{opacity:1}
+.pw-plogo-hint{margin:18px 0 0;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+.pw-plogo-cap{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#5c5c5c}
+.pw-plogo-tile img{max-height:44px!important}
+.pw-plogo-dot::after{content:"↗";position:absolute;right:2px;bottom:2px;width:30px;height:30px;border-radius:50%;background:#0b0b0c;color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.pwl-receipt-partner>.pw-plogo-dot{position:relative;overflow:visible}
+.pwl-receipt-partner>.pw-plogo-dot::after{width:18px;height:18px;font-size:10px;right:-4px;bottom:-4px}
+@media (max-width: 760px){
+  .pw-m-logos>a.pw-plogo-tile,.pw-giving .pw-m-logos>a.pw-plogo-tile{height:88px!important;gap:6px!important}
+  .pw-plogo-tile img{max-height:40px!important}
+  .pw-plogo-cap{font-size:9px;letter-spacing:.06em}
+}

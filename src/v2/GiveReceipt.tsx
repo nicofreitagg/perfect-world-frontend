@@ -174,12 +174,12 @@ export default function GiveReceipt() {
           {row.split ? (
             <div className="pwl-receipt-partners">
               <div className="pwl-logos">{CAUSES.map((c) => SITES[c.id] ? <a key={c.id} href={SITES[c.id]} {...ext} className="pw-plogo"><img src={c.logo} alt={c.partner} /></a> : <span key={c.id}><img src={c.logo} alt={c.partner} /></span>)}</div>
-              <p>{t('About')} €{each} {t('to each partner')}</p>
+              <p>{t('About')} €{each} {t('to each partner')}. {t('Tap a logo to visit them.')}</p>
             </div>
           ) : (
             <div className="pwl-receipt-partner">
-              {SITES[cause.id] ? <a href={SITES[cause.id]} {...ext} className="pw-plogo" aria-label={`${cause.partner}, ${t('website')}`}><img src={cause.logo} alt="" /></a> : <span><img src={cause.logo} alt="" /></span>}
-              <p><b>{cause.partner}</b><br />{t(cause.place)}</p>
+              {SITES[cause.id] ? <a href={SITES[cause.id]} {...ext} className="pw-plogo pw-plogo-dot" aria-label={`${cause.partner}, ${t('website')}`}><img src={cause.logo} alt="" /></a> : <span><img src={cause.logo} alt="" /></span>}
+              <p><b>{cause.partner}</b><br />{t(cause.place)}{SITES[cause.id] && <><br /><a href={SITES[cause.id]} {...ext} className="pw-plink" style={{ color: 'inherit' }}>{t('Visit site ↗')}</a></>}</p>
             </div>
           )}
           <p className="pwl-receipt-note">{t('Every colour gives the same amount.')}</p>

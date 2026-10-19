@@ -206,12 +206,13 @@ export default function ProductV2() {
   <section className="pw-iso" aria-label={tr("The story behind the design")} style={{ position: "relative", zIndex: "78", padding: "0 clamp(12px, 2.5vw, 32px) clamp(48px, 6vw, 80px)" }}>
     <div className="pw-pd-story" style={{ position: "relative", overflow: "hidden", maxWidth: "1400px", margin: "0 auto", borderRadius: "36px", background: c.bg, color: c.fg, padding: "clamp(32px, 5vw, 72px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "36px" }}>
       <img src="/v2/img/banner-hands.png" alt="" className="pw-hands" />
-      {(() => { const st = { position: "relative" as const, width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }; const img = <img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} />; return SITES[c.id] ? <a href={SITES[c.id]} {...ext} className="pw-plogo" style={st} aria-label={`${c.partner}, ${tr("website")}`}>{img}</a> : <span style={st}>{img}</span> })()}
+      {(() => { const st = { position: "relative" as const, width: "120px", height: "120px", borderRadius: "50%", background: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 22px rgba(0,0,0,.14)", flex: "0 0 auto" }; const img = <img src={c.logo} alt={`${c.partner} logo`} style={{ maxWidth: "88px", maxHeight: "76px", objectFit: "contain" }} />; return SITES[c.id] ? <a href={SITES[c.id]} {...ext} className="pw-plogo pw-plogo-dot" style={st} aria-label={`${c.partner}, ${tr("website")}`}>{img}</a> : <span style={st}>{img}</span> })()}
       <div style={{ position: "relative", flex: "1 1 460px" }}>
         <p className="pw-hand" style={{ margin: "0", fontSize: "26px" }}>{tr("the story behind the design")}</p>
         <p className="pw-fat" style={{ margin: "8px 0 0", fontSize: "clamp(23px, 3.6vw, 52px)", lineHeight: "1" }}>{c.name}<span style={{ display: "block", marginTop: "6px", fontSize: ".62em" }}>{tr(c.place)}</span></p>
         <p style={{ margin: "14px 0 0", fontSize: "17px", lineHeight: "1.55", maxWidth: "640px" }}>{tr(c.teaser)}</p>
         <A href={`/project/${c.slug}`} style={{ display: "inline-block", marginTop: "20px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontWeight: "600", fontSize: "15px", padding: "13px 22px", borderRadius: "999px" }}>{tr("Meet")} {c.partner} →</A>
+        {SITES[c.id] && <a href={SITES[c.id]} {...ext} className="pw-plink" style={{ display: "inline-block", marginTop: "20px", marginLeft: "16px", color: "inherit", fontSize: "15px", fontWeight: "600" }}>{tr("Visit")} {c.partner} ↗</a>}
       </div>
     </div>
   </section>
