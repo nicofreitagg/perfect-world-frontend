@@ -282,7 +282,6 @@ export default function ShopV2() {
       <p className="pw-hand" style={{ margin: "0", fontSize: "clamp(24px, 2.4vw, 32px)", color: "#c0322a" }}>{tr("shop hope.")}</p>
       <h1 className="pw-fat" style={{ margin: "10px 0 0", fontSize: "clamp(37px, 6vw, 84px)", lineHeight: "1" }}>{tr("Wear what")}<br />{tr("you wish for.")}</h1>
       <p style={{ margin: "22px 0 0", fontSize: "19px", lineHeight: "1.5", color: "#3a3a3a", maxWidth: "520px" }}>{tr("Every piece supports a cause. The design decides which one.")}</p>
-      <p className="pw-mono pw-shoptrust">{tr("T-shirts from")} €{PIECES.shirt.price} · {tr("Printed in Germany")} · {tr("Shipping from €5.95")}</p>
     </div>
   </section>
 
@@ -296,7 +295,7 @@ export default function ShopV2() {
           <img className="pw-split-img" src="/v2/img/mm-oceans.webp" alt="" />
           <span className="pw-split-txt">
             <span className="pw-split-tag">{tr('NEW')}</span>
-            <img className="pw-split-sig" src="/v2/img/sig-minimal-collection-white.png" alt={tr('The Minimal Collection')} />
+            <img className="pw-split-sig" src="/v2/img/sig-minimal-collection-black.png" alt={tr('The Minimal Collection')} />
             <span className="pw-split-line">{tr('Doing good never looked so clean.')}</span>
             <span className="pw-split-go">{tab === 'minimal' ? tr('Showing') + ' ✓' : tr('See Minimal') + ' →'}</span>
           </span>
@@ -339,9 +338,9 @@ export default function ShopV2() {
       {products.map(card)}
       <div className="pw-allrow">
         <div className="pw-allintro">
-          <span className="pw-mono">{tr('ONE PIECE, SIX PARTNERS')}</span>
+          <span className="pw-mono">{tr('ONE PIECE, ALL SIX CAUSES')}</span>
           <h2 className="pw-fat">{tr('Support all causes in one')}</h2>
-          <p>{tr('No single design. These carry our logo and support all six partners together.')}</p>
+          <p>{tr('Not into a design, but want to support anyway? These carry just our logo, and the amount is split equally between all six partners.')}</p>
           <span className="pw-allicons" aria-hidden="true">{CAUSES.map((c) => <img key={c.id} src={icon(c.id, 'a')} alt="" />)}</span>
         </div>
         {(() => {
@@ -356,12 +355,12 @@ export default function ShopV2() {
               const named = b.title.split('|').map((x) => x.trim())[2]
               return named ? [named] : b.variants.map((v) => v.title.split(' / ')[0]).filter((c) => !/^(os|one size|default title)$/i.test(c))
             }))]
-            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
+            return card({ ...blank, small: true, name: tr('Logo beanie'), sub: colours.map((c) => tr(c)).join(' · '), price: '€' + Number(lead.priceRange.minVariantPrice.amount).toFixed(2), give: '€' + p.give + ' ' + tr('split between all six'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${lead.handle}`, addLabel: tr('See the beanie') }, 99)
           }
           // Until the Printful beanies are active (Draft until 11.11, Nico 16 Oct), show the card without a link:
           // the older Minimal beanie listings still carry the old €33.33.
           const beanie = undefined as ShopifyProduct | undefined
-          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('shared by all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
+          return card({ ...blank, small: true, name: tr('Logo beanie'), sub: tr('Printed logo'), price: '€' + p.price, give: '€' + p.give + ' ' + tr('split between all six'), bg: ALL_BG, isPhoto: true, photos: [{ url: BEANIE_MOCKUP }], isNew: true, swatches: [], href: beanie ? `/product/${beanie.handle}` : '', addLabel: beanie ? tr('See the beanie') : tr('Coming 11.11') }, 99)
         })()}
         {/* Embroidered logo pieces that are live in Shopify; sold-out or hidden ones stay away. */}
         {embLive.map((m, i) => {
@@ -370,7 +369,7 @@ export default function ShopV2() {
           const imgs = m.images.map((x) => x.url)
           const front = imgs.find((u) => /front|vorne/i.test(u)) ?? imgs.find((u) => !/back|hinten|rueck|rück/i.test(u)) ?? imgs[0] ?? ''
           const name = formatDisplayTitle(m.title).replace(/embroidered logo\s*/i, '').replace(/organic\s*/i, '')
-          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('shared by all six') : tr('For all six partners'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
+          return card({ ...blank, small: true, name, sub: tr('Embroidered logo'), price: '€' + Number(m.priceRange.minVariantPrice.amount).toFixed(2), give: give ? '€' + give + ' ' + tr('split between all six') : tr('For all six partners'), bg: ALL_BG, isFront: !!front, img: front, swatches: [], href: `/product/${m.handle}`, addLabel: tr('Choose your size') }, 100 + i)
         })}
       </div>
     </div>

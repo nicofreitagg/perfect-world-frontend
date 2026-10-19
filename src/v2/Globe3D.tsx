@@ -11,11 +11,12 @@ import { latLonToVector3 } from '../utils/animations'
 //   ink  = ink-black land on off-white (globe-pw.webp), preview with ?globe=ink
 //   hand = drawn coastlines on a grid (globe-hand.webp), preview with ?globe=hand
 // Six cause pills open their project page.
-export type GlobeSkin = 'earth' | 'wire' | 'ink' | 'hand'
-const SKINS: Record<GlobeSkin, string> = { earth: '/v2/img/globe-earth.webp', wire: '/v2/img/globe-wire.webp', ink: '/v2/img/globe-pw.webp', hand: '/v2/img/globe-hand.webp' }
+export type GlobeSkin = 'night' | 'earth' | 'wire' | 'ink' | 'hand'
+const SKINS: Record<GlobeSkin, string> = { night: '/v2/img/globe-night.webp', earth: '/v2/img/globe-earth.webp', wire: '/v2/img/globe-wire.webp', ink: '/v2/img/globe-pw.webp', hand: '/v2/img/globe-hand.webp' }
 const globeSkin = (): GlobeSkin => {
   const q = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('globe') : null
-  return q === 'ink' || q === 'hand' || q === 'wire' ? q : 'earth'
+  // Dark with cream coastlines, like the rest of the dark pages (Nico, 19 Oct).
+  return q === 'ink' || q === 'hand' || q === 'wire' || q === 'earth' ? q : 'night'
 }
 
 const PINS = [
@@ -133,7 +134,7 @@ export default function Globe3D({ onReady, skin = globeSkin() }: { onReady: () =
     >
       <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={50} />
       {/* The drawn skin wants flatter light, like paper. */}
-      <ambientLight intensity={skin === 'hand' || skin === 'earth' ? 2.1 : 1.6} />
+      <ambientLight intensity={skin === 'night' ? 2.4 : skin === 'hand' || skin === 'earth' ? 2.1 : 1.6} />
       <directionalLight position={[-3, 3, 5]} intensity={skin === 'hand' || skin === 'earth' ? 0.9 : 1.4} />
       <Suspense fallback={null}>
         <Earth skin={skin} onOpen={(slug) => navigate(`/project/${slug}`)} onReady={markReady} />

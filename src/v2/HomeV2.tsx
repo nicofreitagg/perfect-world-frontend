@@ -39,7 +39,6 @@ const BEST = [
   { slug: 'cool-down', img: 'cool-tote', kind: 'tote', piece: 'Tote bag', price: PIECES.tote.price, give: PIECES.tote.give },
 ]
 // Answers a stranger's first questions at a glance.
-const TRUST = ['Printed in Germany', 'Ships across Europe', 'Six named partners', 'The partner’s amount is already in the price']
 // Home shows the three questions a stranger asks first; the rest open on request.
 const FIRST_Q = ['How long will delivery take?', 'How do I find my size?', 'How does giving work?']
 const HOME_FAQ = [...FIRST_Q.map((q) => FAQ.find((f) => f.q === q)!), ...FAQ.filter((f) => !FIRST_Q.includes(f.q))]
@@ -153,8 +152,12 @@ function DesignStage() {
   const a = ALIVE[i]
   const c = causeBySlug(a.slug)
   const d = MIN_DESIGNS.find((x) => x.slug === a.slug)!
+  const step = (by: number) => { setI((n) => (n + by + ALIVE.length) % ALIVE.length); setAuto(false) }
   return (
     <div className="pwl-stage" style={{ ['--c' as string]: c?.color ?? '#999' }}>
+      {/* Arrows to click through the designs (Nico, 19 Oct). */}
+      <button type="button" className="pwl-stage-arrow is-prev" onClick={() => step(-1)} aria-label={tr('Previous design')}>←</button>
+      <button type="button" className="pwl-stage-arrow is-next" onClick={() => step(1)} aria-label={tr('Next design')}>→</button>
       <div className="pwl-stage-show" key={a.slug} aria-live="polite">
         <img className="pwl-stage-art" src={`/v2/img/art-${a.slug}-w.webp`} alt={`${d.name}, ${tr('artwork')}`} />
         <PieceImg className="pwl-stage-piece" a={a} alt={`${d.name} ${tr(a.piece)}`} />
@@ -279,11 +282,6 @@ export default function HomeV2() {
       <p className="pwl-cine-lede">{tr('Clothing that helps the world: every piece supports a cause.')} <b>{tr('Join the movement.')}</b></p>
       <A href="/shop" className="pwl-btn pwl-cine-btn">{tr('SHOP HOPE')}</A>
     </AutoFilm>
-    {/* Trust line: what a stranger wants to know in two seconds */}
-    <ul className="pwl-trust" aria-label={tr('Good to know')}>
-      <li>{tr('T-shirts from')} €{PIECES.shirt.price}</li>
-      {TRUST.map((t) => <li key={t}>{tr(t)}</li>)}
-    </ul>
   </section>
 
   <Lines />
@@ -299,6 +297,35 @@ export default function HomeV2() {
       <DesignStage />
       <div className="pwl-ctas pwl-ctas-c">
         <A href="/shop#shop" className="pwl-btn">{tr('Shop the collection')}</A>
+      </div>
+    </div>
+  </section>
+
+  {/* 5 · The six causes and the people behind them */}
+  <section id="causes" className="pwl-sec pwl-earth pw-iso" aria-labelledby="causes-h">
+    <div className="pwl-wrap">
+      <div className="pwl-causes-top">
+        <div>
+          <p className="pwl-kicker pwl-kicker-l">{tr('SIX PLACES · ONE HOPE')}</p>
+          <h2 id="causes-h" className="pw-fat pwl-h2">{tr('The people doing the work.')}</h2>
+          <p className="pwl-sub">{tr('Far away and right next door, people are already making these wishes come true. Every collection was made with one of them.')}</p>
+          <A href="/projects" className="pwl-link pwl-link-l">{tr('All six causes')} →</A>
+        </div>
+        <div ref={globeBox} className={globe3d ? 'pwl-globe is-3d' : 'pwl-globe'}>
+          <div className="pwl-globe-flat" role="img" aria-label={tr('Globe with the six causes marked')} />
+          {show3d && <Suspense fallback={null}><Globe3D onReady={onGlobe} /></Suspense>}
+        </div>
+      </div>
+      <div className="pwl-causes">
+        {CAUSES.map((c) => (
+          <A key={c.id} href={`/project/${c.slug}`} className="pwl-cause" style={{ ['--c' as string]: c.color }}>
+            <span className="pwl-cause-logo"><img src={c.logo} alt="" loading="lazy" /></span>
+            <span className="pwl-cause-name pw-fat">{titleCase(c.name)}</span>
+            <span className="pwl-cause-who">{c.partner}<span className="pwl-cause-place">{tr(c.place)}</span></span>
+            <span className="pwl-cause-line pw-hand">{tr(c.line)}</span>
+            <span className="pwl-cause-go">{tr('Meet the project')} →</span>
+          </A>
+        ))}
       </div>
     </div>
   </section>
@@ -357,35 +384,6 @@ export default function HomeV2() {
           </li>
         ))}
       </ul>
-    </div>
-  </section>
-
-  {/* 5 · The six causes and the people behind them */}
-  <section id="causes" className="pwl-sec pwl-earth pw-iso" aria-labelledby="causes-h">
-    <div className="pwl-wrap">
-      <div className="pwl-causes-top">
-        <div>
-          <p className="pwl-kicker pwl-kicker-l">{tr('SIX PLACES · ONE HOPE')}</p>
-          <h2 id="causes-h" className="pw-fat pwl-h2">{tr('The people doing the work.')}</h2>
-          <p className="pwl-sub">{tr('Far away and right next door, people are already making these wishes come true. Every collection was made with one of them.')}</p>
-          <A href="/projects" className="pwl-link pwl-link-l">{tr('All six causes')} →</A>
-        </div>
-        <div ref={globeBox} className={globe3d ? 'pwl-globe is-3d' : 'pwl-globe'}>
-          <div className="pwl-globe-flat" role="img" aria-label={tr('Globe with the six causes marked')} />
-          {show3d && <Suspense fallback={null}><Globe3D onReady={onGlobe} /></Suspense>}
-        </div>
-      </div>
-      <div className="pwl-causes">
-        {CAUSES.map((c) => (
-          <A key={c.id} href={`/project/${c.slug}`} className="pwl-cause" style={{ ['--c' as string]: c.color }}>
-            <span className="pwl-cause-logo"><img src={c.logo} alt="" loading="lazy" /></span>
-            <span className="pwl-cause-name pw-fat">{titleCase(c.name)}</span>
-            <span className="pwl-cause-who">{c.partner}<span className="pwl-cause-place">{tr(c.place)}</span></span>
-            <span className="pwl-cause-line pw-hand">{tr(c.line)}</span>
-            <span className="pwl-cause-go">{tr('Meet the project')} →</span>
-          </A>
-        ))}
-      </div>
     </div>
   </section>
 
