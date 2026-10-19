@@ -45,9 +45,11 @@ export default function CausesV2() {
             <span className="pw-mono" style={{ fontSize: "12px", textAlign: "right" }}>{tr(c.place).toUpperCase()}</span>
           </span>
           <span style={{ position: "relative", display: "flex", flexDirection: "column", gap: "10px" }}>
-            <span className="pw-hand" style={{ fontSize: "clamp(29px, 4vw, 58px)", lineHeight: ".95" }}>{c.name}</span>
+            {/* The partner is the focus here; the cause name is the small label (Nico, 19 Oct). */}
+            <span className="pw-mono" style={{ fontSize: "12px", letterSpacing: ".1em" }}>{tr(c.name)}</span>
+            <span className="pw-hand" style={{ fontSize: "clamp(28px, 3.4vw, 50px)", lineHeight: ".95" }}>{c.partner}</span>
             <span  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "20px" }}>{tr(c.line)}</span>
-            <span className="pw-m-hide-t" style={{ fontSize: "15px", lineHeight: "1.5", maxWidth: "440px" }}>{tr("With")} {c.partner}. {tr(c.teaser)}</span>
+            <span className="pw-m-hide-t" style={{ fontSize: "15px", lineHeight: "1.5", maxWidth: "440px" }}>{tr(c.teaser)}</span>
           </span>
           <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
             <span className="pw-go" style={{ fontSize: "15px", fontWeight: "600", padding: "13px 22px", borderRadius: "999px", background: "#fbf6ec", color: "#0b0b0c", transition: "background .25s, color .25s" }}>{tr("Explore the project →")}</span>
