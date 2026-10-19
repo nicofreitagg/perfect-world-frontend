@@ -106,7 +106,7 @@ const arm = (i: number, twist: number) => {
   const pts: number[][] = []
   for (let k = 0; k <= 16; k++) {
     const t = k / 16
-    const r = 236 * Math.pow(30 / 236, t)
+    const r = 236 * Math.pow(54 / 236, t) // arms stop short of the centre logo
     const a = ((-90 + i * 60 + twist * t) * Math.PI) / 180
     pts.push([300 + r * Math.cos(a), 300 + r * Math.sin(a)])
   }
@@ -140,7 +140,7 @@ export function SixSwirls({ tr }: { tr: (s: string) => string }) {
         })}
       </svg>
       {/* Our logo where the six flow together (Nico 19 Oct, replaced the heart) */}
-      <span className="pwl-swirl-logo"><img src="/v2/img/logo-black.png" alt="Perfect World" /></span>
+      <span className="pwl-swirl-logo"><img src="/v2/img/logo-white.png" alt="Perfect World" /></span>
       {CAUSES.map((c, i) => {
         const [x, y] = at(-90 + i * 60, 240)
         return (

@@ -1056,3 +1056,7 @@
 .pwl-swirl-logo img{width:74%;height:auto;display:block}
 @keyframes pwl-logo-breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.05)}}
 @media (prefers-reduced-motion:reduce){.pwl-swirls.is-in .pwl-swirl-logo{animation:none}}
+/* Logo without the disc, much smaller (Nico 19 Oct 19:28) */
+.pwl-swirl-logo{width:12%;aspect-ratio:auto;background:none;box-shadow:none;border-radius:0}
+.pwl-swirl-logo img{width:100%;filter:drop-shadow(0 2px 8px rgba(0,0,0,.45))}
+@media (max-width:760px){.pwl-swirl-logo{width:15%}}
