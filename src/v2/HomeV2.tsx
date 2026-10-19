@@ -11,7 +11,7 @@ import { A } from './A'
 import { getAllProducts } from '../utils/shopify'
 import type { ShopifyProduct } from '../types/shopify.types'
 import { CAUSES, causeBySlug, causeTitle as titleCase } from './causes'
-import { PIECES, MIN_DESIGNS, icon, minDesignOf, pieceOf, type CauseKey } from './data'
+import { PIECES, NEW_PIECES, MIN_DESIGNS, icon, minDesignOf, pieceOf, type CauseKey } from './data'
 import { useCart } from '../contexts/CartContext'
 import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
@@ -334,11 +334,7 @@ export default function HomeV2() {
   <section id="how" className="pwl-sec pw-iso" aria-labelledby="how-h">
     <div className="pwl-wrap">
       <h2 id="how-h" className="pw-fat pwl-h2 pwl-center">{tr('How it works')}</h2>
-      <ol className="pwl-how">
-        <li><span className="pwl-how-pic pwl-how-art"><img src="/v2/img/art-endangered-oceans-w.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">1</span><b><span className="pwl-how-k">1. </span>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
-        <li><span className="pwl-how-pic"><img src="/v2/img/mm-oceans.webp" alt="" loading="lazy" /></span><span className="pwl-how-n">2</span><b><span className="pwl-how-k">2. </span>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
-        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat">€{PIECES.shirt.give}</span><img src={causeBySlug('endangered-oceans')?.logo} alt="" loading="lazy" /></span><span className="pwl-how-n">3</span><b><span className="pwl-how-k">3. </span>{tr('A fixed amount supports the partner')}</b><span>{tr('Already in the price of every piece.')} <A href="/how-giving-works" className="pwl-how-link">{tr('How giving works')}</A></span></li>
-      </ol>
+      <HowSteps />
     </div>
   </section>
 
@@ -433,6 +429,74 @@ export default function HomeV2() {
 }
 
 // A stage garment: the local cut-out mockup, or a Shopify photo cut out in the browser (hidden until cut, never a white box).
+// How it works, as a tiny demo (Nico, 19 Oct: "more engaging"): pick a piece and the three steps follow it,
+// from the artwork to the garment to the amount its partner gets. Steps come in one by one as the section
+// scrolls in, the amount counts up, and the pieces cycle by themselves until someone taps one.
+const women = NEW_PIECES.find((x) => x.id === 'women')!, bomber = NEW_PIECES.find((x) => x.id === 'bomber')!
+const HOW: { label: string; give: string; a: (typeof ALIVE)[number] }[] = [
+  { label: 'T-shirt', give: PIECES.shirt.give, a: ALIVE.find((x) => x.piece === 'T-shirt')! },
+  { label: 'Hoodie', give: PIECES.hoodie.give, a: ALIVE.find((x) => x.piece === 'Hoodie')! },
+  { label: 'Oversized', give: PIECES.oversized.give, a: ALIVE.find((x) => x.piece === 'Oversized shirt')! },
+  { label: 'Bomber', give: bomber.give, a: ALIVE.find((x) => x.piece === 'Bomber jacket')! },
+  { label: "Women's tee", give: women.give, a: ALIVE.find((x) => x.piece === "Women's T-shirt")! },
+  { label: 'Tote', give: PIECES.tote.give, a: ALIVE.find((x) => x.piece === 'Tote bag')! },
+]
+
+function CountUp({ to, run }: { to: string; run: boolean }) {
+  const target = Number(to)
+  const [v, setV] = useState(target)
+  useEffect(() => {
+    if (!run || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setV(target); return }
+    let raf = 0
+    const t0 = performance.now()
+    const tick = (t: number) => {
+      const k = Math.min(1, (t - t0) / 900)
+      setV(target * (1 - Math.pow(1 - k, 3)))
+      if (k < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [target, run])
+  return <>€{v.toFixed(2)}</>
+}
+
+function HowSteps() {
+  const tr = useT()
+  const ref = useRef<HTMLDivElement>(null)
+  const [seen, setSeen] = useState(false)
+  const [i, setI] = useState(0)
+  const [auto, setAuto] = useState(true)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !('IntersectionObserver' in window)) { setSeen(true); return }
+    const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) { setSeen(true); io.disconnect() } }, { threshold: 0.35 })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+  useEffect(() => {
+    if (!seen || !auto || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = setInterval(() => setI((n) => (n + 1) % HOW.length), 3800)
+    return () => clearInterval(id)
+  }, [seen, auto])
+  const h = HOW[i]
+  const c = causeBySlug(h.a.slug)
+  const d = MIN_DESIGNS.find((x) => x.slug === h.a.slug)!
+  return (
+    <div ref={ref} className={'pwl-howx' + (seen ? ' is-in' : '')} style={{ ['--c' as string]: c?.color ?? '#999' }}>
+      <div className="pwl-how-pick" role="group" aria-label={tr('Pick a piece')}>
+        {HOW.map((x, n) => (
+          <button key={x.label} type="button" aria-pressed={n === i} onClick={() => { setI(n); setAuto(false) }}>{tr(x.label)}</button>
+        ))}
+      </div>
+      <ol className="pwl-how">
+        <li><span className="pwl-how-pic pwl-how-art"><img key={h.a.slug} className="pwl-how-swap" src={`/v2/img/art-${h.a.slug}-w.webp`} alt={`${d.name}, ${tr('artwork')}`} /></span><span className="pwl-how-n">1</span><b><span className="pwl-how-k">1. </span>{tr('Pick a design')}</b><span>{tr('Each one belongs to one of six causes.')}</span></li>
+        <li><span className="pwl-how-pic"><PieceImg key={h.a.img} className="pwl-how-swap" a={h.a} alt={`${d.name} ${tr(h.a.piece)}`} /></span><span className="pwl-how-n">2</span><b><span className="pwl-how-k">2. </span>{tr('We print it for you')}</b><span>{tr('Made to order, so nothing is wasted.')}</span></li>
+        <li><span className="pwl-how-pic pwl-how-amt"><span className="pw-fat" aria-live="polite"><CountUp to={h.give} run={seen} /></span>{c && <img key={c.logo} className="pwl-how-swap" src={c.logo} alt={c.partner} loading="lazy" />}</span><span className="pwl-how-n">3</span><b><span className="pwl-how-k">3. </span>{tr('A fixed amount supports the partner')}</b><span>{c ? `${tr('For')} ${c.partner}, ${tr('already in the price.')}` : tr('Already in the price of every piece.')} <A href="/how-giving-works" className="pwl-how-link">{tr('How giving works')}</A></span></li>
+      </ol>
+    </div>
+  )
+}
+
 function PieceImg({ a, alt, className }: { a: { img: string; src?: string }; alt: string; className?: string }) {
   const cut = useCutout(a.src)
   const [tight, setTight] = useState<{ from: string; url: string }>({ from: '', url: '' })

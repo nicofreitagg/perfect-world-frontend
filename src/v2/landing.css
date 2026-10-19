@@ -867,3 +867,25 @@
 .pwl-min-explore{display:inline-block;margin-top:14px;font-weight:700;font-size:16px;color:inherit;text-decoration:none;border-bottom:1.5px solid currentColor;padding-bottom:2px}
 .pwl-min-explore span{display:inline-block;transition:transform .3s}
 .pwl-min-explore:hover span{transform:translateX(4px)}
+
+/* How it works as a small demo (19 Oct): piece chips, steps come in one by one, amount counts up. */
+.pwl-how-pick{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:clamp(18px,2.4vw,28px) auto 0;max-width:720px}
+.pwl-how-pick button{font:600 14px/1 inherit;font-family:inherit;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(242,235,223,.28);background:transparent;color:inherit;cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.pwl-how-pick button:hover{border-color:rgba(242,235,223,.7)}
+.pwl-how-pick button[aria-pressed="true"]{background:#f2ebdf;color:#13110f;border-color:#f2ebdf}
+.pwl-howx .pwl-how-pic{background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--c) 42%,transparent),transparent 70%);transition:background .8s}
+.pwl-how-swap{animation:pwlHowSwap .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pwlHowSwap{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+.pwl-howx .pwl-how li{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.pwl-howx.is-in .pwl-how li{opacity:1;transform:none}
+.pwl-howx.is-in .pwl-how li:nth-child(2){transition-delay:.35s}
+.pwl-howx.is-in .pwl-how li:nth-child(3){transition-delay:.7s}
+.pwl-howx .pwl-how li:not(:last-child)::after{animation:pwlHowNudge 2.4s ease-in-out infinite}
+@keyframes pwlHowNudge{0%,100%{transform:translateX(0);opacity:.55}50%{transform:translateX(6px);opacity:1}}
+.pwl-howx .pwl-how-amt .pw-fat{font-variant-numeric:tabular-nums}
+@media (max-width:700px){
+  .pwl-how-pick{gap:6px;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;margin-left:-16px;margin-right:-16px;padding:0 16px}
+  .pwl-how-pick::-webkit-scrollbar{display:none}
+  .pwl-how-pick button{flex:0 0 auto;min-height:36px;padding:0 14px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){.pwl-howx .pwl-how li{opacity:1;transform:none;transition:none}.pwl-how-swap,.pwl-howx .pwl-how li::after{animation:none}}
