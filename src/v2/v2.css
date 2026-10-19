@@ -791,3 +791,7 @@ a.pw-beanieline:hover{border-color:#0b0b0c}
 .pw-split>button[aria-selected="false"]{border-color:rgba(255,255,255,.7)}
 .pw-split>button[aria-selected="true"]{border-color:#c0322a;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 14px 34px rgba(70,48,24,.18)}
 @media (hover:hover){.pw-split-og:hover{animation:none}}
+/* glass tiles: ink outline on the selected tile instead of red (Nico 19 Oct) */
+.pw-split>button[aria-selected="true"]{border-color:rgba(20,17,14,.85)}
+.pw-split>button[aria-selected="true"] .pw-split-go,.pw-split-og[aria-selected="true"] .pw-split-go{color:#14110e}
+@media (hover:hover){.pw-split>button:hover .pw-split-go{color:#14110e}}
