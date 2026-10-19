@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { A } from './A'
-import { CAUSES } from './causes'
+import { CAUSES, causeTitle } from './causes'
 import { icon, type CauseKey } from './data'
 
 // Replacements for the home globe (Nico, 19 Oct: globe "too serious"); he picked the map:
@@ -146,6 +146,7 @@ export function SixSwirls({ tr }: { tr: (s: string) => string }) {
           <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-ico" style={{ left: `${x / 6}%`, top: `${y / 6}%`, ['--d' as string]: `${i * 0.18}s`, ['--c' as string]: c.color }}
             onMouseEnter={() => setOn(c.id)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(c.id)} onBlur={() => setOn(null)} aria-label={c.partner}>
             <img src={icon(c.id, 'a')} alt="" />
+            <span className="pwl-swirl-name" style={{ ['--ox' as string]: Math.cos(((-90 + i * 60) * Math.PI) / 180).toFixed(2), ['--oy' as string]: Math.sin(((-90 + i * 60) * Math.PI) / 180).toFixed(2) }}>{causeTitle(c.name)}</span>
           </A>
         )
       })}

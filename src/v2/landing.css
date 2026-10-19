@@ -1026,3 +1026,15 @@
 .pwl-swirls-4 .pwl-swirl-heart path{stroke:none;transform:scale(.75)}
 .pwl-swirls-4 .pwl-swirl-line .pw-hand{font-family:'Bricolage Grotesque',system-ui,sans-serif!important;font-weight:600;letter-spacing:-.01em;font-size:clamp(17px,1.6vw,21px)!important}
 .pwl-swirls-4::before{background:radial-gradient(closest-side,rgba(242,235,223,.07),transparent)}
+/* Cause names beside the swirl icons, pushed outward (Nico 19 Oct) */
+.pwl-swirl-ico{--off:62px}
+.pwl-swirl-name{position:absolute;left:50%;top:50%;transform:translate(calc(-50% + var(--ox) * var(--off) * 1.25),calc(-50% + var(--oy) * var(--off)));white-space:nowrap;font:600 13px/1 'Bricolage Grotesque',system-ui,sans-serif;letter-spacing:.01em;color:#f2ebdf;opacity:.85;pointer-events:none;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.pwl-swirl-ico:hover .pwl-swirl-name{color:var(--c);opacity:1}
+@media (max-width:899px){.pwl-swirl-ico{--off:36px}.pwl-swirl-name{font-size:10.5px}}
+.pwl-swirl-name{font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+@media (max-width:899px){.pwl-swirl-name{font-size:8px;letter-spacing:.05em}}
+.pwl-swirl-ico{--off:50px}
+.pwl-swirl-name{transform:translate(calc(-50% + var(--ox) * var(--off) * 1.5),calc(-50% + var(--oy) * var(--off)))}
+.pwl-swirls-4 .pwl-swirl-line{bottom:-23%}
+.pwl-swirls-4{margin-bottom:clamp(80px,10vw,110px)}
+@media (max-width:899px){.pwl-swirl-ico{--off:30px}.pwl-swirls-4{max-width:300px}}
