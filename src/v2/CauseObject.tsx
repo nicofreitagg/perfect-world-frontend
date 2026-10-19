@@ -86,9 +86,8 @@ export function SketchMap() {
   )
 }
 
-// Free, hand-drawn arms (Nico 19 Oct v3: thinner, crisper, less rigid): a loose spiral with a small
-// curl halfway, drawn through points with a Catmull-Rom curve; a second wobbled copy lets each arm sway.
-const rnd = (n: number) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x) }
+// Clean arms (Nico 19 Oct v4: home must feel elegant, not handwritten): a smooth logarithmic spiral
+// from each cause into the centre; a slightly more twisted copy lets the arms breathe.
 const curve = (pts: number[][]) => {
   let d = `M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`
   for (let k = 0; k < pts.length - 1; k++) {
@@ -99,19 +98,13 @@ const curve = (pts: number[][]) => {
   }
   return d
 }
-const arm = (i: number, wob: number) => {
-  const C = 300, a0 = -90 + i * 60, pts: number[][] = []
-  const N = 9
-  for (let k = 0; k <= N; k++) {
-    const t = k / N
-    const r = 240 - 212 * Math.pow(t, 0.9) + (k && k < N ? (rnd(i * 31 + k + wob * 7) - 0.5) * 22 : 0)
-    const a = ((a0 + 200 * t + (k && k < N ? (rnd(i * 17 + k * 3 + wob * 11) - 0.5) * 10 : 0)) * Math.PI) / 180
-    pts.push([C + r * Math.cos(a), C + r * Math.sin(a)])
-    if (k === 4) {
-      // a little curl, like a pen flourish
-      const [px, py] = pts[pts.length - 1], cr = 13 + rnd(i + wob) * 4, base = a + Math.PI / 2
-      for (let q = 1; q <= 7; q++) pts.push([px + cr * Math.cos(base + q * 0.9) - cr * Math.cos(base), py + cr * Math.sin(base + q * 0.9) - cr * Math.sin(base)])
-    }
+const arm = (i: number, twist: number) => {
+  const pts: number[][] = []
+  for (let k = 0; k <= 16; k++) {
+    const t = k / 16
+    const r = 236 * Math.pow(30 / 236, t)
+    const a = ((-90 + i * 60 + twist * t) * Math.PI) / 180
+    pts.push([300 + r * Math.cos(a), 300 + r * Math.sin(a)])
   }
   return curve(pts)
 }
@@ -123,17 +116,17 @@ export function SixSwirls({ tr }: { tr: (s: string) => string }) {
   const at = (deg: number, r: number) => [C + r * Math.cos((deg * Math.PI) / 180), C + r * Math.sin((deg * Math.PI) / 180)].map((n) => Math.round(n))
   const hot = on ? byId(on) : null
   return (
-    <div ref={ref} className={`pwl-obj pwl-swirls pwl-swirls-3${seen ? ' is-in' : ''}${on ? ' has-on' : ''}`}>
+    <div ref={ref} className={`pwl-obj pwl-swirls pwl-swirls-3 pwl-swirls-4${seen ? ' is-in' : ''}${on ? ' has-on' : ''}`}>
       <svg viewBox="0 0 600 600" aria-hidden="true">
         {CAUSES.map((c, i) => {
-          const d0 = arm(i, 0), d1 = arm(i, 1)
+          const d0 = arm(i, 210), d1 = arm(i, 232)
           return (
             <g key={c.id} className={`pwl-swirl-arm${on === c.id ? ' is-on' : ''}`}>
               <path d={d0} pathLength={1} stroke={c.color} className="pwl-swirl-path" style={{ ['--d' as string]: `${i * 0.18}s` }}>
-                {seen && <animate attributeName="d" values={`${d0};${d1};${d0}`} dur={`${6 + i * 0.7}s`} begin="2.6s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" />}
+                {seen && <animate attributeName="d" values={`${d0};${d1};${d0}`} dur="9s" begin="2.6s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" />}
               </path>
               {seen && [0, 2].map((b) => (
-                <circle key={b} r={3.5} fill={c.color} className="pwl-swirl-drop">
+                <circle key={b} r={2.6} fill={c.color} className="pwl-swirl-drop">
                   <animateMotion dur="4.6s" begin={`${2.6 + b + i * 0.27}s`} repeatCount="indefinite" path={d0} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".5 0 .7 1" />
                   <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="4.6s" begin={`${2.6 + b + i * 0.27}s`} repeatCount="indefinite" />
                 </circle>
