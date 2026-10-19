@@ -88,30 +88,81 @@ export function SketchMap() {
 
 export function SixSwirls({ tr }: { tr: (s: string) => string }) {
   const [ref, seen] = useInView()
+  const [on, setOn] = useState<CauseKey | null>(null)
   const C = 300
   const at = (deg: number, r: number) => [C + r * Math.cos((deg * Math.PI) / 180), C + r * Math.sin((deg * Math.PI) / 180)].map((n) => Math.round(n))
+  const swirl = (i: number) => {
+    const a = -90 + i * 60
+    const [sx, sy] = at(a, 240)
+    const [ax, ay] = at(a + 55, 225)
+    const [bx, by] = at(a + 120, 120)
+    const [ex, ey] = at(a + 190, 34)
+    return `M${sx},${sy} C${ax},${ay} ${bx},${by} ${ex},${ey}`
+  }
+  const hot = on ? byId(on) : null
+  // Homelier and livelier (Nico 19 Oct): the strokes wobble like ink, the whole swirl slowly turns,
+  // little drops keep flowing from every cause into a beating heart, the icons ride along upright.
   return (
-    <div ref={ref} className={`pwl-obj pwl-swirls${seen ? ' is-in' : ''}`}>
+    <div ref={ref} className={`pwl-obj pwl-swirls${seen ? ' is-in' : ''}${on ? ' has-on' : ''}`}>
+      <div className="pwl-swirl-rot">
       <svg viewBox="0 0 600 600" aria-hidden="true">
-        {CAUSES.map((c, i) => {
-          const a = -90 + i * 60
-          const [sx, sy] = at(a, 255)
-          const [ax, ay] = at(a + 55, 230)
-          const [bx, by] = at(a + 120, 120)
-          const [ex, ey] = at(a + 190, 26)
-          return <path key={c.id} d={`M${sx},${sy} C${ax},${ay} ${bx},${by} ${ex},${ey}`} pathLength={1} stroke={c.color} className="pwl-swirl-path" style={{ ['--d' as string]: `${i * 0.18}s` }} />
-        })}
-        <circle cx={C} cy={C} r={26} pathLength={1} className="pwl-swirl-knot" />
+        <defs>
+          <filter id="pwl-ink" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves={2} seed={4}>
+              <animate attributeName="seed" values="4;9;4" dur="0.8s" calcMode="discrete" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale={4} />
+          </filter>
+        </defs>
+        <g>
+          <g filter="url(#pwl-ink)">
+            {CAUSES.map((c, i) => (
+              <g key={c.id} className={`pwl-swirl-arm${on === c.id ? ' is-on' : ''}`}>
+                <path d={swirl(i)} pathLength={1} stroke={c.color} className="pwl-swirl-glow" style={{ ['--d' as string]: `${i * 0.18}s` }} />
+                <path d={swirl(i)} pathLength={1} stroke={c.color} className="pwl-swirl-path" style={{ ['--d' as string]: `${i * 0.18}s` }} />
+              </g>
+            ))}
+          </g>
+          {seen && CAUSES.map((c, i) => [0, 1.4, 2.8].map((b) => (
+            <circle key={c.id + b} r={5} fill={c.color} className="pwl-swirl-drop">
+              <animateMotion dur="4.2s" begin={`${2.6 + b + i * 0.23}s`} repeatCount="indefinite" path={swirl(i)} keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".5 0 .7 1" />
+              <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.8;1" dur="4.2s" begin={`${2.6 + b + i * 0.23}s`} repeatCount="indefinite" />
+            </circle>
+          )))}
+          {CAUSES.map((c, i) => {
+            const [x, y] = at(-90 + i * 60, 240)
+            return (
+              <g key={c.id} transform={`translate(${x} ${y})`}>
+                <g className="pwl-swirl-upright">
+                  <g className="pwl-swirl-badge" style={{ ['--d' as string]: `${i * 0.18}s` }}>
+                    <circle r={34} fill="#f2ebdf" />
+                    <circle r={34} fill="none" stroke={c.color} strokeWidth={3} className="pwl-swirl-badge-ring" />
+                    <image href={icon(c.id, 'a')} x={-22} y={-22} width={44} height={44} />
+                  </g>
+                </g>
+              </g>
+            )
+          })}
+        </g>
       </svg>
       {CAUSES.map((c, i) => {
-        const [x, y] = at(-90 + i * 60, 255)
+        const [x, y] = at(-90 + i * 60, 240)
         return (
-          <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-ico" style={{ left: `${x / 6}%`, top: `${y / 6}%`, ['--d' as string]: `${i * 0.18}s` }} aria-label={c.partner}>
-            <img src={icon(c.id, 'a')} alt="" />
-          </A>
+          <A key={c.id} href={`/project/${c.slug}`} className="pwl-swirl-hit" style={{ left: `${x / 6}%`, top: `${y / 6}%` }}
+            onMouseEnter={() => setOn(c.id)} onMouseLeave={() => setOn(null)} onFocus={() => setOn(c.id)} onBlur={() => setOn(null)} aria-label={c.partner} />
         )
       })}
-      <p className="pwl-swirl-line pw-hand">{tr('Together. Not Alone.')}</p>
+      </div>
+      <svg viewBox="0 0 600 600" className="pwl-swirl-mid" aria-hidden="true">
+        <g transform={`translate(${C} ${C})`}>
+          <g className="pwl-swirl-heart">
+            <path d="M0,20 C-36,-6 -24,-38 0,-18 C24,-38 36,-6 0,20 Z" />
+          </g>
+        </g>
+      </svg>
+      <p className="pwl-swirl-line">
+        {hot ? <><span className="pw-hand" style={{ color: hot.color }}>{hot.partner}</span><small>{tr(hot.place)}</small></> : <span className="pw-hand">{tr('Together. Not Alone.')}</span>}
+      </p>
     </div>
   )
 }

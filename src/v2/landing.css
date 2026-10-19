@@ -975,3 +975,36 @@
 @keyframes pwl-bob{0%,100%{translate:0 0}50%{translate:0 -3px}}
 @media (max-width:899px){.pwl-map-ico{width:20px;height:20px;padding:2px}.pwl-map-label{gap:4px}}
 @media (prefers-reduced-motion:reduce){.pwl-map *{animation:none!important}}
+/* Swirls v2, livelier and homelier (Nico 19 Oct) */
+.pwl-swirls::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(closest-side,rgba(240,190,130,.18),transparent);pointer-events:none}
+.pwl-swirl-spin{transform-origin:300px 300px;animation:pwl-turn 70s linear infinite}
+@keyframes pwl-turn{to{transform:rotate(360deg)}}
+.pwl-swirl-upright{animation:pwl-turn 70s linear infinite reverse}
+.pwl-swirl-glow{fill:none;stroke-width:22;stroke-linecap:round;opacity:.16;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s cubic-bezier(.45,0,.25,1) var(--d)}
+.pwl-swirls.is-in .pwl-swirl-glow{stroke-dashoffset:0}
+.pwl-swirl-arm{transition:opacity .3s}
+.pwl-swirls.has-on .pwl-swirl-arm:not(.is-on){opacity:.25}
+.pwl-swirl-arm.is-on .pwl-swirl-glow{opacity:.35}
+.pwl-swirl-badge{transform:scale(0);transition:transform .6s cubic-bezier(.3,1.6,.5,1) calc(var(--d) + .2s)}
+.pwl-swirls.is-in .pwl-swirl-badge{transform:scale(1)}
+.pwl-swirl-badge image{animation:pwl-wiggle 3.2s ease-in-out infinite;animation-delay:var(--d);transform-origin:0 0}
+@keyframes pwl-wiggle{0%,100%{rotate:-4deg}50%{rotate:4deg}}
+.pwl-swirl-badge-ring{stroke-dasharray:6 7;animation:pwl-stitch 4s linear infinite}
+.pwl-swirl-heart{transform:scale(0);transition:transform .7s cubic-bezier(.3,1.6,.5,1) 2.5s}
+.pwl-swirls.is-in .pwl-swirl-heart{transform:scale(1)}
+.pwl-swirl-heart path{fill:#e2453c;stroke:#f2ebdf;stroke-width:3;transform-origin:0 0;animation:pwl-beat 1.6s ease-in-out infinite 3.2s}
+@keyframes pwl-beat{0%,100%{transform:scale(1)}12%{transform:scale(1.16)}24%{transform:scale(.98)}36%{transform:scale(1.1)}}
+.pwl-swirl-knot{display:none}
+.pwl-swirl-hit{position:absolute;width:13%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);animation:pwl-hit-turn 70s linear infinite}
+.pwl-swirl-line{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:3.2em}
+.pwl-swirl-line small{font:500 11px 'JetBrains Mono',monospace;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+@media (prefers-reduced-motion:reduce){.pwl-swirls *{animation:none!important}}
+.pwl-swirl-spin{animation:none}
+.pwl-swirl-rot{position:absolute;inset:0;animation:pwl-turn 70s linear infinite}
+.pwl-swirl-rot svg,.pwl-swirl-mid{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.pwl-swirl-mid{pointer-events:none}
+.pwl-swirl-hit{animation:none}
+.pwl-swirl-upright{transform-box:view-box;transform-origin:0 0}
+.pwl-swirl-line{bottom:-17%}
+.pwl-swirl-line .pw-hand{font-size:clamp(20px,2vw,26px)!important}
+.pwl-swirls{margin-bottom:clamp(60px,8vw,90px)}
