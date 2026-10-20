@@ -100,7 +100,7 @@ function FooterSignup() {
         </div>
       )}
       {state === 'error' && <p className="pw-foot-signup-err">{t("That didn't work. Please try again.")}</p>}
-      <p className="pw-foot-signup-fine">{after ? t("Unsubscribe any time.") : t("One email at 11:11. Unsubscribe any time.")} <A href="/privacy-policy">{t("Privacy")}</A></p>
+      <p className="pw-foot-signup-fine">{after ? t("Unsubscribe any time.") : t("Free shipping on your first order in launch week. One email at 11:11.")} <A href="/privacy-policy">{t("Privacy")}</A></p>
     </form>
   )
 }
