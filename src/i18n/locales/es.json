@@ -233,5 +233,22 @@
     "title": "Nuestros Proyectos",
     "subtitle": "Organizaciones y causas que apoyamos",
     "intro": "Junto a nuestras organizaciones asociadas, Perfect World te invita a formar parte de un movimiento que trasciende fronteras, llevando alegría y apoyo a quienes más lo necesitan. Explora nuestros productos colaborativos, sabiendo que cada compra contribuye al bienestar y al futuro del planeta. Conoce más sobre cada una de nuestras organizaciones a continuación."
+  },
+  "waitlist": {
+    "title": "Algo nuevo el 11.11.",
+    "body": "Déjanos tu email. Te enviaremos un solo email a las 11:11.",
+    "button": "Unirme a la lista",
+    "doneTitle": "Ya estás en la lista.",
+    "doneBody": "Nos vemos a las 11:11.",
+    "titleAfter": "Mantente al día.",
+    "bodyAfter": "Nuevas prendas y noticias de las seis causas. Sin spam.",
+    "buttonAfter": "Suscribirme",
+    "doneBodyAfter": "Gracias por estar aquí.",
+    "placeholder": "Tu email",
+    "sending": "Enviando…",
+    "error": "No ha funcionado. Inténtalo de nuevo.",
+    "fine": "Puedes darte de baja cuando quieras.",
+    "privacy": "Privacidad",
+    "close": "Cerrar"
   }
 }

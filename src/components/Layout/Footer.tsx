@@ -1,3 +1,4 @@
+import { joinList } from '../../utils/waitlist';
 import React, { useState, type FC, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -76,7 +77,7 @@ const Footer: FC<FooterProps> = ({
     },
   ],
   newsletterTitle,
-  onSubscribe,
+  onSubscribe = joinList,
   className,
   ...props
 }) => {

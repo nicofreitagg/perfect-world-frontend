@@ -233,5 +233,22 @@
     "title": "Unsere Projekte",
     "subtitle": "Organisationen und Anliegen, die wir unterstützen",
     "intro": "Gemeinsam mit unseren Partnerorganisationen lädt dich Perfect World ein, Teil einer Bewegung zu werden, die Grenzen überwindet und jenen Freude und Unterstützung bringt, die sie am dringendsten brauchen. Entdecke unsere gemeinsamen Produkte – im Wissen, dass jeder Kauf zum Wohl und zur Zukunft unseres Planeten beiträgt. Erfahre unten mehr über unsere einzelnen Partnerorganisationen."
+  },
+  "waitlist": {
+    "title": "Etwas Neues am 11.11.",
+    "body": "Hinterlass deine E-Mail. Wir schicken dir um 11:11 eine Mail.",
+    "button": "Auf die Liste",
+    "doneTitle": "Du bist auf der Liste.",
+    "doneBody": "Bis 11:11.",
+    "titleAfter": "Bleib auf dem Laufenden.",
+    "bodyAfter": "Neue Pieces und News von den sechs Causes. Kein Spam.",
+    "buttonAfter": "Eintragen",
+    "doneBodyAfter": "Schön, dass du da bist.",
+    "placeholder": "Deine E-Mail",
+    "sending": "Wird gesendet…",
+    "error": "Das hat nicht geklappt. Bitte versuch es nochmal.",
+    "fine": "Abmelden jederzeit möglich.",
+    "privacy": "Datenschutz",
+    "close": "Schließen"
   }
 }

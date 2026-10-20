@@ -10,7 +10,7 @@ import CookieConsent from './components/Layout/CookieConsent'
 import RegionNotice from './components/Layout/RegionNotice'
 import ColorExpansionOverlay from './components/transitions/ColorExpansionOverlay'
 import ScrollToTop from './components/Layout/ScrollToTop'
-import DiscountPopup from './components/ui/DiscountPopup'
+import WaitlistPopup from './components/ui/WaitlistPopup'
 
 // Route-level code splitting: each page loads on demand so the initial
 // bundle stays small (three.js in particular only loads with Home's scene)
@@ -108,7 +108,7 @@ function App() {
           </Suspense>
           <Swap next={<CookieV2 />} current={<CookieConsent />} />
           <Swap next={<RegionNotice v2 />} current={<RegionNotice />} />
-          <Swap next={null} current={<DiscountPopup />} />
+          <WaitlistPopup />
           <Analytics />
           <SpeedInsights />
         </NavigationProvider>

@@ -4,6 +4,9 @@ import { useT } from './t'
 import { Lines } from './Seams'
 import LangNotice from './LangNotice'
 import PageSwirl from './PageSwirl'
+import { useState } from 'react'
+import { joinList } from '../utils/waitlist'
+import { isLaunched } from './launch'
 
 // Shared header and footer for every page of the new site.
 // Short labels so the menu fits one line on a phone, in both languages.
@@ -66,8 +69,38 @@ export function Footer({ icons = ['/v2/icons/ic-df3d515b.svg', '/v2/icons/ic-745
     <p style={{ margin: "4px 0 0", fontFamily: "'Hand', cursive", fontSize: "clamp(39px, 6.6vw, 100px)", lineHeight: "1", letterSpacing: ".01em" }} className="pw-hand">Not Alone.</p>
     <A href="/shop" style={{ display: "inline-block", marginTop: "30px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", letterSpacing: ".01em", fontSize: "17px", color: "#0b0b0c", background: "#f5f4f1", textDecoration: "none", padding: "12px 30px", borderRadius: "999px" }}>{t("SHOP HOPE")}</A>
     <p style={{ margin: "22px 0 0", fontSize: "14px", color: "rgba(255,255,255,.6)" }}>{t("Comment HOPE on any post at @perfectworld.global, and we'll find you.")}</p>
+    <FooterSignup />
     <nav aria-label="Footer" className="pw-m-footnav" style={{ margin: "64px auto 0", maxWidth: "1100px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "28px", textAlign: "left", paddingTop: "36px", borderTop: "1px solid rgba(255,255,255,.14)" }}><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>{t("SHOP")}</p><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("All pieces")}</A><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Minimal")}</A><A href="/shop" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("OG collections")}</A><A href="/size-guide" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Size guide")}</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>{t("GIVING")}</p><A href="/how-giving-works" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("How giving works")}</A><A href="/projects" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("The six causes")}</A><A href="/how-giving-works#payouts" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("When it's paid")}</A><A href="/about" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Our story")}</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>{t("HELP")}</p><A href="/shipping-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Shipping and delivery")}</A><A href="/refund-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Returns and exchanges")}</A><A href="/#faq" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("FAQ")}</A><A href="mailto:hello@perfectworld.global" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Contact")}</A></div><div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: "0" }}><p style={{ margin: "0 0 4px", fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", letterSpacing: ".12em", color: "#ffffff" }}>{t("LEGAL")}</p><A href="/legal-notice" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Imprint")}</A><A href="/privacy-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Privacy")}</A><A href="/terms-of-service" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Terms")}</A><A href="/refund-policy" style={{ color: "rgba(255,255,255,.62)", textDecoration: "none", fontSize: "15px" }}>{t("Right of withdrawal")}</A></div></nav><p style={{ margin: "40px 0 0", fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", letterSpacing: ".1em", color: "rgba(255,255,255,.4)" }}>{t("MUNICH \u00b7 SIX CAUSES, ONE HOPE \u00b7 PRINTED ON DEMAND IN GERMANY \u00b7 SHIPS IN 1.5 TO 2 WEEKS \u00b7 @PERFECTWORLD.GLOBAL")}</p>
   </footer>
   </>
+  )
+}
+
+// Footer signup, same list as the popup: launch waitlist before 11.11, newsletter after.
+function FooterSignup() {
+  const t = useT()
+  const [email, setEmail] = useState('')
+  const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
+  const after = isLaunched()
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || state === 'sending') return
+    setState('sending')
+    setState((await joinList(email)) ? 'done' : 'error')
+  }
+  return (
+    <form onSubmit={submit} className="pw-foot-signup" aria-label={t("Email list")}>
+      <p className="pw-foot-signup-t">{after ? t("Stay in the loop.") : <>{t("Something new on")} <span style={{ color: "#e2453c" }}>11.11.</span></>}</p>
+      {state === 'done' ? (
+        <p className="pw-foot-signup-ok">{after ? t("You're in. Thanks for being here.") : t("You're on the list. See you at 11:11.")}</p>
+      ) : (
+        <div className="pw-foot-signup-row">
+          <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("Your email")} aria-label={t("Your email")} />
+          <button type="submit" disabled={state === 'sending'}>{state === 'sending' ? t("Sending…") : after ? t("Sign me up") : t("Join the list")}</button>
+        </div>
+      )}
+      {state === 'error' && <p className="pw-foot-signup-err">{t("That didn't work. Please try again.")}</p>}
+      <p className="pw-foot-signup-fine">{after ? t("Unsubscribe any time.") : t("One email at 11:11. Unsubscribe any time.")} <A href="/privacy-policy">{t("Privacy")}</A></p>
+    </form>
   )
 }
