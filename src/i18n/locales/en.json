@@ -233,5 +233,22 @@
     "title": "Our Projects",
     "subtitle": "Charities and Causes we support",
     "intro": "Together with our partner charities, Perfect World invites you to be a part of a movement that transcends borders, bringing joy and support to those who need it the most. Explore our collaborative products, knowing that each purchase contributes to the well-being and future of the planet. Learn more about our individual charities below."
+  },
+  "waitlist": {
+    "title": "Something new on 11.11.",
+    "body": "Leave your email. We'll send one email at 11:11.",
+    "button": "Join the list",
+    "doneTitle": "You're on the list.",
+    "doneBody": "See you at 11:11.",
+    "titleAfter": "Stay in the loop.",
+    "bodyAfter": "New pieces and news from the six causes. No spam.",
+    "buttonAfter": "Sign me up",
+    "doneBodyAfter": "Thanks for being here.",
+    "placeholder": "Your email",
+    "sending": "Sending…",
+    "error": "That didn't work. Please try again.",
+    "fine": "Unsubscribe any time.",
+    "privacy": "Privacy",
+    "close": "Close"
   }
 }
