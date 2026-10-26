@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { CAUSES, TINT, causeFg, causeTitle, FACTS, FILMS, SITES, ext } from './causes'
+import { CAUSES, TINT, causeFg, causeTitle, FACTS, FILMS, SITES, ext, IMPACT } from './causes'
 import { PIECES, icon, RAW_GROUND } from './data'
 import { useCauseGround } from './ground'
 import NotFound from '../pages/NotFound'
@@ -28,7 +28,10 @@ export default function CauseV2() {
   const goNext = () => navigate(`/project/${n.slug}`)
   const fact = FACTS[raw.id]
   const film = FILMS[raw.id]
-  const pieces = ([['TOTE', PIECES.tote], ['T-SHIRT', PIECES.shirt], ['OVERSIZED', PIECES.oversized], ['HOODIE', PIECES.hoodie]] as const).map(([label, p]) => ({ label, give: p.give }))
+  const impact = IMPACT[raw.id]
+  const pieces = ([['TOTE', PIECES.tote.give, 'tote'], ['T-SHIRT', PIECES.shirt.give, 'tshirt'], ['OVERSIZED', PIECES.oversized.give, 'oversized'], ['HOODIE', PIECES.hoodie.give, 'hoodie'], ['BOMBER', '33.33', 'bomber']] as const)
+    .map(([label, give, kind]) => ({ label, give, does: impact?.items[kind] }))
+    .filter((pc) => pc.label !== 'BOMBER' || pc.does)
 
   useEffect(() => {
     document.body.style.background = RAW_GROUND
@@ -108,8 +111,10 @@ export default function CauseV2() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr auto", rowGap: "12px", padding: "16px 0", borderBottom: "1px dashed #bdbab3" }}>
             {pieces.map((pc, pcI) => (<Fragment key={pcI}>
               <span>{tr(pc.label)}</span><span style={{ textAlign: "right", color: "#c0322a", fontWeight: "600" }}>€{pc.give}</span>
+              {pc.does && <span style={{ gridColumn: "1 / -1", marginTop: "-6px", fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontSize: "14px", lineHeight: "1.45", color: "#3a3a3a" }}>= {tr(pc.does)}</span>}
             </Fragment>))}
           </div>
+          {impact && <p style={{ margin: "0", padding: "12px 0", borderBottom: "1px dashed #bdbab3", fontSize: "11px", lineHeight: "1.5", color: "#5c5c5c" }}>{tr(impact.note)}</p>}
           <div style={{ paddingTop: "14px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.6" }}>{tr("GOES TO")} {c.partnerUpper}.<br />{tr("THE SAME AMOUNT, EVERY TIME.")}</div>
           <A href={`/design/${c.slug}`} style={{ display: "flex", alignItems: "center", justifyContent: "center", marginTop: "18px", minHeight: "50px", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", textDecoration: "none", fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: "15px", fontWeight: "600" }}>{tr("Shop for")} {c.title}</A>
         </div>

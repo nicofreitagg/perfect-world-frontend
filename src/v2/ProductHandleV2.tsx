@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 import Shell from './Shell'
 import { A } from './A'
-import { CAUSES, causeTitle } from './causes'
+import { CAUSES, causeTitle, causeBySlug, impactOf } from './causes'
 import { PIECES, NEW_PIECES, WOMEN, minDesignOf, isNewOG } from './data'
 import { useCauseGround } from './ground'
 import { useDesignPairOrGuess } from './printSide'
@@ -64,6 +64,8 @@ export default function ProductHandleV2() {
   const variant = fits(size) ?? fits('M') ?? inColour.find((v) => v.availableForSale)
   const price = variant ? Number(variant.price.amount) : Number(p.priceRange.minVariantPrice.amount)
   const give = giveOf(p.title)
+  const kindOf = /bomber/i.test(p.title) ? 'bomber' : /beanie/i.test(p.title) ? undefined : WOMEN.test(p.title) ? 'tshirt' : extractProductType(p.title)
+  const does = impactOf(causeBySlug(minDesignOf(p.title)?.slug)?.id ?? (og ? cause?.id : undefined), kindOf)
   // Minimal: the back (the design) leads, for the picked colour when Shopify has its photo.
   // OG listings come in the same front/back pairs, so the back print leads there too.
   const minimal = /minimal/i.test(p.title) || og
@@ -95,6 +97,7 @@ export default function ProductHandleV2() {
             )}
             <p style={{ margin: '14px 0 0', fontFamily: mono, fontSize: '22px' }}>€{price.toFixed(2)}</p>
             {give && <p style={{ margin: '6px 0 0', fontFamily: mono, fontSize: '14px', color: '#c0322a' }}>€{give} {/beanie/i.test(p.title) ? t('shared by all six partners') : t('goes to the partner it was made with')}</p>}
+            {does && <p style={{ margin: '6px 0 0', fontSize: '15px', lineHeight: 1.45, color: '#3a3a3a', maxWidth: '440px' }}>= {t(does)}</p>}
           </div>
           {colours.length > 1 && (
             <div>

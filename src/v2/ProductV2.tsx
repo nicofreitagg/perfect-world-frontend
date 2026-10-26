@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { CAUSES, causeBySlug, causeFg, causeTeaser, SITES, ext } from './causes'
+import { CAUSES, causeBySlug, causeFg, causeTeaser, SITES, ext, impactOf } from './causes'
 import { PIECES, icon, RAW_GROUND, isNewOG } from './data'
 import { getAllProducts } from '../utils/shopify'
 import { useDesignPairOrGuess } from './printSide'
@@ -186,6 +186,7 @@ export default function ProductV2() {
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}><span>{c.name} {tr(piece.upper)}{shownSize ? ` · ${shownSize}` : ""}</span><span>€{shownPiece.price}</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", color: "#5c5c5c" }}><span>{tr("Shipping")}</span><span>{tr("from €5.95")}</span></div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", fontWeight: "600" }}><span>→ {help.partner}</span><span style={{ color: "#c0322a" }}>€{piece.give}</span></div>
+            {impactOf(raw?.id, piece.id) && <div style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontSize: "14px", lineHeight: "1.45", color: "#3a3a3a" }}>= {tr(impactOf(raw?.id, piece.id)!)}</div>}
           </div>
           <p style={{ margin: "0", fontSize: "12px", color: "#5c5c5c" }}>{tr("Same amount, every time. Included in the price.")}</p>
         </div>

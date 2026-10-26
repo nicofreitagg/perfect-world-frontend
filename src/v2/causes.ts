@@ -256,3 +256,19 @@ export const SITES: Partial<Record<CauseKey, string>> = {
   wild: 'https://www.elephantsforafrica.org/',
 }
 export const ext = { target: '_blank', rel: 'noopener noreferrer' } as const
+
+// What each amount does, in the partner's own words (MHI, Theresa, 26 Oct). Beanies are split, so none here.
+export type GiveKind = 'tote' | 'tshirt' | 'oversized' | 'hoodie' | 'bomber'
+export const IMPACT: Partial<Record<CauseKey, { note: string; items: Partial<Record<GiveKind, string>> }>> = {
+  talk: {
+    note: 'YAM (Youth Aware of Mental Health) is MHI’s prevention programme for 13 to 17 year olds at school.',
+    items: {
+      tote: '20 printed pocket guides that help young people understand mental health and know where to find help.',
+      tshirt: '1 booklet with support services and YAM course content on stress, crisis, depression and suicidality.',
+      oversized: 'Materials for a whole YAM course: posters and dilemma cards with tricky scenarios to discuss.',
+      hoodie: '1 volunteer allowance for a YAM course assistant.',
+      bomber: '1 volunteer allowance for a YAM course leader.',
+    },
+  },
+}
+export const impactOf = (id: CauseKey | undefined, kind: string | undefined) => (id && kind ? IMPACT[id]?.items[kind as GiveKind] : undefined)
