@@ -250,5 +250,19 @@
     "fine": "Puedes darte de baja cuando quieras.",
     "privacy": "Privacidad",
     "close": "Cerrar"
+  },
+  "prelaunch": {
+    "kicker": "Un nuevo capítulo",
+    "title": "Algo nuevo el",
+    "body": "Perfect World está cambiando, con una nueva colección. Únete a la lista: te enviaremos un solo email a las 11:11, con envío gratis en tu primer pedido de la semana de lanzamiento.",
+    "countdown": "Tiempo hasta el 11.11 a las 11:11",
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Min",
+    "seconds": "Seg",
+    "fine": "Un email a las 11:11. Puedes darte de baja cuando quieras.",
+    "shop": "Ver las prendas actuales",
+    "imprint": "Aviso legal",
+    "contact": "Contacto"
   }
 }

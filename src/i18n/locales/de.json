@@ -250,5 +250,19 @@
     "fine": "Abmelden jederzeit möglich.",
     "privacy": "Datenschutz",
     "close": "Schließen"
+  },
+  "prelaunch": {
+    "kicker": "Ein neues Kapitel",
+    "title": "Etwas Neues am",
+    "body": "Perfect World verändert sich, mit einer neuen Kollektion. Trag dich ein: Wir schicken dir um 11:11 eine Mail, mit kostenlosem Versand auf deine erste Bestellung in der Launch-Woche.",
+    "countdown": "Zeit bis 11.11. um 11:11",
+    "days": "Tage",
+    "hours": "Std",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "fine": "Eine Mail um 11:11. Abmelden jederzeit möglich.",
+    "shop": "Zu den aktuellen Pieces",
+    "imprint": "Impressum",
+    "contact": "Kontakt"
   }
 }

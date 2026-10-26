@@ -16,6 +16,8 @@ export default function WaitlistPopup() {
   const [state, setState] = useState<'idle' | 'sending' | 'done' | 'error'>('idle')
 
   useEffect(() => {
+    // The prelaunch home is the signup itself; no popup on top of it.
+    if (!isLaunched() && window.location.pathname === '/') return
     try {
       if (localStorage.getItem(KEY)) return
     } catch {

@@ -11,10 +11,12 @@ import RegionNotice from './components/Layout/RegionNotice'
 import ColorExpansionOverlay from './components/transitions/ColorExpansionOverlay'
 import ScrollToTop from './components/Layout/ScrollToTop'
 import WaitlistPopup from './components/ui/WaitlistPopup'
+import { isLaunched } from './utils/waitlist'
 
 // Route-level code splitting: each page loads on demand so the initial
 // bundle stays small (three.js in particular only loads with Home's scene)
 const Home = lazy(() => import('./pages/Home'))
+const PreLaunch = lazy(() => import('./pages/PreLaunch'))
 const ProjectPage = lazy(() => import('./pages/ProjectPage'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const AboutUs = lazy(() => import('./pages/AboutUs'))
@@ -57,7 +59,7 @@ function App() {
           <ColorExpansionOverlay />
           <Suspense fallback={<PageFallback />}>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={isLaunched() ? <Home /> : <PreLaunch />} />
               <Route path="/projects" element={<ProjectSelection />} />
               <Route path="/project/:slug" element={<ProjectPage />} />
               <Route path="/product/:handle" element={<ProductDetail />} />
