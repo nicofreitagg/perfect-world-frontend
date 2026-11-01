@@ -57,14 +57,19 @@ async function subscribe(email: string, tag: string) {
   const errs = created.customerCreate.userErrors ?? []
   if (!errs.length) return
   if (!errs.some((e) => /taken/i.test(e.message))) throw new Error(errs.map((e) => e.message).join('; '))
-  // Already a customer: add the tag and switch email consent on.
-  const found = await gql(url, h, `query($q: String!) { customers(first: 1, query: $q) { edges { node { id } } } }`, { q: `email:"${email}"` })
-  const id = (found.customers as unknown as { edges: { node: { id: string } }[] }).edges[0]?.node.id
-  if (!id) throw new Error('customer exists but was not found')
-  await gql(url, h, `mutation($id: ID!, $tags: [String!]!) { tagsAdd(id: $id, tags: $tags) { userErrors { message } } }`, { id, tags: [tag] })
-  await gql(url, h, `mutation($input: CustomerEmailMarketingConsentUpdateInput!) { customerEmailMarketingConsentUpdate(input: $input) { userErrors { message } } }`, {
-    input: { customerId: id, emailMarketingConsent: CONSENT },
-  })
+  // Already a customer: the email is saved. Adding the tag and consent is best effort, because
+  // on the Basic plan apps may not be allowed to look customers up by email.
+  try {
+    const found = await gql(url, h, `query($q: String!) { customers(first: 1, query: $q) { edges { node { id } } } }`, { q: `email:"${email}"` })
+    const id = (found.customers as unknown as { edges: { node: { id: string } }[] }).edges[0]?.node.id
+    if (!id) return
+    await gql(url, h, `mutation($id: ID!, $tags: [String!]!) { tagsAdd(id: $id, tags: $tags) { userErrors { message } } }`, { id, tags: [tag] })
+    await gql(url, h, `mutation($input: CustomerEmailMarketingConsentUpdateInput!) { customerEmailMarketingConsentUpdate(input: $input) { userErrors { message } } }`, {
+      input: { customerId: id, emailMarketingConsent: CONSENT },
+    })
+  } catch (e) {
+    console.warn('waitlist: existing customer not updated', e)
+  }
 }
 
 export default async function handler(req: Req, res: Res) {
