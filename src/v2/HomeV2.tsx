@@ -57,6 +57,7 @@ const VOICES = [
 
 // The film's first frame holds for 2 s with a slow zoom, then the film runs (Nico 2 Nov: no countdown).
 const INTRO_MS = 2000
+const FIRST_WORD_S = 2.2
 
 /** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: string; srcPhone: string; card: string; cardPhone: string; label: string; children: React.ReactNode }) {
@@ -82,6 +83,8 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   }, [])
   // The 11.11 card stays up until the film is really playing (phones on low power never autoplay).
   const [playing, setPlaying] = useState(false)
+  // The copy is the focus until the first spoken word ("Sometimes," at ~2.2 s), then steps back so the film leads.
+  const [dim, setDim] = useState(false)
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
   useEffect(() => {
     const v = ref.current
@@ -137,7 +140,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} />
+      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} onTimeUpdate={(e) => { const d = e.currentTarget.currentTime >= FIRST_WORD_S; if (d !== dim) setDim(d) }} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={cardPhone} />
@@ -160,7 +163,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
       </div>
     </div>
     {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
-    <div className="pwl-cine-over is-in">{children}</div>
+    <div className={'pwl-cine-over is-in' + (dim ? ' is-dim' : '')}>{children}</div>
     </div>
   )
 }

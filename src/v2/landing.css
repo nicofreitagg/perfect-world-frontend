@@ -1077,3 +1077,9 @@
   .pwl-cine-shade{display:block;background:rgba(11,10,9,.1)}
   .pwl-cine-over .pwl-head,.pwl-cine-over .pwl-cine-lede{text-shadow:0 2px 18px rgba(11,10,9,.55),0 1px 3px rgba(11,10,9,.45)}
 }
+/* 2 Nov (Nico): full copy at the start, then it softens (blur + lower opacity) from the first spoken word so the film is the focus. Hover brings it back. */
+@media (min-width:1280px){
+  .pwl-cine-over{transition:opacity 1.4s ease,filter 1.4s ease,transform 1s ease}
+  .pwl-cine-over.is-dim{opacity:.38;filter:blur(1.5px)}
+  .pwl-cine-over.is-dim:hover,.pwl-cine-over.is-dim:focus-within{opacity:1;filter:none}
+}
