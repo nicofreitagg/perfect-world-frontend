@@ -56,24 +56,9 @@ const VOICES = [
 ]
 
 // Desktop: the film's first frame holds for 2 s with a slow zoom, then the film runs (Nico 2 Nov: no countdown).
-// Phones (Nico 2 Nov, shorter social 4:3 cut): the 11.11 card with a 3-2-1 countdown, a white fade, then the film.
+// Phones (Nico 2 Nov, "For website mobile" cut): the film carries its own 11.11 intro card, so it starts straight away.
 const INTRO_MS = 2000
-const PHONE_INTRO_MS = 3000
-const WHITE_MS = 450
 
-function IntroCount() {
-  const [n, setN] = useState(Math.round(PHONE_INTRO_MS / 1000))
-  useEffect(() => {
-    const id = setInterval(() => setN((x) => Math.max(1, x - 1)), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return (
-    <span className="pwl-cine-count" aria-hidden="true">
-      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" /><circle className="is-run" cx="24" cy="24" r="21" pathLength={100} /></svg>
-      <b key={n}>{n}</b>
-    </span>
-  )
-}
 const FIRST_WORD_S = 2.2
 
 /** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
@@ -102,8 +87,6 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   const [playing, setPlaying] = useState(false)
   // The copy is the focus until the first spoken word ("Sometimes," at ~2.2 s), then steps back so the film leads.
   const [dim, setDim] = useState(false)
-  const [white, setWhite] = useState(false)
-  useEffect(() => { if (!white) return; const id = setTimeout(() => setWhite(false), playing ? 120 : 1500); return () => clearTimeout(id) }, [white, playing])
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
   useEffect(() => {
     const v = ref.current
@@ -138,15 +121,11 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
     // The intro (Nico 16 Oct): the 11.11 card holds with a slow zoom and a countdown, then the film runs from its start.
     if (!cardReady || !introRef.current) return off
-    let id2 = 0, id3 = 0
+    let id3 = 0
     // If the phone still holds the film back (low power, data saver), show the play button so one tap starts it.
     const start = () => { ready = true; v.currentTime = 0; setIntro(false); go(); id3 = window.setTimeout(() => { if (v.paused) setPaused(true) }, 2500) }
-    const id = setTimeout(() => {
-      if (!phone) return start()
-      setWhite(true)
-      id2 = window.setTimeout(start, WHITE_MS)
-    }, phone ? PHONE_INTRO_MS : INTRO_MS)
-    return () => { clearTimeout(id); clearTimeout(id2); clearTimeout(id3); off() }
+    const id = setTimeout(start, phone ? 0 : INTRO_MS)
+    return () => { clearTimeout(id); clearTimeout(id3); off() }
   }, [cardReady, phone])
   const introRef = useRef(true)
   useEffect(() => { introRef.current = intro }, [intro])
@@ -172,8 +151,6 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
         <source media="(max-width:700px)" srcSet={cardPhone} />
         <img ref={cardRef} onLoad={() => setCardReady(true)} src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro && cardReady ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
       </picture>
-      {phone && intro && cardReady && !white && <IntroCount />}
-      <div className={'pwl-cine-white' + (white ? ' is-on' : '')} aria-hidden="true" />
       <div className="pwl-film-ctrls">
       {note && <span className="pwl-sound-note" role="status">{note === 'on' ? tr('Sound is on') : tr('Tap for sound')}</span>}
       <button type="button" className="pwl-autofilm-pause" onClick={toggle} aria-label={paused ? tr('Play') : tr('Pause')}>
