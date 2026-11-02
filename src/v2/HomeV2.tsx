@@ -131,21 +131,22 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
         v.muted = false; setMuted(false); setNote('on')
         if ((e.target as Element | null)?.closest?.('.pwl-cine-stage')) swallow.current = true
       }
-      if (v.paused) go()
+      if (v.paused) { go(); if ((e.target as Element | null)?.closest?.('.pwl-cine-stage')) swallow.current = true }
       if (!v.paused && (!v.muted || !wantSound.current)) off()
     }
     const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
     // The intro (Nico 16 Oct): the 11.11 card holds with a slow zoom and a countdown, then the film runs from its start.
     if (!cardReady || !introRef.current) return off
-    const start = () => { ready = true; v.currentTime = 0; setIntro(false); go() }
-    let id2 = 0
+    let id2 = 0, id3 = 0
+    // If the phone still holds the film back (low power, data saver), show the play button so one tap starts it.
+    const start = () => { ready = true; v.currentTime = 0; setIntro(false); go(); id3 = window.setTimeout(() => { if (v.paused) setPaused(true) }, 2500) }
     const id = setTimeout(() => {
       if (!phone) return start()
       setWhite(true)
       id2 = window.setTimeout(start, WHITE_MS)
     }, phone ? PHONE_INTRO_MS : INTRO_MS)
-    return () => { clearTimeout(id); clearTimeout(id2); off() }
+    return () => { clearTimeout(id); clearTimeout(id2); clearTimeout(id3); off() }
   }, [cardReady, phone])
   const introRef = useRef(true)
   useEffect(() => { introRef.current = intro }, [intro])
@@ -165,7 +166,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} onEnded={() => setPaused(true)} onTimeUpdate={(e) => { const d = e.currentTarget.currentTime >= FIRST_WORD_S; if (d !== dim) setDim(d) }} />
+      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => { setPlaying(true); setPaused(false) }} onEnded={() => setPaused(true)} onTimeUpdate={(e) => { const d = e.currentTarget.currentTime >= FIRST_WORD_S; if (d !== dim) setDim(d) }} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={cardPhone} />
