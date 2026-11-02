@@ -278,7 +278,7 @@ export default function HomeV2() {
 
   {/* 1 · Hero: the film fills the first screen; it opens on the 11.11 card, then the line and SHOP HOPE come in */}
   <section id="top" className="pwl-cine pw-iso">
-    <AutoFilm src="/assets/videos/home-film-720.mp4" card="/v2/img/hero-thumb-1111.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
+    <AutoFilm src="/assets/videos/home-film-1111.mp4" card="/v2/img/hero-film-1111-first.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
       <h1 className="pwl-head">
         <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
         <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
