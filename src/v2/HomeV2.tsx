@@ -55,31 +55,22 @@ const VOICES = [
   { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
-// The 11.11 card holds for a moment with a slow zoom in before the film runs (Nico 16 Oct: 3 s with a countdown).
-const INTRO_MS = 3000
+// The film's first frame holds for 2 s with a slow zoom, then the film runs (Nico 2 Nov: no countdown).
+const INTRO_MS = 2000
 
-// A small countdown on the 11.11 card (Nico 16 Oct), a ring that empties as the seconds run down.
-function IntroCount() {
-  const [n, setN] = useState(Math.round(INTRO_MS / 1000))
-  useEffect(() => {
-    const id = setInterval(() => setN((x) => Math.max(1, x - 1)), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return (
-    <span className="pwl-cine-count" aria-hidden="true">
-      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" /><circle className="is-run" cx="24" cy="24" r="21" pathLength={100} /></svg>
-      <b key={n}>{n}</b>
-    </span>
-  )
-}
-
-/** The film fills the hero and plays by itself, muted and looping. It opens on the 11.11 card, then the copy fades in over it. */
-function AutoFilm({ src, card, label, children }: { src: string; card: string; label: string; children: React.ReactNode }) {
+/** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
+function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: string; srcPhone: string; card: string; cardPhone: string; label: string; children: React.ReactNode }) {
   const tr = useT()
   const ref = useRef<HTMLVideoElement>(null)
   // The 11.11 card and countdown run for everyone, Reduce Motion included (only the zoom is left out then).
   const [intro, setIntro] = useState(true)
   const [muted, setMuted] = useState(true)
+  // Sound on by default (Nico 2 Nov). Browsers only allow sound after a first tap or key, so until then the film
+  // plays muted and a note says "Tap for sound"; with sound a short "Sound is on" note shows next to the button.
+  const [note, setNote] = useState<'' | 'on' | 'tap'>('')
+  const wantSound = useRef(true)
+  const swallow = useRef(false)
+  useEffect(() => { if (note !== 'on') return; const id = setTimeout(() => setNote(''), 4500); return () => clearTimeout(id) }, [note])
   const [paused, setPaused] = useState(false)
   // The countdown starts only once the 11.11 card is on screen (Nico 16 Oct: on a slow phone the time ran out before it showed).
   const cardRef = useRef<HTMLImageElement>(null)
@@ -92,17 +83,35 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
   // The 11.11 card stays up until the film is really playing (phones on low power never autoplay).
   const [playing, setPlaying] = useState(false)
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
-  const sq = card.replace('.webp', '-sq.webp')
   useEffect(() => {
     const v = ref.current
     if (!v) return
     // Browsers only autoplay a film that is muted as an attribute too (React sets just the property).
     v.muted = true; v.defaultMuted = true; v.setAttribute('muted', '')
-    const go = () => { v.play().catch(() => {}) }
+    const go = () => {
+      if (!wantSound.current) { v.play().catch(() => {}); return }
+      v.muted = false
+      v.play().then(() => { setMuted(false); setNote('on') }).catch(() => {
+        v.muted = true; setMuted(true)
+        v.play().then(() => setNote('tap')).catch(() => {})
+      })
+    }
     // If the browser still holds it back (low power mode, data saver), the first touch, scroll or key starts it.
     // The film waits for the intro, then starts from its first frame.
     let ready = false
-    const kick = () => { if (stopped.current) return off(); if (!ready) return; go(); if (!v.paused) off() }
+    const kick = (e: Event) => {
+      if (stopped.current) return off()
+      if (!ready) return
+      // The buttons handle their own taps.
+      if ((e.target as Element | null)?.closest?.('.pwl-film-ctrls')) return
+      // A real tap or key may switch the sound on (scrolling can't); a tap on the film then doesn't also pause it.
+      if (e.type !== 'scroll' && wantSound.current && v.muted && !v.paused) {
+        v.muted = false; setMuted(false); setNote('on')
+        if ((e.target as Element | null)?.closest?.('.pwl-cine-stage')) swallow.current = true
+      }
+      if (v.paused) go()
+      if (!v.paused && (!v.muted || !wantSound.current)) off()
+    }
     const off = () => ['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.removeEventListener(e, kick))
     ;['pointerdown', 'touchstart', 'scroll', 'keydown'].forEach((e) => window.addEventListener(e, kick, { passive: true }))
     // The intro (Nico 16 Oct): the 11.11 card holds with a slow zoom and a countdown, then the film runs from its start.
@@ -114,19 +123,19 @@ function AutoFilm({ src, card, label, children }: { src: string; card: string; l
   useEffect(() => { introRef.current = intro }, [intro])
   // Pause and play (Nico 16 Oct); once paused by hand, nothing restarts it by itself.
   const stopped = useRef(false)
-  const toggle = () => { const v = ref.current; if (!v) return; setIntro(false); if (v.paused) { stopped.current = false; v.play().catch(() => {}); setPaused(false) } else { stopped.current = true; v.pause(); setPaused(true) } }
-  const sound = () => { const v = ref.current; if (!v) return; v.muted = !muted; setMuted(!muted); setIntro(false); v.play().catch(() => {}) }
+  const toggle = () => { const v = ref.current; if (!v) return; if (swallow.current) { swallow.current = false; return } setIntro(false); if (v.paused) { stopped.current = false; v.play().catch(() => {}); setPaused(false) } else { stopped.current = true; v.pause(); setPaused(true) } }
+  const sound = () => { const v = ref.current; if (!v) return; const m = !v.muted; v.muted = m; setMuted(m); wantSound.current = !m; setNote(''); setIntro(false); v.play().catch(() => {}) }
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={src} poster={phone ? sq : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} />
+      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted loop playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => setPlaying(true)} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
-        <source media="(max-width:700px)" srcSet={sq} />
+        <source media="(max-width:700px)" srcSet={cardPhone} />
         <img ref={cardRef} onLoad={() => setCardReady(true)} src={card} alt="" aria-hidden="true" className={'pwl-autofilm-card' + (intro && cardReady ? ' is-intro' : '') + (!intro && playing ? ' is-gone' : '')} />
       </picture>
-      {intro && cardReady && <IntroCount />}
       <div className="pwl-film-ctrls">
+      {note && <span className="pwl-sound-note" role="status">{note === 'on' ? tr('Sound is on') : tr('Tap for sound')}</span>}
       <button type="button" className="pwl-autofilm-pause" onClick={toggle} aria-label={paused ? tr('Play') : tr('Pause')}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{paused ? <path d="M8 5v14l11-7z" fill="currentColor" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />}</svg>
       </button>
@@ -278,7 +287,7 @@ export default function HomeV2() {
 
   {/* 1 · Hero: the film fills the first screen; it opens on the 11.11 card, then the line and SHOP HOPE come in */}
   <section id="top" className="pwl-cine pw-iso">
-    <AutoFilm src="/assets/videos/home-film-1111.mp4" card="/v2/img/hero-film-1111-first.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
+    <AutoFilm src="/assets/videos/home-film-1111.mp4" srcPhone="/assets/videos/home-film-1111-43.mp4" card="/v2/img/hero-film-1111-first.webp" cardPhone="/v2/img/hero-film-1111-first-43.webp" label={tr('Perfect World film: the future exists for those who dare to dream')}>
       <h1 className="pwl-head">
         <span className="pw-hand pwl-head-a">{tr('Wear the world you')}</span>
         <span className="pwl-head-row"><span className="pwl-hope pw-fat">{tr('HOPE')}<svg viewBox="0 0 400 200" preserveAspectRatio="none" aria-hidden="true"><path className="pw-draw pw-loop" pathLength={1000} d="M306 20 C 236 0, 104 4, 44 46 C -2 80, 6 148, 88 176 C 172 204, 318 198, 372 152 C 408 120, 398 60, 330 32 C 282 12, 222 10, 160 22" /></svg></span>
