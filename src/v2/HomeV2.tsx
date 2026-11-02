@@ -125,6 +125,15 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   const stopped = useRef(false)
   const toggle = () => { const v = ref.current; if (!v) return; if (swallow.current) { swallow.current = false; return } setIntro(false); if (v.paused) { stopped.current = false; v.play().catch(() => {}); setPaused(false) } else { stopped.current = true; v.pause(); setPaused(true) } }
   const sound = () => { const v = ref.current; if (!v) return; const m = !v.muted; v.muted = m; setMuted(m); wantSound.current = !m; setNote(''); setIntro(false); v.play().catch(() => {}) }
+  const full = () => {
+    const v = ref.current as (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null
+    if (!v) return
+    setIntro(false); stopped.current = false
+    if (v.muted) { v.muted = false; setMuted(false); wantSound.current = true; setNote('') }
+    v.play().catch(() => {}); setPaused(false)
+    if (v.requestFullscreen) v.requestFullscreen().catch(() => v.webkitEnterFullscreen?.())
+    else v.webkitEnterFullscreen?.()
+  }
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
@@ -138,6 +147,9 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
       {note && <span className="pwl-sound-note" role="status">{note === 'on' ? tr('Sound is on') : tr('Tap for sound')}</span>}
       <button type="button" className="pwl-autofilm-pause" onClick={toggle} aria-label={paused ? tr('Play') : tr('Pause')}>
         <svg viewBox="0 0 24 24" aria-hidden="true">{paused ? <path d="M8 5v14l11-7z" fill="currentColor" /> : <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor" />}</svg>
+      </button>
+      <button type="button" className="pwl-autofilm-pause" onClick={full} aria-label={tr('Full screen')}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
       </button>
       <button type="button" className={'pwl-autofilm-sound' + (muted ? ' is-muted' : '')} onClick={sound} aria-pressed={!muted} aria-label={muted ? tr('Sound on') : tr('Sound off')}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" />{muted
