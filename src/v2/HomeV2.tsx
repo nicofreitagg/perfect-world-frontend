@@ -160,7 +160,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
       </div>
     </div>
     {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
-    <div className={'pwl-cine-over' + (intro ? '' : ' is-in')}>{children}</div>
+    <div className="pwl-cine-over is-in">{children}</div>
     </div>
   )
 }
