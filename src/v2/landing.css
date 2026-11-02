@@ -1083,3 +1083,7 @@
   .pwl-cine-over.is-dim{opacity:.38;filter:blur(1.5px)}
   .pwl-cine-over.is-dim:hover,.pwl-cine-over.is-dim:focus-within{opacity:1;filter:none}
 }
+/* Phones (Nico 2 Nov): 3-2-1 countdown on the 11.11 card, then a white fade into the film. */
+.pwl-cine-white{position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none;transition:opacity .45s ease}
+.pwl-cine-white.is-on{opacity:1}
+@media (max-width:700px){.pwl-cine-count{top:auto;bottom:12px}}
