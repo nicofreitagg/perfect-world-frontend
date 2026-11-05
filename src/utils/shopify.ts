@@ -1,3 +1,4 @@
+import { isNewSiteVisible } from '../v2/launch'
 import { SHOPIFY } from './constants'
 import { getCollectionKey } from './productGrouping'
 import type {
@@ -91,9 +92,15 @@ async function shopifyFetch<T>(query: string, variables: Record<string, string |
   }
 }
 
+// The Minimal collection and the new OG listings ("Hoodie | OG | One World") launch on 11.11 on the new site;
+// until then this site never shows them.
+// From 11.11 11:11 (and on previews) the new site shows everything.
+const isMinimal = (p: { title: string }) => !isNewSiteVisible() && (/minimal/i.test(p.title) || /\|\s*og\s*(\||$)/i.test(p.title))
+
 // Get products by collection handle
 export async function getCollectionProducts(handle: string): Promise<ShopifyCollection> {
-  return withCache(`collection:${handle}:${contextCacheKey()}`, () => fetchCollectionProducts(handle))
+  const c = await withCache(`collection:${handle}:${contextCacheKey()}`, () => fetchCollectionProducts(handle))
+  return { ...c, products: c.products.filter((p) => !isMinimal(p)) }
 }
 
 async function fetchCollectionProducts(handle: string): Promise<ShopifyCollection> {
@@ -201,7 +208,9 @@ async function fetchCollectionProducts(handle: string): Promise<ShopifyCollectio
 
 // Get single product by handle
 export async function getProduct(handle: string): Promise<ShopifyProduct> {
-  return withCache(`product:${handle}:${contextCacheKey()}`, () => fetchProduct(handle))
+  const p = await withCache(`product:${handle}:${contextCacheKey()}`, () => fetchProduct(handle))
+  if (isMinimal(p)) throw new Error(`Product with handle "${handle}" not found`)
+  return p
 }
 
 async function fetchProduct(handle: string): Promise<ShopifyProduct> {
@@ -512,7 +521,8 @@ export function generateCustomerAccountLogoutUrl(postLogoutRedirectUri?: string)
 
 // Fetch all products in the store
 export async function getAllProducts(): Promise<ShopifyProduct[]> {
-  return withCache(`all-products:${contextCacheKey()}`, () => fetchAllProducts())
+  const all = await withCache(`all-products:${contextCacheKey()}`, () => fetchAllProducts())
+  return all.filter((p) => !isMinimal(p))
 }
 
 async function fetchAllProducts(): Promise<ShopifyProduct[]> {

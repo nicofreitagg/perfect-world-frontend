@@ -1,4 +1,6 @@
 import { isLaunched } from '../v2/launch'
+// The prelaunch home (until 11.11 11:11) reads the launch moment from here.
+export { LAUNCH_AT, isLaunched } from '../v2/launch'
 
 // Before 11.11 every signup joins the launch waitlist; afterwards it is the normal newsletter.
 export const signupTag = () => (isLaunched() ? 'newsletter' : 'waitlist-wish')

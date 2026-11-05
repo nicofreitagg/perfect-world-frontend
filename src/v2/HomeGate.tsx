@@ -1,10 +1,11 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { isNewSiteVisible, LAUNCH_AT } from './launch'
 
-const Home = lazy(() => import('../pages/Home'))
+// Until 11:11 the live home is the waitlist-first prelaunch page (live since 26 Oct).
+const PreLaunch = lazy(() => import('../pages/PreLaunch'))
 const HomeV2 = lazy(() => import('./HomeV2'))
 
-/** Shows the current homepage until the 11.11 launch moment (or in previews), then the new one. */
+/** Shows the prelaunch homepage until the 11.11 launch moment (or in previews), then the new one. */
 export default function HomeGate() {
   const [visible, setVisible] = useState(isNewSiteVisible)
 
@@ -16,5 +17,5 @@ export default function HomeGate() {
     return () => clearTimeout(t)
   }, [visible])
 
-  return <Suspense fallback={null}>{visible ? <HomeV2 /> : <Home />}</Suspense>
+  return <Suspense fallback={null}>{visible ? <HomeV2 /> : <PreLaunch />}</Suspense>
 }

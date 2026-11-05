@@ -250,5 +250,19 @@
     "fine": "Unsubscribe any time.",
     "privacy": "Privacy",
     "close": "Close"
+  },
+  "prelaunch": {
+    "kicker": "A new chapter",
+    "title": "Something new on",
+    "body": "Perfect World is changing, with a new collection. Join the list: we'll send one email at 11:11, with free shipping on your first order in launch week.",
+    "countdown": "Time until 11.11 at 11:11",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "fine": "One email at 11:11. Unsubscribe any time.",
+    "shop": "Shop the current pieces",
+    "imprint": "Imprint",
+    "contact": "Contact"
   }
 }
