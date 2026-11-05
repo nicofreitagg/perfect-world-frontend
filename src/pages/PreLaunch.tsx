@@ -125,9 +125,6 @@ export default function PreLaunch() {
           </form>
         )}
 
-        <Link to="/shop" className="mt-12 text-sm text-white/60 underline underline-offset-4 hover:text-white">
-          {t('prelaunch.shop')} →
-        </Link>
       </section>
 
       <footer className="relative z-10 flex flex-wrap items-center justify-between gap-3 px-5 sm:px-10 pb-6 text-xs text-white/45">
