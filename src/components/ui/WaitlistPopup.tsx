@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { isLaunched } from '../../v2/launch'
+import { isLaunched, isWishWeek } from '../../v2/launch'
 import { joinList } from '../../utils/waitlist'
 
 // Replaces the old "10% off" popup, which never stored the email (Oct 2026).
 // Before 11.11 it collects the launch waitlist; afterwards it is a plain newsletter signup.
-const KEY = isLaunched() ? 'pw-newsletter-popup' : 'pw-waitlist-popup'
+// Launch week gets its own key, so the WISH1111 popup shows once even to people who closed the waitlist one.
+const KEY = isWishWeek() ? 'pw-wish-popup' : isLaunched() ? 'pw-newsletter-popup' : 'pw-waitlist-popup'
 
 export default function WaitlistPopup() {
   const { t } = useTranslation()
   const after = isLaunched()
+  const wish = isWishWeek()
   const [isVisible, setIsVisible] = useState(false)
   const [email, setEmail] = useState('')
   const [website, setWebsite] = useState('')
@@ -93,7 +95,9 @@ export default function WaitlistPopup() {
           {state !== 'done' ? (
             <form onSubmit={handleSubmit} className="pr-6">
               <h3 id="pw-waitlist-title" className="text-2xl font-bold leading-tight">
-                {after ? (
+                {wish ? (
+                  t('waitlist.titleWish')
+                ) : after ? (
                   t('waitlist.titleAfter')
                 ) : (
                   <>
@@ -102,7 +106,7 @@ export default function WaitlistPopup() {
                   </>
                 )}
               </h3>
-              <p className="mt-2 text-sm text-gray-300 leading-relaxed">{after ? t('waitlist.bodyAfter') : t('waitlist.body')}</p>
+              <p className="mt-2 text-sm text-gray-300 leading-relaxed">{wish ? t('waitlist.bodyWish') : after ? t('waitlist.bodyAfter') : t('waitlist.body')}</p>
               <input
                 type="text"
                 name="website"
@@ -142,7 +146,7 @@ export default function WaitlistPopup() {
           ) : (
             <div className="pr-6">
               <h3 className="text-2xl font-bold leading-tight">{t('waitlist.doneTitle')}</h3>
-              <p className="mt-2 text-sm text-gray-300">{after ? t('waitlist.doneBodyAfter') : t('waitlist.doneBody')}</p>
+              <p className="mt-2 text-sm text-gray-300">{wish ? t('waitlist.doneBodyWish') : after ? t('waitlist.doneBodyAfter') : t('waitlist.doneBody')}</p>
             </div>
           )}
         </motion.div>

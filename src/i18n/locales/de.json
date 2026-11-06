@@ -249,6 +249,9 @@
     "error": "Das hat nicht geklappt. Bitte versuch es nochmal.",
     "fine": "Abmelden jederzeit möglich.",
     "privacy": "Datenschutz",
-    "close": "Schließen"
+    "close": "Schließen",
+    "titleWish": "Wünsch dir was.",
+    "bodyWish": "Kostenloser Versand auf jede Bestellung bis 15. Nov. mit dem Code WISH1111. Trag dich ein für neue Pieces und News von den sechs Projekten.",
+    "doneBodyWish": "Schön, dass du da bist. Dein Code für kostenlosen Versand bis 15. Nov.: WISH1111."
   }
 }

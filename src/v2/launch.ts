@@ -31,3 +31,7 @@ export function isNewSiteVisible(): boolean {
 
 /** True once the 11.11 moment has passed, so copy can say "since 11.11" instead of "from 11.11". */
 export const isLaunched = () => Date.now() >= LAUNCH_AT
+
+/** Launch week (Nico 6 Nov): WISH1111 gives everyone free shipping from 11.11 11:11 to 15.11 23:59, and the signup says so. */
+export const WISH_UNTIL = Date.parse('2026-11-15T23:59:59+01:00')
+export const isWishWeek = () => isLaunched() && Date.now() <= WISH_UNTIL
