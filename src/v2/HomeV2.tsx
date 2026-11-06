@@ -55,11 +55,7 @@ const VOICES = [
   { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
-// Desktop: the film's first frame holds for 2 s with a slow zoom, then the film runs (Nico 2 Nov: no countdown).
-// Phones (Nico 2 Nov, "For website mobile" cut): the film carries its own 11.11 intro card, so it starts straight away.
-const INTRO_MS = 2000
-
-const FIRST_WORD_S = 2.2
+const FIRST_WORD_S = 1.6
 
 /** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: string; srcPhone: string; card: string; cardPhone: string; label: string; children: React.ReactNode }) {
@@ -124,7 +120,8 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
     let id3 = 0
     // If the phone still holds the film back (low power, data saver), show the play button so one tap starts it.
     const start = () => { ready = true; v.currentTime = 0; setIntro(false); go(); id3 = window.setTimeout(() => { if (v.paused) setPaused(true) }, 2500) }
-    const id = setTimeout(start, phone ? 0 : INTRO_MS)
+    // 6 Nov: one 4:3 film for every screen, with its own 11.11 intro card, so it starts straight away everywhere.
+    const id = setTimeout(start, 0)
     return () => { clearTimeout(id); clearTimeout(id3); off() }
   }, [cardReady, phone])
   const introRef = useRef(true)

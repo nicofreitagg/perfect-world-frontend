@@ -1083,3 +1083,16 @@
   .pwl-cine-over.is-dim{opacity:.38;filter:blur(1.5px)}
   .pwl-cine-over.is-dim:hover,.pwl-cine-over.is-dim:focus-within{opacity:1;filter:none}
 }
+/* 6 Nov (Nico): one 4:3 film on every screen. The stage keeps the film's 4:3 shape (never cropped) and fits the screen height. */
+@media (min-width:701px){
+  .pwl-cine-box{width:min(100%,calc((100svh - 120px) * 4 / 3),1280px);margin:0 auto}
+  .pwl-cine-stage{aspect-ratio:4/3;height:auto;min-height:0;max-height:none;width:100%}
+}
+/* Wide screens: a 4:3 film leaves no free corner (the 11.11 card sits in the middle), so the copy sits beside it, film on the right. */
+@media (min-width:1100px){
+  .pwl-cine-box{width:100%;max-width:1680px;display:grid;grid-template-columns:minmax(340px,1fr) min(62vw,calc((100svh - 130px) * 4 / 3));align-items:center;gap:clamp(24px,3vw,56px)}
+  .pwl-cine-over,.pwl-cine-over.is-dim{position:static;order:-1;max-width:560px;opacity:1;filter:none;transform:none;pointer-events:auto;padding:0 0 0 clamp(8px,3vw,48px);display:block;text-align:left}
+  .pwl-cine-over .pwl-head,.pwl-cine-over .pwl-cine-lede{text-shadow:none}
+  .pwl-cine-lede{margin-left:0;margin-right:0}
+  .pwl-cine-shade{display:none}
+}
