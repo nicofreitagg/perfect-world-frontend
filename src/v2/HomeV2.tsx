@@ -56,9 +56,9 @@ const VOICES = [
 ]
 
 const FIRST_WORD_S = 1.6
-// Light frames in the desktop film: the 11.11 intro card (until ~1.25 s) and the Together. Not Alone. end card (from ~59.4 s).
+// Light frames in the desktop film: the 11.11 intro card (until ~1.25 s) and the Together. Not Alone. end card (from ~58.4 s on desktop).
 const INTRO_END_S = 1.25
-const END_CARD_S = 59.4
+const END_CARD_S = 58.4
 
 /** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: string; srcPhone: string; card: string; cardPhone: string; label: string; children: React.ReactNode }) {
