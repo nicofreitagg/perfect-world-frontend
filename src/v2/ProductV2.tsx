@@ -196,7 +196,7 @@ export default function ProductV2() {
       </div>
 
       <button type="button" onClick={add} disabled={!variant}  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", minHeight: "60px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{addLabel}</button>
-      {noShip && !variant && all !== null && all.length > 0 && <p style={{ margin: "-6px 0 0", fontSize: "14px", lineHeight: "1.5", color: "#3a3a3a" }}>{tr("Currently we only ship within the EU and Switzerland. We hope to come to you soon.")}</p>}
+      {noShip && !variant && all !== null && all.length > 0 && <p style={{ margin: "-6px 0 0", fontSize: "14px", lineHeight: "1.5", color: "#3a3a3a" }}>{tr("Currently we only ship within the EU and Switzerland. We hope to come to you soon.")} {tr("Still keen? Write to us at")} <a href="mailto:info@perfectworld.global" style={{ color: "#0b0b0c", fontWeight: 600 }}>info@perfectworld.global</a>{tr(", maybe we can find a way.")}</p>}
 
       <div className="pw-mono pw-pd-facts" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.5" }}>
         <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("MADE TO ORDER")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Printed just for you")}</span></span>

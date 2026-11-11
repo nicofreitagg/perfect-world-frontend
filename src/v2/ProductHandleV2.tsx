@@ -128,7 +128,7 @@ export default function ProductHandleV2() {
           <button type="button" disabled={!variant} onClick={() => { if (!variant) return; addToCart({ variantId: variant.id, productId: p.id, title: p.title, variant: variant.title, price, image: p.images[0]?.url ?? '', quantity: 1 }); openCart() }} style={{ minHeight: '56px', borderRadius: '999px', border: 'none', background: '#0b0b0c', color: '#fff', fontFamily: 'inherit', fontWeight: 700, fontSize: '16px', cursor: variant ? 'pointer' : 'not-allowed', opacity: variant ? 1 : 0.5 }}>
             {variant ? `${t('ADD TO CART')} · €${price.toFixed(2)}` : t(noShip ? "WE DON'T DELIVER TO YOUR COUNTRY YET" : 'SOLD OUT')}
           </button>
-          {noShip && !variant && <p style={{ margin: '-10px 0 0', fontSize: '14px', lineHeight: 1.5, color: '#3a3a3a' }}>{t("Currently we only ship within the EU and Switzerland. We hope to come to you soon.")}</p>}
+          {noShip && !variant && <p style={{ margin: '-10px 0 0', fontSize: '14px', lineHeight: 1.5, color: '#3a3a3a' }}>{t("Currently we only ship within the EU and Switzerland. We hope to come to you soon.")} {t("Still keen? Write to us at")} <a href="mailto:info@perfectworld.global" style={{ color: "#0b0b0c", fontWeight: 600 }}>info@perfectworld.global</a>{t(", maybe we can find a way.")}</p>}
           {p.descriptionHtml ? <div className="pw-desc" dangerouslySetInnerHTML={{ __html: cleanDescription(p.descriptionHtml) }} /> : p.description && <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, color: '#3a3a3a' }}>{p.description}</p>}
           <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{t('MADE TO ORDER · ABOUT 1½ TO 2 WEEKS · SHIPPING FROM €5.95')}</p>
         </div>
