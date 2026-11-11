@@ -9,6 +9,7 @@ import { getCollectionKey, extractProductType, extractColorFromTitle } from '../
 import type { ShopifyProduct, ShopifyVariant } from '../types/shopify.types'
 import NotFound from '../pages/NotFound'
 import { useT } from './t'
+import { useOutsideShipZone } from './shipZone'
 import FitScale from './FitScale'
 import { hexOf, rankColours } from './colours'
 
@@ -33,6 +34,7 @@ import { usePageTitle } from '../hooks/usePageTitle'
 
 export default function ProductV2() {
   const tr = useT()
+  const noShip = useOutsideShipZone()
   usePageTitle('Shop | Perfect World')
   const { cartCount, isCartOpen, openCart, closeCart, addToCart } = useCart()
   const { slug } = useParams()
@@ -99,7 +101,7 @@ export default function ProductV2() {
   const colours = colourNames.map((n, k) => ({ label: tr(n), hex: hexOf(n), pick: () => setColour(n), disabled: false, ...on(ofKind[k] === product) }))
   const sizes = variants.map((v) => ({ label: sizeOf(v), pick: () => setSize(sizeOf(v)), disabled: !v.availableForSale, ...on(v === variant) }))
   const shownSize = variant ? sizeOf(variant) : ''
-  const addLabel = all === null ? tr('LOADING…') : !variant ? tr(all.length ? 'SOLD OUT' : 'SHOP IS OFFLINE, TRY AGAIN SOON') : added ? tr('ADDED. THANK YOU.') : `${tr('ADD TO CART')} · €${money(price)}`
+  const addLabel = all === null ? tr('LOADING…') : !variant ? tr(all.length ? (noShip ? 'CURRENTLY WE ONLY SHIP WITHIN EUROPE' : 'SOLD OUT') : 'SHOP IS OFFLINE, TRY AGAIN SOON') : added ? tr('ADDED. THANK YOU.') : `${tr('ADD TO CART')} · €${money(price)}`
   const add = () => {
     if (!variant || !product) return
     addToCart({ variantId: variant.id, productId: product.id, title: product.title, variant: variant.title, price, image: images[lead]?.url ?? raw.print, quantity: 1 })
@@ -194,6 +196,7 @@ export default function ProductV2() {
       </div>
 
       <button type="button" onClick={add} disabled={!variant}  style={{ fontFamily: "'Bricolage Grotesque', system-ui, sans-serif", fontWeight: "700", fontSize: "17px", minHeight: "60px", border: "none", borderRadius: "999px", background: "#0b0b0c", color: "#ffffff", cursor: "pointer" }}>{addLabel}</button>
+      {noShip && !variant && all !== null && all.length > 0 && <p style={{ margin: "-6px 0 0", fontSize: "14px", lineHeight: "1.5", color: "#3a3a3a" }}>{tr("Sorry, we don't deliver to your location yet. Every piece is printed to order in Germany and ships within Europe.")}</p>}
 
       <div className="pw-mono pw-pd-facts" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "10px", fontSize: "12px", color: "#3a3a3a", lineHeight: "1.5" }}>
         <span style={{ background: "#fbf6ec", border: "1px solid #e2d6c1", borderRadius: "14px", padding: "12px 14px" }}>{tr("MADE TO ORDER")}<br /><span style={{ color: "#5c5c5c" }}>{tr("Printed just for you")}</span></span>

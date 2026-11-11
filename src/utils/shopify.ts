@@ -92,6 +92,17 @@ async function shopifyFetch<T>(query: string, variables: Record<string, string |
   }
 }
 
+// Countries our Shopify markets sell to (Storefront localization). Used to tell visitors
+// outside them "we only ship within Europe" instead of showing products as sold out.
+export async function getShipCountries(): Promise<string[]> {
+  return withCache('ship-countries', async () => {
+    const data = await shopifyFetch<{ localization: { availableCountries: { isoCode: string }[] } }>(
+      `query shipCountries { localization { availableCountries { isoCode } } }`
+    )
+    return data.localization.availableCountries.map((c) => c.isoCode)
+  })
+}
+
 // The Minimal collection and the new OG listings ("Hoodie | OG | One World") launch on 11.11 on the new site;
 // until then this site never shows them.
 // From 11.11 11:11 (and on previews) the new site shows everything.

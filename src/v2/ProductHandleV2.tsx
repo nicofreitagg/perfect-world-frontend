@@ -9,6 +9,7 @@ import { useDesignPairOrGuess } from './printSide'
 import { useCutout } from './cutout'
 import { hexOf } from './colours'
 import { useT } from './t'
+import { useOutsideShipZone } from './shipZone'
 import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
 import { getProduct, getAllProducts } from '../utils/shopify'
@@ -33,6 +34,7 @@ const mono = "'JetBrains Mono', monospace"
 
 export default function ProductHandleV2() {
   const t = useT()
+  const noShip = useOutsideShipZone()
   const { handle } = useParams()
   const { addToCart, openCart } = useCart()
   const [p, setP] = useState<ShopifyProduct | null | undefined>(undefined)
@@ -124,8 +126,9 @@ export default function ProductHandleV2() {
             </div>
           )}
           <button type="button" disabled={!variant} onClick={() => { if (!variant) return; addToCart({ variantId: variant.id, productId: p.id, title: p.title, variant: variant.title, price, image: p.images[0]?.url ?? '', quantity: 1 }); openCart() }} style={{ minHeight: '56px', borderRadius: '999px', border: 'none', background: '#0b0b0c', color: '#fff', fontFamily: 'inherit', fontWeight: 700, fontSize: '16px', cursor: variant ? 'pointer' : 'not-allowed', opacity: variant ? 1 : 0.5 }}>
-            {variant ? `${t('ADD TO CART')} · €${price.toFixed(2)}` : t('SOLD OUT')}
+            {variant ? `${t('ADD TO CART')} · €${price.toFixed(2)}` : t(noShip ? 'CURRENTLY WE ONLY SHIP WITHIN EUROPE' : 'SOLD OUT')}
           </button>
+          {noShip && !variant && <p style={{ margin: '-10px 0 0', fontSize: '14px', lineHeight: 1.5, color: '#3a3a3a' }}>{t("Sorry, we don't deliver to your location yet. Every piece is printed to order in Germany and ships within Europe.")}</p>}
           {p.descriptionHtml ? <div className="pw-desc" dangerouslySetInnerHTML={{ __html: cleanDescription(p.descriptionHtml) }} /> : p.description && <p style={{ margin: 0, fontSize: '16px', lineHeight: 1.6, color: '#3a3a3a' }}>{p.description}</p>}
           <p style={{ margin: 0, fontFamily: mono, fontSize: '12px', color: '#5c5c5c' }}>{t('MADE TO ORDER · ABOUT 1½ TO 2 WEEKS · SHIPPING FROM €5.95')}</p>
         </div>
