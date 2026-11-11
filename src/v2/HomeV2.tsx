@@ -55,11 +55,10 @@ const VOICES = [
   { name: 'Nico Higgins', img: '/v2/img/voice-nico.webp', pos: '50% 35%', quote: "It makes it easier for people to make a difference and help charities they may not have heard of." },
 ]
 
-// Desktop: the film's first frame holds for 2 s with a slow zoom, then the film runs (Nico 2 Nov: no countdown).
-// Phones (Nico 2 Nov, "For website mobile" cut): the film carries its own 11.11 intro card, so it starts straight away.
-const INTRO_MS = 2000
-
-const FIRST_WORD_S = 2.2
+const FIRST_WORD_S = 1.6
+// Light frames in the desktop film: the 11.11 intro card (until ~1.25 s) and the Together. Not Alone. end card (from ~58.4 s on desktop).
+const INTRO_END_S = 1.25
+const END_CARD_S = 58.4
 
 /** The film fills the hero and plays by itself with sound where the browser allows it, looping. It opens on the 11.11 card, then the copy fades in over it. */
 function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: string; srcPhone: string; card: string; cardPhone: string; label: string; children: React.ReactNode }) {
@@ -87,6 +86,8 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   const [playing, setPlaying] = useState(false)
   // The copy is the focus until the first spoken word ("Sometimes," at ~2.2 s), then steps back so the film leads.
   const [dim, setDim] = useState(false)
+  // On the light intro card the copy turns ink; on the end card it steps away so the card reads alone.
+  const [tone, setTone] = useState<'intro' | 'film' | 'end'>('intro')
   const phone = useMemo(() => window.matchMedia('(max-width:700px)').matches, [])
   useEffect(() => {
     const v = ref.current
@@ -124,7 +125,8 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
     let id3 = 0
     // If the phone still holds the film back (low power, data saver), show the play button so one tap starts it.
     const start = () => { ready = true; v.currentTime = 0; setIntro(false); go(); id3 = window.setTimeout(() => { if (v.paused) setPaused(true) }, 2500) }
-    const id = setTimeout(start, phone ? 0 : INTRO_MS)
+    // 6 Nov: one 4:3 film for every screen, with its own 11.11 intro card, so it starts straight away everywhere.
+    const id = setTimeout(start, 0)
     return () => { clearTimeout(id); clearTimeout(id3); off() }
   }, [cardReady, phone])
   const introRef = useRef(true)
@@ -145,7 +147,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
   return (
     <div className="pwl-cine-box">
     <div className="pwl-cine-stage">
-      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => { setPlaying(true); setPaused(false) }} onEnded={() => setPaused(true)} onTimeUpdate={(e) => { const d = e.currentTarget.currentTime >= FIRST_WORD_S; if (d !== dim) setDim(d) }} />
+      <video ref={ref} src={phone ? srcPhone : src} poster={phone ? cardPhone : card} muted playsInline preload="auto" aria-label={label} className="pwl-autofilm" onClick={toggle} onPlaying={() => { setPlaying(true); setPaused(false) }} onEnded={() => setPaused(true)} onTimeUpdate={(e) => { const t = e.currentTarget.currentTime; const d = t >= FIRST_WORD_S; if (d !== dim) setDim(d); const n = t < INTRO_END_S ? 'intro' : t >= END_CARD_S ? 'end' : 'film'; if (n !== tone) setTone(n) }} />
       <div className="pwl-cine-shade" aria-hidden="true" />
       <picture>
         <source media="(max-width:700px)" srcSet={cardPhone} />
@@ -168,7 +170,7 @@ function AutoFilm({ src, srcPhone, card, cardPhone, label, children }: { src: st
       </div>
     </div>
     {/* On wide screens the copy sits on the film; narrower, it sits under it so it never meets the film's own captions. */}
-    <div className={'pwl-cine-over is-in' + (dim ? ' is-dim' : '')}>{children}</div>
+    <div className={'pwl-cine-over is-in' + (dim ? ' is-dim' : '') + ' is-' + tone}>{children}</div>
     </div>
   )
 }

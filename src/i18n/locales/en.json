@@ -249,7 +249,10 @@
     "error": "That didn't work. Please try again.",
     "fine": "Unsubscribe any time.",
     "privacy": "Privacy",
-    "close": "Close"
+    "close": "Close",
+    "titleWish": "Make a wish.",
+    "bodyWish": "Free shipping on every order until 15 Nov with the code WISH1111. Join the list for new pieces and news from the six causes.",
+    "doneBodyWish": "Thanks for being here. Your code for free shipping until 15 Nov: WISH1111."
   },
   "prelaunch": {
     "kicker": "A new chapter",

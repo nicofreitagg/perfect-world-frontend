@@ -249,7 +249,10 @@
     "error": "No ha funcionado. Inténtalo de nuevo.",
     "fine": "Puedes darte de baja cuando quieras.",
     "privacy": "Privacidad",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "titleWish": "Pide un deseo.",
+    "bodyWish": "Envío gratis en todos los pedidos hasta el 15 de nov. con el código WISH1111. Únete a la lista para nuevas piezas y noticias de las seis causas.",
+    "doneBodyWish": "Gracias por estar aquí. Tu código de envío gratis hasta el 15 de nov.: WISH1111."
   },
   "prelaunch": {
     "kicker": "Un nuevo capítulo",

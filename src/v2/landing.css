@@ -1083,3 +1083,13 @@
   .pwl-cine-over.is-dim{opacity:.38;filter:blur(1.5px)}
   .pwl-cine-over.is-dim:hover,.pwl-cine-over.is-dim:focus-within{opacity:1;filter:none}
 }
+/* 6 Nov (Nico): desktop plays a 16:9 version of the 4:3 film again (copy over the film); phones keep the 4:3 cut. */
+
+/* 6 Nov: the film opens and closes on cream cards. Over the 11.11 intro card the copy is ink (cream on cream was unreadable); over the end card it fades out so Together. Not Alone. and the partner logos read on their own. */
+@media (min-width:1280px){
+  .pwl-cine-over .pwl-head,.pwl-cine-over .pwl-head *,.pwl-cine-over .pwl-cine-lede{transition:color .5s ease,text-shadow .5s ease}
+  .pwl-cine-over.is-intro .pwl-head,.pwl-cine-over.is-intro .pwl-head *,.pwl-cine-over.is-intro .pwl-cine-lede{color:#14110f;text-shadow:none}
+  .pwl-cine-over .pwl-cine-btn{transition:background-color .5s ease,color .5s ease}
+  .pwl-cine:is(#pw-quiet,.pwl-cine) .pwl-cine-over.is-intro .pwl-btn.pwl-cine-btn{color:#14110f!important;border-color:rgba(20,17,15,.7)}
+  .pwl-cine-over.is-end,.pwl-cine-over.is-end.is-dim:hover,.pwl-cine-over.is-end.is-dim:focus-within{opacity:0;filter:none;pointer-events:none}
+}
