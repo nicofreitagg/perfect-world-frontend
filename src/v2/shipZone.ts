@@ -1,27 +1,14 @@
-import { useEffect, useState } from 'react'
 import { useLocale } from '../contexts/LocaleContext'
-import { getShipCountries } from '../utils/shopify'
-
-// Our print-on-demand maker delivers within Europe only (Nico, 14 Oct 2026).
-// Fallback list for when Shopify's own market countries can't be read.
-export const SHIPS_TO = new Set([
-  'DE', 'AT', 'CH', 'LI', 'LU', 'BE', 'NL', 'FR', 'IT', 'ES', 'PT', 'IE', 'DK', 'SE', 'FI', 'NO', 'IS',
-  'PL', 'CZ', 'SK', 'HU', 'SI', 'HR', 'RO', 'BG', 'GR', 'CY', 'MT', 'EE', 'LV', 'LT', 'GB', 'MC', 'SM', 'AD', 'VA',
-])
+import type { ShopifyVariant } from '../types/shopify.types'
 
 /**
- * True when the visitor browses from a country our Shopify markets don't deliver to.
- * Shopify then reports every variant as not for sale, which the product pages used to show
- * as "Sold out" (11.11 launch). They now say we only ship within Europe instead.
+ * True when Shopify won't sell this product to the visitor's country.
+ * We print on demand, so a product is never really sold out: when Shopify marks every
+ * variant as not for sale for the visitor's country (checked 11 Nov 2026: US, GB, NO, AU,
+ * ZA, CA; DE, FR, CH sell normally), it means we don't deliver there yet. The product
+ * pages used to call that "Sold out"; they now say so honestly.
  */
-export function useOutsideShipZone(): boolean {
+export function useNoDeliveryHere(variants: Pick<ShopifyVariant, 'availableForSale'>[]): boolean {
   const { country } = useLocale()
-  const [markets, setMarkets] = useState<Set<string> | null>(null)
-  useEffect(() => {
-    let live = true
-    getShipCountries().then((c) => { if (live && c.length) setMarkets(new Set(c)) }).catch(() => {})
-    return () => { live = false }
-  }, [])
-  if (!country) return false
-  return !(markets ?? SHIPS_TO).has(country)
+  return !!country && country !== 'DE' && variants.length > 0 && variants.every((v) => !v.availableForSale)
 }

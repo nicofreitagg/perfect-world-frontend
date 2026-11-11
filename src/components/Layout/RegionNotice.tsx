@@ -2,10 +2,16 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { useLocale } from '../../contexts/LocaleContext'
-import { SHIPS_TO } from '../../v2/shipZone'
 
 const DISMISS_KEY = 'pw-ship-notice-dismissed'
 
+// Our print-on-demand maker delivers within Europe only (Nico, 14 Oct 2026), so visitors
+// from anywhere else get a note before they pick something we can't send them.
+// If it turns out to be DACH only, shrink this list to DE, AT, CH.
+const SHIPS_TO = new Set([
+  'DE', 'AT', 'CH', 'LI', 'LU', 'BE', 'NL', 'FR', 'IT', 'ES', 'PT', 'IE', 'DK', 'SE', 'FI', 'NO', 'IS',
+  'PL', 'CZ', 'SK', 'HU', 'SI', 'HR', 'RO', 'BG', 'GR', 'CY', 'MT', 'EE', 'LV', 'LT', 'GB', 'MC', 'SM', 'AD', 'VA',
+])
 
 export default function RegionNotice({ v2 = false }: { v2?: boolean }) {
   const { country } = useLocale()
