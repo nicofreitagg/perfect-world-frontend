@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
+import { trackAddToCart } from '../utils/metaPixel'
 
 export interface CartItem {
   variantId: string
@@ -54,6 +55,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false)
 
   const addToCart = (item: CartItem) => {
+    trackAddToCart(item)
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((i) => i.variantId === item.variantId)
       if (existingItem) {

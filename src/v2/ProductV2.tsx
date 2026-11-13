@@ -29,6 +29,7 @@ import { Header, Footer } from './Chrome'
 import Sustain from './Sustain'
 import { A } from './A'
 import { useCart } from '../contexts/CartContext'
+import { trackViewContent } from '../utils/metaPixel'
 import CartDrawer from './CartDrawerV2'
 import { usePageTitle } from '../hooks/usePageTitle'
 
@@ -90,6 +91,11 @@ export default function ProductV2() {
     document.body.style.background = RAW_GROUND
     return () => { document.body.style.background = '' }
   }, [])
+  // Meta pixel: one ViewContent per product shown (not for OG designs, which hand over to their product page).
+  useEffect(() => {
+    if (product && variant && !ogLead) trackViewContent({ productId: product.id, variantId: variant.id, title: product.title, price: Number(variant.price.amount) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, ogLead])
 
   if (!raw) return <NotFound />
   const c = { ...raw, icoA: icon(raw.id, 'a'), icoB: icon(raw.id, 'b'), hasPrint: !!raw.print, noPrint: !raw.print, fg: causeFg(raw), partnerLower: raw.partner.toLowerCase(), teaser: causeTeaser(raw) }

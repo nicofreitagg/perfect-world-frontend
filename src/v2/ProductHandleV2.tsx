@@ -12,6 +12,7 @@ import { useT } from './t'
 import { useNoDeliveryHere } from './shipZone'
 import FitScale from './FitScale'
 import { useCart } from '../contexts/CartContext'
+import { trackViewContent } from '../utils/metaPixel'
 import { getProduct, getAllProducts } from '../utils/shopify'
 import { cleanDescription } from './richText'
 import { getCollectionKey, extractProductType } from '../utils/productGrouping'
@@ -43,6 +44,11 @@ export default function ProductHandleV2() {
   const [params, setParams] = useSearchParams()
 
   useEffect(() => { if (handle) getProduct(handle).then(setP).catch(() => setP(null)) }, [handle])
+  // Meta pixel: one ViewContent per product opened.
+  useEffect(() => {
+    const v = p?.variants.find((x) => x.availableForSale) ?? p?.variants[0]
+    if (p && v) trackViewContent({ productId: p.id, variantId: v.id, title: p.title, price: Number(v.price.amount) })
+  }, [p])
   // OG: the other pieces of the same design (T-shirt, oversized, hoodie), to switch between them.
   const [siblings, setSiblings] = useState<ShopifyProduct[]>([])
   const og = !!p && isNewOG(p.title)
