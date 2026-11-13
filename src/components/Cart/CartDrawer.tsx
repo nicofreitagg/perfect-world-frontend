@@ -3,7 +3,6 @@ import { useCart } from '../../contexts/CartContext'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createCheckout } from '../../utils/shopify'
-import { trackInitiateCheckout } from '../../utils/metaPixel'
 import GlassyButton from '../ui/GlassyButton'
 
 interface CartDrawerProps {
@@ -40,7 +39,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       const checkout = await createCheckout(lineItems)
 
       if (checkout && checkout.webUrl) {
-        trackInitiateCheckout(cart)
         // Redirect to Shopify checkout
         window.location.href = checkout.webUrl
       } else {

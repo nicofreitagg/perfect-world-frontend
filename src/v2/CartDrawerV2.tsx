@@ -1,7 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { createCheckout } from '../utils/shopify'
-import { trackInitiateCheckout } from '../utils/metaPixel'
 import { getCollectionKey, formatDisplayTitle } from '../utils/productGrouping'
 import { CAUSES } from './causes'
 import { PIECES, NEW_PIECES, MIN_DESIGNS, minDesignOf, pieceOf } from './data'
@@ -61,7 +60,6 @@ export default function CartDrawerV2({ isOpen, onClose, inline = false }: { isOp
     try {
       const res = await createCheckout(cart.map((i) => ({ variantId: i.variantId, quantity: i.quantity })))
       if (!res?.webUrl) throw new Error('no checkout link')
-      trackInitiateCheckout(cart)
       window.location.href = res.webUrl
     } catch {
       setError('Checkout did not open. Please try again in a moment.')

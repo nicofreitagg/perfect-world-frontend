@@ -1,7 +1,8 @@
 // Meta pixel shopping events for the Vercel site (pixel 792108707196031, loaded in index.html).
 // index.html sends PageView, and the pixel sends a new PageView on each in-app page change by itself.
-// The shop steps (view product, add to cart, start checkout) only exist here, so we send them ourselves.
-// Purchase happens on Shopify's checkout and is sent by Shopify's "Facebook & Instagram" app.
+// The shop steps (view product, add to cart) only exist here, so we send them ourselves.
+// Checkout started and Purchase happen on Shopify's checkout and are sent by Shopify's "Facebook & Instagram" app,
+// so we don't send InitiateCheckout here (it would count twice).
 
 type Fbq = (...args: unknown[]) => void
 
@@ -30,12 +31,4 @@ export const trackAddToCart = (p: { productId: string; variantId: string; title:
     content_name: p.title,
     contents: [{ id: contentId(p.productId, p.variantId), quantity: p.quantity }],
     value: Math.round(p.price * p.quantity * 100) / 100,
-  })
-
-export const trackInitiateCheckout = (items: { productId: string; variantId: string; price: number; quantity: number }[]) =>
-  send('InitiateCheckout', {
-    content_ids: items.map((i) => contentId(i.productId, i.variantId)),
-    contents: items.map((i) => ({ id: contentId(i.productId, i.variantId), quantity: i.quantity })),
-    num_items: items.reduce((n, i) => n + i.quantity, 0),
-    value: Math.round(items.reduce((s, i) => s + i.price * i.quantity, 0) * 100) / 100,
   })
