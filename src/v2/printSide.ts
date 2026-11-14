@@ -54,9 +54,24 @@ export async function orderPair(a: string, b: string): Promise<[string, string]>
   return sa > sb ? [a, b] : [b, a]
 }
 
-// The pair a photo belongs to: photos come in front/back pairs per colour, from the first.
+// Shopify mockup files are named like "mockup-c727-back_…" / "mockup-c727-front_…": the colour
+// code and the side. The photos of one colour are found by that code, so the order the photos
+// sit in on Shopify no longer matters (14 Nov: Nico moved the back print to the first slot).
+const colourCode = (url: string) => /mockup-c(\d+)-(?:front|back)/i.exec(url)?.[1] ?? null
+
+// The pair a photo belongs to: the front and back of the same colour. Falls back to
+// position pairs (from the first photo) for files that don't follow the naming.
 export const pairOf = <T extends { url: string }>(images: T[], url?: string): [string, string] | null => {
+  if (!images.length) return null
   const i = url ? images.findIndex((im) => im.url === url) : 0
+  const at = images[i < 0 ? 0 : i].url
+  const code = colourCode(at)
+  if (code) {
+    const same = images.filter((im) => colourCode(im.url) === code).map((im) => im.url)
+    const back = same.find((u) => named(u) > 0), front = same.find((u) => named(u) < 0)
+    if (back && front) return [back, front]
+    if (same.length === 1) return [same[0], same[0]]
+  }
   const start = i < 0 ? 0 : i - (i % 2)
   const a = images[start]?.url, b = images[start + 1]?.url
   return a && b ? [a, b] : a ? [a, a] : null
@@ -84,5 +99,9 @@ export function useDesignPairOrGuess(images: { url: string }[] | undefined, colo
   const known = useDesignPair(images, colourUrl)
   if (known) return known
   const pair = images ? pairOf(images, colourUrl) : null
-  return pair ? [pair[1], pair[0]] : null
+  if (!pair) return null
+  // Filenames say the side for every current listing, so the guess is usually already right.
+  const na = named(pair[0]), nb = named(pair[1])
+  if (na !== nb) return na > nb ? pair : [pair[1], pair[0]]
+  return [pair[1], pair[0]]
 }
