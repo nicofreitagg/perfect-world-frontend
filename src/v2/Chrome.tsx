@@ -91,9 +91,9 @@ function FooterSignup() {
   }
   return (
     <form onSubmit={submit} className="pw-foot-signup" aria-label={t("Email list")}>
-      <p className="pw-foot-signup-t">{wish ? t("Make a wish.") : after ? t("Stay in the loop.") : <>{t("Something new on")} <span style={{ color: "#e2453c" }}>11.11.</span></>}</p>
+      <p className="pw-foot-signup-t">{wish ? t("Make a wish.") : after ? t("Your first order ships free.") : <>{t("Something new on")} <span style={{ color: "#e2453c" }}>11.11.</span></>}</p>
       {state === 'done' ? (
-        <p className="pw-foot-signup-ok">{wish ? t("You're in. Your code for free shipping until 15 Nov: WISH1111.") : after ? t("You're in. Thanks for being here.") : t("You're on the list. See you at 11:11.")}</p>
+        <p className="pw-foot-signup-ok">{wish ? t("You're in. Your code for free shipping until 15 Nov: WISH1111.") : after ? t("You're in. Your code for free shipping on your first order: FIRSTWISH.") : t("You're on the list. See you at 11:11.")}</p>
       ) : (
         <div className="pw-foot-signup-row">
           <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("Your email")} aria-label={t("Your email")} />
@@ -101,7 +101,7 @@ function FooterSignup() {
         </div>
       )}
       {state === 'error' && <p className="pw-foot-signup-err">{t("That didn't work. Please try again.")}</p>}
-      <p className="pw-foot-signup-fine">{wish ? t("Free shipping on every order until 15 Nov with WISH1111. Unsubscribe any time.") : after ? t("Unsubscribe any time.") : t("Free shipping on your first order in launch week. One email at 11:11.")} <A href="/privacy-policy">{t("Privacy")}</A></p>
+      <p className="pw-foot-signup-fine">{wish ? t("Free shipping on every order until 15 Nov with WISH1111. Unsubscribe any time.") : after ? t("Free shipping on your first order with FIRSTWISH. Unsubscribe any time.") : t("Free shipping on your first order in launch week. One email at 11:11.")} <A href="/privacy-policy">{t("Privacy")}</A></p>
     </form>
   )
 }

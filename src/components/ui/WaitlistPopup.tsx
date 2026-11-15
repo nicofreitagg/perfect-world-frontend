@@ -7,7 +7,7 @@ import { joinList } from '../../utils/waitlist'
 // Replaces the old "10% off" popup, which never stored the email (Oct 2026).
 // Before 11.11 it collects the launch waitlist; afterwards it is a plain newsletter signup.
 // Launch week gets its own key, so the WISH1111 popup shows once even to people who closed the waitlist one.
-const KEY = isWishWeek() ? 'pw-wish-popup' : isLaunched() ? 'pw-newsletter-popup' : 'pw-waitlist-popup'
+const KEY = isWishWeek() ? 'pw-wish-popup' : isLaunched() ? 'pw-firstwish-popup' : 'pw-waitlist-popup'
 
 export default function WaitlistPopup() {
   const { t } = useTranslation()
